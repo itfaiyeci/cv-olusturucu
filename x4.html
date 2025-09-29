@@ -1,0 +1,2850 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head> <style>
+iframe[src*="tawk.to"] {
+    position: fixed !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    z-index: 2147483647 !important; /* maksimum seviye */
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+</style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Profesyonel CV Oluşturucu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Pickr renk paleti -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+
+<style>
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+  }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    min-width: 1300px;
+  }
+  
+  body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f5f7fa; 
+    color: #2c3e50; 
+    transition: background 0.3s, color 0.3s; 
+    display: flex;
+    flex-direction: column;
+    transform: scale(1);
+    transform-origin: top left;
+    position: relative;
+    width: 1300px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  
+  /* Windows benzeri scrollbar */
+  ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 0px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+    border: 4px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #f1f1f1;
+  }
+  
+  header { 
+    background: #2c3e50; 
+    color: #fff; 
+    text-align: center; 
+    padding: 18px 10px; 
+    font-size: 1.6rem; 
+    font-weight: 700; 
+    position: relative; 
+    flex-shrink: 0;
+    width: 1300px;
+  }
+  
+ <!-- #toggleDark { 
+    position: absolute; 
+    right: 15px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    background: transparent; 
+    border: none; 
+    font-size: 1.3rem; 
+    color: #fff; 
+    cursor: pointer; 
+  }-->
+
+  .main-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    width: 1300px;
+    padding: 20px;
+    gap: 20px;
+    overflow: visible;
+  }
+
+  #cvForm { 
+    width: 400px;
+    flex-shrink: 0;
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    transition: background 0.3s, color 0.3s; 
+    height: calc(100vh - 100px);
+    overflow: hidden;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  /* Gelişmiş Sekme Tasarımı */
+  .tabs-wrapper { 
+    display: flex; 
+    align-items: center; 
+    position: relative; 
+    width: 100%; 
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #f6f9fc 0%, #eef1f5 100%);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  
+  .tabs-container { 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+    flex: 1; 
+    scrollbar-width: none; 
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .tabs-container::-webkit-scrollbar { display: none; }
+  
+  .tabs { 
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 4px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+  }
+  
+  .tabBtn { 
+    flex: 1 1 auto;
+    padding: 12px 18px;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #5a67d8;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .tabBtn:hover {
+    background: rgba(94, 114, 228, 0.1);
+    color: #4c51bf;
+    transform: translateY(-2px);
+  }
+  
+  .tabBtn.active { 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    z-index: 1;
+  }
+  
+  .tabContent {
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #cvPreview { 
+    width: 210mm;
+    min-width: 210mm;
+    min-height: 296mm;
+    background: #fff; 
+    padding: 0; 
+    border-radius: 4px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.2); 
+    overflow: hidden; 
+    box-sizing: border-box;
+    display: flex; 
+    gap: 20px; 
+    transition: background 0.3s, color 0.3s; 
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  #cvLeft { 
+    width: 35%; 
+    padding: 20px;
+    background: #e0e0e0; 
+    color: #111; 
+    flex-shrink: 0; 
+  }
+  
+  #cvRight { flex: 1; padding-left: 1px; margin-top:50px; }
+  #cvLeft p, #cvLeft h2 { margin-left: 10px; padding-bottom:15px; }
+  #cvPreview h2 { 
+    font-size: 1.3rem;
+    border-bottom: 1px solid #f2f6fb; 
+    padding-bottom: 8px; 
+    margin-top: 25px;
+    clear: both;
+  }
+  #cvPreview h2:first-child { margin-top: 0; }
+
+  /* Eğitim, iş deneyimi ve kurs listeleri için özel stil */
+  #outEdu li, #outExp li, #outCourse li {
+    position: relative;
+    padding: 8px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .edu-left, .exp-left, .course-left {
+    float: left;
+    text-align: left;
+    width: 99%;
+    font-weight: 600;
+  }
+  
+  .edu-right, .exp-right, .course-right {
+    float: right;
+    text-align: right;
+    width: 30%;
+    color: #666;
+    font-style: italic;
+	margin-right:20px;
+  }
+
+  .field { margin-bottom: 15px; position: relative; }
+  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 1rem; }
+  input, textarea, select { 
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #d1d7dd; 
+    border-radius: 6px; 
+    font-size: 1rem; 
+    background: #fff; 
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  
+  /* Eğitim, iş deneyimi ve kurs alanları için özel stil */
+  .edu-field-row, .exp-field-row, .course-field-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .edu-field, .exp-field, .course-field {
+    flex: 1;
+  }
+  
+  .edu-field:first-child, .exp-field:first-child, .course-field:first-child {
+    flex: 2;
+  }
+  
+  .btns { 
+    margin-top: 25px; 
+    display: flex; 
+    gap: 10px; 
+    align-items: center; 
+    flex-wrap: wrap;
+  }
+  
+  .btns button { 
+    padding: 12px 18px; 
+    border: none; 
+    border-radius: 6px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    background: #2c3e50; 
+    color: #fff; 
+    transition: background 0.2s; 
+    flex: 1;
+    min-width: 140px;
+  }
+  
+  .btns button:hover { background: #1a2636; }
+  .add-btn { background: #28a745 !important; margin-top: 15px; }
+  .add-btn:hover { background: #218838 !important; }
+
+  /* Dil seçimi için özel stiller - DROPDOWN olarak değiştirildi */
+  .language-dropdown-container {
+    position: relative;
+    margin-bottom: 15px;
+  }
+  
+  .language-dropdown {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d7dd;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .language-dropdown::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+  }
+  
+  .language-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #d1d7dd;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .language-option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+  }
+  
+  .language-option:hover {
+    background: #f0f0f0;
+  }
+  
+  .language-option input {
+    width: auto;
+    margin-right: 8px;
+  }
+  
+  /* Özel dil ekleme */
+  .custom-language {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .custom-language input {
+    flex: 1;
+  }
+  
+  /* Email domain seçimi için özel stiller */
+  .email-container {
+    position: relative;
+  }
+  
+  .domain-selector {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #d1d7dd;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .domain-option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .domain-option:hover {
+    background: #f0f0f0;
+  }
+  
+  /* Renk seçici düzenlemeleri */
+  .color-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .color-controls label {
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+  
+  .pcr-button {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50% !important;
+    overflow: hidden;
+  }
+  
+  #resetColor {
+    padding: 8px 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  #resetColor:hover {
+    background: #c82333;
+  }
+
+  /* Fotoğraf alanı düzenlemeleri */
+  #avatarBox {
+    width: 60mm;
+    height: 72mm;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    margin: 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  #avatar {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: none;
+  }
+  
+  #avatarText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  #delAvatar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 10;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  /* Dinamik alan silme butonu */
+  .field > button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 18px;
+  }
+  
+  .field > button:hover {
+    background: #c82333;
+  }
+
+  /* Karanlık mod stilleri */
+  body.dark { background: #222; color: #eee; }
+  body.dark header { background: #111; }
+  body.dark #cvForm { background: #333; color: #fff; }
+  body.dark #cvPreview { background: #222; color: #fff; }
+  body.dark #cvLeft { background: #444; color: #fff; }
+  body.dark #cvRight { color: #fff; }
+  body.dark input, body.dark textarea, body.dark select { background: #444; color: #fff; border-color: #555; }
+  body.dark .tabs-wrapper { 
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+  }
+  body.dark .tabs { 
+    background: rgba(0, 0, 0, 0.2);
+  }
+  body.dark .tabBtn { 
+    color: #a3bffa;
+  }
+  body.dark .tabBtn:hover {
+    background: rgba(102, 126, 234, 0.2);
+    color: #fff;
+  }
+  
+  body.dark .language-dropdown,
+  body.dark .language-options,
+  body.dark .domain-selector {
+    background: #444;
+    border-color: #555;
+    color: #fff;
+  }
+  
+  body.dark .language-option:hover,
+  body.dark .domain-option:hover {
+    background: #555;
+  }
+  
+  /* Otomatik tamamlama için öneri kutusu */
+  .suggestions-box {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: none;
+  }
+  
+  .suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  body.dark .suggestions-box {
+    background: #444;
+    border-color: #555;
+    color: #fff;
+  }
+  
+  body.dark .suggestion-item:hover {
+    background-color: #555;
+  }
+  
+  /* Özel dil ekleme butonu */
+  .add-language-btn {
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+  }
+  
+  .add-language-btn:hover {
+    background: #218838;
+  }
+  
+  /* Dil listesi öğeleri */
+  .language-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    margin: 3px 0;
+    border-radius: 4px;
+    background: #f8f9fa;
+  }
+  
+  .language-item:hover {
+    background: #e9ecef;
+  }
+  
+  .delete-language {
+    color: #dc3545;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  
+  .delete-language:hover {
+    background: #dc3545;
+    color: white;
+  }
+  
+  body.dark .language-item {
+    background: #3a3a3a;
+  }
+  
+  body.dark .language-item:hover {
+    background: #4a4a4a;
+  }
+  
+  /* Yeni eklenen alanlar için stiller */
+  .field-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .field-row .field {
+    flex: 1;
+  }
+  
+  /* Ehliyet sınıfları için stiller */
+  .license-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .license-option {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #d1d7dd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .license-option:hover {
+    background: #f0f0f0;
+  }
+  
+  .license-option input {
+    width: auto;
+    margin-right: 8px;
+  }
+  
+  body.dark .license-option {
+    border-color: #555;
+  }
+  
+  body.dark .license-option:hover {
+    background: #555;
+  }
+  
+  /* Form içeriği için scrollbar düzenlemesi */
+  .form-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .form-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .form-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .form-content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+  
+  body.dark .form-content::-webkit-scrollbar-track {
+    background: #333;
+  }
+  
+  body.dark .form-content::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+  
+  body.dark .form-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+
+  @media (max-width: 1300px) {    
+    body, header, .main-container {
+      width: 100%;
+      min-width: 100%;
+    }
+    
+    .main-container {
+      overflow-x: auto;
+    }
+  }
+
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    
+    #cvPreview, #cvPreview * {
+      visibility: visible;
+    }
+    
+    #cvPreview {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 210mm !important;
+      height: 296mm !important;
+      margin: 0 !important;
+      padding: 20mm !important;
+      box-shadow: none !important;
+      background: white !important;
+      color: black !important;
+      font-size: 16px !important;
+    }
+    
+    .no-print {
+      display: none !important;
+    }
+    
+    #cvLeft {
+      background: #f0f0f0 !important;
+      color: black !important;
+      padding: 20px !important;
+    }
+    
+    #cvRight {
+      color: black !important;
+      padding-left: 15px !important;
+    }
+    
+    #cvPreview h2 {
+      font-size: 1.3rem !important;
+      margin-top: 25px !important;
+    }
+    
+    /* PDF'de eğitim, iş deneyimi ve kurs stilleri */
+    #outEdu li, #outExp li, #outCourse li {
+      position: relative;
+      padding: 8px 0;
+      overflow: hidden;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .edu-left, .exp-left, .course-left {
+      float: left;
+      text-align: left;
+      width: 70%;
+      font-weight: 600;
+    }
+    
+    .edu-right, .exp-right, .course-right {
+      float: right;
+      text-align: right;
+      width: 30%;
+      color: #666;
+      font-style: italic;
+    }
+  }
+
+  /* Pickr renk paleti boyutlandırma */
+  .pcr-app {
+    width: 280px !important;
+    height: auto !important;
+    max-height: 320px;
+    padding: 8px !important;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    z-index: 1000;
+  }
+
+  .pcr-hue {
+    height: 12px !important;
+  }
+
+  .pcr-swatches .pcr-swatches-color {
+    width: 22px !important;
+    height: 22px !important;
+    margin: 3px !important;
+  }
+  
+  /* CV Preview scrollbar kaldırma */
+  #cvPreview {
+    overflow: hidden;
+  }
+  
+  /* Form scrollbar kaldırma - sadece içerik kısmı scroll edilebilir */
+  #cvForm {
+    overflow: hidden;
+  }
+
+  /* Engelli açıklama bölümü */
+  .disability-description-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+  }
+  
+  .disability-description-section h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.2rem;
+  }
+  
+  body.dark .disability-description-section {
+    background: #333;
+    border-left-color: #4dabf7;
+  }
+  
+  body.dark .disability-description-section h3 {
+    color: #fff;
+  }
+  #summary {
+    white-space: pre-wrap; /* satırları korur ve taşmaları engeller */
+  }
+  
+
+
+
+
+</style>
+</head>
+<body>
+
+<header>
+  Profesyonel CV Oluşturucu
+ <!-- <button id="toggleDark"><i class="fa-solid fa-moon"></i></button>-->
+</header>
+
+<div class="main-container">
+  <div id="cvForm">
+    <!-- Gelişmiş Sekmeler -->
+    <div class="tabs-wrapper">
+      <div class="tabs-container">
+        <div class="tabs">
+          <button class="tabBtn active" data-tab="tab1">Kişisel</button>
+          <button class="tabBtn" data-tab="tab2">Diller</button>
+          <button class="tabBtn" data-tab="tab3">Hakkımda</button>
+          <button class="tabBtn" data-tab="tab4">Eğitim</button>
+          <button class="tabBtn" data-tab="tab5">İş Deneyimi</button>
+          <button class="tabBtn" data-tab="tab6">Kurs</button>
+          <button class="tabBtn" data-tab="tab7">Yetenekler</button>
+          <button class="tabBtn" data-tab="tab8">İlgi Alanları</button>
+          <button class="tabBtn" data-tab="tab9">Referans</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-content">
+      <!-- Sekme içerikleri -->
+      <div class="tabContent" id="tab1">
+        <div class="field"><label>Ad Soyad</label><input id="name" /></div>
+        <div class="field"><label>Pozisyon</label><input id="position" /></div>
+        
+        <!-- Yeni eklenen alanlar -->
+        <div class="field-row">
+          <div class="field">
+            <label>Doğum Tarihi</label>
+            <input id="birthDate" type="date" />
+          </div>
+          <div class="field">
+            <label>Doğum Yeri</label>
+            <select id="birthPlace">
+              <option value="">Seçiniz</option>
+              <option value="Adana">Adana</option>
+              <option value="Adıyaman">Adıyaman</option>
+              <option value="Afyonkarahisar">Afyonkarahisar</option>
+              <option value="Ağrı">Ağrı</option>
+              <option value="Amasya">Amasya</option>
+              <option value="Ankara">Ankara</option>
+              <option value="Antalya">Antalya</option>
+              <option value="Artvin">Artvin</option>
+              <option value="Aydın">Aydın</option>
+              <option value="Balıkesir">Balıkesir</option>
+              <option value="Bilecik">Bilecik</option>
+              <option value="Bingöl">Bingöl</option>
+              <option value="Bitlis">Bitlis</option>
+              <option value="Bolu">Boluspor</option>
+              <option value="Burdur">Burdur</option>
+              <option value="Bursa">Bursa</option>
+              <option value="Çanakkale">Çanakkale</option>
+              <option value="Çankırí">Çankırı</option>
+              <option value="Çorum">Çorum</option>
+              <option value="Denizli">Denizli</option>
+              <option value="Diyarbakır">Diyarbakır</option>
+              <option value="Edirne">Edirne</option>
+              <option value="Elazığ">Elazığ</option>
+              <option value="Erzincan">Erzincan</option>
+              <option value="Erzurum">Erzurum</option>
+              <option value="Eskişehir">Eskişehir</option>
+              <option value="Gaziantep">Gaziantep</option>
+              <option value="Giresun">Giresun</option>
+              <option value="Gümüşhane">Gümüşhane</option>
+              <option value="Hakkâri">Hakkâri</option>
+              <option value="Hatay">Hatay</option>
+              <option value="Isparta">Isparta</option>
+              <option value="Mersin">Mersin</option>
+              <option value="İstanbul">İstanbul</option>
+              <option value="İzmir">İzmir</option>
+              <option value="Kars">Kars</option>
+              <option value="Kastamonu">Kastamonu</option>
+              <option value="Kayseri">Kayseri</option>
+              <option value="Kırklareli">Kırklareli</option>
+              <option value="Kırşehir">Kırşehir</option>
+              <option value="Kocaeli">Kocaeli</option>
+              <option value="Konya">Konya</option>
+              <option value="Kütahya">Kütahya</option>
+              <option value="Malatya">Malatya</option>
+              <option value="Manisa">Manisa</option>
+              <option value="Kahramanmaraş">Kahramanmaraş</option>
+              <option value="Mardin">Mardin</option>
+              <option value="Muğla">Muğla</option>
+              <option value="Muş">Muş</option>
+              <option value="Nevşehir">Nevşehir</option>
+              <option value="Niğde">Niğde</option>
+              <option value="Ordu">Ordu</option>
+              <option value="Rize">Rize</option>
+              <option value="Sakarya">Sakarya</option>
+              <option value="Samsun">Samsun</option>
+              <option value="Siirt">Siirt</option>
+              <option value="Sinop">Sinop</option>
+              <option value="Sivas">Sivas</option>
+              <option value="Tekirdağ">Tekirdağ</option>
+              <option value="Tokat">Tokat</option>
+              <option value="Trabzon">Trabzon</option>
+              <option value="Tunceli">Tunceli</option>
+              <option value="Şanlıurfa">Şanlıurfa</option>
+              <option value="Uşak">Uşak</option>
+              <option value="Van">Van</option>
+              <option value="Yozgat">Yozgat</option>
+              <option value="Zonguldak">Zonguldak</option>
+              <option value="Aksaray">Aksaray</option>
+              <option value="Bayburt">Bayburt</option>
+              <option value="Karaman">Karaman</option>
+              <option value="Kırıkkale">Kırıkkale</option>
+              <option value="Batman">Batman</option>
+              <option value="Şırnak">Şırnak</option>
+              <option value="Bartın">Bartın</option>
+              <option value="Ardahan">Ardahan</option>
+              <option value="Iğdır">Iğdır</option>
+              <option value="Yalova">Yalova</option>
+              <option value="Karabük">Karabük</option>
+              <option value="Kilis">Kilis</option>
+              <option value="Osmaniye">Osmaniye</option>
+              <option value="Düzce">Düzce</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="field-row">
+          <div class="field">
+            <label>Askerlik Durumu</label>
+            <select id="militaryStatus">
+              <option value="">Seçiniz</option>
+              <option value="Yaptı">Yaptı</option>
+              <option value="Yapmadı">Yapmadı</option>
+              <option value="Tecilli">Tecilli</option>
+              <option value="Muaf">Muaf</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Sabıka Kaydı</label>
+            <select id="criminalRecord">
+              <option value="">Seçiniz</option>
+              <option value="Var">Var</option>
+              <option value="Yok">Yok</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Ehliyet alanı - Dropdown olarak değiştirildi -->
+        <div class="field">
+          <label>Ehliyet Sınıfı</label>
+          <select id="license" multiple size="4">
+            <option value="A">A</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B">B</option>
+            <option value="B1">B1</option>
+            <option value="BE">BE</option>
+            <option value="C">C</option>
+            <option value="C1">C1</option>
+            <option value="CE">CE</option>
+            <option value="C1E">C1E</option>
+            <option value="D">D</option>
+            <option value="D1">D1</option>
+            <option value="DE">DE</option>
+            <option value="D1E">D1E</option>
+            <option value="M">M</option>
+            <option value="G">G</option>
+            <option value="F">F</option>
+          </select>
+          <p class="hint-text"><small>Çoklu seçim için Ctrl (Windows) veya Command (Mac) tuşuna basılı tutun</small></p>
+        </div>
+        
+        <!-- Engelli durumu alanı -->
+        <div class="field-row">
+          <div class="field">
+            <label>Engelli Durumu</label>
+            <select id="disabilityStatus">
+              <option value="">Seçiniz</option>
+              <option value="Evet">Evet</option>
+              <option value="Hayır">Hayır</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="field">
+          <label>Engelli Durumu Açıklama</label>
+          <textarea id="disabilityDescription" placeholder="Engelli durumu hakkında açıklama"></textarea>
+        </div>
+        
+        <!--telefon-->
+        <div class="field">
+          <label>Telefon</label>
+          <input id="phone" type="tel" placeholder="5xx xxx xx xx" />
+        </div>
+        <!--telefon-->
+        
+        <!-- Email alanı - domain seçimi eklendi -->
+        <div class="field email-container">
+          <label>E-posta</label>
+          <input id="email" type="email" placeholder="Kullanıcı adı yazın ve domain seçin" />
+          <div id="domainSelector" class="domain-selector">
+            <div class="domain-option" data-domain="@gmail.com">@gmail.com</div>
+            <div class="domain-option" data-domain="@yahoo.com">@yahoo.com</div>
+            <div class="domain-option" data-domain="@hotmail.com">@hotmail.com</div>
+            <div class="domain-option" data-domain="@outlook.com">@outlook.com</div>
+            <div class="domain-option" data-domain="@icloud.com">@icloud.com</div>
+            <div class="domain-option" data-domain="">Özel domain (manuel girin)</div>
+          </div>
+        </div>
+        
+        <div class="field"><label>Adres</label><textarea id="address"></textarea></div>
+      </div>
+      
+      <div class="tabContent" id="tab2" style="display:none;">
+        <h3>Dil Seçenekleri</h3>
+        
+        <!-- DROPDOWN olarak değiştirildi -->
+        <div class="language-dropdown-container">
+          <div class="language-dropdown" id="languageDropdown">
+            Dilleri seçmek için tıklayın
+          </div>
+          <div class="language-options" id="languageOptions">
+            <label class="language-option"><input type="checkbox" value="Türkçe"> Türkçe</label>
+            <label class="language-option"><input type="checkbox" value="İngilizce"> İngilizce</label>
+            <label class="language-option"><input type="checkbox" value="Almanca"> Almanca</label>
+            <label class="language-option"><input type="checkbox" value="Fransızca"> Fransızca</label>
+            <label class="language-option"><input type="checkbox" value="İspanyolca"> İspanyolca</label>
+            <label class="language-option"><input type="checkbox" value="Arapça"> Arapça</label>
+            <label class="language-option"><input type="checkbox" value="Rusça"> Rusça</label>
+            <label class="language-option"><input type="checkbox" value="Çince"> Çince</label>
+            <label class="language-option"><input type="checkbox" value="Japonca"> Japonca</label>
+            <label class="language-option"><input type="checkbox" value="İtalyanca"> İtalyanca</label>
+            <label class="language-option"><input type="checkbox" value="Portekizce"> Portekizce</label>
+            <label class="language-option"><input type="checkbox" value="Hollandaca"> Hollandaca</label>
+            <label class="language-option"><input type="checkbox" value="Yunanca"> Yunanca</label>
+            <label class="language-option"><input type="checkbox" value="İsveçce"> İsveçce</label>
+            <label class="language-option"><input type="checkbox" value="Korece"> Korece</label>
+          </div>
+        </div>
+        
+        <div class="field">
+          <label>Başka Dil Ekle</label>
+          <div class="custom-language">
+            <input type="text" id="customLanguage" placeholder="Dil yazın">
+            <button type="button" id="addLanguageBtn" class="add-language-btn">+</button>
+            <div id="suggestionsBox" class="suggestions-box"></div>
+          </div>
+          <p class="hint-text"><small>Dil yazıp + butonuna basın veya otomatik eklemeyi bekleyin</small></p>
+        </div>
+
+        <div class="field">
+          <label>Eklenen Diller</label>
+          <div id="addedLanguagesList"></div>
+        </div>
+      </div>
+      
+      <div class="tabContent" id="tab3" style="display:none;">
+        <div class="field"><label>Hakkımda</label><textarea id="summary" ></textarea></div>
+        
+        <!-- Engelli açıklama bölümü (Hakkımda sekmesine eklendi) -->
+        <div id="disabilityDescriptionSection" class="disability-description-section" style="display: none;">
+          <h3>Engelli Durumu Açıklaması</h3>
+          <div id="outDisabilityDescriptionRight"></div>
+        </div>
+      </div>
+      
+      <div class="tabContent" id="tab4" style="display:none;">
+        <div id="eduContainer">
+          <div class="edu-field-row">
+            <div class="edu-field">
+              <label>Üniversite & Bölüm</label>
+              <input class="eduUniInput" placeholder="Üniversite adı ve bölüm" />
+            </div>
+            <div class="edu-field">
+              <label>Tarih </label>
+              <input class="eduDateInput" placeholder="2005-2010" maxlength="9" />
+            </div>
+            <button type="button" class="no-print" onclick="removeEduField(this)"style="align-self: flex-end; margin-bottom: 8px; background: rgb(220, 53, 69); color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEduField()">+ Eğitim Ekle</button>
+      </div>
+      
+      <div class="tabContent" id="tab5" style="display:none;">
+        <div id="expContainer">
+          <div class="exp-field-row">
+            <div class="exp-field">
+              <label>Şirket & Görev</label>
+              <input class="expCompanyInput" placeholder="Şirket adı ve görev" />
+            </div>
+            <div class="exp-field">
+              <label>Tarih </label>
+              <input class="expDateInput" placeholder="2005-2010" maxlength="9" />
+            </div>
+            <button type="button" class="no-print" onclick="removeExpField(this)" style="align-self: flex-end; margin-bottom: 8px; background: rgb(220, 53, 69); color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addExpField()">+ Deneyim Ekle</button>
+      </div>
+      
+      <div class="tabContent" id="tab6" style="display:none;">
+        <div id="courseContainer">
+          <div class="course-field-row">
+            <div class="course-field">
+              <label>Kurs / Sertifika</label>
+              <input class="courseNameInput" placeholder="Kurs veya sertifika adı" />
+            </div>
+            <div class="course-field">
+              <label>Tarih </label>
+              <input class="courseDateInput" placeholder="2005-2010" maxlength="9" />
+            </div>
+            <button type="button" class="no-print" onclick="removeCourseField(this)" style="align-self: flex-end; margin-bottom: 8px; background: rgb(220, 53, 69); color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addCourseField()">+ Kurs Ekle</button>
+      </div>
+      
+      <div class="tabContent" id="tab7" style="display:none;">
+        <div class="field">
+          <label>Yetenekler</label>
+          <textarea id="skills" placeholder="Her bir yeteneği virgülle ayırın"></textarea>
+          <p class="hint-text"><small>Yetenekleri virgülle ayırarak yazın (Örnek: HTML, CSS, JavaScript, Photoshop)</small></p>
+        </div>
+      </div>
+      
+      <div class="tabContent" id="tab8" style="display:none;">
+        <div class="field">
+          <label>İlgi Alanları</label>
+          <textarea id="interests" placeholder="Her bir ilgi alanını virgülle ayırın"></textarea>
+          <p class="hint-text"><small>İlgi alanlarını virgülle ayırarak yazın (Örnek: Seyahat, Fotoğrafçılık, Müzik, Spor)</small></p>
+        </div>
+      </div>
+      
+      <div class="tabContent" id="tab9" style="display:none;">
+        <div id="refContainer">
+          <div class="field">
+            <input class="refInput" placeholder="Ad Soyad, Görev, İletişim" />
+            <button type="button" class="no-print" onclick="removeField(this)">×</button>
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addField('refContainer','refInput', 'Ad Soyad, Görev, İletişim')">+ Referans Ekle</button>
+      </div>
+    </div>
+
+    <!--Buton-->
+    <div class="btns">
+      <button id="btnPDF">PDF İndir</button>
+      <button id="btnClear">Temizle</button>
+    </div>
+    
+    <div class="color-controls">
+      <label>Sol Panel Rengi:</label>
+      <div id="colorPicker"></div>
+      <button type="button" id="resetColor">Varsayılan</button>
+    </div>
+  </div>
+
+  <!-- Önizleme -->
+  <div id="cvPreview">
+    <div id="cvLeft">
+      <!--foto-->	 
+      <div id="avatarBox">
+        <img id="avatar" alt="Fotoğraf" />
+        <span id="avatarText">Fotoğraf eklemek için tıklayın</span>
+        <span id="delAvatar" class="no-print">X</span>
+        <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+      </div>
+      <!--foto-->
+
+      <!--<h2>Kişisel Bilgiler</h2>-->
+      <p style="text-align: center; margin-top: 25px;"> <!--<strong>Ad Soyad:</strong>--> <span id="outName" style="font-weight: bold; font-size: 24px;">Ad Soyad</span></p>
+      <p style="text-align: center; " > <!--<strong>Pozisyon:</strong>--> <span id="outPosition" style="font-weight: bold; font-size: 18px;">Pozisyon</span></p>
+      <p  style="margin-top: 20px;"> Doğum Tarihi: <span id="outBirthDate" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"> Doğum Yeri: <span id="outBirthPlace" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"> Askerlik Durumu: <span id="outMilitaryStatus" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"> Sabıka Kaydı: <span id="outCriminalRecord" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"> Ehliyet Sınıfı: <span id="outLicense" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"> Engelli Durumu: <span id="outDisabilityStatus" style="float: right;">-</span></p>
+      <!-- Engelli açıklaması sol panelden kaldırıldı -->
+      <p style="margin-top: 5px;"><strong>Telefon:</strong> <span id="outPhone" style="float: right;">-</span></p>
+      <p style="margin-top: 5px;"><strong>E-posta:</strong> <br><span id="outEmail" style="float: right; font-size: 14px;">-</span></p>
+      <p style="margin-top: 15px;"><strong>Adres:</strong> <br><span id="outAddress" style="display:block; text-align:right;">-</span></p>
+      
+      <h2 id="languagesSection">Dil</h2>
+      <ul id="outLanguages"></ul>
+    </div>
+    
+    <div id="cvRight">
+      <h2 id="summarySection">Hakkımda</h2>
+      <p id="outSummary" style="text-align:justify; padding:10px; width:100%;  box-sizing:border-box; white-space:pre-wrap; overflow-wrap: break-word;/* uzun kelimeleri kırar */">Buraya hakkınızda kısa yazı gelecek...</p>
+
+      <!-- Engelli açıklama bölümü sağ panele eklendi -->
+      <div id="disabilityDescriptionRight" class="disability-description-section" style="display: none; text-align:justify;">
+        <h3>Engelli Durumu Açıklaması</h3>
+        <p id="outDisabilityDescriptionRightText"></p>
+      </div>
+
+      <h2 id="eduSection">Eğitim</h2>
+      <ul id="outEdu"></ul>
+
+      <h2 id="expSection">İş Deneyimi</h2>
+      <ul id="outExp"></ul>
+
+      <h2 id="courseSection">Kurslar & Sertifikalar</h2>
+      <ul id="outCourse"></ul>
+
+      <h2 id="skillsSection">Yetenekler</h2>
+      <ul id="outSkills"></ul>
+
+      <h2 id="interestsSection">İlgi Alanları</h2>
+      <ul id="outInterests"></ul>
+
+      <h2 id="refSection">Referanslar</h2>
+      <ul id="outRef"></ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Doğru HTML2PDF kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+// ==================== CROSS-BROWSER POLYFILLS ====================
+
+// Object.assign polyfill for IE11
+if (typeof Object.assign != 'function') {
+  Object.assign = function(target) {
+    if (target == null) {
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+    target = Object(target);
+    for (var index = 1; index < arguments.length; index++) {
+      var source = arguments[index];
+      if (source != null) {
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+    }
+    return target;
+  };
+}
+
+// NodeList.forEach polyfill for IE11
+if (window.NodeList && !NodeList.prototype.forEach) {
+  NodeList.prototype.forEach = function(callback, thisArg) {
+    thisArg = thisArg || window;
+    for (var i = 0; i < this.length; i++) {
+      callback.call(thisArg, this[i], i, this);
+    }
+  };
+}
+
+// String.includes polyfill for IE11
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+
+// Array.includes polyfill for IE11
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    value: function(valueToFind, fromIndex) {
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+      var o = Object(this);
+      var len = o.length >>> 0;
+      if (len === 0) {
+        return false;
+      }
+      var n = fromIndex | 0;
+      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+      while (k < len) {
+        if (o[k] === valueToFind) {
+          return true;
+        }
+        k++;
+      }
+      return false;
+    }
+  });
+}
+
+// requestAnimationFrame polyfill
+if (!window.requestAnimationFrame) {
+  window.requestAnimationFrame = (function() {
+    return window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame ||
+           window.oRequestAnimationFrame ||
+           window.msRequestAnimationFrame ||
+           function(callback) {
+             return window.setTimeout(callback, 1000 / 60);
+           };
+  })();
+}
+
+// CustomEvent polyfill for IE
+if (typeof window.CustomEvent !== "function") {
+  function CustomEvent(event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+  CustomEvent.prototype = window.Event.prototype;
+  window.CustomEvent = CustomEvent;
+}
+
+// ==================== ORİJİNAL KOD ====================
+
+// Değişkenler
+let pickr;
+let customLanguages = [];
+let lastAddedLanguage = '';
+let debounceTimer;
+
+// Tarih formatı kontrolü için yardımcı fonksiyon
+function formatDateInput(input) {
+  let value = input.value.replace(/\D/g, ''); // Sadece rakamları al
+  let formattedValue = '';
+  
+  // Maksimum 8 karakter (4+4 rakam)
+  if (value.length > 8) {
+    value = value.substring(0, 8);
+  }
+  
+  // Format: XXXX-XXXX
+  if (value.length > 4) {
+    formattedValue = value.substring(0, 4) + '-' + value.substring(4, 8);
+  } else {
+    formattedValue = value;
+  }
+  
+  input.value = formattedValue;
+}
+
+// Engelli durumu değiştiğinde açıklama alanını göster/gizle
+function updateDisabilityDescription() {
+  const disabilityStatus = document.getElementById("disabilityStatus");
+  const disabilityDescription = document.getElementById("disabilityDescription");
+  const disabilityDescriptionSection = document.getElementById("disabilityDescriptionSection");
+  const disabilityDescriptionRight = document.getElementById("disabilityDescriptionRight");
+  const outDisabilityDescriptionRightText = document.getElementById("outDisabilityDescriptionRightText");
+  
+  if (disabilityStatus.value === "Evet") {
+    // Hakkımda sekmesindeki açıklama bölümünü göster
+    disabilityDescriptionSection.style.display = "block";
+    
+    // Sağ paneldeki açıklama bölümünü göster
+    disabilityDescriptionRight.style.display = "block";
+    
+    // Açıklama metnini güncelle
+    outDisabilityDescriptionRightText.textContent = disabilityDescription.value || "Engelli durumu hakkında açıklama bulunmamaktadır.";
+  } else {
+    // Hakkımda sekmesindeki açıklama bölümünü gizle
+    disabilityDescriptionSection.style.display = "none";
+    
+    // Sağ paneldeki açıklama bölümünü gizle
+    disabilityDescriptionRight.style.display = "none";
+    
+    // Açıklama alanını temizle
+    disabilityDescription.value = "";
+  }
+}
+
+// Engelli açıklaması güncellendiğinde
+function updateDisabilityDescriptionText() {
+  const disabilityDescription = document.getElementById("disabilityDescription");
+  const outDisabilityDescriptionRightText = document.getElementById("outDisabilityDescriptionRightText");
+  
+  if (outDisabilityDescriptionRightText) {
+    outDisabilityDescriptionRightText.textContent = disabilityDescription.value || "Engelli durumu hakkında açıklama bulunmamaktadır.";
+  }
+}
+
+// Diller listesini güncelleme
+function updateLanguagesList() {
+  const outLanguages = document.getElementById("outLanguages");
+  const languagesSection = document.getElementById("languagesSection");
+  
+  if (outLanguages) {
+    outLanguages.innerHTML = '';
+    let hasContent = false;
+    
+    // Seçili dilleri ekle
+    const selectedLanguages = document.querySelectorAll('#languageOptions input[type="checkbox"]:checked');
+    selectedLanguages.forEach(checkbox => {
+      if (checkbox.checked) {
+        hasContent = true;
+        const li = document.createElement('li');
+        li.textContent = checkbox.value;
+        outLanguages.appendChild(li);
+      }
+    });
+    
+    // Özel dilleri ekle
+    customLanguages.forEach(language => {
+      hasContent = true;
+      const li = document.createElement('li');
+      li.textContent = language;
+      outLanguages.appendChild(li);
+    });
+  }
+  
+  // Dropdown metnini güncelle
+  updateLanguageDropdownText();
+}
+
+// Hakkımda bölümünü güncelleme
+function updateSummarySection() {
+  const summaryInput = document.getElementById("summary");
+  const outSummary = document.getElementById("outSummary");
+  
+  if (summaryInput && outSummary) {
+    const summaryText = summaryInput.value.trim();
+    outSummary.textContent = summaryText || "Buraya hakkınızda kısa yazı gelecek...";
+  }
+}
+
+// Eğitim listesini güncelleme
+function updateEduList() {
+  const eduUniInputs = document.querySelectorAll(".eduUniInput");
+  const eduDateInputs = document.querySelectorAll(".eduDateInput");
+  const outEdu = document.getElementById("outEdu");
+  
+  if (outEdu) {
+    outEdu.innerHTML = "";
+    
+    for (let i = 0; i < eduUniInputs.length; i++) {
+      const uniValue = eduUniInputs[i].value.trim();
+      const dateValue = eduDateInputs[i].value.trim();
+      
+      if (uniValue !== "" || dateValue !== "") {
+        const li = document.createElement("li");
+        
+        // Üniversite/bölüm sol tarafta
+        const leftPart = document.createElement("span");
+        leftPart.className = "edu-left";
+        leftPart.textContent = uniValue || "Üniversite & Bölüm";
+        
+        // Tarih sağ tarafta
+        const rightPart = document.createElement("span");
+        rightPart.className = "edu-right";
+        rightPart.textContent = dateValue || "Tarih";
+        
+        li.appendChild(leftPart);
+        li.appendChild(rightPart);
+        outEdu.appendChild(li);
+      }
+    }
+  }
+}
+
+// İş deneyimi listesini güncelleme
+function updateExpList() {
+  const expCompanyInputs = document.querySelectorAll(".expCompanyInput");
+  const expDateInputs = document.querySelectorAll(".expDateInput");
+  const outExp = document.getElementById("outExp");
+  
+  if (outExp) {
+    outExp.innerHTML = "";
+    
+    for (let i = 0; i < expCompanyInputs.length; i++) {
+      const companyValue = expCompanyInputs[i].value.trim();
+      const dateValue = expDateInputs[i].value.trim();
+      
+      if (companyValue !== "" || dateValue !== "") {
+        const li = document.createElement("li");
+        
+        // Şirket/görev sol tarafta
+        const leftPart = document.createElement("span");
+        leftPart.className = "exp-left";
+        leftPart.textContent = companyValue || "Şirket & Görev";
+        
+        // Tarih sağ tarafta
+        const rightPart = document.createElement("span");
+        rightPart.className = "exp-right";
+        rightPart.textContent = dateValue || "Tarih";
+        
+        li.appendChild(leftPart);
+        li.appendChild(rightPart);
+        outExp.appendChild(li);
+      }
+    }
+  }
+}
+
+// Kurs listesini güncelleme
+function updateCourseList() {
+  const courseNameInputs = document.querySelectorAll(".courseNameInput");
+  const courseDateInputs = document.querySelectorAll(".courseDateInput");
+  const outCourse = document.getElementById("outCourse");
+  
+  if (outCourse) {
+    outCourse.innerHTML = "";
+    
+    for (let i = 0; i < courseNameInputs.length; i++) {
+      const nameValue = courseNameInputs[i].value.trim();
+      const dateValue = courseDateInputs[i].value.trim();
+      
+      if (nameValue !== "" || dateValue !== "") {
+        const li = document.createElement("li");
+        
+        // Kurs/sertifika sol tarafta
+        const leftPart = document.createElement("span");
+        leftPart.className = "course-left";
+        leftPart.textContent = nameValue || "Kurs / Sertifika";
+        
+        // Tarih sağ tarafta
+        const rightPart = document.createElement("span");
+        rightPart.className = "course-right";
+        rightPart.textContent = dateValue || "Tarih";
+        
+        li.appendChild(leftPart);
+        li.appendChild(rightPart);
+        outCourse.appendChild(li);
+      }
+    }
+  }
+}
+
+// Yetenekler listesini güncelleme
+function updateSkillsList() {
+  const skillsInput = document.getElementById("skills");
+  const outSkills = document.getElementById("outSkills");
+  
+  if (skillsInput && outSkills) {
+    outSkills.innerHTML = "";
+    const items = skillsInput.value.split(',').filter(item => item.trim() !== '');
+    
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.trim();
+      outSkills.appendChild(li);
+    });
+  }
+}
+
+// İlgi alanları listesini güncelleme
+function updateInterestsList() {
+  const interestsInput = document.getElementById("interests");
+  const outInterests = document.getElementById("outInterests");
+  
+  if (interestsInput && outInterests) {
+    outInterests.innerHTML = "";
+    const items = interestsInput.value.split(',').filter(item => item.trim() !== '');
+    
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.trim();
+      outInterests.appendChild(li);
+    });
+  }
+}
+
+// Referans listesini güncelleme
+function updateRefList() {
+  const refInputs = document.querySelectorAll(".refInput");
+  const outRef = document.getElementById("outRef");
+  
+  if (outRef) {
+    outRef.innerHTML = "";
+    
+    refInputs.forEach(inp => {
+      if (inp.value.trim() !== "") {
+        const li = document.createElement("li");
+        li.textContent = inp.value;
+        outRef.appendChild(li);
+      }
+    });
+  }
+}
+
+// Tüm listeleri güncelleme fonksiyonu
+function updateAllDynamicLists() {
+  updateSummarySection(); // Hakkımda bölümünü güncelle
+  updateLanguagesList(); // Diller listesini güncelle
+  updateEduList(); // Eğitim listesini güncelle
+  updateExpList(); // İş deneyimi listesini güncelle
+  updateCourseList(); // Kurs listesini güncelle
+  updateSkillsList(); // Yetenekler listesini güncelle
+  updateInterestsList(); // İlgi alanları listesini güncelle
+  updateRefList(); // Referans listesini güncelle
+  updateDisabilityDescription(); // Engelli açıklamasını güncelle
+  updateDisabilityDescriptionText(); // Engelli açıklama metnini güncelle
+}
+
+// Eğitim alanı ekleme
+function addEduField() {
+  const container = document.getElementById('eduContainer');
+  if (!container) return;
+
+  const eduFieldRow = document.createElement("div");
+  eduFieldRow.className = "edu-field-row";
+  
+  // Üniversite alanı
+  const uniField = document.createElement("div");
+  uniField.className = "edu-field";
+  
+  const uniLabel = document.createElement("label");
+  uniLabel.textContent = "Üniversite & Bölüm";
+  
+  const uniInput = document.createElement("input");
+  uniInput.className = "eduUniInput";
+  uniInput.placeholder = "Üniversite adı ve bölüm";
+  
+  uniField.appendChild(uniLabel);
+  uniField.appendChild(uniInput);
+  
+  // Tarih alanı
+  const dateField = document.createElement("div");
+  dateField.className = "edu-field";
+  
+  const dateLabel = document.createElement("label");
+  dateLabel.textContent = "Tarih ";
+  
+  const dateInput = document.createElement("input");
+  dateInput.className = "eduDateInput";
+  dateInput.placeholder = "2005-2010";
+  dateInput.maxLength = 9; // Maksimum 9 karakter
+  
+  dateField.appendChild(dateLabel);
+  dateField.appendChild(dateInput);
+  
+  // Silme butonu
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "×";
+  delBtn.type = "button";
+  delBtn.classList.add("no-print");
+  delBtn.style.cssText = "align-self: flex-end; margin-bottom: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;";
+  delBtn.onclick = function () {
+    removeEduField(this);
+  };
+  
+  eduFieldRow.appendChild(uniField);
+  eduFieldRow.appendChild(dateField);
+  eduFieldRow.appendChild(delBtn);
+  container.appendChild(eduFieldRow);
+  
+  // Event listener'ları ekle
+  uniInput.addEventListener("input", updateAllDynamicLists);
+  dateInput.addEventListener("input", function() {
+    formatDateInput(this);
+    updateAllDynamicLists();
+  });
+  
+  // Sadece rakam ve tire girişine izin ver
+  dateInput.addEventListener("keypress", function(e) {
+    const char = String.fromCharCode(e.which);
+    if (!/[\d-]/.test(char) && e.which !== 8) { // 8 = backspace
+      e.preventDefault();
+    }
+  });
+}
+
+// İş deneyimi alanı ekleme
+function addExpField() {
+  const container = document.getElementById('expContainer');
+  if (!container) return;
+
+  const expFieldRow = document.createElement("div");
+  expFieldRow.className = "exp-field-row";
+  
+  // Şirket alanı
+  const companyField = document.createElement("div");
+  companyField.className = "exp-field";
+  
+  const companyLabel = document.createElement("label");
+  companyLabel.textContent = "Şirket & Görev";
+  
+  const companyInput = document.createElement("input");
+  companyInput.className = "expCompanyInput";
+  companyInput.placeholder = "Şirket adı ve görev";
+  
+  companyField.appendChild(companyLabel);
+  companyField.appendChild(companyInput);
+  
+  // Tarih alanı
+  const dateField = document.createElement("div");
+  dateField.className = "exp-field";
+  
+  const dateLabel = document.createElement("label");
+  dateLabel.textContent = "Tarih ";
+  
+  const dateInput = document.createElement("input");
+  dateInput.className = "expDateInput";
+  dateInput.placeholder = "2005-2010";
+  dateInput.maxLength = 9; // Maksimum 9 karakter
+  
+  dateField.appendChild(dateLabel);
+  dateField.appendChild(dateInput);
+  
+  // Silme butonu
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "×";
+  delBtn.type = "button";
+  delBtn.classList.add("no-print");
+  delBtn.style.cssText = "align-self: flex-end; margin-bottom: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;";
+  delBtn.onclick = function () {
+    removeExpField(this);
+  };
+  
+  expFieldRow.appendChild(companyField);
+  expFieldRow.appendChild(dateField);
+  expFieldRow.appendChild(delBtn);
+  container.appendChild(expFieldRow);
+  
+  // Event listener'ları ekle
+  companyInput.addEventListener("input", updateAllDynamicLists);
+  dateInput.addEventListener("input", function() {
+    formatDateInput(this);
+    updateAllDynamicLists();
+  });
+  
+  // Sadece rakam ve tire girişine izin ver
+  dateInput.addEventListener("keypress", function(e) {
+    const char = String.fromCharCode(e.which);
+    if (!/[\d-]/.test(char) && e.which !== 8) { // 8 = backspace
+      e.preventDefault();
+    }
+  });
+}
+
+// Kurs alanı ekleme
+function addCourseField() {
+  const container = document.getElementById('courseContainer');
+  if (!container) return;
+
+  const courseFieldRow = document.createElement("div");
+  courseFieldRow.className = "course-field-row";
+  
+  // Kurs adı alanı
+  const nameField = document.createElement("div");
+  nameField.className = "course-field";
+  
+  const nameLabel = document.createElement("label");
+  nameLabel.textContent = "Kurs / Sertifika";
+  
+  const nameInput = document.createElement("input");
+  nameInput.className = "courseNameInput";
+  nameInput.placeholder = "Kurs veya sertifika adı";
+  
+  nameField.appendChild(nameLabel);
+  nameField.appendChild(nameInput);
+  
+  // Tarih alanı
+  const dateField = document.createElement("div");
+  dateField.className = "course-field";
+  
+  const dateLabel = document.createElement("label");
+  dateLabel.textContent = "Tarih ";
+  
+  const dateInput = document.createElement("input");
+  dateInput.className = "courseDateInput";
+  dateInput.placeholder = "2005-2010";
+  dateInput.maxLength = 9; // Maksimum 9 karakter
+  
+  dateField.appendChild(dateLabel);
+  dateField.appendChild(dateInput);
+  
+  // Silme butonu
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "×";
+  delBtn.type = "button";
+  delBtn.classList.add("no-print");
+  delBtn.style.cssText = "align-self: flex-end; margin-bottom: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; width: 30px; height: 30px; cursor: pointer;";
+  delBtn.onclick = function () {
+    removeCourseField(this);
+  };
+  
+  courseFieldRow.appendChild(nameField);
+  courseFieldRow.appendChild(dateField);
+  courseFieldRow.appendChild(delBtn);
+  container.appendChild(courseFieldRow);
+  
+  // Event listener'ları ekle
+  nameInput.addEventListener("input", updateAllDynamicLists);
+  dateInput.addEventListener("input", function() {
+    formatDateInput(this);
+    updateAllDynamicLists();
+  });
+  
+  // Sadece rakam ve tire girişine izin ver
+  dateInput.addEventListener("keypress", function(e) {
+    const char = String.fromCharCode(e.which);
+    if (!/[\d-]/.test(char) && e.which !== 8) { // 8 = backspace
+      e.preventDefault();
+    }
+  });
+}
+
+// Eğitim alanı silme fonksiyonu
+function removeEduField(button) {
+  const eduFieldRow = button.parentElement;
+  eduFieldRow.remove();
+  updateAllDynamicLists();
+}
+
+// İş deneyimi alanı silme fonksiyonu
+function removeExpField(button) {
+  const expFieldRow = button.parentElement;
+  expFieldRow.remove();
+  updateAllDynamicLists();
+}
+
+// Kurs alanı silme fonksiyonu
+function removeCourseField(button) {
+  const courseFieldRow = button.parentElement;
+  courseFieldRow.remove();
+  updateAllDynamicLists();
+}
+
+// Diğer alanlar için ekleme fonksiyonu (referanslar için)
+function addField(containerId, className, placeholder) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const div = document.createElement("div");
+  div.className = "field";
+
+  const input = document.createElement("input");
+  input.className = className;
+  input.placeholder = placeholder;
+
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "×";
+  delBtn.type = "button";
+  delBtn.classList.add("no-print");
+  delBtn.onclick = function () {
+    removeField(this);
+  };
+
+  div.appendChild(input);
+  div.appendChild(delBtn);
+  container.appendChild(div);
+
+  input.addEventListener("input", updateAllDynamicLists);
+}
+
+// Diğer alanlar için silme fonksiyonu (referanslar için)
+function removeField(button) {
+  const fieldDiv = button.parentElement;
+  fieldDiv.remove();
+  updateAllDynamicLists();
+}
+
+// Mevcut tarih alanlarını da formatlamak için
+function initializeDateFields() {
+  // Mevcut eğitim tarih alanlarını formatla
+  document.querySelectorAll('.eduDateInput').forEach(input => {
+    input.maxLength = 9;
+    input.placeholder = "2005-2010";
+    
+    input.addEventListener("input", function() {
+      formatDateInput(this);
+      updateAllDynamicLists();
+    });
+    
+    input.addEventListener("keypress", function(e) {
+      const char = String.fromCharCode(e.which);
+      if (!/[\d-]/.test(char) && e.which !== 8) {
+        e.preventDefault();
+      }
+    });
+  });
+  
+  // Mevcut iş deneyimi tarih alanlarını formatla
+  document.querySelectorAll('.expDateInput').forEach(input => {
+    input.maxLength = 9;
+    input.placeholder = "2005-2010";
+    
+    input.addEventListener("input", function() {
+      formatDateInput(this);
+      updateAllDynamicLists();
+    });
+    
+    input.addEventListener("keypress", function(e) {
+      const char = String.fromCharCode(e.which);
+      if (!/[\d-]/.test(char) && e.which !== 8) {
+        e.preventDefault();
+      }
+    });
+  });
+  
+  // Mevcut kurs tarih alanlarını formatla
+  document.querySelectorAll('.courseDateInput').forEach(input => {
+    input.maxLength = 9;
+    input.placeholder = "2005-2010";
+    
+    input.addEventListener("input", function() {
+      formatDateInput(this);
+      updateAllDynamicLists();
+    });
+    
+    input.addEventListener("keypress", function(e) {
+      const char = String.fromCharCode(e.which);
+      if (!/[\d-]/.test(char) && e.which !== 8) {
+        e.preventDefault();
+      }
+    });
+  });
+}
+
+// Dinamik inputları bağlama
+function bindDynamicInputs() {
+  // Tüm inputlara event listener ekle
+  document.querySelectorAll(".eduUniInput, .expCompanyInput, .courseNameInput, .refInput").forEach(input => {
+    input.addEventListener("input", updateAllDynamicLists);
+  });
+  
+  // Tarih alanları için özel event listener'lar
+  initializeDateFields();
+  
+  // Yetenekler ve ilgi alanları için event listener ekle
+  document.getElementById("skills").addEventListener("input", updateAllDynamicLists);
+  document.getElementById("interests").addEventListener("input", updateAllDynamicLists);
+  document.getElementById("summary").addEventListener("input", updateAllDynamicLists);
+  document.getElementById("disabilityDescription").addEventListener("input", updateAllDynamicLists);
+  
+  // Engelli durumu değişikliğini dinle
+  document.getElementById("disabilityStatus").addEventListener("change", updateAllDynamicLists);
+  
+  // İlk güncellemeyi yap
+  updateAllDynamicLists();
+}
+
+// PDF için boş bölümleri gizleme
+function hideEmptySectionsForPDF() {
+  const sections = [
+    { 
+      id: 'summarySection', 
+      content: 'outSummary', 
+      isText: true
+    },
+    { 
+      id: 'languagesSection', 
+      content: 'outLanguages', 
+      isText: false
+    },
+    { 
+      id: 'eduSection', 
+      content: 'outEdu', 
+      isText: false
+    },
+    { 
+      id: 'expSection', 
+      content: 'outExp', 
+      isText: false
+    },
+    { 
+      id: 'courseSection', 
+      content: 'outCourse', 
+      isText: false
+    },
+    { 
+      id: 'skillsSection', 
+      content: 'outSkills', 
+      isText: false
+    },
+    { 
+      id: 'interestsSection', 
+      content: 'outInterests', 
+      isText: false
+    },
+    { 
+      id: 'refSection', 
+      content: 'outRef', 
+      isText: false
+    },
+    { 
+      id: 'disabilityDescriptionRight', 
+      content: 'outDisabilityDescriptionRightText', 
+      isText: true
+    }
+  ];
+  
+  sections.forEach(section => {
+    const sectionElement = document.getElementById(section.id);
+    const contentElement = document.getElementById(section.content);
+    
+    if (sectionElement && contentElement) {
+      let isEmpty = false;
+      
+      if (section.isText) {
+        // Metin içeriği için kontrol
+        isEmpty = contentElement.textContent.trim() === "Buraya hakkınızda kısa yazı gelecek..." || 
+                 contentElement.textContent.trim() === "" ||
+                 contentElement.textContent.trim() === "Engelli durumu hakkında açıklama bulunmamaktadır.";
+      } else {
+        // Liste içeriği için kontrol
+        isEmpty = contentElement.innerHTML.trim() === '';
+      }
+      
+      // Eğer içerik boşsa, hem başlığı hem içeriği gizle
+      if (isEmpty) {
+        sectionElement.style.display = 'none';
+        contentElement.style.display = 'none';
+        
+        // Özel olarak işaretle (sonradan geri almak için)
+        sectionElement.setAttribute('data-pdf-hidden', 'true');
+        contentElement.setAttribute('data-pdf-hidden', 'true');
+      }
+    }
+  });
+}
+
+// PDF'den sonra gizlenen bölümleri geri gösterme
+function showHiddenSectionsAfterPDF() {
+  // data-pdf-hidden attribute'u olan tüm elementleri bul ve göster
+  const hiddenElements = document.querySelectorAll('[data-pdf-hidden="true"]');
+  hiddenElements.forEach(element => {
+    element.style.display = '';
+    element.removeAttribute('data-pdf-hidden');
+  });
+}
+
+// PDF oluşturma
+function generatePDF() {
+  // Önizleme elementini al
+  const element = document.getElementById('cvPreview');
+  
+  // Boş bölümleri gizle
+  hideEmptySectionsForPDF();
+  
+  // Yedek stilleri kaydet
+  const originalStyles = {
+    width: element.style.width,
+    height: element.style.height,
+    overflow: element.style.overflow,
+    boxShadow: element.style.boxShadow,
+    borderRadius: element.style.borderRadius
+  };
+  
+  // PDF için geçici stiller uygula
+  element.style.width = '210mm';
+  element.style.height = 'auto';
+  element.style.overflow = 'visible';
+  element.style.boxShadow = 'none';
+  element.style.borderRadius = '0';
+  
+  // Silme butonlarını gizle
+  const delButtons = element.querySelectorAll('.no-print');
+  delButtons.forEach(btn => {
+    btn.style.display = 'none';
+  });
+  
+  const opt = {
+    margin: 0,
+    filename: 'cv.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2,
+      useCORS: true,
+      logging: true
+    },
+    jsPDF: { 
+      unit: 'mm', 
+      format: 'a4', 
+      orientation: 'portrait'
+    }
+  };
+
+  // PDF oluştur
+  html2pdf().set(opt).from(element).save().then(() => {
+    // Özgün stilleri geri yükle
+    element.style.width = originalStyles.width;
+    element.style.height = originalStyles.height;
+    element.style.overflow = originalStyles.overflow;
+    element.style.boxShadow = originalStyles.boxShadow;
+    element.style.borderRadius = originalStyles.borderRadius;
+    
+    // Silme butonlarını geri göster
+    delButtons.forEach(btn => {
+      btn.style.display = 'block';
+    });
+    
+    // Gizlenen bölümleri geri göster
+    showHiddenSectionsAfterPDF();
+  }).catch(error => {
+    console.error('PDF oluşturma hatası:', error);
+    alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+    
+    // Hata durumunda da özgün stilleri geri yükle
+    element.style.width = originalStyles.width;
+    element.style.height = originalStyles.height;
+    element.style.overflow = originalStyles.overflow;
+    element.style.boxShadow = originalStyles.boxShadow;
+    element.style.borderRadius = originalStyles.borderRadius;
+    
+    delButtons.forEach(btn => {
+      btn.style.display = 'block';
+    });
+    
+    // Gizlenen bölümleri geri göster
+    showHiddenSectionsAfterPDF();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  // Karanlık mod işlevselliği
+   //const toggleDarkBtn = document.getElementById("toggleDark");
+  // const icon = toggleDarkBtn.querySelector("i");
+  
+  // toggleDarkBtn.addEventListener("click", () => {
+   //  document.body.classList.toggle("dark");
+   // if (document.body.classList.contains("dark")) {
+    //   icon.classList.remove("fa-moon");
+    //   icon.classList.add("fa-sun");
+    // } else {
+    //   icon.classList.remove("fa-sun");
+    //   icon.classList.add("fa-moon");
+    // }
+  // });
+
+  // Sekme geçişleri
+  const tabBtns = document.querySelectorAll('.tabBtn');
+  const tabContents = document.querySelectorAll('.tabContent');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabContents.forEach(c => c.style.display = 'none');
+      document.getElementById(btn.dataset.tab).style.display = 'block';
+      
+      // Diller sekmesine geçildiğinde eklenen dilleri göster
+      if (btn.dataset.tab === 'tab2') {
+        updateAddedLanguagesList();
+      }
+    });
+  });
+
+  // Bağlantılar - Tüm alanlar için bağlantıları kur
+  bindInputToOutput("name", "outName", "Ad Soyad");
+  bindInputToOutput("position", "outPosition", "Pozisyon");
+  bindInputToOutput("phone", "outPhone", "-");
+  bindInputToOutput("email", "outEmail", "-");
+  bindInputToOutput("address", "outAddress", "-");
+  
+  // Yeni eklenen alanlar için bağlantılar
+  bindInputToOutput("birthDate", "outBirthDate", "-");
+  bindSelectToOutput("birthPlace", "outBirthPlace", "-");
+  bindSelectToOutput("militaryStatus", "outMilitaryStatus", "-");
+  bindSelectToOutput("criminalRecord", "outCriminalRecord", "-");
+  bindSelectToOutput("disabilityStatus", "outDisabilityStatus", "-");
+  
+  // Ehliyet dropdown'unu dinle
+  const licenseSelect = document.getElementById('license');
+  licenseSelect.addEventListener('change', updateLicenseList);
+  
+  // Dinamik inputları bağla
+  bindDynamicInputs();
+
+  // PDF indirme butonu
+  document.getElementById("btnPDF").addEventListener("click", generatePDF);
+  
+  // Temizleme butonu
+  document.getElementById("btnClear").addEventListener("click", clearForm);
+  
+  // Fotoğraf yükleme
+  document.getElementById("avatarBox").addEventListener("click", ()=>{
+    document.getElementById("photoInput").click();
+  });
+
+  // Fotoğraf seçildiğinde yükle
+  document.getElementById("photoInput").addEventListener("change", function(){
+    let file = this.files[0];
+    if(file){
+      let reader = new FileReader();
+      reader.onload = e => {
+        const avatar = document.getElementById("avatar");
+        avatar.src = e.target.result;
+        avatar.style.display = "block";
+        document.getElementById("avatarText").style.display = "none";
+        document.getElementById("delAvatar").style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Fotoğraf silme
+  document.getElementById("delAvatar").addEventListener("click", (e)=>{
+    e.stopPropagation();
+    document.getElementById("avatar").src = "";
+    document.getElementById("avatar").style.display = "none";
+    document.getElementById("avatarText").style.display = "block";
+    document.getElementById("delAvatar").style.display = "none";
+    document.getElementById("photoInput").value = "";
+  });
+  
+  // Telefon formatı
+  const phoneInput = document.getElementById("phone");
+  phoneInput.addEventListener("input", function(e) {
+    let digits = this.value.replace(/\D/g, '');
+    if (digits.length > 10) digits = digits.slice(0, 10);
+    
+    let part1 = digits.substring(0,3);
+    let part2 = digits.substring(3,6);
+    let part3 = digits.substring(6,8);
+    let part4 = digits.substring(8,10);
+    
+    let formatted = part1;
+    if (part2) formatted += ' ' + part2;
+    if (part3) formatted += ' ' + part3;
+    if (part4) formatted += ' ' + part4;
+    
+    this.value = formatted;
+    
+    const outPhone = document.getElementById("outPhone");
+    outPhone.textContent = formatted || "-";
+  });
+  
+  // Email domain seçme işlevselliği
+  const emailInput = document.getElementById("email");
+  const domainSelector = document.getElementById("domainSelector");
+  const domainOptions = document.querySelectorAll(".domain-option");
+  
+  emailInput.addEventListener("focus", function() {
+    // Eğer bir @ işareti varsa, domain seçeneklerini göster
+    if (this.value.includes("@")) {
+      const atIndex = this.value.indexOf("@");
+      const currentDomain = this.value.substring(atIndex);
+      
+      // Mevcut domaini vurgula
+      domainOptions.forEach(option => {
+        if (option.dataset.domain === currentDomain) {
+          option.style.background = "#f0f0f0";
+        } else {
+          option.style.background = "";
+        }
+      });
+    }
+    
+    domainSelector.style.display = "block";
+  });
+  
+  emailInput.addEventListener("blur", function() {
+    // Domain seçiciyi gizle (biraz gecikmeyle, tıklama işlemi için zaman tanımak için)
+    setTimeout(() => {
+      domainSelector.style.display = "none";
+    }, 200);
+  });
+  
+  emailInput.addEventListener("input", function() {
+    const value = this.value;
+    
+    // Eğer kullanıcı @ işareti yazdıysa domain seçeneklerini göster
+    if (value.includes("@")) {
+      domainSelector.style.display = "block";
+    }
+  });
+  
+  // Domain seçeneklerine tıklama
+  domainOptions.forEach(option => {
+    option.addEventListener("mousedown", function(e) {
+      e.preventDefault(); // Input'un blur olmasını engelle
+      
+      const domain = this.dataset.domain;
+      const emailInput = document.getElementById("email");
+      let currentValue = emailInput.value;
+      
+      if (domain === "") {
+        // Özel domain - hiçbir şey yapma, kullanıcı kendi yazsın
+        emailInput.focus();
+      } else {
+        // Kullanıcı adını al (@ işaretinden öncesi)
+        let username = currentValue;
+        if (currentValue.includes("@")) {
+          username = currentValue.split("@")[0];
+        }
+        
+        // Tam email adresini oluştur
+        emailInput.value = username + domain;
+        
+        // Önizlemeyi güncelle
+        document.getElementById("outEmail").textContent = username + domain;
+      }
+      
+      domainSelector.style.display = "none";
+      emailInput.focus();
+    });
+  });
+  
+  // Dil dropdown işlevselliği
+  const languageDropdown = document.getElementById('languageDropdown');
+  const languageOptionsContainer = document.getElementById('languageOptions');
+  const languageCheckboxes = languageOptionsContainer.querySelectorAll('input[type="checkbox"]');
+  
+  // Dil dropdown aç/kapat
+  languageDropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
+    languageOptionsContainer.style.display = 
+      languageOptionsContainer.style.display === 'block' ? 'none' : 'block';
+  });
+  
+  // Sayfada herhangi bir yere tıklandığında dropdown'ı kapat
+  document.addEventListener('click', function() {
+    languageOptionsContainer.style.display = 'none';
+  });
+  
+  // Dropdown içine tıklandığında kapanmasını engelle
+  languageOptionsContainer.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+  
+  // Dil seçeneklerini dinle
+  languageCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      updateLanguagesList();
+    });
+  });
+  
+  // + butonu ile dil ekleme
+  const addLanguageBtn = document.getElementById('addLanguageBtn');
+  const customLanguageInput = document.getElementById('customLanguage');
+  const suggestionsBox = document.getElementById('suggestionsBox');
+  
+  addLanguageBtn.addEventListener('click', function() {
+    const customLanguage = customLanguageInput.value.trim();
+    if (customLanguage) {
+      addCustomLanguage(customLanguage);
+      customLanguageInput.value = '';
+    }
+  });
+  
+  // Özel dil ekleme (Otomatik - her tuş vuruşunda kontrol)
+  customLanguageInput.addEventListener('input', function(e) {
+    const inputText = this.value.trim();
+    
+    // Önerileri temizle ve gizle
+    suggestionsBox.innerHTML = '';
+    suggestionsBox.style.display = 'none';
+    
+    // Eğer yeterince uzun bir metin girildiyse
+    if (inputText.length > 1) {
+      // Benzer diller için öneriler göster
+      showLanguageSuggestions(inputText);
+    }
+    
+    // Debounce kullanarak otomatik ekleme
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      if (inputText.length > 2 && inputText !== lastAddedLanguage) {
+        addCustomLanguage(inputText);
+        this.value = '';
+      }
+    }, 1500); // 1500ms gecikme
+  });
+  
+  // Özel dil ekleme (Enter tuşu ile de çalışsın)
+  customLanguageInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const customLanguage = this.value.trim();
+      if (customLanguage) {
+        addCustomLanguage(customLanguage);
+        this.value = '';
+      }
+    }
+  });
+  
+  // Input'tan focus çıkınca da ekle
+  customLanguageInput.addEventListener('blur', function() {
+    const customLanguage = this.value.trim();
+    if (customLanguage && customLanguage.length > 2 && customLanguage !== lastAddedLanguage) {
+      addCustomLanguage(customLanguage);
+      this.value = '';
+    }
+  });
+  
+  // Renk seçici
+  const defaultColor = "#e0e0e0";
+  const cvLeft = document.getElementById("cvLeft");
+  
+  pickr = Pickr.create({
+    el: "#colorPicker",
+    theme: "classic",
+    default: defaultColor,
+    components: {
+      preview: false,
+      opacity: false,
+      hue: true,
+      interaction: { input: false }
+    }
+  });
+
+  pickr.on("change", color => {
+    cvLeft.style.background = color.toHEXA().toString();
+  });
+  
+  // Renk resetleme
+  document.getElementById("resetColor").addEventListener("click", () => {
+    cvLeft.style.background = defaultColor;
+    pickr.setColor(defaultColor);
+  });
+
+  // Sayfa yüklendiğinde ekranı sola kaydır
+  window.scrollTo(0, 0);
+});
+
+// Dil dropdown metnini güncelle
+function updateLanguageDropdownText() {
+  const languageDropdown = document.getElementById('languageDropdown');
+  const selectedLanguages = document.querySelectorAll('#languageOptions input[type="checkbox"]:checked');
+  
+  if (selectedLanguages.length === 0) {
+    languageDropdown.textContent = 'Dilleri seçmek için tıklayın';
+  } else {
+    const languageNames = Array.from(selectedLanguages).map(cb => cb.value);
+    languageDropdown.textContent = languageNames.join(', ');
+  }
+}
+
+// Ehliyet listesini güncelleme
+function updateLicenseList() {
+  const outLicense = document.getElementById('outLicense');
+  const selectedOptions = Array.from(document.getElementById('license').selectedOptions);
+  
+  if (selectedOptions.length === 0) {
+    outLicense.textContent = '-';
+    return;
+  }
+  
+  const licenseValues = selectedOptions.map(option => option.value);
+  outLicense.textContent = licenseValues.join(', ');
+}
+
+// Select -> Önizleme bağlama
+function bindSelectToOutput(selectId, outputId, placeholder="") {
+  const select = document.getElementById(selectId);
+  const output = document.getElementById(outputId);
+  if (select && output) {
+    select.addEventListener("change", () => {
+      output.textContent = select.value !== "" ? select.value : placeholder;
+    });
+  }
+}
+
+// Form -> Önizleme bağlama (genel)
+function bindInputToOutput(inputId, outputId, placeholder="") {
+  const input = document.getElementById(inputId);
+  const output = document.getElementById(outputId);
+  if (input && output) {
+    input.addEventListener("input", () => {
+      output.textContent = input.value.trim() !== "" ? input.value : placeholder;
+    });
+  }
+}
+
+// Dil önerilerini göster
+function showLanguageSuggestions(inputText) {
+  const suggestionsBox = document.getElementById('suggestionsBox');
+  const popularLanguages = [
+    "Türkçe", "İngilizce", "Almanca", "Fransızca", "İspanyolca", 
+    "Arapça", "Rusça", "Çince", "Japonca", "İtalyanca", 
+    "Portekizce", "Hollandaca", "Yunanca", "İsveçce", "Korece"
+  ];
+  
+  const filteredLanguages = popularLanguages.filter(lang => 
+    lang.toLowerCase().includes(inputText.toLowerCase())
+  );
+  
+  if (filteredLanguages.length > 0) {
+    suggestionsBox.innerHTML = '';
+    filteredLanguages.forEach(lang => {
+      const div = document.createElement('div');
+      div.className = 'suggestion-item';
+      div.textContent = lang;
+      div.addEventListener('click', () => {
+        document.getElementById('customLanguage').value = lang;
+        addCustomLanguage(lang);
+        suggestionsBox.style.display = 'none';
+      });
+      suggestionsBox.appendChild(div);
+    });
+    suggestionsBox.style.display = 'block';
+  } else {
+    suggestionsBox.style.display = 'none';
+  }
+}
+
+// Özel dil ekleme fonksiyonu
+function addCustomLanguage(language) {
+  if (language && !customLanguages.includes(language)) {
+    customLanguages.push(language);
+    lastAddedLanguage = language;
+    updateLanguagesList();
+    updateAddedLanguagesList();
+    
+    // Başarılı ekleme için kısa bir bildirim
+    showNotification(`"${language}" dili eklendi`);
+  }
+}
+
+// Eklenen diller listesini güncelle
+function updateAddedLanguagesList() {
+  const addedLanguagesList = document.getElementById('addedLanguagesList');
+  addedLanguagesList.innerHTML = '';
+  
+  if (customLanguages.length === 0) {
+    addedLanguagesList.innerHTML = '<p class="hint-text"><small>Henüz özel dil eklenmedi</small></p>';
+    return;
+  }
+  
+  customLanguages.forEach((language, index) => {
+    const languageItem = document.createElement('div');
+    languageItem.className = 'language-item';
+    languageItem.innerHTML = `
+      <span>${language}</span>
+      <span class="delete-language" data-index="${index}">×</span>
+    `;
+    addedLanguagesList.appendChild(languageItem);
+  });
+  
+  // Silme butonlarına event listener ekle
+  document.querySelectorAll('.delete-language').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const index = parseInt(this.getAttribute('data-index'));
+      deleteCustomLanguage(index);
+    });
+  });
+}
+
+// Özel dil silme fonksiyonu
+function deleteCustomLanguage(index) {
+  const deletedLanguage = customLanguages[index];
+  customLanguages.splice(index, 1);
+  updateLanguagesList();
+  updateAddedLanguagesList();
+  showNotification(`"${deletedLanguage}" dili silindi`);
+}
+
+// Bildirim gösterme
+function showNotification(message) {
+  // Önceki bildirimi temizle
+  const existingNotification = document.querySelector('.language-notification');
+  if (existingNotification) {
+    existingNotification.remove();
+  }
+  
+  const notification = document.createElement('div');
+  notification.className = 'language-notification';
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    z-index: 10000;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Görünür yap
+  setTimeout(() => {
+    notification.style.opacity = '1';
+  }, 10);
+  
+  // 3 saniye sonra kaldır
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 3000);
+}
+
+// Formu temizleme
+function clearForm() {
+  if (confirm('Formdaki tüm verileri silmek istediğinize emin misiniz?')) {
+    // Input ve textarea temizle
+    document.querySelectorAll('input, textarea, select').forEach(input => {
+      if (input.type !== 'checkbox') {
+        input.value = '';
+      } else {
+        input.checked = false;
+      }
+    });
+
+    // Dinamik alanları sıfırla (sadece ilk alan kalacak şekilde)
+    const containers = ['eduContainer','expContainer','courseContainer','refContainer'];
+    containers.forEach(id => {
+      const container = document.getElementById(id);
+      if (!container) return;
+      
+      if (id === 'eduContainer') {
+        // Eğitim alanı için özel temizleme
+        const fields = container.querySelectorAll('.edu-field-row');
+        fields.forEach((field, index) => {
+          if(index === 0) {
+            const uniInput = field.querySelector('.eduUniInput');
+            const dateInput = field.querySelector('.eduDateInput');
+            if(uniInput) uniInput.value = '';
+            if(dateInput) dateInput.value = '';
+          } else {
+            field.remove();
+          }
+        });
+      } else if (id === 'expContainer') {
+        // İş deneyimi alanı için özel temizleme
+        const fields = container.querySelectorAll('.exp-field-row');
+        fields.forEach((field, index) => {
+          if(index === 0) {
+            const companyInput = field.querySelector('.expCompanyInput');
+            const dateInput = field.querySelector('.expDateInput');
+            if(companyInput) companyInput.value = '';
+            if(dateInput) dateInput.value = '';
+          } else {
+            field.remove();
+          }
+        });
+      } else if (id === 'courseContainer') {
+        // Kurs alanı için özel temizleme
+        const fields = container.querySelectorAll('.course-field-row');
+        fields.forEach((field, index) => {
+          if(index === 0) {
+            const nameInput = field.querySelector('.courseNameInput');
+            const dateInput = field.querySelector('.courseDateInput');
+            if(nameInput) nameInput.value = '';
+            if(dateInput) dateInput.value = '';
+          } else {
+            field.remove();
+          }
+        });
+      } else {
+        // Diğer alanlar için normal temizleme
+        const fields = container.querySelectorAll('.field');
+        fields.forEach((field, index) => {
+          if(index === 0) {
+            const input = field.querySelector('input');
+            if(input) input.value = '';
+          } else {
+            field.remove();
+          }
+        });
+      }
+    });
+
+    // Önizlemeyi temizle / varsayılan metinleri geri yükle
+    document.getElementById('outName').textContent = 'Ad Soyad';
+    document.getElementById('outPosition').textContent = 'Pozisyon';
+    document.getElementById('outBirthDate').textContent = '-';
+    document.getElementById('outBirthPlace').textContent = '-';
+    document.getElementById('outMilitaryStatus').textContent = '-';
+    document.getElementById('outCriminalRecord').textContent = '-';
+    document.getElementById('outLicense').textContent = '-';
+    document.getElementById('outDisabilityStatus').textContent = '-';
+    document.getElementById('outPhone').textContent = '-';
+    document.getElementById('outEmail').textContent = '-';
+    document.getElementById('outAddress').textContent = '-';
+    document.getElementById('outSummary').textContent = 'Buraya hakkınızda kısa yazı gelecek...';
+    
+    // Listeleri temizle
+    ['outSkills','outLanguages','outInterests','outEdu','outExp','outCourse','outRef'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
+
+    // Fotoğrafı temizle
+    document.getElementById("avatar").src = "";
+    document.getElementById("avatar").style.display = "none";
+    document.getElementById("avatarText").style.display = "block";
+    document.getElementById("delAvatar").style.display = "none";
+    document.getElementById("photoInput").value = "";
+
+    // Özel dilleri temizle
+    customLanguages = [];
+    lastAddedLanguage = '';
+    updateAddedLanguagesList();
+    updateLanguageDropdownText();
+    
+    // Öneri kutusunu temizle
+    const suggestionsBox = document.getElementById('suggestionsBox');
+    if (suggestionsBox) {
+      suggestionsBox.innerHTML = '';
+      suggestionsBox.style.display = 'none';
+    }
+    
+    // Varsayılan rengi geri yükle
+    const defaultColor = "#e0e0e0";
+    document.getElementById("cvLeft").style.background = defaultColor;
+    if (pickr) {
+      pickr.setColor(defaultColor);
+    }
+
+    // Engelli açıklama bölümlerini gizle
+    document.getElementById("disabilityDescriptionSection").style.display = "none";
+    document.getElementById("disabilityDescriptionRight").style.display = "none";
+
+    // Tüm bölümleri güncelle
+    updateAllDynamicLists();
+
+    // Gizlenen bölümleri geri göster
+    showHiddenSectionsAfterPDF();
+
+    alert('Form ve fotoğraf temizlendi!');
+  }
+}
+
+// Sekmeler için sürükleme işlevselliği
+const tabsContainer = document.querySelector('.tabs-container');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+tabsContainer.addEventListener('mousedown', (e) => {
+  isDown = true;
+  tabsContainer.classList.add('active');
+  startX = e.pageX - tabsContainer.offsetLeft;
+  scrollLeft = tabsContainer.scrollLeft;
+});
+tabsContainer.addEventListener('mouseleave', () => {
+  isDown = false;
+  tabsContainer.classList.remove('active');
+});
+tabsContainer.addEventListener('mouseup', () => {
+  isDown = false;
+  tabsContainer.classList.remove('active');
+});
+tabsContainer.addEventListener('mousemove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - tabsContainer.offsetLeft;
+  const walk = (x - startX) * 2;
+  tabsContainer.scrollLeft = scrollLeft - walk;
+});
+
+// Dokunmatik ekranlar için olay dinleyicileri
+tabsContainer.addEventListener('touchstart', (e) => {
+  isDown = true;
+  tabsContainer.classList.add('active');
+  startX = e.touches[0].pageX - tabsContainer.offsetLeft;
+  scrollLeft = tabsContainer.scrollLeft;
+});
+
+tabsContainer.addEventListener('touchend', () => {
+  isDown = false;
+  tabsContainer.classList.remove('active');
+});
+
+tabsContainer.addEventListener('touchmove', (e) => {
+  if(!isDown) return;
+  e.preventDefault();
+  const x = e.touches[0].pageX - tabsContainer.offsetLeft;
+  const walk = (x - startX) * 2;
+  tabsContainer.scrollLeft = scrollLeft - walk;
+});
+
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+</html>
