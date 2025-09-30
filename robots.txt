@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap
+Sitemap: https://www.mobilcv.com/sitemap.xml
+
+# Crawl delay - arama motorlarına sayfanızı nazikçe taramalarını söyler
+Crawl-delay: 1
