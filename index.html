@@ -2998,19 +2998,19 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 	// Tawk.to boyut düzeltme - CSS yüklenmezse bu çalışsın
-function fixTawkToSize() {
-    setTimeout(() => {
-        const tawkFrames = document.querySelectorAll('iframe[src*="tawk.to"], iframe[src*="tawk_to"]');
-        tawkFrames.forEach(iframe => {
-            iframe.style.width = '50px !important';
-            iframe.style.height = '50px !important';
-            iframe.style.position = 'fixed !important';
-            iframe.style.bottom = '15px !important';
-            iframe.style.right = '15px !important';
-            iframe.style.zIndex = '9999 !important';
-        });
-    }, 3000); // 3 saniye sonra çalışsın
-}
+// function fixTawkToSize() {
+   // //  setTimeout(() => {
+    //     const tawkFrames = document.querySelectorAll('iframe[src*="tawk.to"], iframe[src*="tawk_to"]');
+     //    tawkFrames.forEach(iframe => {
+      //       iframe.style.width = '50px !important';
+      //       iframe.style.height = '50px !important';
+        //     iframe.style.position = 'fixed !important';
+        //     iframe.style.bottom = '15px !important';
+         //    iframe.style.right = '15px !important';
+        //     iframe.style.zIndex = '9999 !important';
+     //    });
+  //   }, 3000); // 3 saniye sonra çalışsın
+// }
 
 // Sayfa yüklendiğinde ve her 5 saniyede bir kontrol et
 window.addEventListener('load', fixTawkToSize);
@@ -3058,6 +3058,7 @@ s0.parentNode.insertBefore(s1,s0);
 </html>
 </body>
 </html>
+
 
 
 
