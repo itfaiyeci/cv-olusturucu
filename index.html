@@ -3,48 +3,37 @@
 <head>
 	<style>
 /* ==================== */
-/* TAWK.TO MOBİL DÜZELTMESİ */
+/* TAWK.TO MOBİL TAM ÇÖZÜM */
 /* ==================== */
 
-/* Tawk.to iframe için mobil optimizasyon */
+/* Tawk.to için mobil optimize */
 iframe[src*="tawk.to"] {
     position: fixed !important;
-    bottom: 0 !important;
-    right: 0 !important;
-    z-index: 2147483647 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    bottom: 15px !important;
+    right: 15px !important;
+    z-index: 9999 !important;
     
-    /* Mobil için boyut ayarı */
-    width: 60px !important;
-    height: 60px !important;
-    max-width: 60px !important;
-    max-height: 60px !important;
-    min-width: 60px !important;
-    min-height: 60px !important;
+    /* Sabit küçük boyut */
+    width: 50px !important;
+    height: 50px !important;
+    border: none !important;
+    border-radius: 25px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
 }
 
-/* Mobil cihazlar için ek ayarlar */
-@media (max-width: 768px) {
+/* Tablet için */
+@media (min-width: 769px) and (max-width: 1024px) {
     iframe[src*="tawk.to"] {
-        width: 50px !important;
-        height: 50px !important;
-        max-width: 50px !important;
-        max-height: 50px !important;
-        bottom: 10px !important;
-        right: 10px !important;
+        width: 55px !important;
+        height: 55px !important;
     }
 }
 
-/* Çok küçük ekranlar için */
-@media (max-width: 480px) {
+/* Masaüstü için normal boyut */
+@media (min-width: 1025px) {
     iframe[src*="tawk.to"] {
-        width: 45px !important;
-        height: 45px !important;
-        max-width: 45px !important;
-        max-height: 45px !important;
-        bottom: 8px !important;
-        right: 8px !important;
+        width: 60px !important;
+        height: 60px !important;
     }
 }
 </style>
@@ -3048,6 +3037,7 @@ s0.parentNode.insertBefore(s1,s0);
 </html>
 </body>
 </html>
+
 
 
 
