@@ -2977,6 +2977,26 @@ s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
+
+	// BASİT TEST KODU
+function showTawkTo() {
+    const tawkFrame = document.querySelector('iframe[src*="tawk"]');
+    if (tawkFrame) {
+        tawkFrame.style.width = '50px';
+        tawkFrame.style.height = '50px';
+        tawkFrame.style.position = 'fixed';
+        tawkFrame.style.bottom = '15px';
+        tawkFrame.style.right = '15px';
+        tawkFrame.style.zIndex = '9999';
+        console.log('Tawk.to bulundu ve boyutlandırıldı');
+    } else {
+        console.log('Tawk.to iframe bulunamadı');
+    }
+}
+
+// Hemen çalıştır ve tekrarla
+showTawkTo();
+setInterval(showTawkTo, 2000);
 </script>
 <!--End of Tawk.to Script-->
 <!--End of Tawk.to Script-->
@@ -3006,6 +3026,7 @@ s0.parentNode.insertBefore(s1,s0);
 </html>
 </body>
 </html>
+
 
 
 
