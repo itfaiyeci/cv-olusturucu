@@ -3013,8 +3013,49 @@ window.addEventListener('DOMContentLoaded', () => {
 // }
 
 // Sayfa yüklendiğinde ve her 5 saniyede bir kontrol et
+//window.addEventListener('load', fixTawkToSize);
+//setInterval(fixTawkToSize, 5000);
+
+	// Tawk.to KESİN ÇÖZÜM
+function fixTawkToSize() {
+    setTimeout(() => {
+        const tawkFrames = document.querySelectorAll('iframe[src*="tawk"], #tawk_iframe, [id*="tawk"]');
+        
+        tawkFrames.forEach(iframe => {
+            // Tüm stilleri sıfırla ve yeniden ata
+            iframe.setAttribute('style', '');
+            iframe.style.cssText = `
+                width: 50px !important;
+                height: 50px !important;
+                position: fixed !important;
+                bottom: 15px !important;
+                right: 15px !important;
+                z-index: 9999 !important;
+                border: none !important;
+                border-radius: 25px !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+                background: transparent !important;
+            `;
+            
+            // Mobil için ek kontrol
+            if (window.innerWidth <= 768) {
+                iframe.style.cssText += `
+                    width: 45px !important;
+                    height: 45px !important;
+                    bottom: 10px !important;
+                    right: 10px !important;
+                `;
+            }
+        });
+    }, 2000);
+}
+
+// Daha sık kontrol
 window.addEventListener('load', fixTawkToSize);
-setInterval(fixTawkToSize, 5000);
+setInterval(fixTawkToSize, 3000);
+
+// Ekran boyutu değişince de tetikle
+window.addEventListener('resize', fixTawkToSize);
 </script>
 
 <!--Start of Tawk.to Script-->
@@ -3058,6 +3099,7 @@ s0.parentNode.insertBefore(s1,s0);
 </html>
 </body>
 </html>
+
 
 
 
