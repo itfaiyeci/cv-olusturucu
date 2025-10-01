@@ -2996,20 +2996,29 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, 15000);
 });
+
+	// Tawk.to boyut düzeltme - CSS yüklenmezse bu çalışsın
+function fixTawkToSize() {
+    setTimeout(() => {
+        const tawkFrames = document.querySelectorAll('iframe[src*="tawk.to"], iframe[src*="tawk_to"]');
+        tawkFrames.forEach(iframe => {
+            iframe.style.width = '50px !important';
+            iframe.style.height = '50px !important';
+            iframe.style.position = 'fixed !important';
+            iframe.style.bottom = '15px !important';
+            iframe.style.right = '15px !important';
+            iframe.style.zIndex = '9999 !important';
+        });
+    }, 3000); // 3 saniye sonra çalışsın
+}
+
+// Sayfa yüklendiğinde ve her 5 saniyede bir kontrol et
+window.addEventListener('load', fixTawkToSize);
+setInterval(fixTawkToSize, 5000);
 </script>
 
 <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+
 <!--End of Tawk.to Script-->
 	<!-- ==================== -->
 <!-- OTOMATİK POPUP BAŞLANGIÇ -->
@@ -3037,6 +3046,7 @@ s0.parentNode.insertBefore(s1,s0);
 </html>
 </body>
 </html>
+
 
 
 
