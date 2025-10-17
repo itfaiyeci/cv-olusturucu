@@ -2330,13 +2330,12 @@
     <div class="hint-bubble" id="hint-bubble"></div>
 
 
-<!-- FEEDBACK SECTION - Sayfanın EN ALTINA ekleyin -->
 <div class="feedback-section">
     <div class="feedback-container">
         <p class="feedback-text" data-key="feedbackText">Görüş ve önerileriniz için bize ulaşın:</p>
-        <a href="mailto:destek@mobilcv.com?subject=MobilCV%20Geri%20Bildirim&body=Merhaba,%20MobilCV%20hakkındaki%20görüşlerim:%0D%0A%0D%0A" 
+        <a href="#" 
            class="feedback-email-link"
-           onclick="handleFeedbackClick(event)">
+           id="feedback-email-link">
            <span class="email-icon">✉️</span>
            <span class="email-text">destek@mobilcv.com</span>
         </a>
@@ -5863,39 +5862,41 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-    // Feedback e-posta linki için click handler
-    function handleFeedbackClick(event) {
-        // Sayfadan ayrılma uyarısını geçici olarak devre dışı bırak
-        const hadBeforeUnload = window.hasBeforeUnload;
-        window.hasBeforeUnload = false;
-        
-        // E-posta istemcisini aç
-        const email = 'destek@mobilcv.com';
-        const subject = 'MobilCV Geri Bildirim';
-        const body = 'Merhaba, MobilCV hakkındaki görüşlerim:\n\n';
-        
-        // Mailto linkini manuel olarak aç
-        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        // Kısa bir süre sonra beforeunload'ı eski haline getir
-        setTimeout(() => {
-            window.hasBeforeUnload = hadBeforeUnload;
-        }, 1000);
-        
-        event.preventDefault();
-        return false;
-    }
-
-    // Beforeunload event listener'ını güncelle
-    window.addEventListener('beforeunload', function(e) {
-        if (window.hasBeforeUnload !== false && !localStorage.getItem('pdfDownloaded')) {
+     // FEEDBACK LINK - EN SONA EKLENECEK
+    const feedbackLink = document.getElementById('feedback-email-link');
+    if (feedbackLink) {
+        feedbackLink.addEventListener('click', function(e) {
             e.preventDefault();
-            e.returnValue = 'CV\'nizi kaydetmediniz! Sayfadan ayrılmak istediğinizden emin misiniz?';
-        }
-    });
-
-    // Sayfa yüklendiğinde beforeunload'ı aktif et
-    window.hasBeforeUnload = true;
+            
+            // Beforeunload event'ini tamamen devre dışı bırak
+            const originalBeforeUnload = window.onbeforeunload;
+            window.onbeforeunload = null;
+            
+            // E-posta bilgileri
+            const email = 'destek@mobilcv.com';
+            const subject = 'MobilCV Geri Bildirim';
+            const body = 'Merhaba, MobilCV hakkındaki görüşlerim:\\n\\n';
+            
+            // Mailto linkini oluştur
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Geçici bir form ile aç (en garantili yöntem)
+            const tempForm = document.createElement('form');
+            tempForm.action = mailtoLink;
+            tempForm.method = 'get';
+            tempForm.target = '_blank';
+            tempForm.style.display = 'none';
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+            document.body.removeChild(tempForm);
+            
+            // 3 saniye sonra beforeunload'ı geri yükle
+            setTimeout(() => {
+                window.onbeforeunload = originalBeforeUnload;
+            }, 3000);
+        });
+    }
+});
     </script>
 	
 	<!--Start of Tawk.to Script-->
@@ -5914,3 +5915,4 @@ s0.parentNode.insertBefore(s1,s0);
 
 
 </html>  
+
