@@ -2468,26 +2468,26 @@
 <div class="feedback-popup-overlay" id="feedback-popup">
     <div class="feedback-popup-content">
         <div class="feedback-popup-header">
-            <h3>Geri Bildirim Gönder</h3>
+            <h3 data-key="feedbackPopupTitle">Geri Bildirim Gönder</h3>
             <button class="feedback-popup-close" id="feedback-close-btn">×</button>
         </div>
         <div class="feedback-popup-body">
             <form id="feedback-form">
                 <div class="form-group">
-                    <label for="feedback-name">Adınız (İsteğe bağlı)</label>
-                    <input type="text" id="feedback-name" placeholder="İsminiz">
+                    <label for="feedback-name" data-key="feedbackNameLabel">Adınız (İsteğe bağlı)</label>
+                    <input type="text" id="feedback-name" data-key="feedbackNamePlaceholder" placeholder="İsminiz">
                 </div>
                 <div class="form-group">
-                    <label for="feedback-email">E-posta (İsteğe bağlı)</label>
-                    <input type="email" id="feedback-email" placeholder="cevap@almak.isterseniz">
+                    <label for="feedback-email" data-key="feedbackEmailLabel">E-posta (İsteğe bağlı)</label>
+                    <input type="email" id="feedback-email" data-key="feedbackEmailPlaceholder" placeholder="cevap@almak.isterseniz">
                 </div>
                 <div class="form-group">
-                    <label for="feedback-message">Mesajınız *</label>
-                    <textarea id="feedback-message" placeholder="Görüş ve önerilerinizi buraya yazın..." required rows="5"></textarea>
+                    <label for="feedback-message" data-key="feedbackMessageLabel">Mesajınız *</label>
+                    <textarea id="feedback-message" data-key="feedbackMessagePlaceholder" placeholder="Görüş ve önerilerinizi buraya yazın..." required rows="5"></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-cancel" id="feedback-cancel-btn">İptal</button>
-                    <button type="submit" class="btn-send">Gönder</button>
+                    <button type="button" class="btn-cancel" id="feedback-cancel-btn" data-key="cancelButton">İptal</button>
+                    <button type="submit" class="btn-send" data-key="sendButton">Gönder</button>
                 </div>
             </form>
         </div>
@@ -2660,7 +2660,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "LinkedIn profil URL'nizi ekleyin",
     "githubHint": "GitHub profil URL'nizi ekleyin",
-    "twitterHint": "Twitter/X profil URL'nizi ekleyin"
+    "twitterHint": "Twitter/X profil URL'nizi ekleyin",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Geri Bildirim Gönder",
+        "feedbackNameLabel": "Adınız (İsteğe bağlı)",
+        "feedbackNamePlaceholder": "İsminiz",
+        "feedbackEmailLabel": "E-posta (İsteğe bağlı)",
+        "feedbackEmailPlaceholder": "cevap@almak.isterseniz",
+        "feedbackMessageLabel": "Mesajınız *",
+        "feedbackMessagePlaceholder": "Görüş ve önerilerinizi buraya yazın...",
+        "cancelButton": "İptal",
+        "sendButton": "Gönder",
+        "feedbackSuccess": "Teşekkürler! Geri bildiriminiz için.",
+        "feedbackError": "Lütfen mesajınızı yazın!"
 	
             },
             en: {
@@ -2791,7 +2803,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Add your LinkedIn profile URL",
     "githubHint": "Add your GitHub profile URL", 
-    "twitterHint": "Add your Twitter/X profile URL"
+    "twitterHint": "Add your Twitter/X profile URL",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Send Feedback",
+        "feedbackNameLabel": "Your Name (Optional)",
+        "feedbackNamePlaceholder": "Your name",
+        "feedbackEmailLabel": "Email (Optional)",
+        "feedbackEmailPlaceholder": "if.you.want.a.reply",
+        "feedbackMessageLabel": "Your Message *",
+        "feedbackMessagePlaceholder": "Write your feedback and suggestions here...",
+        "cancelButton": "Cancel",
+        "sendButton": "Send",
+        "feedbackSuccess": "Thank you for your feedback!",
+        "feedbackError": "Please write your message!"
 	
             },
             de: {
@@ -2922,7 +2946,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Fügen Sie Ihre LinkedIn-Profil-URL hinzu",
     "githubHint": "Fügen Sie Ihre GitHub-Profil-URL hinzu",
-    "twitterHint": "Fügen Sie Ihre Twitter/X-Profil-URL hinzu"
+    "twitterHint": "Fügen Sie Ihre Twitter/X-Profil-URL hinzu",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Feedback Senden",
+        "feedbackNameLabel": "Ihr Name (Optional)",
+        "feedbackNamePlaceholder": "Ihr Name",
+        "feedbackEmailLabel": "E-Mail (Optional)",
+        "feedbackEmailPlaceholder": "wenn.Sie.antworten.wollen",
+        "feedbackMessageLabel": "Ihre Nachricht *",
+        "feedbackMessagePlaceholder": "Schreiben Sie hier Ihr Feedback und Ihre Vorschläge...",
+        "cancelButton": "Abbrechen",
+        "sendButton": "Senden",
+        "feedbackSuccess": "Vielen Dank für Ihr Feedback!",
+        "feedbackError": "Bitte schreiben Sie Ihre Nachricht!"
             },
             fr: {
                 "appTitle": "Créateur de CV Mobile",
@@ -3052,7 +3088,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Ajoutez votre URL de profil LinkedIn",
     "githubHint": "Ajoutez votre URL de profil GitHub",
-    "twitterHint": "Ajoutez votre URL de profil Twitter/X"
+    "twitterHint": "Ajoutez votre URL de profil Twitter/X",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Envoyer des Commentaires",
+        "feedbackNameLabel": "Votre nom (Optionnel)",
+        "feedbackNamePlaceholder": "Votre nom",
+        "feedbackEmailLabel": "E-mail (Optionnel)",
+        "feedbackEmailPlaceholder": "si.vous.voulez.réponse",
+        "feedbackMessageLabel": "Votre message *",
+        "feedbackMessagePlaceholder": "Écrivez vos commentaires et suggestions ici...",
+        "cancelButton": "Annuler",
+        "sendButton": "Envoyer",
+        "feedbackSuccess": "Merci pour vos commentaires !",
+        "feedbackError": "Veuillez écrire votre message !"
             },
             es: {
                  "appTitle": "Creador de CV Móvil", 
@@ -3182,7 +3230,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Agregue su URL de perfil de LinkedIn",
     "githubHint": "Agregue su URL de perfil de GitHub",
-    "twitterHint": "Agregue su URL de perfil de Twitter/X"
+    "twitterHint": "Agregue su URL de perfil de Twitter/X",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Enviar Comentarios",
+        "feedbackNameLabel": "Su nombre (Opcional)",
+        "feedbackNamePlaceholder": "Su nombre",
+        "feedbackEmailLabel": "Correo electrónico (Opcional)",
+        "feedbackEmailPlaceholder": "si.quiere.respuesta",
+        "feedbackMessageLabel": "Su mensaje *",
+        "feedbackMessagePlaceholder": "Escriba sus comentarios y sugerencias aquí...",
+        "cancelButton": "Cancelar",
+        "sendButton": "Enviar",
+        "feedbackSuccess": "¡Gracias por sus comentarios!",
+        "feedbackError": "¡Por favor escriba su mensaje!"
             },
             it: {
                 "appTitle": "Creatore CV Mobile",
@@ -3312,7 +3372,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Aggiungi il tuo URL profilo LinkedIn",
     "githubHint": "Aggiungi il tuo URL profilo GitHub",
-    "twitterHint": "Aggiungi il tuo URL profilo Twitter/X"
+    "twitterHint": "Aggiungi il tuo URL profilo Twitter/X",
+	// Feedback Popup
+        "feedbackPopupTitle": "Invia Feedback",
+        "feedbackNameLabel": "Il tuo nome (Opzionale)",
+        "feedbackNamePlaceholder": "Il tuo nome",
+        "feedbackEmailLabel": "Email (Opzionale)",
+        "feedbackEmailPlaceholder": "se.vuoi.risposta",
+        "feedbackMessageLabel": "Il tuo messaggio *",
+        "feedbackMessagePlaceholder": "Scrivi qui il tuo feedback e i tuoi suggerimenti...",
+        "cancelButton": "Annulla",
+        "sendButton": "Invia",
+        "feedbackSuccess": "Grazie per il tuo feedback!",
+        "feedbackError": "Per favore scrivi il tuo messaggio!"
 	 },
             pt: {
                  "appTitle": "Criador de CV Móvel",
@@ -3442,7 +3514,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Adicione seu URL de perfil do LinkedIn",
     "githubHint": "Adicione seu URL de perfil do GitHub",
-    "twitterHint": "Adicione seu URL de perfil do Twitter/X"
+    "twitterHint": "Adicione seu URL de perfil do Twitter/X",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Enviar Feedback",
+        "feedbackNameLabel": "Seu nome (Opcional)",
+        "feedbackNamePlaceholder": "Seu nome",
+        "feedbackEmailLabel": "E-mail (Opcional)",
+        "feedbackEmailPlaceholder": "se.quiser.resposta",
+        "feedbackMessageLabel": "Sua mensagem *",
+        "feedbackMessagePlaceholder": "Escreva seu feedback e sugestões aqui...",
+        "cancelButton": "Cancelar",
+        "sendButton": "Enviar",
+        "feedbackSuccess": "Obrigado pelo seu feedback!",
+        "feedbackError": "Por favor escreva sua mensagem!"
             },
             ru: {
                  "appTitle": "Мобильный Создатель Резюме",
@@ -3572,7 +3656,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "Добавьте URL вашего профиля LinkedIn",
     "githubHint": "Добавьте URL вашего профиля GitHub",
-    "twitterHint": "Добавьте URL вашего профиля Twitter/X"
+    "twitterHint": "Добавьте URL вашего профиля Twitter/X",
+	 // Feedback Popup
+        "feedbackPopupTitle": "Отправить отзыв",
+        "feedbackNameLabel": "Ваше имя (Необязательно)",
+        "feedbackNamePlaceholder": "Ваше имя",
+        "feedbackEmailLabel": "Эл. почта (Необязательно)",
+        "feedbackEmailPlaceholder": "если.хотите.ответ",
+        "feedbackMessageLabel": "Ваше сообщение *",
+        "feedbackMessagePlaceholder": "Напишите свой отзыв и предложения здесь...",
+        "cancelButton": "Отмена",
+        "sendButton": "Отправить",
+        "feedbackSuccess": "Спасибо за ваш отзыв!",
+        "feedbackError": "Пожалуйста, напишите ваше сообщение!"
             },
             ar: {
                "appTitle": "منشئ السيرة الذاتية للموبايل",
@@ -3702,7 +3798,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "أضف رابط ملفك الشخصي على LinkedIn",
     "githubHint": "أضف رابط ملفك الشخصي على GitHub",
-    "twitterHint": "أضف رابط ملفك الشخصي على Twitter/X"
+    "twitterHint": "أضف رابط ملفك الشخصي على Twitter/X",
+	 // Feedback Popup
+        "feedbackPopupTitle": "إرسال ملاحظات",
+        "feedbackNameLabel": "اسمك (اختياري)",
+        "feedbackNamePlaceholder": "اسمك",
+        "feedbackEmailLabel": "البريد الإلكتروني (اختياري)",
+        "feedbackEmailPlaceholder": "إذا.أردت.رد",
+        "feedbackMessageLabel": "رسالتك *",
+        "feedbackMessagePlaceholder": "اكتب ملاحظاتك واقتراحاتك هنا...",
+        "cancelButton": "إلغاء",
+        "sendButton": "إرسال",
+        "feedbackSuccess": "شكرًا لك على ملاحظاتك!",
+        "feedbackError": "الرجاء كتابة رسالتك!"
             },
             zh: {
                 "appTitle": "移动简历生成器",
@@ -3832,7 +3940,19 @@
     // Sosyal medya ipuçları
     "linkedinHint": "添加您的 LinkedIn 个人资料网址",
     "githubHint": "添加您的 GitHub 个人资料网址",
-    "twitterHint": "添加您的 Twitter/X 个人资料网址"
+    "twitterHint": "添加您的 Twitter/X 个人资料网址",
+	  // Feedback Popup
+        "feedbackPopupTitle": "发送反馈",
+        "feedbackNameLabel": "您的姓名 (可选)",
+        "feedbackNamePlaceholder": "您的姓名",
+        "feedbackEmailLabel": "电子邮件 (可选)",
+        "feedbackEmailPlaceholder": "如果您希望回复",
+        "feedbackMessageLabel": "您的消息 *",
+        "feedbackMessagePlaceholder": "在此处写下您的反馈和建议...",
+        "cancelButton": "取消",
+        "sendButton": "发送",
+        "feedbackSuccess": "感谢您的反馈！",
+        "feedbackError": "请写下您的消息！"
             }
         };
 // ==================== SOSYAL MEDYA YÖNETİCİSİ ====================
@@ -4161,23 +4281,40 @@ class SocialMediaManager {
                 });
                 
                 
-// YENİ: Tüm editable alanların placeholder'larını güncelle
-document.querySelectorAll('.editable[data-placeholder-key]').forEach(element => {
-    const placeholderKey = element.getAttribute('data-placeholder-key');
-    if (translation[placeholderKey]) {
-        const placeholderText = translation[placeholderKey];
-        element.setAttribute('data-placeholder', placeholderText);
+				// YENİ: Tüm editable alanların placeholder'larını güncelle
+					document.querySelectorAll('.editable[data-placeholder-key]').forEach(element => {
+						const placeholderKey = element.getAttribute('data-placeholder-key');
+							if (translation[placeholderKey]) {
+								const placeholderText = translation[placeholderKey];
+									element.setAttribute('data-placeholder', placeholderText);
         
-        // Eğer element sadece placeholder içeriyorsa veya boşsa, güncelle
-        const currentText = element.textContent.trim();
-        const oldPlaceholder = element.getAttribute('data-placeholder-old');
-        if (currentText === '' || currentText === oldPlaceholder) {
-            element.textContent = placeholderText;
-            element.classList.add('empty-field');
+						// Eğer element sadece placeholder içeriyorsa veya boşsa, güncelle
+							const currentText = element.textContent.trim();
+								const oldPlaceholder = element.getAttribute('data-placeholder-old');
+									if (currentText === '' || currentText === oldPlaceholder) {
+										element.textContent = placeholderText;
+											element.classList.add('empty-field');
+							}
+								element.setAttribute('data-placeholder-old', placeholderText);
+							}
+						});
+						
+						
+						
+						
+						 // FEEDBACK POPUP çevirilerini güncelle
+    document.querySelectorAll('[data-key]').forEach(element => {
+        const key = element.getAttribute('data-key');
+        if (translation[key]) {
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = translation[key];
+            } else if (element.tagName === 'LABEL') {
+                element.textContent = translation[key];
+            } else {
+                element.textContent = translation[key];
+            }
         }
-        element.setAttribute('data-placeholder-old', placeholderText);
-    }
-});
+    });
                 
                 // İpucu metinlerini güncelle
                 document.querySelectorAll('[data-hint-key]').forEach(element => {
@@ -6027,7 +6164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-        
+        // FEEDBACK LINK - EN SONA EKLENECEK
        // FEEDBACK POPUP SISTEMI
     const feedbackPopup = document.getElementById('feedback-popup');
     const feedbackLink = document.getElementById('feedback-email-link');
@@ -6076,7 +6213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Form gönderimi
+                           // Form gönderimi - KESİN ÇÖZÜM
     if (feedbackForm) {
         feedbackForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -6085,44 +6222,54 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('feedback-email').value;
             const message = document.getElementById('feedback-message').value;
             
+            // Mevcut dili al
+            const currentLang = document.getElementById('language-select').value;
+            const translation = translations[currentLang];
+            
             if (!message.trim()) {
-                alert('Lütfen mesajınızı yazın!');
+                alert(translation.feedbackError);
                 return;
             }
             
-            // Mailto linki oluştur ve gönder
-            const subject = 'MobilCV Geri Bildirim' + (name ? ` - ${name}` : '');
-            const body = `Mesaj: ${message}` + (email ? `\n\nE-posta: ${email}` : '') + (name ? `\nİsim: ${name}` : '');
+            // 1. ÖNCE beforeunload event listener'ını tamamen kaldır
+            const beforeUnloadListener = window._beforeUnloadListener;
+            if (beforeUnloadListener) {
+                window.removeEventListener('beforeunload', beforeUnloadListener);
+            }
+            
+            // 2. PDF indirildi olarak işaretle
+            localStorage.setItem('pdfDownloaded', 'true');
+            
+            // Mailto linkini oluştur
+            const subject = 'MobilCV Feedback - ' + (name ? name : 'Anonymous');
+            const body = `Message: ${message}` + 
+                        (email ? `\n\nEmail: ${email}` : '') + 
+                        (name ? `\nName: ${name}` : '') +
+                        `\n\nLanguage: ${currentLang}`;
             
             const mailtoLink = `mailto:destek@mobilcv.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             
-            // Beforeunload'ı geçici devre dışı bırak
-            const originalBeforeUnload = window.onbeforeunload;
-            window.onbeforeunload = null;
+            // 3. Geçici bir link ile mailto'yu aç
+            const tempLink = document.createElement('a');
+            tempLink.href = mailtoLink;
+            tempLink.style.display = 'none';
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
             
-            // Form ile gönder (en garantili yöntem)
-            const tempForm = document.createElement('form');
-            tempForm.action = mailtoLink;
-            tempForm.method = 'get';
-            tempForm.target = '_blank';
-            tempForm.style.display = 'none';
-            document.body.appendChild(tempForm);
-            tempForm.submit();
-            document.body.removeChild(tempForm);
-            
-            // Popup'ı kapat
+            // 4. Popup'ı kapat ve formu temizle
             closeFeedbackPopup();
-            
-            // Beforeunload'ı geri yükle
-            setTimeout(() => {
-                window.onbeforeunload = originalBeforeUnload;
-            }, 1000);
-            
-            // Formu temizle
             feedbackForm.reset();
+            
+            // 5. 3 saniye sonra beforeunload'ı geri yükle
+            setTimeout(() => {
+                localStorage.removeItem('pdfDownloaded');
+                if (beforeUnloadListener) {
+                    window.addEventListener('beforeunload', beforeUnloadListener);
+                }
+            }, 3000);
         });
     }
-// FEEDBACK LINK - EN SONA EKLENECEK
     </script>
 	
 	<!--Start of Tawk.to Script-->
@@ -6140,4 +6287,5 @@ s0.parentNode.insertBefore(s1,s0);
 </body>
 
 
-</html>  kontrol et doğru yerdemi sosyal medya js leri
+</html>  
+<!-- Emeğe Saygı-->
