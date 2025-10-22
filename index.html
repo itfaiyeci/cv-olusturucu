@@ -88,11 +88,11 @@
         }
          
         .language-selector {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             width: 100%;
             max-width: 210mm;
             background: white;
-            padding: 15px;
+            padding: 1px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -121,7 +121,7 @@
             gap: 10px;
             background: white;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 1px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 210mm;
@@ -1869,9 +1869,13 @@
     }
 }
 
-/* SOSYAL MEDYA STİLLERİ */
+/* SOSYAL MEDYA BÖLÜMÜ GÜNCELLEMELERİ */
+.personal-info-item[data-field="social-media"] .personal-info-label {
+    display: none; /* "Sosyal Medya" yazısını gizle */
+}
+
 .social-media-container {
-    margin-top: 5px;
+    margin-top: 0; /* Üst boşluğu kaldır */
 }
 
 .social-media-item {
@@ -1880,6 +1884,8 @@
     margin-bottom: 6px;
     padding: 4px 0;
     border-bottom: 1px dashed #ecf0f1;
+    gap: 8px;
+    width: 100%; /* Tam genişlik */
 }
 
 .social-icon {
@@ -1892,7 +1898,6 @@
     font-size: 10px;
     font-weight: bold;
     color: white;
-    margin-right: 8px;
     flex-shrink: 0;
     cursor: default;
 }
@@ -1903,15 +1908,24 @@
 .social-icon.twitter { background: #000000; }
 
 .social-media-value {
-    flex: 1;
+    flex: 1; /* Tüm boş alanı kapla */
+    min-width: 0; /* Taşma sorununu çöz */
+    width: 100%; /* Tam genişlik */
     font-size: 11px;
     color: #2c3e50;
     border-bottom: 1px solid #d5dbdb;
     padding-bottom: 3px;
     min-height: 18px;
     word-break: break-all;
+    margin-left: 0;
 }
 
+
+/* Input alanına focus olduğunda genişleme */
+.social-media-value:focus {
+    min-width: 200px; /* Minimum genişlik */
+    flex-grow: 1; /* Esnek genişleme */
+}
 /* Sosyal medya linkleri için özel stiller */
 .social-media-value[contenteditable="true"]:focus {
     border-color: #3498db;
@@ -6270,6 +6284,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 3000);
         });
     }
+	
+	
+	
+	
+
+	
+	
+	
+	
     </script>
 	
 	<!--Start of Tawk.to Script-->
@@ -6283,9 +6306,9 @@ s1.charset='UTF-8';
 s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
+
 </script>
 </body>
 
 
-</html>  
-<!-- Emeğe Saygı-->
+</html>
