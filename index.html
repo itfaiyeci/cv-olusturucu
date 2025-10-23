@@ -5863,7 +5863,11 @@ if (socialMediaSection) {
                     document.getElementById("avatarText").style.display = "block";
                     document.getElementById("delAvatar").style.display = "none";
                     document.getElementById("photoInput").value = "";
-                    
+
+					 // ✅ YENİ: Kayıtlı verileri de temizle
+        if (window.autoSaveManager) {
+            window.autoSaveManager.clearSavedData();
+        }
                     alert('Tüm CV içeriği temizlendi!');
                 }
             });
@@ -6435,7 +6439,576 @@ if (feedbackForm) {
 	
 	
 
-	
+	// ==================== OTOMATİK KAYDETME SİSTEMİ ====================
+class AutoSaveManager {
+    constructor() {
+        this.storageKey = 'mobilcv_data';
+        this.isSaving = false;
+        this.saveDelay = 1000; // 1 saniye
+        this.init();
+    }
+
+    init() {
+        this.setupAutoSave();
+        this.loadSavedData();
+        this.setupBeforeUnload();
+        
+        // Sayfa yüklendiğinde verileri geri yükle
+        window.addEventListener('load', () => {
+            setTimeout(() => this.loadSavedData(), 100);
+        });
+    }
+
+    setupAutoSave() {
+        // Tüm editable alanlardaki değişiklikleri izle
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('editable')) {
+                this.debouncedSave();
+            }
+        });
+
+        // Fotoğraf değişikliklerini izle
+        document.getElementById('avatar')?.addEventListener('load', () => {
+            this.debouncedSave();
+        });
+
+        // Dil değişikliğini izle
+        document.getElementById('language-select')?.addEventListener('change', () => {
+            this.debouncedSave();
+        });
+    }
+
+    debouncedSave() {
+        if (this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
+        }
+        this.saveTimeout = setTimeout(() => this.saveAllData(), this.saveDelay);
+    }
+
+    saveAllData() {
+        if (this.isSaving) return;
+        
+        this.isSaving = true;
+        
+        try {
+            const data = {
+                timestamp: new Date().toISOString(),
+                personalInfo: this.getPersonalInfo(),
+                about: this.getAboutText(),
+                education: this.getEducationData(),
+                experience: this.getExperienceData(),
+                courses: this.getCoursesData(),
+                skills: this.getSkillsData(),
+                references: this.getReferencesData(),
+                languages: this.getLanguagesData(),
+                socialMedia: this.getSocialMediaData(),
+                photo: this.getPhotoData(),
+                language: document.getElementById('language-select')?.value || 'tr'
+            };
+
+            localStorage.setItem(this.storageKey, JSON.stringify(data));
+            console.log('CV verileri kaydedildi:', new Date().toLocaleTimeString());
+        } catch (error) {
+            console.error('Kaydetme hatası:', error);
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
+    loadSavedData() {
+        try {
+            const saved = localStorage.getItem(this.storageKey);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+            
+            // Dil ayarı
+            if (data.language && document.getElementById('language-select')) {
+                document.getElementById('language-select').value = data.language;
+                // Dil değişikliğini tetikle
+                const event = new Event('change');
+                document.getElementById('language-select').dispatchEvent(event);
+            }
+
+            // Kişisel bilgiler
+            if (data.personalInfo) this.setPersonalInfo(data.personalInfo);
+            
+            // Hakkımda
+            if (data.about) this.setAboutText(data.about);
+            
+            // Eğitim
+            if (data.education) this.setEducationData(data.education);
+            
+            // Deneyim
+            if (data.experience) this.setExperienceData(data.experience);
+            
+            // Kurslar
+            if (data.courses) this.setCoursesData(data.courses);
+            
+            // Yetenekler
+            if (data.skills) this.setSkillsData(data.skills);
+            
+            // Referanslar
+            if (data.references) this.setReferencesData(data.references);
+            
+            // Diller
+            if (data.languages) this.setLanguagesData(data.languages);
+            
+            // Sosyal medya
+            if (data.socialMedia) this.setSocialMediaData(data.socialMedia);
+            
+            // Fotoğraf
+            if (data.photo) this.setPhotoData(data.photo);
+
+            console.log('CV verileri yüklendi:', new Date().toLocaleTimeString());
+            
+            // Input event'lerini tetikle
+            setTimeout(() => {
+                document.querySelectorAll('.editable').forEach(el => {
+                    const event = new Event('input', { bubbles: true });
+                    el.dispatchEvent(event);
+                });
+            }, 500);
+
+        } catch (error) {
+            console.error('Yükleme hatası:', error);
+            this.clearSavedData();
+        }
+    }
+
+    // VERİ TOPLAMA FONKSİYONLARI
+    getPersonalInfo() {
+        const info = {};
+        document.querySelectorAll('.personal-info-item').forEach(item => {
+            const field = item.getAttribute('data-field') || 
+                         item.querySelector('.personal-info-label')?.textContent.toLowerCase().replace(/\s+/g, '');
+            const valueElement = item.querySelector('.personal-info-value');
+            if (field && valueElement) {
+                const value = valueElement.textContent.trim();
+                const placeholder = valueElement.getAttribute('data-placeholder');
+                if (value !== placeholder) {
+                    info[field] = value;
+                }
+            }
+        });
+        return info;
+    }
+
+    getAboutText() {
+        const about = document.getElementById('about-text');
+        return about?.textContent.trim() || '';
+    }
+
+    getEducationData() {
+        const education = [];
+        document.querySelectorAll('#education-container .education-item').forEach(item => {
+            const institution = item.querySelector('.education-institution')?.textContent.trim() || '';
+            const date = item.querySelector('.education-date')?.textContent.trim() || '';
+            if (institution || date) {
+                education.push({ institution, date });
+            }
+        });
+        return education;
+    }
+
+    getExperienceData() {
+        const experience = [];
+        document.querySelectorAll('#experience-container .experience-item').forEach(item => {
+            const title = item.querySelector('.item-title')?.textContent.trim() || '';
+            const company = item.querySelector('.experience-company')?.textContent.trim() || '';
+            const duration = item.querySelector('.experience-duration')?.textContent.trim() || '';
+            const description = item.querySelector('.item-description')?.textContent.trim() || '';
+            
+            if (title || company || duration || description) {
+                experience.push({ title, company, duration, description });
+            }
+        });
+        return experience;
+    }
+
+    getCoursesData() {
+        const courses = [];
+        document.querySelectorAll('#courses-container .course-item').forEach(item => {
+            const title = item.querySelector('.item-title')?.textContent.trim() || '';
+            const institution = item.querySelector('.course-institution')?.textContent.trim() || '';
+            const date = item.querySelector('.course-date')?.textContent.trim() || '';
+            
+            if (title || institution || date) {
+                courses.push({ title, institution, date });
+            }
+        });
+        return courses;
+    }
+
+    getSkillsData() {
+        const skills = [];
+        document.querySelectorAll('#skills-container .skill-item').forEach(item => {
+            const skill = item.textContent.trim();
+            const placeholder = item.getAttribute('data-placeholder');
+            if (skill && skill !== placeholder) {
+                skills.push(skill);
+            }
+        });
+        return skills;
+    }
+
+    getReferencesData() {
+        const references = [];
+        document.querySelectorAll('#references-container .reference-item').forEach(item => {
+            const name = item.querySelector('.reference-name')?.textContent.trim() || '';
+            const position = item.querySelector('.reference-position')?.textContent.trim() || '';
+            const phone = item.querySelector('.reference-phone')?.textContent.trim() || '';
+            
+            if (name || position || phone) {
+                references.push({ name, position, phone });
+            }
+        });
+        return references;
+    }
+
+    getLanguagesData() {
+        const languages = [];
+        document.querySelectorAll('#languages-container .language-item').forEach(item => {
+            const name = item.querySelector('.language-name')?.textContent.trim() || '';
+            const level = item.querySelector('.language-level')?.textContent.trim() || '';
+            
+            if (name || level) {
+                languages.push({ name, level });
+            }
+        });
+        return languages;
+    }
+
+    getSocialMediaData() {
+        const socialMedia = {};
+        document.querySelectorAll('.social-media-item').forEach(item => {
+            const type = item.querySelector('.social-media-value')?.getAttribute('data-type');
+            const value = item.querySelector('.social-media-value')?.textContent.trim() || '';
+            const placeholder = item.querySelector('.social-media-value')?.getAttribute('data-placeholder');
+            
+            if (type && value && value !== placeholder) {
+                socialMedia[type] = value;
+            }
+        });
+        return socialMedia;
+    }
+
+    getPhotoData() {
+        const avatar = document.getElementById('avatar');
+        if (avatar.src && avatar.style.display !== 'none') {
+            return avatar.src;
+        }
+        return null;
+    }
+
+    // VERİ YÜKLEME FONKSİYONLARI
+    setPersonalInfo(info) {
+        Object.keys(info).forEach(field => {
+            const value = info[field];
+            let element;
+            
+            // Özel alanları kontrol et
+            if (field === 'email') {
+                element = document.querySelector('.personal-info-item[data-field="email"] .personal-info-value') ||
+                         document.querySelector('.personal-info-item.full-width .personal-info-value');
+            } else if (field === 'social-media') {
+                // Sosyal medya özel işlemi
+                return;
+            } else {
+                element = document.querySelector(`[data-field="${field}"] .personal-info-value`) ||
+                         document.querySelector(`.personal-info-item .personal-info-value`);
+            }
+            
+            if (element && value) {
+                element.textContent = value;
+                element.classList.remove('empty-field');
+            }
+        });
+    }
+
+    setAboutText(text) {
+        const about = document.getElementById('about-text');
+        if (about && text) {
+            about.textContent = text;
+            about.classList.remove('empty-field');
+        }
+    }
+
+    setEducationData(education) {
+        const container = document.getElementById('education-container');
+        if (!container) return;
+
+        // Mevcut öğeleri temizle (ilk öğe hariç)
+        while (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+
+        // Verileri yükle
+        education.forEach((edu, index) => {
+            let item;
+            if (index === 0) {
+                item = container.children[0];
+            } else {
+                // Yeni öğe ekle
+                document.getElementById('add-education-btn')?.click();
+                item = container.lastElementChild;
+            }
+
+            if (item) {
+                const institution = item.querySelector('.education-institution');
+                const date = item.querySelector('.education-date');
+                
+                if (institution && edu.institution) {
+                    institution.textContent = edu.institution;
+                    institution.classList.remove('empty-field');
+                }
+                
+                if (date && edu.date) {
+                    date.textContent = edu.date;
+                }
+            }
+        });
+    }
+
+    setExperienceData(experience) {
+        const container = document.getElementById('experience-container');
+        if (!container) return;
+
+        while (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+
+        experience.forEach((exp, index) => {
+            let item;
+            if (index === 0) {
+                item = container.children[0];
+            } else {
+                document.getElementById('add-experience-btn')?.click();
+                item = container.lastElementChild;
+            }
+
+            if (item) {
+                const title = item.querySelector('.item-title');
+                const company = item.querySelector('.experience-company');
+                const duration = item.querySelector('.experience-duration');
+                const description = item.querySelector('.item-description');
+                
+                if (title && exp.title) {
+                    title.textContent = exp.title;
+                    title.classList.remove('empty-field');
+                }
+                
+                if (company && exp.company) {
+                    company.textContent = exp.company;
+                    company.classList.remove('empty-field');
+                }
+                
+                if (duration && exp.duration) {
+                    duration.textContent = exp.duration;
+                }
+                
+                if (description && exp.description) {
+                    description.textContent = exp.description;
+                    description.classList.remove('empty-field');
+                }
+            }
+        });
+    }
+
+    setCoursesData(courses) {
+        const container = document.getElementById('courses-container');
+        if (!container) return;
+
+        while (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+
+        courses.forEach((course, index) => {
+            let item;
+            if (index === 0) {
+                item = container.children[0];
+            } else {
+                document.getElementById('add-course-btn')?.click();
+                item = container.lastElementChild;
+            }
+
+            if (item) {
+                const title = item.querySelector('.item-title');
+                const institution = item.querySelector('.course-institution');
+                const date = item.querySelector('.course-date');
+                
+                if (title && course.title) {
+                    title.textContent = course.title;
+                }
+                
+                if (institution && course.institution) {
+                    institution.textContent = course.institution;
+                    institution.classList.remove('empty-field');
+                }
+                
+                if (date && course.date) {
+                    date.textContent = course.date;
+                }
+            }
+        });
+    }
+
+    setSkillsData(skills) {
+        const container = document.getElementById('skills-container');
+        if (!container) return;
+
+        // Tüm yetenekleri temizle (ilk öğe hariç)
+        while (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+
+        // İlk öğeyi ayarla
+        if (container.firstElementChild && skills[0]) {
+            container.firstElementChild.textContent = skills[0];
+            container.firstElementChild.classList.remove('empty-field', 'hidden-in-pdf');
+        }
+
+        // Diğer yetenekleri ekle
+        skills.slice(1).forEach(skill => {
+            document.getElementById('add-skill-btn')?.click();
+            const newItem = container.lastElementChild;
+            if (newItem && skill) {
+                newItem.textContent = skill;
+                newItem.classList.remove('empty-field', 'hidden-in-pdf');
+            }
+        });
+    }
+
+    setReferencesData(references) {
+        const container = document.getElementById('references-container');
+        if (!container) return;
+
+        while (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+
+        references.forEach((ref, index) => {
+            let item;
+            if (index === 0) {
+                item = container.children[0];
+            } else {
+                document.getElementById('add-reference-btn')?.click();
+                item = container.lastElementChild;
+            }
+
+            if (item) {
+                const name = item.querySelector('.reference-name');
+                const position = item.querySelector('.reference-position');
+                const phone = item.querySelector('.reference-phone');
+                
+                if (name && ref.name) {
+                    name.textContent = ref.name;
+                }
+                
+                if (position && ref.position) {
+                    position.textContent = ref.position;
+                }
+                
+                if (phone && ref.phone) {
+                    phone.textContent = ref.phone;
+                }
+            }
+        });
+    }
+
+    setLanguagesData(languages) {
+        const container = document.getElementById('languages-container');
+        if (!container) return;
+
+        // İlk iki öğe zaten var, fazlasını ekle
+        while (container.children.length < languages.length) {
+            document.getElementById('add-language-btn')?.click();
+        }
+
+        // Verileri yükle
+        languages.forEach((lang, index) => {
+            const item = container.children[index];
+            if (item) {
+                const name = item.querySelector('.language-name');
+                const level = item.querySelector('.language-level');
+                
+                if (name && lang.name) {
+                    name.textContent = lang.name;
+                }
+                
+                if (level && lang.level) {
+                    level.textContent = lang.level;
+                }
+            }
+        });
+    }
+
+    setSocialMediaData(socialMedia) {
+        Object.keys(socialMedia).forEach(platform => {
+            const valueElement = document.querySelector(`.social-media-value[data-type="${platform}"]`);
+            if (valueElement && socialMedia[platform]) {
+                valueElement.textContent = socialMedia[platform];
+                valueElement.classList.remove('empty-field');
+            }
+        });
+    }
+
+    setPhotoData(photoData) {
+        if (photoData) {
+            const avatar = document.getElementById('avatar');
+            const avatarText = document.getElementById('avatarText');
+            const delAvatar = document.getElementById('delAvatar');
+            
+            avatar.src = photoData;
+            avatar.style.display = 'block';
+            avatarText.style.display = 'none';
+            delAvatar.style.display = 'block';
+        }
+    }
+
+    setupBeforeUnload() {
+        // Sayfadan ayrılırken son bir kaydetme yap
+        window.addEventListener('beforeunload', () => {
+            this.saveAllData();
+        });
+    }
+
+    clearSavedData() {
+        localStorage.removeItem(this.storageKey);
+        console.log('Kayıtlı veriler temizlendi');
+    }
+
+    // Manuel kaydetme için public method
+    forceSave() {
+        this.saveAllData();
+    }
+}
+
+// Sayfa yüklendiğinde otomatik kaydetme sistemini başlat
+document.addEventListener('DOMContentLoaded', function() {
+    // Mevcut tüm kodlardan SONRA bu satırı ekle
+    window.autoSaveManager = new AutoSaveManager();
+    
+    // Sayfa yüklendikten sonra verileri yükle
+    setTimeout(() => {
+        window.autoSaveManager.loadSavedData();
+    }, 1000);
+});
+
+// Manuel kaydetme için global fonksiyon (isteğe bağlı)
+function saveCV() {
+    if (window.autoSaveManager) {
+        window.autoSaveManager.forceSave();
+        alert('CV kaydedildi!');
+    }
+}
+
+// Sayfa kapatılırken kaydet
+window.addEventListener('beforeunload', function() {
+    if (window.autoSaveManager) {
+        window.autoSaveManager.forceSave();
+    }
+});
 	
 	
 	
@@ -6458,3 +7031,4 @@ s0.parentNode.insertBefore(s1,s0);
 
 
 </html>  
+
