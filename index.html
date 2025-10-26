@@ -1502,17 +1502,6 @@
     }
 }
 
-/* Boş dil öğelerini PDF'de gizle */
-.pdf-mode .language-item.hidden-in-pdf {
-    display: none !important;
-}
-
-@media print {
-    .language-item.hidden-in-pdf {
-        display: none !important;
-    }
-}
-
 /* Bayraklı dil seçici konteyneri */
 .language-select-container {
     position: relative;
@@ -5672,38 +5661,33 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
         }
     });
                 
-                // Diller bölümü kontrolü - DÜZELTİLMİŞ VERSİYON
+                 // Diller bölümü kontrolü
 let hasAnyLanguageContent = false;
-document.querySelectorAll('.language-item').forEach(item => {
-    const nameElement = item.querySelector('.language-name');
-    const levelElement = item.querySelector('.language-level');
-    
-    const isNameEmpty = nameElement && (nameElement.textContent.trim() === '' || 
-                                        nameElement.textContent === nameElement.getAttribute('data-placeholder'));
-    const isLevelEmpty = levelElement && (levelElement.textContent.trim() === '' || 
-                                         levelElement.textContent === levelElement.getAttribute('data-placeholder'));
-    
-    const isLanguageEmpty = isNameEmpty && isLevelEmpty;
-    
-    if (isLanguageEmpty) {
-        item.classList.add('hidden-in-pdf');
-    } else {
-        item.classList.remove('hidden-in-pdf');
-        hasAnyLanguageContent = true;
-    }
-});
+    document.querySelectorAll('.language-item').forEach(item => {
+        const nameElement = item.querySelector('.language-name');
+        const levelElement = item.querySelector('.language-level');
+        const isLanguageEmpty = (nameElement && (nameElement.textContent.trim() === '' || nameElement.textContent === nameElement.getAttribute('data-placeholder'))) && 
+                               (levelElement && (levelElement.textContent.trim() === '' || levelElement.textContent === levelElement.getAttribute('data-placeholder')));
+        
+        if (isLanguageEmpty) {
+            item.classList.add('hidden-in-pdf');
+        } else {
+            item.classList.remove('hidden-in-pdf');
+            hasAnyLanguageContent = true;
+        }
+    });
 
-// DİLLER BÖLÜMÜ TAMAMEN GİZLEME - DÜZELTİLMİŞ
+// DİLLER BÖLÜMÜ TAMAMEN GİZLEME
 const languagesSection = document.getElementById('languages-section');
-if (languagesSection) {
-    if (!hasAnyLanguageContent) {
-        // Hiç dil içeriği yoksa tüm bölümü gizle
-        languagesSection.classList.add('hidden-in-pdf');
-    } else {
-        // En az bir dil içeriği varsa bölümü göster
-        languagesSection.classList.remove('hidden-in-pdf');
+    if (languagesSection) {
+        if (!hasAnyLanguageContent) {
+            // Hiç dil içeriği yoksa tüm bölümü gizle
+            languagesSection.classList.add('hidden-in-pdf');
+        } else {
+            // En az bir dil içeriği varsa bölümü göster
+            languagesSection.classList.remove('hidden-in-pdf');
+        }
     }
-}
                 
                 // Eğitim öğelerini kontrol et
                  document.querySelectorAll('.education-item').forEach(item => {
@@ -5879,7 +5863,8 @@ if (socialMediaSection) {
                     document.getElementById("avatarText").style.display = "block";
                     document.getElementById("delAvatar").style.display = "none";
                     document.getElementById("photoInput").value = "";
-
+                    
+					
 					 // ✅ YENİ: Kayıtlı verileri de temizle
         if (window.autoSaveManager) {
             window.autoSaveManager.clearSavedData();
@@ -6454,8 +6439,7 @@ if (feedbackForm) {
 	
 	
 	
-
-	// ==================== OTOMATİK KAYDETME SİSTEMİ ====================
+// ==================== OTOMATİK KAYDETME SİSTEMİ ====================
 class AutoSaveManager {
     constructor() {
         this.storageKey = 'mobilcv_data';
@@ -6682,21 +6666,18 @@ class AutoSaveManager {
         return references;
     }
 
-   getLanguagesData() {
-    const languages = [];
-    document.querySelectorAll('#languages-container .language-item').forEach(item => {
-        const name = item.querySelector('.language-name')?.textContent.trim() || '';
-        const level = item.querySelector('.language-level')?.textContent.trim() || '';
-        const namePlaceholder = item.querySelector('.language-name')?.getAttribute('data-placeholder');
-        const levelPlaceholder = item.querySelector('.language-level')?.getAttribute('data-placeholder');
-        
-        // Sadece gerçek veri içeren dilleri kaydet
-        if ((name && name !== namePlaceholder) || (level && level !== levelPlaceholder)) {
-            languages.push({ name, level });
-        }
-    });
-    return languages;
-}
+    getLanguagesData() {
+        const languages = [];
+        document.querySelectorAll('#languages-container .language-item').forEach(item => {
+            const name = item.querySelector('.language-name')?.textContent.trim() || '';
+            const level = item.querySelector('.language-level')?.textContent.trim() || '';
+            
+            if (name || level) {
+                languages.push({ name, level });
+            }
+        });
+        return languages;
+    }
 
     getSocialMediaData() {
         const socialMedia = {};
@@ -7028,6 +7009,7 @@ window.addEventListener('beforeunload', function() {
         window.autoSaveManager.forceSave();
     }
 });
+	
 	
 	
 	
