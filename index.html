@@ -48,6 +48,7 @@
         "url": "https://www.mobilcv.com",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Any",
+		"inLanguage": ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh"],
         "permissions": "browser",
         "offers": {
             "@type": "Offer",
@@ -7015,17 +7016,37 @@ window.addEventListener('beforeunload', function() {
     </script>
 	
 	<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-
+<!-- Tawk.to - Kullanıcı Etkileşiminde Yükle -->
+<script>
+// Kullanıcı sayfayla etkileşime girdiğinde yükle
+document.addEventListener('DOMContentLoaded', function() {
+    let loaded = false;
+    
+    function loadTawkTo() {
+        if (loaded) return;
+        loaded = true;
+        
+        var s1 = document.createElement("script");
+        s1.src = 'https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
+        s1.async = true;
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        document.body.appendChild(s1);
+        
+        // Event listener'ları temizle
+        document.removeEventListener('scroll', loadTawkTo);
+        document.removeEventListener('click', loadTawkTo);
+        document.removeEventListener('touchstart', loadTawkTo);
+    }
+    
+    // Sayfa kaydırıldığında, tıklandığında veya dokunulduğunda yükle
+    document.addEventListener('scroll', loadTawkTo);
+    document.addEventListener('click', loadTawkTo);
+    document.addEventListener('touchstart', loadTawkTo);
+    
+    // 5 saniye sonra yüklenmediyse zorla yükle
+    setTimeout(loadTawkTo, 5000);
+});
 </script>
 </body>
 
