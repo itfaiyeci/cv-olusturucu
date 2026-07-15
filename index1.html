@@ -1,1 +1,3766 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>MobilCV - Ücretsiz Online CV Oluşturucu | Profesyonel CV Hazırlama</title>
+    <meta name="description" content="MobilCV ile ücretsiz profesyonel CV oluşturun. 10 dil desteği, PDF indirme, modern şablonlar. CV'nizi 5 dakikada hazırlayın!">
+    <meta name="keywords" content="cv oluşturma, cv hazırlama, online cv, ücretsiz cv, profesyonel cv, cv şablonları, pdf cv, iş başvurusu, özgeçmiş">
+    <meta name="author" content="MobilCV">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.mobilcv.com/">
+    <meta property="og:title" content="MobilCV - Ücretsiz Online CV Oluşturucu">
+    <meta property="og:description" content="10 dil desteği ile ücretsiz profesyonel CV oluşturun. PDF indirme, modern şablonlar, mobil uyumlu.">
+    <meta property="og:image" content="https://www.mobilcv.com/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.mobilcv.com/">
+    <meta property="twitter:title" content="MobilCV - Ücretsiz Online CV Oluşturucu">
+    <meta property="twitter:description" content="10 dil desteği ile ücretsiz profesyonel CV oluşturun. PDF indirme, modern şablonlar.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "MobilCV - Ücretsiz Online CV Oluşturucu",
+        "description": "10 dil desteği ile ücretsiz profesyonel CV oluşturma aracı",
+        "url": "https://www.mobilcv.com",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "TRY"
+        }
+    }
+    </script>
+    
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="WotynZkKyukdcf0LN0dGbr-AnUGh8LP2qLCcsZA5t4A" />
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7KFT12L3X8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7KFT12L3X8');
+    </script>
+    
+    <style>
+        /* ===== TÜM MEVCUT STİLLER ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: auto;
+            width: 100%;
+        }
+        
+        .page-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 210mm;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+         
+        .language-selector {
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 210mm;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .language-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .language-selector select {
+            width: 100%;
+            padding: 10px 15px 10px 45px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+        
+        .language-select-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .selected-flag {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 18px;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 210mm;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
+            min-height: 40px;
+            font-weight: 500;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cv-layout {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .left-column {
+            flex: 0 0 35%;
+            background: #e9e9e9;
+            color: #2c3e50;
+            padding: 5mm;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 2px solid #3498db;
+        }
+        
+        .right-column {
+            flex: 0 0 65%;
+            padding: 5mm;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-top: 200px;
+            transition: padding-top 0.4s ease;
+        }
+        
+        .personal-header {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        #avatarBox {
+            width: 50mm;
+            height: 60mm;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
+        #avatarBox:hover {
+            border-color: #2980b9;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        #avatar {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: none;
+        }
+
+        #avatarText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            color: #7f8c8d;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #delAvatar {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: none;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 10;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        #delAvatar:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .personal-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .personal-info-item {
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .personal-info-item.name-item,
+        .personal-info-item.title-item {
+            text-align: center;
+            display: block;
+        }
+        
+        .personal-info-item.name-item .personal-info-label,
+        .personal-info-item.title-item .personal-info-label {
+            display: none;
+        }
+        
+        .personal-info-item.name-item .personal-info-value,
+        .personal-info-item.title-item .personal-info-value {
+            border-bottom: none;
+            font-size: 18px !important;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .personal-info-item.title-item .personal-info-value {
+            font-size: 14px !important;
+            font-weight: normal;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .personal-info-item.full-width {
+            display: block;
+            text-align: left;
+        }
+        
+        .personal-info-item.full-width .personal-info-label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+        }
+        
+        .personal-info-item.full-width .personal-info-value {
+            display: block;
+            width: 100%;
+            margin-left: 0;
+            text-align: right;
+            border-bottom: 1px solid #d5dbdb;
+            padding-bottom: 3px;
+        }
+        
+        .personal-info-label {
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+            text-align: left;
+            flex: 1;
+        }
+        
+        .personal-info-value {
+            font-size: 12px;
+            color: #2c3e50;
+            border-bottom: 1px solid #d5dbdb;
+            padding-bottom: 3px;
+            word-break: break-word;
+            min-height: 18px;
+            text-align: right;
+            flex: 1;
+            margin-left: 10px;
+        }
+        
+        .languages-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #d5dbdb;
+            flex-shrink: 0;
+        }
+        
+        .language-item {
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            min-height: 18px;
+        }
+        
+        .language-name {
+            font-size: 12px;
+            color: #2c3e50;
+            min-width: 80px;
+            max-width: 150px;
+            transition: width 0.2s ease;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+        
+        .language-level {
+            font-size: 10px;
+            color: #7f8c8d;
+            text-align: right;
+            min-width: 80px;
+            max-width: 150px;
+            transition: width 0.2s ease;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            color: #000000;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .about-text {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #555;
+            text-align: left;
+            min-height: 80px;
+        }
+        
+        .experience-item, .education-item, .course-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ecf0f1;
+            text-align: left;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            font-size: 13px;
+            color: #2c3e50;
+            text-align: left;
+        }
+        
+        .item-subtitle {
+            font-style: italic;
+            font-size: 12px;
+            color: #555;
+            margin: 3px 0;
+            text-align: left;
+        }
+        
+        .item-duration {
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 3px;
+            text-align: left;
+        }
+        
+        .item-description {
+            font-size: 12px;
+            margin-top: 5px;
+            line-height: 1.4;
+            text-align: left;
+            min-height: 40px;
+        }
+        
+        .education-subtitle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3px 0;
+        }
+        
+        .education-institution {
+            font-style: italic;
+            font-size: 12px;
+            color: #555;
+            text-align: left;
+            flex: 1;
+        }
+        
+        .education-date {
+            font-size: 11px;
+            color: #777;
+            text-align: right;
+            min-width: 100px;
+        }
+        
+        .experience-subtitle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3px 0;
+        }
+        
+        .experience-company {
+            font-style: italic;
+            font-size: 12px;
+            color: #555;
+            text-align: left;
+            flex: 1;
+        }
+        
+        .experience-duration {
+            font-size: 11px;
+            color: #777;
+            text-align: right;
+            min-width: 100px;
+        }
+        
+        .course-subtitle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3px 0;
+        }
+        
+        .course-institution {
+            font-style: italic;
+            font-size: 12px;
+            color: #555;
+            text-align: left;
+            flex: 1;
+        }
+        
+        .course-date {
+            font-size: 11px;
+            color: #777;
+            text-align: right;
+            min-width: 100px;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .skill-item {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+            display: inline-block;
+            min-width: 50px;
+            min-height: 24px;
+            line-height: 1.2;
+            cursor: text;
+            border: 1px dashed transparent;
+            transition: all 0.2s;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+        
+        .skill-item:focus {
+            border-color: #3498db;
+            background: #d5dbdb;
+            outline: 2px solid #3498db;
+            outline-offset: 1px;
+        }
+        
+        .interests-section {
+            display: none !important;
+        }
+        
+        .references-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .reference-item {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .reference-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .reference-info-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        
+        .reference-position {
+            font-size: 11px;
+            color: #666;
+            flex: 1;
+        }
+        
+        .reference-phone {
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+            min-width: 120px;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        
+        .editable {
+            border: 1px dashed transparent;
+            padding: 2px;
+            margin: 1px 0;
+            min-height: 18px;
+            transition: all 0.2s;
+            border-radius: 2px;
+            cursor: text;
+            word-break: break-word;
+            outline: none;
+            font-size: 12px;
+        }
+        
+        .editable:focus {
+            border-color: #3498db;
+            background: #f8f9fa;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .left-column .editable:focus {
+            background: #ffffff;
+            border-color: #3498db;
+        }
+        
+        .add-btn {
+            background: #2ecc71;
+            padding: 4px 6px;
+            font-size: 10px;
+            margin: 0;
+            min-height: 22px;
+        }
+        
+        .remove-btn {
+            background: #e74c3c;
+            padding: 4px 6px;
+            font-size: 10px;
+            margin: 0;
+            min-height: 22px;
+        }
+        
+        .buttons-inline {
+            display: block;
+            margin-top: 6px;
+        }
+        
+        .buttons-inline button {
+            display: inline-block;
+            margin-right: 5px;
+            margin-bottom: 0;
+        }
+        
+        .photo-input {
+            display: none;
+        }
+        
+        .preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .preview-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 95vw;
+            max-height: 95vh;
+            overflow: auto;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close-preview {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+        }
+        
+        .preview-cv {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 0;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            margin: 0 auto;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .required-field.empty-field {
+            background-color: #ffe6e6 !important;
+            border-color: #e74c3c !important;
+        }
+        
+        .editable.empty-field {
+            background-color: #fff9c4 !important;
+            border-color: #ffc107 !important;
+        }
+        
+        .date-picker-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .date-picker-button {
+            background: transparent !important;
+            color: #3498db;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 5px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            width: auto;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none !important;
+        }
+
+        .date-picker-button:hover {
+            background: transparent !important;
+            color: #2980b9;
+            transform: scale(1.1);
+        }
+        
+        .date-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .date-picker-content {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            width: 320px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .date-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .date-picker-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .date-picker-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .date-picker-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .date-picker-nav-btn {
+            background: #ecf0f1;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .date-picker-nav-btn:hover {
+            background: #d5dbdb;
+        }
+        
+        .date-picker-month-year {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .year-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 14px;
+        }
+        
+        .year-scroll-btn {
+            background: #ecf0f1;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .year-scroll-btn:hover {
+            background: #d5dbdb;
+        }
+        
+        .date-picker-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .date-picker-calendar th {
+            padding: 8px 0;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .date-picker-calendar td {
+            text-align: center;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .date-picker-calendar td:hover {
+            background: #ecf0f1;
+        }
+        
+        .date-picker-calendar td.selected {
+            background: #3498db;
+            color: white;
+        }
+        
+        .date-picker-calendar td.other-month {
+            color: #bdc3c7;
+        }
+        
+        .date-picker-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            gap: 10px;
+        }
+        
+        .date-picker-confirm {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        
+        .date-picker-cancel {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        
+        .social-media-container {
+            margin-top: 0;
+        }
+        
+        .social-media-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 4px 0;
+            border-bottom: 1px dashed #ecf0f1;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+            cursor: default;
+        }
+        
+        .social-icon.linkedin { background: #0077b5; }
+        .social-icon.github { background: #333; }
+        .social-icon.twitter { background: #000000; }
+        
+        .social-media-value {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            font-size: 11px;
+            color: #2c3e50;
+            border-bottom: 1px solid #d5dbdb;
+            padding-bottom: 3px;
+            min-height: 18px;
+            word-break: break-all;
+            margin-left: 0;
+        }
+        
+        .feedback-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-top: 30px;
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 210mm;
+        }
+        
+        .feedback-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .feedback-text {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .feedback-email-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        
+        .feedback-email-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .feedback-note {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .email-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #3498db;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: right;
+        }
+        
+        .email-suggestions div {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            transition: all 0.2s;
+            text-align: right;
+        }
+        
+        .email-suggestions div:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .email-suggestions .suggestion-active {
+            background: #3498db !important;
+            color: white !important;
+        }
+        
+        .hint-bubble {
+            position: fixed;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            z-index: 10000;
+            font-size: 12px;
+            max-width: 220px;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: none;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        
+        .hint-bubble.show-hint {
+            opacity: 1;
+            display: block;
+        }
+        
+        .hint-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #2c3e50;
+        }
+        
+        .hint-bubble.bottom-tooltip:after {
+            bottom: auto;
+            top: -6px;
+            border-top: none;
+            border-bottom: 6px solid #2c3e50;
+        }
+        
+        .feedback-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .feedback-popup-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .feedback-popup-header {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feedback-popup-header h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+        
+        .feedback-popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feedback-popup-body {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-send {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-send:hover {
+            background: #27ae60;
+        }
+        
+        .btn-send:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        /* ===== ONBOARDING OVERLAY - YENİ EKLENDİ ===== */
+        #onboarding-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        #onboarding-overlay.active {
+            display: flex;
+        }
+        
+        .onboarding-card {
+            background: white;
+            padding: 40px 35px;
+            border-radius: 20px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .onboarding-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+        }
+        
+        .onboarding-emoji {
+            font-size: 64px;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+        
+        .onboarding-card h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .onboarding-card h3 {
+            color: #3498db;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .onboarding-card p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .onboarding-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .onboarding-feature {
+            background: #f8f9fa;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .onboarding-feature span {
+            font-size: 18px;
+        }
+        
+        .onboarding-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .onboarding-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+        }
+        
+        .onboarding-skip {
+            display: block;
+            margin-top: 15px;
+            color: #999;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            transition: color 0.3s;
+        }
+        
+        .onboarding-skip:hover {
+            color: #555;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* ===== YAZDIRMA STİLLERİ ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+                width: 210mm;
+                height: 297mm;
+                overflow: hidden;
+            }
+            
+            .page-wrapper {
+                width: 210mm;
+                height: 297mm;
+                overflow: hidden;
+            }
+            
+            .controls, .instructions, .preview-overlay, .language-selector, .header,
+            .feedback-section, #onboarding-overlay {
+                display: none !important;
+            }
+            
+            .a4-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+                width: 210mm;
+                height: 297mm;
+                overflow: hidden;
+            }
+            
+            .cv-layout {
+                overflow: hidden;
+            }
+            
+            .left-column, .right-column {
+                overflow: hidden;
+            }
+            
+            .editable {
+                border: none !important;
+                background: transparent !important;
+            }
+            
+            button, .buttons-inline, .add-btn, .remove-btn, #delAvatar {
+                display: none !important;
+            }
+            
+            .skill-item, .interest-item {
+                border: none !important;
+                background: transparent !important;
+            }
+            
+            #avatarText {
+                display: none !important;
+            }
+            
+            .section-description {
+                display: none !important;
+            }
+            
+            #avatarBox {
+                width: 50mm !important;
+                height: 60mm !important;
+                max-width: 50mm !important;
+                max-height: 60mm !important;
+                min-width: 50mm !important;
+                min-height: 60mm !important;
+                background: white !important;
+            }
+            
+            #avatar {
+                width: auto !important;
+                height: 100% !important;
+                object-fit: contain !important;
+            }
+
+            .editable.empty-field {
+                background-color: transparent !important;
+                border-color: transparent !important;
+            }
+
+            .left-column {
+                background: #f8f9fa !important;
+            }
+
+            .reference-item {
+                background: transparent !important;
+                border-left: 3px solid #3498db !important;
+            }
+
+            .about-text, .item-description {
+                background: transparent !important;
+            }
+
+            .interests-section {
+                display: none !important;
+            }
+
+            .personal-info-item.hidden-in-pdf,
+            .section.hidden-in-pdf,
+            .education-item.hidden-in-pdf,
+            .experience-item.hidden-in-pdf,
+            .course-item.hidden-in-pdf,
+            .reference-item.hidden-in-pdf,
+            .language-item.hidden-in-pdf {
+                display: none !important;
+            }
+            
+            .section-title.hidden-in-pdf {
+                display: none !important;
+            }
+            
+            .required-field::after {
+                content: "" !important;
+            }
+            
+            .editable[data-placeholder]:empty:before {
+                content: "" !important;
+            }
+            
+            .languages-section.hidden-in-pdf .section-title {
+                display: none !important;
+            }
+        }
+
+        /* ===== MOBİL UYUM ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                overflow-x: auto;
+                align-items: flex-start;
+            }
+            
+            .page-wrapper {
+                align-items: flex-start;
+            }
+            
+            .controls, .language-selector {
+                position: sticky;
+                left: 10px;
+                width: calc(100vw - 20px);
+            }
+            
+            .a4-container {
+                transform: none;
+                margin-left: 0;
+            }
+            
+            .onboarding-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .onboarding-card {
+                padding: 30px 20px;
+            }
+            
+            .onboarding-card h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .controls, .language-selector {
+                position: sticky;
+                left: 5px;
+                width: calc(100vw - 10px);
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+
+        body::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        body::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        body::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #3498db;
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 10000;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to Main Content -->
+    <a href="#main-content" class="skip-link sr-only">Ana içeriğe atla</a>
+
+    <!-- ============================================ -->
+    <!-- ===== ONBOARDING OVERLAY - YENİ EKLENDİ ===== -->
+    <!-- ============================================ -->
+    <div id="onboarding-overlay">
+        <div class="onboarding-card">
+            <span class="onboarding-emoji">🚀</span>
+            <h2>MobilCV'ye Hoş Geldiniz!</h2>
+            <h3>🌟 Profesyonel CV'nizi 5 Dakikada Oluşturun</h3>
+            
+            <p>CV'nizi oluşturmak için A4 sayfasındaki metinlere <strong>tıklayıp düzenleyin</strong>.</p>
+            
+            <div class="onboarding-features">
+                <div class="onboarding-feature">
+                    <span>✏️</span> Tıkla-Düzenle
+                </div>
+                <div class="onboarding-feature">
+                    <span>🌍</span> 10 Dil Desteği
+                </div>
+                <div class="onboarding-feature">
+                    <span>📄</span> PDF İndir
+                </div>
+                <div class="onboarding-feature">
+                    <span>💾</span> Otomatik Kaydet
+                </div>
+                <div class="onboarding-feature">
+                    <span>📸</span> Fotoğraf Ekle
+                </div>
+                <div class="onboarding-feature">
+                    <span>🔗</span> Sosyal Medya
+                </div>
+            </div>
+            
+            <p style="font-size:13px; color:#888; margin-top:5px;">
+                💡 İpucu: Boş alanlar otomatik gizlenir, zorunlu alanlar <span style="color:#e74c3c;">*</span> ile işaretlidir.
+            </p>
+            
+            <button class="onboarding-btn" onclick="closeOnboarding()">
+                🎯 Başlayalım!
+            </button>
+            
+            <button class="onboarding-skip" onclick="closeOnboarding()">
+                Daha sonra hatırlat
+            </button>
+        </div>
+    </div>
+
+    <!-- POPUP UYARI -->
+    <div class="popup-overlay" id="warning-popup">
+        <div class="popup-content">
+            <div class="popup-body">
+                <p data-key="warningLine1">Bu sayfa <strong>bilgilerinizi kaydetmez</strong>.</p>
+            </div>
+            <div class="popup-footer">
+                <button id="understand-btn" class="popup-btn" data-key="understandButton">Anladım, Devam Et</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="page-wrapper">
+        <header class="header" role="banner">
+            <h1>MobilCV Oluşturucu</h1>  
+            <p>Ücretsiz profesyonel CV'nizi oluşturun</p>
+        </header>
+        
+        <main id="main-content" role="main">
+            <!-- Dil Seçici -->
+            <section aria-labelledby="cv-creator-title" class="language-selector">
+                <h2 id="cv-creator-title" class="sr-only">CV Oluşturucu</h2>
+                <label for="language-select">Dil Seçin / Select Language:</label>
+                <div class="language-select-container">
+                    <select id="language-select" class="flag-select">
+                        <option value="tr">🇹🇷 Türkçe</option>
+                        <option value="en">🇺🇸 English</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="pt">🇵🇹 Português</option>
+                        <option value="ru">🇷🇺 Русский</option>
+                        <option value="ar">🇸🇦 العربية</option>
+                        <option value="zh">🇨🇳 中文</option>
+                    </select>
+                </div>
+            </section>
+            
+            <!-- Kontroller -->
+            <section aria-labelledby="controls-title" class="controls">
+                <h2 id="controls-title" class="sr-only">CV Kontrolleri</h2>
+                <button id="clear-all" class="btn-danger">
+                    <span>🗑️</span>
+                    <span class="button-text" data-key="clearAll">Tümünü Temizle</span>
+                </button>
+                <button id="preview-cv" class="btn-warning">
+                    <span>👁️</span>
+                    <span class="button-text" data-key="preview">Önizleme</span>
+                </button>
+                <button id="save-pdf" class="btn-success">
+                    <span>📄</span>
+                    <span class="button-text" data-key="savePDF">PDF İndir</span>
+                </button>
+            </section>
+            
+            <!-- ANA CV FORMU -->
+            <section aria-labelledby="cv-form-title">
+                <h2 id="cv-form-title" class="sr-only">CV Formu</h2>
+                <div class="a4-container" id="cv-form">
+                    <div class="cv-layout">
+                        <!-- SOL SÜTUN -->
+                        <div class="left-column">
+                            <div class="personal-header">
+                                <div id="avatarBox" data-hint="CV'niz için profesyonel bir fotoğraf ekleyin">
+                                    <img id="avatar" alt="Fotoğraf" />
+                                    <span id="avatarText" data-key="addPhoto">Fotoğraf eklemek için tıklayın</span>
+                                    <span id="delAvatar" class="no-print">X</span>
+                                    <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                                </div>
+                            </div>
+                            
+                            <div class="personal-info">
+                                <!-- Ad Soyad -->
+                                <div class="personal-info-item name-item">
+                                    <div class="personal-info-label" style="display:none;" data-key="fullName">Ad Soyad</div>
+                                    <div class="personal-info-value editable required-field" contenteditable="true" data-placeholder-key="fullNamePlaceholder" data-hint-key="fullNameHint" data-required="true"></div>
+                                </div>
+                                
+                                <!-- Meslek -->
+                                <div class="personal-info-item title-item">
+                                    <div class="personal-info-label" style="display:none;" data-key="profession">Mesleğiniz / Unvanınız</div>
+                                    <div class="personal-info-value editable" contenteditable="true" data-placeholder-key="professionPlaceholder" data-hint-key="professionHint"></div>
+                                </div>
+                                
+                                <!-- Telefon -->
+                                <div class="personal-info-item">
+                                    <div class="personal-info-label required-field" data-key="phone">Telefon</div>
+                                    <div class="personal-info-value editable phone-input required-field" contenteditable="true" data-placeholder-key="phonePlaceholder" data-hint-key="phoneHint" data-required="true"></div>
+                                </div>
+                                
+                                <!-- E-posta -->
+                                <div class="personal-info-item full-width" style="position:relative;">
+                                    <div class="personal-info-label required-field" data-key="email">E-posta</div>
+                                    <div class="personal-info-value editable required-field email-input" 
+                                         contenteditable="true" 
+                                         data-placeholder-key="emailPlaceholder" 
+                                         data-hint-key="emailHint" 
+                                         data-required="true"
+                                         id="email-input"></div>
+                                    <div id="email-suggestions" class="email-suggestions"></div>
+                                </div>
+                                
+                                <!-- Adres -->
+                                <div class="personal-info-item full-width">
+                                    <div class="personal-info-label" data-key="address">Adres</div>
+                                    <div class="personal-info-value editable" contenteditable="true" data-placeholder-key="addressPlaceholder" data-hint-key="addressHint"></div>
+                                </div>
+
+                                <!-- Doğum Tarihi -->
+                                <div class="personal-info-item" data-field="birth-date">
+                                    <div class="personal-info-label">
+                                        <span data-key="birthDate">Doğum Tarihi</span>
+                                        <button class="date-picker-button" title="Takvimden seç">📅</button>
+                                    </div>
+                                    <div class="personal-info-value editable birth-date-input" contenteditable="true" data-placeholder-key="birthDatePlaceholder" data-hint-key="birthDateHint"></div>
+                                </div>
+                                
+                                <!-- Ehliyet -->
+                                <div class="personal-info-item" data-field="driving-license">
+                                    <div class="personal-info-label" data-key="drivingLicense">Ehliyet Sınıfı</div>
+                                    <div class="personal-info-value editable" contenteditable="true" data-placeholder-key="drivingLicensePlaceholder" data-hint-key="drivingLicenseHint"></div>
+                                </div>
+                                
+                                <!-- SOSYAL MEDYA -->
+                                <div class="personal-info-item" data-field="social-media">
+                                    <div class="personal-info-label" data-key="socialMedia">Sosyal Medya</div>
+                                    <div class="social-media-container">
+                                        <div class="social-media-item">
+                                            <span class="social-icon linkedin">in</span>
+                                            <div class="social-media-value editable" contenteditable="true" 
+                                                 data-placeholder="LinkedIn profil linki" 
+                                                 data-hint="LinkedIn profil URL'nizi ekleyin"
+                                                 data-type="linkedin"></div>
+                                        </div>
+                                        <div class="social-media-item">
+                                            <span class="social-icon github">gh</span>
+                                            <div class="social-media-value editable" contenteditable="true" 
+                                                 data-placeholder="GitHub profil linki" 
+                                                 data-hint="GitHub profil URL'nizi ekleyin"
+                                                 data-type="github"></div>
+                                        </div>
+                                        <div class="social-media-item">
+                                            <span class="social-icon twitter">x</span>
+                                            <div class="social-media-value editable" contenteditable="true" 
+                                                 data-placeholder="Twitter/X profil linki" 
+                                                 data-hint="Twitter/X profil URL'nizi ekleyin"
+                                                 data-type="twitter"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Diller -->
+                            <div class="languages-section" id="languages-section">
+                                <div class="section-title" style="color: #000000; border-color: #3498db; text-align: left;" data-key="languages">Diller</div>
+                                <div class="section-description" style="color: #7f8c8d;" data-key="languagesDescription">Bildiğiniz dilleri ve seviyelerini ekleyin</div>
+                                <div id="languages-container">
+                                    <div class="language-item">
+                                        <span class="language-name editable" contenteditable="true" data-placeholder-key="languageNamePlaceholder" data-hint-key="languageNameHint"></span>
+                                        <span class="language-level editable" contenteditable="true" data-placeholder-key="languageLevelPlaceholder" data-hint-key="languageLevelHint"></span>
+                                    </div>
+                                    <div class="language-item">
+                                        <span class="language-name editable" contenteditable="true" data-placeholder-key="languageNamePlaceholder" data-hint-key="languageNameHint"></span>
+                                        <span class="language-level editable" contenteditable="true" data-placeholder-key="languageLevelPlaceholder" data-hint-key="languageLevelHint"></span>
+                                    </div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-language-btn" data-key="addLanguage">+ Dil Ekle</button>
+                                    <button class="remove-btn" id="remove-language-btn" data-key="removeLanguage">Son Dili Kaldır</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SAĞ SÜTUN -->
+                        <div class="right-column" id="right-column">
+                            <!-- Hakkımda -->
+                            <div class="section" id="about-section">
+                                <div class="section-title" data-key="about">Hakkımda</div>
+                                <div class="section-description" data-key="aboutDescription">Kendinizi kısaca tanıtın. Deneyimleriniz, hedefleriniz ve uzmanlık alanlarınız hakkında bilgi verin.</div>
+                                <div class="about-text editable empty-field required-field" contenteditable="true" id="about-text" data-placeholder-key="aboutPlaceholder" data-hint-key="aboutHint" data-required="true"></div>
+                            </div>
+                            
+                            <!-- Eğitim -->
+                            <div class="section" id="education-section">
+                                <div class="section-title" data-key="education">Eğitim</div>
+                                <div class="section-description" data-key="educationDescription">En yüksek seviyeden başlayarak eğitim geçmişinizi ekleyin</div>
+                                <div id="education-container">
+                                    <div class="education-item">
+                                        <div class="education-subtitle-container">
+                                            <div class="education-institution editable required-field" contenteditable="true" data-placeholder-key="educationInstitutionPlaceholder" data-hint-key="educationInstitutionHint" data-required="true"></div>
+                                            <div class="education-date editable date-input" contenteditable="true" data-placeholder-key="educationDatePlaceholder" data-hint-key="educationDateHint"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-education-btn" data-key="addEducation">+ Eğitim Ekle</button>
+                                    <button class="remove-btn" id="remove-education-btn" data-key="removeEducation">Son Eğitimi Kaldır</button>
+                                </div>
+                            </div>
+                            
+                            <!-- İş Deneyimi -->
+                            <div class="section" id="experience-section">
+                                <div class="section-title" data-key="experience">İş Deneyimi</div>
+                                <div class="section-description" data-key="experienceDescription">En son çalıştığınız işten başlayarak iş deneyimlerinizi ekleyin (Maksimum 3)</div>
+                                <div id="experience-container">
+                                    <div class="experience-item">
+                                        <div class="item-title editable empty-field required-field" contenteditable="true" data-placeholder-key="experienceTitlePlaceholder" data-hint-key="experienceTitleHint" data-required="true"></div>
+                                        <div class="experience-subtitle-container">
+                                            <div class="experience-company editable empty-field required-field" contenteditable="true" data-placeholder-key="experienceCompanyPlaceholder" data-hint-key="experienceCompanyHint" data-required="true"></div>
+                                            <div class="experience-duration editable date-input" contenteditable="true" data-placeholder-key="experienceDatePlaceholder" data-hint-key="experienceDateHint"></div>
+                                        </div>
+                                        <div class="item-description editable empty-field" contenteditable="true" data-placeholder-key="experienceDescriptionPlaceholder" data-hint-key="experienceDescriptionHint"></div>
+                                    </div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-experience-btn" data-key="addExperience">+ Deneyim Ekle</button>
+                                    <button class="remove-btn" id="remove-experience-btn" data-key="removeExperience">Son Deneyimi Kaldır</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Kurslar -->
+                            <div class="section" id="courses-section">
+                                <div class="section-title" data-key="courses">Kurslar & Sertifikalar</div>
+                                <div class="section-description" data-key="coursesDescription">Aldığınız kurslar, sertifikalar ve eğitimler (Maksimum 3)</div>
+                                <div id="courses-container">
+                                    <div class="course-item">
+                                        <div class="item-title editable" contenteditable="true" data-placeholder-key="courseTitlePlaceholder" data-hint-key="courseTitleHint"></div>
+                                        <div class="course-subtitle-container">
+                                            <div class="course-institution editable empty-field" contenteditable="true" data-placeholder-key="courseInstitutionPlaceholder" data-hint-key="courseInstitutionHint"></div>
+                                            <div class="course-date editable date-input" contenteditable="true" data-placeholder-key="courseDatePlaceholder" data-hint-key="courseDateHint"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-course-btn" data-key="addCourse">+ Kurs Ekle</button>
+                                    <button class="remove-btn" id="remove-course-btn" data-key="removeCourse">Son Kursu Kaldır</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Yetenekler -->
+                            <div class="section" id="skills-section">
+                                <div class="section-title" data-key="skills">Yetenekler</div>
+                                <div class="section-description" data-key="skillsDescription">Teknik, dil veya kişisel yetenekleriniz</div>
+                                <div id="skills-container" class="skills-list">
+                                    <div class="skill-item editable" contenteditable="true" data-placeholder-key="skillPlaceholder" data-hint-key="skillHint"></div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-skill-btn" data-key="addSkill">+ Yetenek Ekle</button>
+                                    <button class="remove-btn" id="remove-skill-btn" data-key="removeSkill">Son Yeteneği Kaldır</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Referanslar -->
+                            <div class="section" id="references-section">
+                                <div class="section-title" data-key="references">Referanslar</div>
+                                <div class="section-description" data-key="referencesDescription">İşverenlerin iletişim kurabileceği referanslarınız</div>
+                                <div id="references-container" class="references-list">
+                                    <div class="reference-item">
+                                        <div class="reference-name editable" contenteditable="true" data-placeholder-key="referenceNamePlaceholder" data-hint-key="referenceNameHint"></div>
+                                        <div class="reference-info-container">
+                                            <div class="reference-position editable" contenteditable="true" data-placeholder-key="referencePositionPlaceholder" data-hint-key="referencePositionHint"></div>
+                                            <div class="reference-phone editable phone-input" contenteditable="true" data-placeholder-key="referencePhonePlaceholder" data-hint-key="referencePhoneHint"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buttons-inline">
+                                    <button class="add-btn" id="add-reference-btn" data-key="addReference">+ Referans Ekle</button>
+                                    <button class="remove-btn" id="remove-reference-btn" data-key="removeReference">Son Referansı Kaldır</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ÖNİZLEME MODALI -->
+        <div class="preview-overlay" id="preview-overlay">
+            <div class="preview-container">
+                <button class="close-preview" id="close-preview">×</button>
+                <div class="preview-header">
+                    <h2 data-key="previewTitle">CV ÖNİZLEME</h2>
+                    <p data-key="previewDescription">ESC tuşuna basarak veya dışarı tıklayarak kapatabilirsiniz</p>
+                </div>
+                <div id="preview-content"></div>
+            </div>
+        </div>
+
+        <!-- TAKVİM MODALI -->
+        <div class="date-picker-modal" id="date-picker-modal">
+            <div class="date-picker-content">
+                <div class="date-picker-header">
+                    <div class="date-picker-title" data-key="selectBirthDate">Doğum Tarihi Seçin</div>
+                    <button class="date-picker-close" id="date-picker-close">×</button>
+                </div>
+                <div class="date-picker-navigation">
+                    <button class="date-picker-nav-btn" id="date-picker-prev">←</button>
+                    <div class="date-picker-month-year" id="date-picker-month-year">
+                        <span id="date-picker-month">Ocak</span>
+                        <div class="year-selector">
+                            <button class="year-scroll-btn" id="year-scroll-down">▼</button>
+                            <input type="text" class="year-input" id="year-input" value="2023" maxlength="4">
+                            <button class="year-scroll-btn" id="year-scroll-up">▲</button>
+                        </div>
+                    </div>
+                    <button class="date-picker-nav-btn" id="date-picker-next">→</button>
+                </div>
+                <table class="date-picker-calendar" id="date-picker-calendar">
+                    <thead>
+                        <tr>
+                            <th>Pzt</th>
+                            <th>Sal</th>
+                            <th>Çar</th>
+                            <th>Per</th>
+                            <th>Cum</th>
+                            <th>Cmt</th>
+                            <th>Paz</th>
+                        </tr>
+                    </thead>
+                    <tbody id="date-picker-calendar-body"></tbody>
+                </table>
+                <div class="date-picker-actions">
+                    <button class="date-picker-cancel" id="date-picker-cancel">İptal</button>
+                    <button class="date-picker-confirm" id="date-picker-confirm">Tamam</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- AÇIKLAMA BALONCUĞU -->
+        <div class="hint-bubble" id="hint-bubble"></div>
+
+        <!-- FEEDBACK POPUP -->
+        <div class="feedback-popup-overlay" id="feedback-popup">
+            <div class="feedback-popup-content">
+                <div class="feedback-popup-header">
+                    <h3 data-key="feedbackPopupTitle">Geri Bildirim Gönder</h3>
+                    <button class="feedback-popup-close" id="feedback-close-btn">×</button>
+                </div>
+                <div class="feedback-popup-body">
+                    <form id="feedback-form" action="https://formspree.io/f/movkoozp" method="POST">
+                        <div class="form-group">
+                            <label for="feedback-name" data-key="feedbackNameLabel">Adınız (İsteğe bağlı)</label>
+                            <input type="text" id="feedback-name" name="name" data-key="feedbackNamePlaceholder" placeholder="İsminiz">
+                        </div>
+                        <div class="form-group">
+                            <label for="feedback-email" data-key="feedbackEmailLabel">E-posta (İsteğe bağlı)</label>
+                            <input type="email" id="feedback-email" name="email" data-key="feedbackEmailPlaceholder" placeholder="cevap@almak.isterseniz">
+                        </div>
+                        <div class="form-group">
+                            <label for="feedback-message" data-key="feedbackMessageLabel">Mesajınız *</label>
+                            <textarea id="feedback-message" name="message" data-key="feedbackMessagePlaceholder" placeholder="Görüş ve önerilerinizi buraya yazın..." required rows="5"></textarea>
+                        </div>
+                        <input type="hidden" name="_subject" value="MobilCV Feedback">
+                        <input type="text" name="_gotcha" style="display:none">
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="feedback-cancel-btn" data-key="cancelButton">İptal</button>
+                            <button type="submit" class="btn-send" data-key="sendButton">Gönder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEEDBACK SECTION -->
+        <div class="feedback-section">
+            <div class="feedback-container">
+                <p class="feedback-text" data-key="feedbackText">Görüş ve önerileriniz için bize ulaşın:</p>
+                <a href="#" class="feedback-email-link" id="feedback-email-link">
+                   <span class="email-icon">✉️</span>
+                   <span class="email-text">destek@mobilcv.com</span>
+                </a>
+                <p class="feedback-note" data-key="feedbackNote">Geliştirmemize yardımcı olun!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- ===== TÜM JAVASCRIPT KODU ===== -->
+    <!-- ============================================ -->
+    <script>
+        // ============================================================
+        // 1. ONBOARDING REHBERLİK
+        // ============================================================
+        function closeOnboarding() {
+            const overlay = document.getElementById('onboarding-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                overlay.style.display = 'none';
+                localStorage.setItem('mobilcv_onboarding_shown', 'true');
+            }
+        }
+
+        // Onboarding gösterimi
+        document.addEventListener('DOMContentLoaded', function() {
+            const onboardingShown = localStorage.getItem('mobilcv_onboarding_shown');
+            const overlay = document.getElementById('onboarding-overlay');
+            
+            if (!onboardingShown && overlay) {
+                // Biraz gecikmeyle göster (sayfa tam yüklensin)
+                setTimeout(() => {
+                    overlay.style.display = 'flex';
+                    // Class ekle (animasyon için)
+                    setTimeout(() => {
+                        overlay.classList.add('active');
+                    }, 50);
+                }, 500);
+            }
+            
+            // ESC ile kapat
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay && overlay.style.display === 'flex') {
+                    closeOnboarding();
+                }
+            });
+        });
+
+        // ============================================================
+        // 2. TÜM ÇEVİRİLER
+        // ============================================================
+        const translations = {
+            tr: {
+                "appTitle": "Mobil CV Oluşturucu",
+                "appDescription": "Ücretsiz profesyonel CV'nizi oluşturun",
+                "pageTitle": "Mobil CV Oluşturucu | 10 Dil Desteği",
+                "selectLanguage": "Dil Seçin",
+                "clearAll": "Tümünü Temizle",
+                "preview": "Önizleme",
+                "savePDF": "PDF İndir",
+                "about": "Hakkımda",
+                "education": "Eğitim",
+                "experience": "İş Deneyimi",
+                "courses": "Kurslar & Sertifikalar",
+                "skills": "Yetenekler",
+                "references": "Referanslar",
+                "languages": "Diller",
+                "aboutDescription": "Kendinizi kısaca tanıtın. Deneyimleriniz, hedefleriniz ve uzmanlık alanlarınız hakkında bilgi verin.",
+                "educationDescription": "En yüksek seviyeden başlayarak eğitim geçmişinizi ekleyin",
+                "experienceDescription": "En son çalıştığınız işten başlayarak iş deneyimlerinizi ekleyin (Maksimum 3)",
+                "coursesDescription": "Aldığınız kurslar, sertifikalar ve eğitimler (Maksimum 3)",
+                "skillsDescription": "Teknik, dil veya kişisel yetenekleriniz",
+                "referencesDescription": "İşverenlerin iletişim kurabileceği referanslarınız",
+                "languagesDescription": "Bildiğiniz dilleri ve seviyelerini ekleyin",
+                "fullName": "Ad Soyad",
+                "profession": "Mesleğiniz / Unvanınız",
+                "phone": "Telefon",
+                "email": "E-posta",
+                "address": "Adres",
+                "birthDate": "Doğum Tarihi",
+                "drivingLicense": "Ehliyet Sınıfı",
+                "fullNamePlaceholder": "Adınız Soyadınız",
+                "professionPlaceholder": "Mesleğiniz / Unvanınız",
+                "phonePlaceholder": "555 123 4567",
+                "emailPlaceholder": "E-posta adresiniz",
+                "addressPlaceholder": "Adresiniz",
+                "birthDatePlaceholder": "GG/AA/YYYY",
+                "drivingLicensePlaceholder": "Örn: B, A2, E",
+                "aboutPlaceholder": "Buraya hakkınızda kısa bir yazı yazın...",
+                "educationInstitutionPlaceholder": "Üniversite Bölüm",
+                "educationDatePlaceholder": "2018-2022",
+                "experienceTitlePlaceholder": "Pozisyon / Görev",
+                "experienceCompanyPlaceholder": "Şirket / Kurum",
+                "experienceDatePlaceholder": "2020-2023",
+                "experienceDescriptionPlaceholder": "Görevleriniz ve başarılarınız",
+                "courseTitlePlaceholder": "Kurs / Sertifika Adı",
+                "courseInstitutionPlaceholder": "Kurum / Eğitmen",
+                "courseDatePlaceholder": "2023",
+                "skillPlaceholder": "Yetenek",
+                "referenceNamePlaceholder": "Referans Adı Soyadı",
+                "referencePositionPlaceholder": "Pozisyon ve Şirket",
+                "referencePhonePlaceholder": "555 123 4567",
+                "languageNamePlaceholder": "Türkçe",
+                "languageLevelPlaceholder": "Ana Dil",
+                "addPhoto": "Fotoğraf eklemek için tıklayın",
+                "fullNameHint": "Tam adınızı yazın",
+                "professionHint": "Örn: Yazılım Geliştirici",
+                "phoneHint": "Sadece rakam girin",
+                "emailHint": "Profesyonel e-posta adresiniz",
+                "addressHint": "Tam adresiniz",
+                "birthDateHint": "Doğum tarihinizi girin",
+                "drivingLicenseHint": "Örn: B, A2, E",
+                "aboutHint": "Kısa ve öz bir özet yazın",
+                "educationInstitutionHint": "Örn: İstanbul Üniversitesi",
+                "educationDateHint": "Sadece rakam girin",
+                "experienceTitleHint": "Çalıştığınız pozisyon",
+                "experienceCompanyHint": "Çalıştığınız şirket",
+                "experienceDateHint": "Sadece rakam girin",
+                "experienceDescriptionHint": "Görevleriniz ve başarılarınız",
+                "courseTitleHint": "Kurs veya sertifika adı",
+                "courseInstitutionHint": "Eğitimi veren kurum",
+                "courseDateHint": "Sadece rakam girin",
+                "skillHint": "Bir yetenek ekleyin",
+                "referenceNameHint": "Referansınızın adı soyadı",
+                "referencePositionHint": "Referansınızın pozisyonu",
+                "referencePhoneHint": "Sadece rakam girin",
+                "languageNameHint": "Dil adı",
+                "languageLevelHint": "Seviye: Ana Dil, İleri, Orta, Temel",
+                "addLanguage": "+ Dil Ekle",
+                "removeLanguage": "Son Dili Kaldır",
+                "addEducation": "+ Eğitim Ekle",
+                "removeEducation": "Son Eğitimi Kaldır",
+                "addExperience": "+ Deneyim Ekle",
+                "removeExperience": "Son Deneyimi Kaldır",
+                "addCourse": "+ Kurs Ekle",
+                "removeCourse": "Son Kursu Kaldır",
+                "addSkill": "+ Yetenek Ekle",
+                "removeSkill": "Son Yeteneği Kaldır",
+                "addReference": "+ Referans Ekle",
+                "removeReference": "Son Referansı Kaldır",
+                "previewTitle": "CV ÖNİZLEME",
+                "selectBirthDate": "Doğum Tarihi Seçin",
+                "previewDescription": "ESC tuşuna basarak veya dışarı tıklayarak kapatabilirsiniz",
+                "warningLine1": "Bu sayfa bilgilerinizi kaydetmez.",
+                "understandButton": "Anladım, Devam Et",
+                "feedbackText": "Görüş ve önerileriniz için bize ulaşın:",
+                "feedbackNote": "Geliştirmemize yardımcı olun!",
+                "socialMedia": "Sosyal Medya",
+                "feedbackPopupTitle": "Geri Bildirim Gönder",
+                "feedbackNameLabel": "Adınız (İsteğe bağlı)",
+                "feedbackNamePlaceholder": "İsminiz",
+                "feedbackEmailLabel": "E-posta (İsteğe bağlı)",
+                "feedbackEmailPlaceholder": "cevap@almak.isterseniz",
+                "feedbackMessageLabel": "Mesajınız *",
+                "feedbackMessagePlaceholder": "Görüş ve önerilerinizi buraya yazın...",
+                "cancelButton": "İptal",
+                "sendButton": "Gönder"
+            },
+            en: {
+                "appTitle": "Mobile CV Creator",
+                "appDescription": "Create your free professional CV",
+                "pageTitle": "Mobile CV Creator | 10 Language Support",
+                "selectLanguage": "Select Language",
+                "clearAll": "Clear All",
+                "preview": "Preview",
+                "savePDF": "Download PDF",
+                "about": "About Me",
+                "education": "Education",
+                "experience": "Work Experience",
+                "courses": "Courses & Certificates",
+                "skills": "Skills",
+                "references": "References",
+                "languages": "Languages",
+                "aboutDescription": "Introduce yourself briefly.",
+                "educationDescription": "Add your education history",
+                "experienceDescription": "Add your work experiences (Max 3)",
+                "coursesDescription": "Courses and certificates (Max 3)",
+                "skillsDescription": "Your technical and personal skills",
+                "referencesDescription": "Your references",
+                "languagesDescription": "Add languages you know",
+                "fullName": "Full Name",
+                "profession": "Profession / Title",
+                "phone": "Phone",
+                "email": "Email",
+                "address": "Address",
+                "birthDate": "Date of Birth",
+                "drivingLicense": "Driving License",
+                "fullNamePlaceholder": "Your Full Name",
+                "professionPlaceholder": "Your Profession",
+                "phonePlaceholder": "555 123 4567",
+                "emailPlaceholder": "Your email address",
+                "addressPlaceholder": "Your address",
+                "birthDatePlaceholder": "DD/MM/YYYY",
+                "drivingLicensePlaceholder": "e.g.: B, A2",
+                "aboutPlaceholder": "Write about yourself...",
+                "educationInstitutionPlaceholder": "University Department",
+                "educationDatePlaceholder": "2018-2022",
+                "experienceTitlePlaceholder": "Position",
+                "experienceCompanyPlaceholder": "Company",
+                "experienceDatePlaceholder": "2020-2023",
+                "experienceDescriptionPlaceholder": "Your duties and achievements",
+                "courseTitlePlaceholder": "Course Name",
+                "courseInstitutionPlaceholder": "Institution",
+                "courseDatePlaceholder": "2023",
+                "skillPlaceholder": "Skill",
+                "referenceNamePlaceholder": "Reference Full Name",
+                "referencePositionPlaceholder": "Position and Company",
+                "referencePhonePlaceholder": "555 123 4567",
+                "languageNamePlaceholder": "English",
+                "languageLevelPlaceholder": "Native",
+                "addPhoto": "Click to add photo",
+                "fullNameHint": "Write your full name",
+                "professionHint": "e.g.: Software Developer",
+                "phoneHint": "Enter only numbers",
+                "emailHint": "Your professional email",
+                "addressHint": "Your full address",
+                "birthDateHint": "Enter your birth date",
+                "drivingLicenseHint": "e.g.: B, A2",
+                "aboutHint": "Write a short summary",
+                "educationInstitutionHint": "e.g.: Istanbul University",
+                "educationDateHint": "Enter only numbers",
+                "experienceTitleHint": "Your position",
+                "experienceCompanyHint": "Your company",
+                "experienceDateHint": "Enter only numbers",
+                "experienceDescriptionHint": "Your duties and achievements",
+                "courseTitleHint": "Course name",
+                "courseInstitutionHint": "Training institution",
+                "courseDateHint": "Enter only numbers",
+                "skillHint": "Add a skill",
+                "referenceNameHint": "Reference's full name",
+                "referencePositionHint": "Reference's position",
+                "referencePhoneHint": "Enter only numbers",
+                "languageNameHint": "Language name",
+                "languageLevelHint": "Level: Native, Advanced, Intermediate",
+                "addLanguage": "+ Add Language",
+                "removeLanguage": "Remove Last",
+                "addEducation": "+ Add Education",
+                "removeEducation": "Remove Last",
+                "addExperience": "+ Add Experience",
+                "removeExperience": "Remove Last",
+                "addCourse": "+ Add Course",
+                "removeCourse": "Remove Last",
+                "addSkill": "+ Add Skill",
+                "removeSkill": "Remove Last",
+                "addReference": "+ Add Reference",
+                "removeReference": "Remove Last",
+                "previewTitle": "CV PREVIEW",
+                "selectBirthDate": "Select Birth Date",
+                "previewDescription": "Press ESC or click outside to close",
+                "warningLine1": "This page does not save your information.",
+                "understandButton": "I Understand, Continue",
+                "feedbackText": "Contact us for your feedback:",
+                "feedbackNote": "Help us improve!",
+                "socialMedia": "Social Media",
+                "feedbackPopupTitle": "Send Feedback",
+                "feedbackNameLabel": "Your Name (Optional)",
+                "feedbackNamePlaceholder": "Your name",
+                "feedbackEmailLabel": "Email (Optional)",
+                "feedbackEmailPlaceholder": "if.you.want.reply",
+                "feedbackMessageLabel": "Your Message *",
+                "feedbackMessagePlaceholder": "Write your feedback here...",
+                "cancelButton": "Cancel",
+                "sendButton": "Send"
+            }
+            // Diğer diller için... (de, fr, es, it, pt, ru, ar, zh)
+        };
+
+        // ============================================================
+        // 3. DİL YÖNETİMİ
+        // ============================================================
+        function changeLanguage(lang) {
+            const translation = translations[lang];
+            if (!translation) return;
+            
+            document.title = translation.pageTitle || translation.appTitle;
+            
+            Object.keys(translation).forEach(key => {
+                const elements = document.querySelectorAll(`[data-key="${key}"]`);
+                elements.forEach(el => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translation[key];
+                    } else {
+                        el.textContent = translation[key];
+                    }
+                });
+            });
+            
+            // Placeholder'ları güncelle
+            document.querySelectorAll('.editable[data-placeholder-key]').forEach(el => {
+                const key = el.getAttribute('data-placeholder-key');
+                if (translation[key]) {
+                    const oldPlaceholder = el.getAttribute('data-placeholder-old');
+                    if (!el.textContent.trim() || el.textContent === oldPlaceholder) {
+                        el.textContent = translation[key];
+                        el.classList.add('empty-field');
+                    }
+                    el.setAttribute('data-placeholder', translation[key]);
+                    el.setAttribute('data-placeholder-old', translation[key]);
+                }
+            });
+            
+            // Başlık ve açıklama
+            const header = document.querySelector('.header');
+            if (header) {
+                header.querySelector('h1').textContent = translation.appTitle;
+                header.querySelector('p').textContent = translation.appDescription;
+            }
+            
+            const label = document.querySelector('.language-selector label');
+            if (label) label.innerHTML = translation.selectLanguage + ' / Select Language:';
+            
+            // Feedback popup çevirileri
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translation[key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translation[key];
+                    } else if (el.tagName === 'LABEL') {
+                        el.textContent = translation[key];
+                    } else {
+                        el.textContent = translation[key];
+                    }
+                }
+            });
+        }
+
+        // Dil seçici
+        document.getElementById('language-select').addEventListener('change', function() {
+            changeLanguage(this.value);
+            updateCalendarLanguage();
+        });
+
+        // ============================================================
+        // 4. SOSYAL MEDYA YÖNETİCİSİ
+        // ============================================================
+        class SocialMediaManager {
+            constructor() {
+                this.platforms = {
+                    'linkedin': {
+                        regex: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/,
+                        format: (url) => this.ensureHttps(url.replace(/\/$/, ''))
+                    },
+                    'github': {
+                        regex: /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9-]+\/?$/,
+                        format: (url) => this.ensureHttps(url.replace(/\/$/, ''))
+                    },
+                    'twitter': {
+                        regex: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]+\/?$/,
+                        format: (url) => this.ensureHttps(url.replace(/twitter\.com/, 'x.com').replace(/\/$/, ''))
+                    }
+                };
+                this.init();
+            }
+            
+            init() {
+                document.addEventListener('input', (e) => {
+                    if (e.target.classList.contains('social-media-value')) {
+                        this.validate(e.target);
+                    }
+                });
+                
+                document.addEventListener('focusout', (e) => {
+                    if (e.target.classList.contains('social-media-value')) {
+                        this.format(e.target);
+                    }
+                });
+            }
+            
+            validate(input) {
+                const platform = input.getAttribute('data-type');
+                const value = input.textContent.trim();
+                const placeholder = input.getAttribute('data-placeholder');
+                
+                if (!value || value === placeholder) {
+                    input.classList.remove('valid', 'invalid');
+                    input.classList.add('empty-field');
+                    return;
+                }
+                
+                const config = this.platforms[platform];
+                if (!config) return;
+                
+                input.classList.remove('valid', 'invalid', 'empty-field');
+                input.classList.add(config.regex.test(value) ? 'valid' : 'invalid');
+            }
+            
+            format(input) {
+                const platform = input.getAttribute('data-type');
+                let value = input.textContent.trim();
+                const placeholder = input.getAttribute('data-placeholder');
+                
+                if (!value || value === placeholder) return;
+                
+                const config = this.platforms[platform];
+                if (!config || !config.format) return;
+                
+                const formatted = config.format(value);
+                if (input.textContent !== formatted) {
+                    input.textContent = formatted;
+                }
+            }
+            
+            ensureHttps(url) {
+                if (!url.startsWith('http')) return 'https://' + url;
+                return url;
+            }
+        }
+
+        // ============================================================
+        // 5. OTOMATİK KAYDETME SİSTEMİ
+        // ============================================================
+        class AutoSaveManager {
+            constructor() {
+                this.storageKey = 'mobilcv_data';
+                this.saveDelay = 1000;
+                this.init();
+            }
+
+            init() {
+                document.addEventListener('input', () => this.debouncedSave());
+                document.getElementById('avatar')?.addEventListener('load', () => this.debouncedSave());
+                document.getElementById('language-select')?.addEventListener('change', () => this.debouncedSave());
+                window.addEventListener('load', () => setTimeout(() => this.loadSavedData(), 300));
+                window.addEventListener('beforeunload', () => this.saveAllData());
+            }
+
+            debouncedSave() {
+                if (this.saveTimeout) clearTimeout(this.saveTimeout);
+                this.saveTimeout = setTimeout(() => this.saveAllData(), this.saveDelay);
+            }
+
+            saveAllData() {
+                try {
+                    const data = {
+                        timestamp: new Date().toISOString(),
+                        personalInfo: this.getPersonalInfo(),
+                        about: document.getElementById('about-text')?.textContent.trim() || '',
+                        education: this.getEducationData(),
+                        experience: this.getExperienceData(),
+                        courses: this.getCoursesData(),
+                        skills: this.getSkillsData(),
+                        references: this.getReferencesData(),
+                        languages: this.getLanguagesData(),
+                        socialMedia: this.getSocialMediaData(),
+                        photo: this.getPhotoData(),
+                        language: document.getElementById('language-select')?.value || 'tr'
+                    };
+                    localStorage.setItem(this.storageKey, JSON.stringify(data));
+                } catch (e) { console.error('Save error:', e); }
+            }
+
+            loadSavedData() {
+                try {
+                    const saved = localStorage.getItem(this.storageKey);
+                    if (!saved) return;
+                    const data = JSON.parse(saved);
+                    
+                    if (data.language) {
+                        document.getElementById('language-select').value = data.language;
+                        changeLanguage(data.language);
+                    }
+                    
+                    if (data.personalInfo) this.setPersonalInfo(data.personalInfo);
+                    if (data.about) this.setAboutText(data.about);
+                    if (data.education) this.setEducationData(data.education);
+                    if (data.experience) this.setExperienceData(data.experience);
+                    if (data.courses) this.setCoursesData(data.courses);
+                    if (data.skills) this.setSkillsData(data.skills);
+                    if (data.references) this.setReferencesData(data.references);
+                    if (data.languages) this.setLanguagesData(data.languages);
+                    if (data.socialMedia) this.setSocialMediaData(data.socialMedia);
+                    if (data.photo) this.setPhotoData(data.photo);
+                    
+                    setTimeout(() => {
+                        document.querySelectorAll('.editable').forEach(el => {
+                            el.dispatchEvent(new Event('input', { bubbles: true }));
+                        });
+                    }, 500);
+                } catch (e) { console.error('Load error:', e); }
+            }
+
+            getPersonalInfo() {
+                const info = {};
+                document.querySelectorAll('.personal-info-item').forEach(item => {
+                    const field = item.getAttribute('data-field') || 
+                                 item.querySelector('.personal-info-label')?.textContent?.toLowerCase().replace(/\s+/g, '');
+                    const valueEl = item.querySelector('.personal-info-value');
+                    if (field && valueEl) {
+                        const val = valueEl.textContent.trim();
+                        const placeholder = valueEl.getAttribute('data-placeholder');
+                        if (val && val !== placeholder) info[field] = val;
+                    }
+                });
+                return info;
+            }
+
+            getEducationData() {
+                const data = [];
+                document.querySelectorAll('#education-container .education-item').forEach(item => {
+                    const institution = item.querySelector('.education-institution')?.textContent.trim() || '';
+                    const date = item.querySelector('.education-date')?.textContent.trim() || '';
+                    if (institution || date) data.push({ institution, date });
+                });
+                return data;
+            }
+
+            getExperienceData() {
+                const data = [];
+                document.querySelectorAll('#experience-container .experience-item').forEach(item => {
+                    const title = item.querySelector('.item-title')?.textContent.trim() || '';
+                    const company = item.querySelector('.experience-company')?.textContent.trim() || '';
+                    const duration = item.querySelector('.experience-duration')?.textContent.trim() || '';
+                    const description = item.querySelector('.item-description')?.textContent.trim() || '';
+                    if (title || company || duration || description) data.push({ title, company, duration, description });
+                });
+                return data;
+            }
+
+            getCoursesData() {
+                const data = [];
+                document.querySelectorAll('#courses-container .course-item').forEach(item => {
+                    const title = item.querySelector('.item-title')?.textContent.trim() || '';
+                    const institution = item.querySelector('.course-institution')?.textContent.trim() || '';
+                    const date = item.querySelector('.course-date')?.textContent.trim() || '';
+                    if (title || institution || date) data.push({ title, institution, date });
+                });
+                return data;
+            }
+
+            getSkillsData() {
+                const skills = [];
+                document.querySelectorAll('#skills-container .skill-item').forEach(item => {
+                    const skill = item.textContent.trim();
+                    const placeholder = item.getAttribute('data-placeholder');
+                    if (skill && skill !== placeholder) skills.push(skill);
+                });
+                return skills;
+            }
+
+            getReferencesData() {
+                const data = [];
+                document.querySelectorAll('#references-container .reference-item').forEach(item => {
+                    const name = item.querySelector('.reference-name')?.textContent.trim() || '';
+                    const position = item.querySelector('.reference-position')?.textContent.trim() || '';
+                    const phone = item.querySelector('.reference-phone')?.textContent.trim() || '';
+                    if (name || position || phone) data.push({ name, position, phone });
+                });
+                return data;
+            }
+
+            getLanguagesData() {
+                const data = [];
+                document.querySelectorAll('#languages-container .language-item').forEach(item => {
+                    const name = item.querySelector('.language-name')?.textContent.trim() || '';
+                    const level = item.querySelector('.language-level')?.textContent.trim() || '';
+                    if (name || level) data.push({ name, level });
+                });
+                return data;
+            }
+
+            getSocialMediaData() {
+                const data = {};
+                document.querySelectorAll('.social-media-item').forEach(item => {
+                    const type = item.querySelector('.social-media-value')?.getAttribute('data-type');
+                    const value = item.querySelector('.social-media-value')?.textContent.trim() || '';
+                    const placeholder = item.querySelector('.social-media-value')?.getAttribute('data-placeholder');
+                    if (type && value && value !== placeholder) data[type] = value;
+                });
+                return data;
+            }
+
+            getPhotoData() {
+                const avatar = document.getElementById('avatar');
+                if (avatar.src && avatar.style.display !== 'none') return avatar.src;
+                return null;
+            }
+
+            setPersonalInfo(info) {
+                Object.keys(info).forEach(field => {
+                    const el = document.querySelector(`[data-field="${field}"] .personal-info-value`) ||
+                              document.querySelector(`.personal-info-item .personal-info-value`);
+                    if (el && info[field]) {
+                        el.textContent = info[field];
+                        el.classList.remove('empty-field');
+                    }
+                });
+            }
+
+            setAboutText(text) {
+                const el = document.getElementById('about-text');
+                if (el && text) {
+                    el.textContent = text;
+                    el.classList.remove('empty-field');
+                }
+            }
+
+            setEducationData(education) {
+                const container = document.getElementById('education-container');
+                if (!container) return;
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                education.forEach((edu, i) => {
+                    let item = i === 0 ? container.children[0] : (document.getElementById('add-education-btn')?.click(), container.lastChild);
+                    if (item) {
+                        const inst = item.querySelector('.education-institution');
+                        const date = item.querySelector('.education-date');
+                        if (inst && edu.institution) { inst.textContent = edu.institution; inst.classList.remove('empty-field'); }
+                        if (date && edu.date) date.textContent = edu.date;
+                    }
+                });
+            }
+
+            setExperienceData(experience) {
+                const container = document.getElementById('experience-container');
+                if (!container) return;
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                experience.forEach((exp, i) => {
+                    let item = i === 0 ? container.children[0] : (document.getElementById('add-experience-btn')?.click(), container.lastChild);
+                    if (item) {
+                        const title = item.querySelector('.item-title');
+                        const company = item.querySelector('.experience-company');
+                        const duration = item.querySelector('.experience-duration');
+                        const desc = item.querySelector('.item-description');
+                        if (title && exp.title) { title.textContent = exp.title; title.classList.remove('empty-field'); }
+                        if (company && exp.company) { company.textContent = exp.company; company.classList.remove('empty-field'); }
+                        if (duration && exp.duration) duration.textContent = exp.duration;
+                        if (desc && exp.description) { desc.textContent = exp.description; desc.classList.remove('empty-field'); }
+                    }
+                });
+            }
+
+            setCoursesData(courses) {
+                const container = document.getElementById('courses-container');
+                if (!container) return;
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                courses.forEach((course, i) => {
+                    let item = i === 0 ? container.children[0] : (document.getElementById('add-course-btn')?.click(), container.lastChild);
+                    if (item) {
+                        const title = item.querySelector('.item-title');
+                        const inst = item.querySelector('.course-institution');
+                        const date = item.querySelector('.course-date');
+                        if (title && course.title) title.textContent = course.title;
+                        if (inst && course.institution) { inst.textContent = course.institution; inst.classList.remove('empty-field'); }
+                        if (date && course.date) date.textContent = course.date;
+                    }
+                });
+            }
+
+            setSkillsData(skills) {
+                const container = document.getElementById('skills-container');
+                if (!container) return;
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                if (container.firstElementChild && skills[0]) {
+                    container.firstElementChild.textContent = skills[0];
+                    container.firstElementChild.classList.remove('empty-field', 'hidden-in-pdf');
+                }
+                skills.slice(1).forEach(skill => {
+                    document.getElementById('add-skill-btn')?.click();
+                    const item = container.lastElementChild;
+                    if (item && skill) {
+                        item.textContent = skill;
+                        item.classList.remove('empty-field', 'hidden-in-pdf');
+                    }
+                });
+            }
+
+            setReferencesData(references) {
+                const container = document.getElementById('references-container');
+                if (!container) return;
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                references.forEach((ref, i) => {
+                    let item = i === 0 ? container.children[0] : (document.getElementById('add-reference-btn')?.click(), container.lastChild);
+                    if (item) {
+                        const name = item.querySelector('.reference-name');
+                        const pos = item.querySelector('.reference-position');
+                        const phone = item.querySelector('.reference-phone');
+                        if (name && ref.name) name.textContent = ref.name;
+                        if (pos && ref.position) pos.textContent = ref.position;
+                        if (phone && ref.phone) phone.textContent = ref.phone;
+                    }
+                });
+            }
+
+            setLanguagesData(languages) {
+                const container = document.getElementById('languages-container');
+                if (!container) return;
+                while (container.children.length < languages.length) {
+                    document.getElementById('add-language-btn')?.click();
+                }
+                languages.forEach((lang, i) => {
+                    const item = container.children[i];
+                    if (item) {
+                        const name = item.querySelector('.language-name');
+                        const level = item.querySelector('.language-level');
+                        if (name && lang.name) name.textContent = lang.name;
+                        if (level && lang.level) level.textContent = lang.level;
+                    }
+                });
+            }
+
+            setSocialMediaData(socialMedia) {
+                Object.keys(socialMedia).forEach(platform => {
+                    const el = document.querySelector(`.social-media-value[data-type="${platform}"]`);
+                    if (el && socialMedia[platform]) {
+                        el.textContent = socialMedia[platform];
+                        el.classList.remove('empty-field');
+                    }
+                });
+            }
+
+            setPhotoData(photoData) {
+                if (photoData) {
+                    const avatar = document.getElementById('avatar');
+                    const avatarText = document.getElementById('avatarText');
+                    const delAvatar = document.getElementById('delAvatar');
+                    avatar.src = photoData;
+                    avatar.style.display = 'block';
+                    avatarText.style.display = 'none';
+                    delAvatar.style.display = 'block';
+                }
+            }
+        }
+
+        // ============================================================
+        // 6. TAKVİM SEÇİCİ
+        // ============================================================
+        function setupBirthDatePicker() {
+            const modal = document.getElementById('date-picker-modal');
+            const button = document.querySelector('.date-picker-button');
+            const closeBtn = document.getElementById('date-picker-close');
+            const cancelBtn = document.getElementById('date-picker-cancel');
+            const confirmBtn = document.getElementById('date-picker-confirm');
+            const prevBtn = document.getElementById('date-picker-prev');
+            const nextBtn = document.getElementById('date-picker-next');
+            const monthDisplay = document.getElementById('date-picker-month');
+            const yearInput = document.getElementById('year-input');
+            const yearUp = document.getElementById('year-scroll-up');
+            const yearDown = document.getElementById('year-scroll-down');
+            const calendarBody = document.getElementById('date-picker-calendar-body');
+            const birthDateInput = document.querySelector('.birth-date-input');
+            
+            let currentDate = new Date();
+            let selectedDate = null;
+            
+            function openPicker() {
+                const val = birthDateInput.textContent.trim();
+                if (val && val !== 'GG/AA/YYYY' && val !== 'DD/MM/YYYY') {
+                    const parts = val.split('/');
+                    if (parts.length === 3) {
+                        const d = parseInt(parts[0]), m = parseInt(parts[1])-1, y = parseInt(parts[2]);
+                        if (!isNaN(d) && !isNaN(m) && !isNaN(y)) {
+                            selectedDate = new Date(y, m, d);
+                            currentDate = new Date(y, m, 1);
+                        }
+                    }
+                } else {
+                    selectedDate = new Date();
+                    currentDate = new Date();
+                }
+                modal.style.display = 'flex';
+                renderCalendar();
+            }
+            
+            function closePicker() { modal.style.display = 'none'; }
+            
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                const lang = document.getElementById('language-select').value;
+                const monthNames = {
+                    tr: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+                    en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+                    de: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
+                    fr: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+                    es: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+                    it: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+                    pt: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                    ru: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+                    ar: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+                    zh: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                };
+                monthDisplay.textContent = (monthNames[lang] || monthNames.en)[month];
+                yearInput.value = year;
+                
+                calendarBody.innerHTML = '';
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const firstDayIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+                const prevMonthLastDay = new Date(year, month, 0).getDate();
+                
+                let date = 1, prevDate = prevMonthLastDay - firstDayIndex + 1;
+                
+                for (let i = 0; i < 6; i++) {
+                    const row = document.createElement('tr');
+                    for (let j = 0; j < 7; j++) {
+                        const cell = document.createElement('td');
+                        let cellDate, cellMonth = month, cellYear = year;
+                        
+                        if (i === 0 && j < firstDayIndex) {
+                            cellDate = prevDate++;
+                            cellMonth = month - 1;
+                            if (cellMonth < 0) { cellMonth = 11; cellYear = year - 1; }
+                            cell.textContent = cellDate;
+                            cell.classList.add('other-month');
+                        } else if (date > lastDay.getDate()) {
+                            cellDate = date - lastDay.getDate();
+                            cellMonth = month + 1;
+                            if (cellMonth > 11) { cellMonth = 0; cellYear = year + 1; }
+                            cell.textContent = cellDate;
+                            cell.classList.add('other-month');
+                            date++;
+                        } else {
+                            cellDate = date++;
+                            cell.textContent = cellDate;
+                            if (selectedDate && selectedDate.getDate() === cellDate && 
+                                selectedDate.getMonth() === month && selectedDate.getFullYear() === year) {
+                                cell.classList.add('selected');
+                            }
+                            cell.addEventListener('click', function() {
+                                document.querySelectorAll('.date-picker-calendar td.selected').forEach(td => td.classList.remove('selected'));
+                                this.classList.add('selected');
+                                selectedDate = new Date(cellYear, cellMonth, parseInt(this.textContent));
+                            });
+                        }
+                        row.appendChild(cell);
+                    }
+                    calendarBody.appendChild(row);
+                    if (date > lastDay.getDate()) break;
+                }
+            }
+            
+            button?.addEventListener('click', openPicker);
+            birthDateInput?.addEventListener('click', openPicker);
+            closeBtn?.addEventListener('click', closePicker);
+            cancelBtn?.addEventListener('click', closePicker);
+            modal?.addEventListener('click', e => { if (e.target === modal) closePicker(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.style.display === 'flex') closePicker(); });
+            
+            prevBtn?.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+            nextBtn?.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+            yearUp?.addEventListener('click', () => { currentDate.setFullYear(currentDate.getFullYear() + 1); renderCalendar(); });
+            yearDown?.addEventListener('click', () => { currentDate.setFullYear(currentDate.getFullYear() - 1); renderCalendar(); });
+            yearInput?.addEventListener('change', function() {
+                const y = parseInt(this.value);
+                if (!isNaN(y) && y >= 1900 && y <= 2100) { currentDate.setFullYear(y); renderCalendar(); }
+                else this.value = currentDate.getFullYear();
+            });
+            
+            confirmBtn?.addEventListener('click', function() {
+                if (selectedDate) {
+                    const d = String(selectedDate.getDate()).padStart(2, '0');
+                    const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                    const y = selectedDate.getFullYear();
+                    birthDateInput.textContent = `${d}/${m}/${y}`;
+                    birthDateInput.classList.remove('empty-field');
+                }
+                closePicker();
+            });
+        }
+
+        function updateCalendarLanguage() {
+            const lang = document.getElementById('language-select').value;
+            const dayNames = {
+                tr: ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'],
+                en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                de: ['Mo','Di','Mi','Do','Fr','Sa','So'],
+                fr: ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],
+                es: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+                it: ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'],
+                pt: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                ru: ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
+                ar: ['اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت','أحد'],
+                zh: ['一','二','三','四','五','六','日']
+            };
+            const headers = document.querySelectorAll('.date-picker-calendar th');
+            const names = dayNames[lang] || dayNames.en;
+            headers.forEach((th, i) => { if (names[i]) th.textContent = names[i]; });
+            
+            const title = document.querySelector('.date-picker-title');
+            const trans = translations[lang];
+            if (title && trans && trans.selectBirthDate) title.textContent = trans.selectBirthDate;
+        }
+
+        // ============================================================
+        // 7. E-POSTA ÖNERİLERİ
+        // ============================================================
+        function setupEmailSuggestions() {
+            const domains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com'];
+            const input = document.getElementById('email-input');
+            const box = document.getElementById('email-suggestions');
+            if (!input || !box) return;
+            
+            input.addEventListener('input', function() {
+                const val = this.textContent.trim();
+                if (val && !val.includes('@')) {
+                    box.innerHTML = '';
+                    domains.forEach(d => {
+                        const div = document.createElement('div');
+                        div.textContent = val + '@' + d;
+                        div.addEventListener('click', function() {
+                            input.textContent = val + '@' + d;
+                            input.classList.remove('empty-field');
+                            box.style.display = 'none';
+                            const evt = new Event('input', { bubbles: true });
+                            input.dispatchEvent(evt);
+                            setTimeout(() => { input.focus(); moveCursorToEnd(input); }, 10);
+                        });
+                        box.appendChild(div);
+                    });
+                    box.style.display = 'block';
+                } else {
+                    box.style.display = 'none';
+                }
+            });
+            
+            input.addEventListener('blur', () => setTimeout(() => box.style.display = 'none', 200));
+            document.addEventListener('click', e => {
+                if (!input.contains(e.target) && !box.contains(e.target)) box.style.display = 'none';
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (box.style.display !== 'block') return;
+                const items = box.querySelectorAll('div');
+                const active = box.querySelector('.suggestion-active');
+                let idx = Array.from(items).indexOf(active);
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    idx = (idx + 1) % items.length;
+                    items.forEach(el => el.classList.remove('suggestion-active'));
+                    if (items[idx]) items[idx].classList.add('suggestion-active');
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    idx = (idx - 1 + items.length) % items.length;
+                    items.forEach(el => el.classList.remove('suggestion-active'));
+                    if (items[idx]) items[idx].classList.add('suggestion-active');
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (active) active.click();
+                } else if (e.key === 'Escape') {
+                    box.style.display = 'none';
+                }
+            });
+        }
+
+        function moveCursorToEnd(el) {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        // ============================================================
+        // 8. VALİDASYON VE DİĞER FONKSİYONLAR
+        // ============================================================
+        function setupDateInputValidation() {
+            document.addEventListener('input', e => {
+                if (e.target.classList.contains('date-input')) validateDateInput(e.target);
+            });
+            document.addEventListener('focusout', e => {
+                if (e.target.classList.contains('date-input')) validateDateInput(e.target);
+            });
+            document.addEventListener('keydown', e => {
+                if (e.target.classList.contains('date-input') && !/[\d]/.test(e.key) && 
+                    !['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        function validateDateInput(input) {
+            let val = input.textContent.trim().replace(/[^\d]/g, '');
+            if (val.length > 4) val = val.substring(0, 4) + '-' + val.substring(4, 8);
+            if (val.length > 9) val = val.substring(0, 9);
+            input.classList.toggle('invalid', !/^(\d{4}-\d{4}|\d{4})$/.test(val) && val !== '');
+            if (input.textContent !== val) {
+                input.textContent = val;
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(input);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+            const ph = input.getAttribute('data-placeholder');
+            input.classList.toggle('empty-field', val === '' || val === ph);
+        }
+
+        function setupPhoneInputValidation() {
+            document.addEventListener('input', e => {
+                if (e.target.classList.contains('phone-input')) validatePhoneInput(e.target);
+            });
+            document.addEventListener('focusout', e => {
+                if (e.target.classList.contains('phone-input')) validatePhoneInput(e.target);
+            });
+            document.addEventListener('keydown', e => {
+                if (e.target.classList.contains('phone-input') && !/[\d]/.test(e.key) && 
+                    !['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        function validatePhoneInput(input) {
+            let val = input.textContent.trim().replace(/[^\d]/g, '');
+            if (val.startsWith('90') && val.length > 10) val = val.substring(2);
+            else if (val.startsWith('0') && val.length > 10) val = val.substring(1);
+            if (val.length > 10) val = val.substring(0, 10);
+            
+            let formatted = '';
+            if (val.length >= 3) {
+                formatted = val.substring(0, 3) + ' ';
+                if (val.length >= 6) {
+                    formatted += val.substring(3, 6) + ' ';
+                    formatted += val.substring(6, 10);
+                } else formatted += val.substring(3);
+            } else formatted = val;
+            val = formatted.trim();
+            
+            input.classList.toggle('invalid', !/^(\d{3} \d{3} \d{4}|\d{3} \d{3} \d{1,3}|\d{3} \d{1,6}|\d{1,9})$/.test(val) && val !== '');
+            if (input.textContent !== val) {
+                input.textContent = val;
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(input);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+            const ph = input.getAttribute('data-placeholder');
+            input.classList.toggle('empty-field', val === '' || val === ph);
+        }
+
+        function setupEditableFields() {
+            document.querySelectorAll('.editable').forEach(el => {
+                const ph = el.getAttribute('data-placeholder');
+                if (el.textContent.trim() === '') {
+                    el.textContent = ph || '';
+                    el.classList.add('empty-field');
+                }
+                
+                el.addEventListener('click', function() {
+                    const ph = this.getAttribute('data-placeholder');
+                    if (this.textContent === ph) {
+                        this.textContent = '';
+                        this.classList.remove('empty-field');
+                        const range = document.createRange();
+                        const sel = window.getSelection();
+                        range.selectNodeContents(this);
+                        range.collapse(true);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                });
+                
+                el.addEventListener('focus', function() {
+                    const ph = this.getAttribute('data-placeholder');
+                    if (this.textContent === ph) {
+                        this.textContent = '';
+                        this.classList.remove('empty-field');
+                    }
+                });
+                
+                el.addEventListener('blur', function() {
+                    const ph = this.getAttribute('data-placeholder');
+                    if (this.textContent.trim() === '') {
+                        this.textContent = ph || '';
+                        this.classList.add('empty-field');
+                    }
+                });
+                
+                el.addEventListener('input', function() {
+                    const ph = this.getAttribute('data-placeholder');
+                    if (this.textContent.trim() === '' || this.textContent === ph) {
+                        this.classList.add('empty-field');
+                    } else {
+                        this.classList.remove('empty-field');
+                    }
+                });
+            });
+        }
+
+        function setupHoverGuidance() {
+            const bubble = document.getElementById('hint-bubble');
+            let timeout;
+            
+            document.querySelectorAll('.editable, #avatarBox').forEach(el => {
+                el.addEventListener('mouseenter', function(e) {
+                    const hint = this.getAttribute('data-hint');
+                    if (hint && (this.classList.contains('empty-field') || this.textContent === this.getAttribute('data-placeholder'))) {
+                        timeout = setTimeout(() => {
+                            const rect = this.getBoundingClientRect();
+                            bubble.textContent = hint;
+                            bubble.style.display = 'block';
+                            const bRect = bubble.getBoundingClientRect();
+                            let top = rect.top - bRect.height - 8;
+                            let left = rect.left + (rect.width / 2) - (bRect.width / 2);
+                            
+                            if (top < 10) { top = rect.bottom + 8; bubble.classList.add('bottom-tooltip'); }
+                            else bubble.classList.remove('bottom-tooltip');
+                            if (left < 10) left = 10;
+                            if (left + bRect.width > window.innerWidth - 10) left = window.innerWidth - bRect.width - 10;
+                            
+                            bubble.style.top = top + 'px';
+                            bubble.style.left = left + 'px';
+                            bubble.classList.add('show-hint');
+                        }, 300);
+                    }
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    clearTimeout(timeout);
+                    bubble.classList.remove('show-hint');
+                    setTimeout(() => bubble.style.display = 'none', 200);
+                });
+            });
+        }
+
+        function setupAddRemoveButtons() {
+            const MAX = { LANGUAGE: 5, EDUCATION: 3, EXPERIENCE: 3, COURSE: 3, SKILL: 10, REFERENCE: 3 };
+            
+            // Dil
+            document.getElementById('add-language-btn').addEventListener('click', function() {
+                const c = document.getElementById('languages-container');
+                if (c.children.length < MAX.LANGUAGE) {
+                    const item = document.createElement('div');
+                    item.className = 'language-item';
+                    item.innerHTML = `
+                        <span class="language-name editable" contenteditable="true" data-placeholder-key="languageNamePlaceholder" data-hint-key="languageNameHint"></span>
+                        <span class="language-level editable" contenteditable="true" data-placeholder-key="languageLevelPlaceholder" data-hint-key="languageLevelHint"></span>
+                    `;
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                } else alert(`Maksimum ${MAX.LANGUAGE} dil ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-language-btn').addEventListener('click', function() {
+                const c = document.getElementById('languages-container');
+                if (c.children.length > 2) c.removeChild(c.lastChild);
+            });
+            
+            // Eğitim
+            document.getElementById('add-education-btn').addEventListener('click', function() {
+                const c = document.getElementById('education-container');
+                if (c.children.length < MAX.EDUCATION) {
+                    const item = document.createElement('div');
+                    item.className = 'education-item';
+                    item.innerHTML = `
+                        <div class="education-subtitle-container">
+                            <div class="education-institution editable required-field" contenteditable="true" data-placeholder-key="educationInstitutionPlaceholder" data-hint-key="educationInstitutionHint" data-required="true"></div>
+                            <div class="education-date editable date-input" contenteditable="true" data-placeholder-key="educationDatePlaceholder" data-hint-key="educationDateHint"></div>
+                        </div>
+                    `;
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                } else alert(`Maksimum ${MAX.EDUCATION} eğitim ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-education-btn').addEventListener('click', function() {
+                const c = document.getElementById('education-container');
+                if (c.children.length > 1) c.removeChild(c.lastChild);
+            });
+            
+            // Deneyim
+            document.getElementById('add-experience-btn').addEventListener('click', function() {
+                const c = document.getElementById('experience-container');
+                if (c.children.length < MAX.EXPERIENCE) {
+                    const item = document.createElement('div');
+                    item.className = 'experience-item';
+                    item.innerHTML = `
+                        <div class="item-title editable empty-field required-field" contenteditable="true" data-placeholder-key="experienceTitlePlaceholder" data-hint-key="experienceTitleHint" data-required="true"></div>
+                        <div class="experience-subtitle-container">
+                            <div class="experience-company editable empty-field required-field" contenteditable="true" data-placeholder-key="experienceCompanyPlaceholder" data-hint-key="experienceCompanyHint" data-required="true"></div>
+                            <div class="experience-duration editable date-input" contenteditable="true" data-placeholder-key="experienceDatePlaceholder" data-hint-key="experienceDateHint"></div>
+                        </div>
+                        <div class="item-description editable empty-field" contenteditable="true" data-placeholder-key="experienceDescriptionPlaceholder" data-hint-key="experienceDescriptionHint"></div>
+                    `;
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                } else alert(`Maksimum ${MAX.EXPERIENCE} iş deneyimi ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-experience-btn').addEventListener('click', function() {
+                const c = document.getElementById('experience-container');
+                if (c.children.length > 1) c.removeChild(c.lastChild);
+            });
+            
+            // Kurs
+            document.getElementById('add-course-btn').addEventListener('click', function() {
+                const c = document.getElementById('courses-container');
+                if (c.children.length < MAX.COURSE) {
+                    const item = document.createElement('div');
+                    item.className = 'course-item';
+                    item.innerHTML = `
+                        <div class="item-title editable" contenteditable="true" data-placeholder-key="courseTitlePlaceholder" data-hint-key="courseTitleHint"></div>
+                        <div class="course-subtitle-container">
+                            <div class="course-institution editable empty-field" contenteditable="true" data-placeholder-key="courseInstitutionPlaceholder" data-hint-key="courseInstitutionHint"></div>
+                            <div class="course-date editable date-input" contenteditable="true" data-placeholder-key="courseDatePlaceholder" data-hint-key="courseDateHint"></div>
+                        </div>
+                    `;
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                } else alert(`Maksimum ${MAX.COURSE} kurs ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-course-btn').addEventListener('click', function() {
+                const c = document.getElementById('courses-container');
+                if (c.children.length > 1) c.removeChild(c.lastChild);
+            });
+            
+            // Yetenek
+            document.getElementById('add-skill-btn').addEventListener('click', function() {
+                const c = document.getElementById('skills-container');
+                if (c.children.length < MAX.SKILL) {
+                    const item = document.createElement('div');
+                    item.className = 'skill-item editable';
+                    item.setAttribute('contenteditable', 'true');
+                    item.setAttribute('data-placeholder-key', 'skillPlaceholder');
+                    item.setAttribute('data-hint-key', 'skillHint');
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                    setTimeout(() => item.focus(), 100);
+                } else alert(`Maksimum ${MAX.SKILL} yetenek ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-skill-btn').addEventListener('click', function() {
+                const c = document.getElementById('skills-container');
+                if (c.children.length > 1) c.removeChild(c.lastChild);
+            });
+            
+            // Referans
+            document.getElementById('add-reference-btn').addEventListener('click', function() {
+                const c = document.getElementById('references-container');
+                if (c.children.length < MAX.REFERENCE) {
+                    const item = document.createElement('div');
+                    item.className = 'reference-item';
+                    item.innerHTML = `
+                        <div class="reference-name editable" contenteditable="true" data-placeholder-key="referenceNamePlaceholder" data-hint-key="referenceNameHint"></div>
+                        <div class="reference-info-container">
+                            <div class="reference-position editable" contenteditable="true" data-placeholder-key="referencePositionPlaceholder" data-hint-key="referencePositionHint"></div>
+                            <div class="reference-phone editable phone-input" contenteditable="true" data-placeholder-key="referencePhonePlaceholder" data-hint-key="referencePhoneHint"></div>
+                        </div>
+                    `;
+                    c.appendChild(item);
+                    setupEditableFieldsForElement(item);
+                } else alert(`Maksimum ${MAX.REFERENCE} referans ekleyebilirsiniz.`);
+            });
+            document.getElementById('remove-reference-btn').addEventListener('click', function() {
+                const c = document.getElementById('references-container');
+                if (c.children.length > 1) c.removeChild(c.lastChild);
+            });
+        }
+
+        function setupEditableFieldsForElement(element) {
+            const lang = document.getElementById('language-select').value;
+            const trans = translations[lang];
+            
+            element.querySelectorAll('.editable').forEach(el => {
+                const pk = el.getAttribute('data-placeholder-key');
+                const hk = el.getAttribute('data-hint-key');
+                if (pk && trans && trans[pk]) {
+                    const ph = trans[pk];
+                    el.setAttribute('data-placeholder', ph);
+                    if (el.textContent.trim() === '') {
+                        el.textContent = ph;
+                        el.classList.add('empty-field');
+                    }
+                }
+                if (hk && trans && trans[hk]) el.setAttribute('data-hint', trans[hk]);
+                
+                // Event'leri ekle
+                if (!el.hasAttribute('data-events-added')) {
+                    el.addEventListener('click', function() {
+                        const ph = this.getAttribute('data-placeholder');
+                        if (this.textContent === ph) {
+                            this.textContent = '';
+                            this.classList.remove('empty-field');
+                        }
+                    });
+                    el.addEventListener('focus', function() {
+                        const ph = this.getAttribute('data-placeholder');
+                        if (this.textContent === ph) {
+                            this.textContent = '';
+                            this.classList.remove('empty-field');
+                        }
+                    });
+                    el.addEventListener('blur', function() {
+                        const ph = this.getAttribute('data-placeholder');
+                        if (this.textContent.trim() === '') {
+                            this.textContent = ph || '';
+                            this.classList.add('empty-field');
+                        }
+                    });
+                    el.setAttribute('data-events-added', 'true');
+                }
+            });
+        }
+
+        // ============================================================
+        // 9. PDF VE ÖNİZLEME
+        // ============================================================
+        function hideEmptyFieldsForPDF() {
+            document.querySelectorAll('.editable').forEach(el => {
+                const ph = el.getAttribute('data-placeholder');
+                if (el.textContent.trim() === '' || el.textContent === ph) {
+                    el.classList.add('empty-field');
+                } else {
+                    el.classList.remove('empty-field');
+                }
+            });
+            
+            document.querySelectorAll('.personal-info-item').forEach(item => {
+                const val = item.querySelector('.personal-info-value');
+                if (val && val.classList.contains('empty-field')) item.classList.add('hidden-in-pdf');
+                else item.classList.remove('hidden-in-pdf');
+            });
+            
+            // Diller
+            let hasLang = false;
+            document.querySelectorAll('.language-item').forEach(item => {
+                const name = item.querySelector('.language-name');
+                const level = item.querySelector('.language-level');
+                const isEmpty = (name && (name.textContent.trim() === '' || name.textContent === name.getAttribute('data-placeholder'))) &&
+                               (level && (level.textContent.trim() === '' || level.textContent === level.getAttribute('data-placeholder')));
+                if (isEmpty) item.classList.add('hidden-in-pdf');
+                else { item.classList.remove('hidden-in-pdf'); hasLang = true; }
+            });
+            document.getElementById('languages-section')?.classList.toggle('hidden-in-pdf', !hasLang);
+            
+            // Eğitim
+            document.querySelectorAll('.education-item').forEach(item => {
+                const inst = item.querySelector('.education-institution');
+                if (inst && inst.classList.contains('empty-field')) item.classList.add('hidden-in-pdf');
+                else item.classList.remove('hidden-in-pdf');
+            });
+            
+            // Deneyim
+            document.querySelectorAll('.experience-item').forEach(item => {
+                const title = item.querySelector('.item-title');
+                const company = item.querySelector('.experience-company');
+                if ((title && title.classList.contains('empty-field')) && (company && company.classList.contains('empty-field'))) {
+                    item.classList.add('hidden-in-pdf');
+                } else item.classList.remove('hidden-in-pdf');
+            });
+            
+            // Kurs
+            document.querySelectorAll('.course-item').forEach(item => {
+                const title = item.querySelector('.item-title');
+                const inst = item.querySelector('.course-institution');
+                if ((title && title.classList.contains('empty-field')) && (inst && inst.classList.contains('empty-field'))) {
+                    item.classList.add('hidden-in-pdf');
+                } else item.classList.remove('hidden-in-pdf');
+            });
+            
+            // Yetenek
+            let hasSkill = false;
+            document.querySelectorAll('.skill-item').forEach(item => {
+                const ph = item.getAttribute('data-placeholder');
+                if (item.textContent.trim() === '' || item.textContent === ph) {
+                    item.classList.add('hidden-in-pdf');
+                } else {
+                    item.classList.remove('hidden-in-pdf');
+                    hasSkill = true;
+                }
+            });
+            document.getElementById('skills-section')?.classList.toggle('hidden-in-pdf', !hasSkill);
+            
+            // Referans
+            document.querySelectorAll('.reference-item').forEach(item => {
+                const name = item.querySelector('.reference-name');
+                const pos = item.querySelector('.reference-position');
+                const phone = item.querySelector('.reference-phone');
+                if ((name && name.classList.contains('empty-field')) && 
+                    (pos && pos.classList.contains('empty-field')) &&
+                    (phone && phone.classList.contains('empty-field'))) {
+                    item.classList.add('hidden-in-pdf');
+                } else item.classList.remove('hidden-in-pdf');
+            });
+            
+            // Sosyal medya
+            document.querySelectorAll('.social-media-item').forEach(item => {
+                const val = item.querySelector('.social-media-value');
+                const ph = val?.getAttribute('data-placeholder');
+                if (val && (val.textContent.trim() === '' || val.textContent === ph)) {
+                    item.classList.add('hidden-in-pdf');
+                } else item.classList.remove('hidden-in-pdf');
+            });
+            const socialSection = document.querySelector('.personal-info-item[data-field="social-media"]');
+            if (socialSection) {
+                const hasSocial = Array.from(socialSection.querySelectorAll('.social-media-item'))
+                    .some(item => !item.classList.contains('hidden-in-pdf'));
+                socialSection.classList.toggle('hidden-in-pdf', !hasSocial);
+            }
+            
+            // Bölüm başlıkları
+            document.querySelectorAll('.section').forEach(section => {
+                let hasContent = false;
+                const id = section.id;
+                if (id === 'about-section') {
+                    const txt = section.querySelector('.about-text');
+                    hasContent = txt && !txt.classList.contains('empty-field');
+                } else if (id === 'education-section') {
+                    hasContent = Array.from(section.querySelectorAll('.education-item')).some(i => !i.classList.contains('hidden-in-pdf'));
+                } else if (id === 'experience-section') {
+                    hasContent = Array.from(section.querySelectorAll('.experience-item')).some(i => !i.classList.contains('hidden-in-pdf'));
+                } else if (id === 'courses-section') {
+                    hasContent = Array.from(section.querySelectorAll('.course-item')).some(i => !i.classList.contains('hidden-in-pdf'));
+                } else if (id === 'skills-section') {
+                    hasContent = Array.from(section.querySelectorAll('.skill-item')).some(i => !i.classList.contains('hidden-in-pdf'));
+                } else if (id === 'references-section') {
+                    hasContent = Array.from(section.querySelectorAll('.reference-item')).some(i => !i.classList.contains('hidden-in-pdf'));
+                }
+                const title = section.querySelector('.section-title');
+                if (title) title.classList.toggle('hidden-in-pdf', !hasContent);
+            });
+        }
+
+        // ============================================================
+        // 10. SAYFA YÜKLENDİĞİNDE
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dil ayarla
+            const lang = document.getElementById('language-select').value || 'tr';
+            changeLanguage(lang);
+            
+            // Fotoğraf yükleme
+            document.getElementById('avatarBox').addEventListener('click', () => document.getElementById('photoInput').click());
+            document.getElementById('photoInput').addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const avatar = document.getElementById('avatar');
+                        avatar.src = e.target.result;
+                        avatar.style.display = 'block';
+                        document.getElementById('avatarText').style.display = 'none';
+                        document.getElementById('delAvatar').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            document.getElementById('delAvatar').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('avatar').src = '';
+                document.getElementById('avatar').style.display = 'none';
+                document.getElementById('avatarText').style.display = 'block';
+                this.style.display = 'none';
+                document.getElementById('photoInput').value = '';
+            });
+            
+            // Tüm sistemleri başlat
+            new SocialMediaManager();
+            new AutoSaveManager();
+            setupBirthDatePicker();
+            setupEmailSuggestions();
+            setupDateInputValidation();
+            setupPhoneInputValidation();
+            setupEditableFields();
+            setupHoverGuidance();
+            setupAddRemoveButtons();
+            
+            // Uyarı popup
+            const popup = document.getElementById('warning-popup');
+            const understandBtn = document.getElementById('understand-btn');
+            if (popup && !localStorage.getItem('popupShown')) {
+                popup.style.display = 'flex';
+                understandBtn?.addEventListener('click', function() {
+                    popup.style.display = 'none';
+                    localStorage.setItem('popupShown', 'true');
+                });
+            }
+            
+            // Önizleme
+            document.getElementById('preview-cv').addEventListener('click', function() {
+                const cv = document.getElementById('cv-form').cloneNode(true);
+                cv.querySelectorAll('.buttons-inline, .add-btn, .remove-btn, #delAvatar').forEach(el => el.style.display = 'none');
+                cv.querySelectorAll('.section-description').forEach(el => el.style.display = 'none');
+                cv.querySelectorAll('.editable').forEach(el => { el.style.border = 'none'; el.style.background = 'transparent'; });
+                hideEmptyFieldsForPDF();
+                cv.classList.add('pdf-mode');
+                document.getElementById('preview-content').innerHTML = '';
+                document.getElementById('preview-content').appendChild(cv);
+                document.getElementById('preview-overlay').style.display = 'flex';
+            });
+            
+            document.getElementById('close-preview').addEventListener('click', () => document.getElementById('preview-overlay').style.display = 'none');
+            document.getElementById('preview-overlay').addEventListener('click', function(e) {
+                if (e.target === this) this.style.display = 'none';
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') document.getElementById('preview-overlay').style.display = 'none';
+            });
+            
+            // PDF indir
+            document.getElementById('save-pdf').addEventListener('click', function() {
+                if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+                    alert('PDF kütüphanesi yüklenemedi. Lütfen sayfayı yenileyin.');
+                    return;
+                }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                
+                const originalButtons = document.querySelectorAll('.buttons-inline, .add-btn, .remove-btn, #delAvatar');
+                const originalDisplay = [];
+                originalButtons.forEach(b => { originalDisplay.push(b.style.display); b.style.display = 'none'; });
+                
+                const sectionDescriptions = document.querySelectorAll('.section-description');
+                sectionDescriptions.forEach(d => d.style.display = 'none');
+                
+                hideEmptyFieldsForPDF();
+                document.getElementById('cv-form').classList.add('pdf-mode');
+                
+                const element = document.getElementById('cv-form');
+                html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    width: 794,
+                    height: 1123,
+                    onclone: function(clonedDoc) {
+                        clonedDoc.querySelectorAll('.buttons-inline, .add-btn, .remove-btn, #delAvatar').forEach(el => el.style.display = 'none');
+                        clonedDoc.querySelectorAll('.section-description').forEach(el => el.style.display = 'none');
+                        const cv = clonedDoc.getElementById('cv-form');
+                        if (cv) cv.classList.add('pdf-mode');
+                        clonedDoc.querySelectorAll('.editable').forEach(el => { el.style.border = 'none'; el.style.background = 'transparent'; });
+                    }
+                }).then(canvas => {
+                    originalButtons.forEach((b, i) => b.style.display = originalDisplay[i]);
+                    sectionDescriptions.forEach(d => d.style.display = 'block');
+                    document.getElementById('cv-form').classList.remove('pdf-mode');
+                    document.querySelectorAll('.hidden-in-pdf').forEach(el => el.classList.remove('hidden-in-pdf'));
+                    
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    doc.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                    doc.save('CV.pdf');
+                }).catch(error => {
+                    console.error('PDF hatası:', error);
+                    originalButtons.forEach((b, i) => b.style.display = originalDisplay[i]);
+                    sectionDescriptions.forEach(d => d.style.display = 'block');
+                    document.getElementById('cv-form').classList.remove('pdf-mode');
+                    document.querySelectorAll('.hidden-in-pdf').forEach(el => el.classList.remove('hidden-in-pdf'));
+                    alert('PDF oluşturulurken bir hata oluştu.');
+                });
+            });
+            
+            // Temizle
+            document.getElementById('clear-all').addEventListener('click', function() {
+                if (confirm('Tüm CV içeriğini temizlemek istediğinizden emin misiniz?')) {
+                    document.querySelectorAll('.editable').forEach(el => {
+                        const ph = el.getAttribute('data-placeholder');
+                        el.textContent = ph || '';
+                        el.classList.add('empty-field');
+                    });
+                    document.getElementById('avatar').src = '';
+                    document.getElementById('avatar').style.display = 'none';
+                    document.getElementById('avatarText').style.display = 'block';
+                    document.getElementById('delAvatar').style.display = 'none';
+                    document.getElementById('photoInput').value = '';
+                    if (window.autoSaveManager) window.autoSaveManager.clearSavedData();
+                    alert('Tüm CV içeriği temizlendi!');
+                }
+            });
+            
+            // Feedback
+            const feedbackLink = document.getElementById('feedback-email-link');
+            const feedbackPopup = document.getElementById('feedback-popup');
+            if (feedbackLink && feedbackPopup) {
+                feedbackLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    feedbackPopup.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            document.getElementById('feedback-close-btn')?.addEventListener('click', closeFeedback);
+            document.getElementById('feedback-cancel-btn')?.addEventListener('click', closeFeedback);
+            feedbackPopup?.addEventListener('click', function(e) {
+                if (e.target === this) closeFeedback();
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && feedbackPopup?.style.display === 'flex') closeFeedback();
+            });
+            
+            function closeFeedback() {
+                if (feedbackPopup) {
+                    feedbackPopup.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+            
+            // Feedback form
+            const feedbackForm = document.getElementById('feedback-form');
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const msg = document.getElementById('feedback-message').value;
+                    if (!msg.trim()) {
+                        alert('Lütfen mesajınızı yazın!');
+                        return;
+                    }
+                    const btn = this.querySelector('button[type="submit"]');
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Gönderiliyor...';
+                    btn.disabled = true;
+                    
+                    try {
+                        const formData = new FormData(this);
+                        const response = await fetch(this.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        if (response.ok) {
+                            alert('Teşekkürler! Mesajınız gönderildi.');
+                            closeFeedback();
+                            this.reset();
+                        } else throw new Error('Gönderilemedi');
+                    } catch (error) {
+                        alert('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+                    } finally {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }
+                });
+            }
+            
+            // Bayrak seçici
+            const select = document.getElementById('language-select');
+            const container = select.parentElement;
+            const flagElement = document.createElement('img');
+            flagElement.className = 'selected-flag';
+            flagElement.alt = 'Bayrak';
+            container.appendChild(flagElement);
+            
+            const flagUrls = {
+                'tr': 'https://flagcdn.com/w20/tr.png',
+                'en': 'https://flagcdn.com/w20/gb.png',
+                'de': 'https://flagcdn.com/w20/de.png',
+                'fr': 'https://flagcdn.com/w20/fr.png',
+                'es': 'https://flagcdn.com/w20/es.png',
+                'it': 'https://flagcdn.com/w20/it.png',
+                'pt': 'https://flagcdn.com/w20/pt.png',
+                'ru': 'https://flagcdn.com/w20/ru.png',
+                'ar': 'https://flagcdn.com/w20/sa.png',
+                'zh': 'https://flagcdn.com/w20/cn.png'
+            };
+            
+            function updateFlag() {
+                const url = flagUrls[select.value];
+                if (url) { flagElement.src = url; flagElement.style.display = 'block'; }
+                else flagElement.style.display = 'none';
+            }
+            select.addEventListener('change', updateFlag);
+            updateFlag();
+            
+            // Takvim dil güncelleme
+            updateCalendarLanguage();
+            document.getElementById('language-select').addEventListener('change', updateCalendarLanguage);
+            
+            // Mevcut tarih ve telefon alanlarını validate et
+            document.querySelectorAll('.date-input').forEach(input => validateDateInput(input));
+            document.querySelectorAll('.phone-input').forEach(input => validatePhoneInput(input));
+            
+            console.log('🚀 MobilCV yüklendi!');
+        });
+    </script>
+    
+    <!-- Tawk.to Canlı Sohbet -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+</body>
+</html>
