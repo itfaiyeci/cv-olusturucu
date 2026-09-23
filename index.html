@@ -268,6 +268,17 @@
             width: 100%;
             max-width: 210mm;
         }
+
+        /* Bazı dillerde (Fransızca, İspanyolca, Rusça, Arapça vb.) buton metni
+           tek satıra sığmayabilir. Buton boyutunu (padding/min-height) değiştirmeden,
+           metnin gerektiğinde alt satıra sarılmasına izin veriyoruz - böylece metin
+           sayfa/kutu dışına taşmaz, kutunun içinde iki satır olarak kalır. */
+        .controls button {
+            white-space: normal;
+            text-align: center;
+            line-height: 1.25;
+            overflow-wrap: break-word;
+        }
         
         button {
             padding: 10px 15px;
@@ -3741,8 +3752,8 @@ img {
                 "clearAll": "Tout effacer",
                 "preview": "Aperçu",
                 "savePDF": "Télécharger PDF",
-                "exportData": "Télécharger la sauvegarde",
-                "importData": "Charger la sauvegarde",
+                "exportData": "Sauvegarder",
+                "importData": "Charger",
                 "importSuccess": "Sauvegarde chargée avec succès !",
                 "importError": "Fichier de sauvegarde invalide !",
                 "shareCV": "Partager",
@@ -3923,8 +3934,8 @@ img {
                 "clearAll": "Limpiar todo",
                 "preview": "Vista previa",
                 "savePDF": "Descargar PDF",
-                "exportData": "Descargar copia de seguridad",
-                "importData": "Cargar copia de seguridad",
+                "exportData": "Descargar copia",
+                "importData": "Cargar copia",
                 "importSuccess": "¡Copia de seguridad cargada con éxito!",
                 "importError": "¡Archivo de copia de seguridad no válido!",
                 "shareCV": "Compartir",
@@ -4469,8 +4480,8 @@ img {
                 "clearAll": "Очистить все",
                 "preview": "Предпросмотр",
                 "savePDF": "Скачать PDF",
-                "exportData": "Скачать резервную копию",
-                "importData": "Загрузить резервную копию",
+                "exportData": "Скачать копию",
+                "importData": "Загрузить копию",
                 "importSuccess": "Резервная копия успешно загружена!",
                 "importError": "Недействительный файл резервной копии!",
                 "shareCV": "Поделиться",
@@ -4651,8 +4662,8 @@ img {
                 "clearAll": "مسح الكل",
                 "preview": "معاينة",
                 "savePDF": "تحميل PDF",
-                "exportData": "تنزيل النسخة الاحتياطية",
-                "importData": "تحميل النسخة الاحتياطية",
+                "exportData": "تنزيل نسخة",
+                "importData": "تحميل نسخة",
                 "importSuccess": "تم تحميل النسخة الاحتياطية بنجاح!",
                 "importError": "ملف النسخة الاحتياطية غير صالح!",
                 "shareCV": "مشاركة",
