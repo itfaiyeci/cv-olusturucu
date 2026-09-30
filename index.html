@@ -9069,27 +9069,26 @@ s0.parentNode.insertBefore(s1,s0);
     transform: translateX(-50%) translateY(0);
 }
 
-/* main'in kendisi (page-wrapper'a göre) SINIRLI tutuluyor ki .cv-layout
-   kendi içinde (aşağıda tanımlı overflow-x:auto ile) YEREL bir kaydırma
-   alanı oluşturabilsin. main sınırlı olmazsa .cv-layout'un clientWidth'i
-   de scrollWidth'i ile eşit olup scroll edilecek bir şey kalmıyordu. */
-#main-content {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
-}
-/* .a4-container (CV'nin PDF/A4 önizlemesi) kasıtlı olarak sabit genişlikte
-   (210mm) - bu, PDF çıktı kalitesi için gerekli, değiştirilmemeli. Onu saran
-   bu section'a yerel bir kaydırma alanı vererek, main-content sınırlı
-   kalırken (main'e width:100% verildi) kullanıcı .right-column'a (Hakkımda,
-   Eğitim, Deneyim...) parmağıyla yatay kaydırarak ulaşabiliyor. */
-section[aria-labelledby="cv-form-title"] {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    box-sizing: border-box;
+/* main-content ve CV form section'ına, SADECE mobilde (480px altı) sınırlama
+   uygulanır (sağ sütuna parmakla kaydırarak erişim için gerekli). Masaüstünde
+   bu kurallar UYGULANMAZ çünkü page-wrapper'ın kendi ortalama mekanizmasını
+   (display:flex; align-items:center) bozup sayfanın sola yaslanmasına
+   sebep oluyordu - main/section "doğal genişliğinde" olmayıp page-wrapper'ın
+   tamamını kaplayınca ortalanacak bir şey kalmıyordu. */
+@media (max-width: 480px) {
+    #main-content {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+    section[aria-labelledby="cv-form-title"] {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        box-sizing: border-box;
+    }
 }
 
 @media (max-width: 480px) {
