@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
+    <!-- Not: Varsayılan MOBİL-KOLAY görünüm. Masaüstü görünümü artık aşağıdaki
+         script ile eklenen bir düğmeyle isteğe bağlı olarak açılabiliyor. -->
     
     <!-- Primary Meta Tags -->
     <title>MobilCV - Üyeliksiz ve Ücretsiz Mobil CV Oluşturucu (PDF)</title>
@@ -168,7 +170,25 @@
         box-sizing: border-box;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
+
+    /* En üst düzey güvenlik ağı: Tawk.to gibi üçüncü parti widget'lar (canlı
+       destek balonu vb.) kendi CSS'leriyle sayfayı yatay olarak taşırabilir.
+       html/body'de max-width + overflow-x:hidden olması, viewport'un ASLA
+       aşılamamasını garanti eder - taşan kısım görsel olarak kırpılır ama
+       sayfa her zaman telefon genişliğine tam oturur, tarayıcı otomatik
+       zoom-out yapmaz. Aşağıdaki diğer html/body kuralları bunun üzerine
+       yazılabilir ama hiçbiri overflow-x'i tekrar açık bırakmamalıdır.
+
+       NOT: "auto" denendi ama sayfanın tamamen otomatik küçülmesine
+       (zoom-out) neden olduğu görüldü, bu yüzden "hidden"a geri dönüldü.
+       .right-column erişimi artık #main-content + .cv-layout üzerindeki
+       YEREL (local) scroll container ile sağlanıyor, html/body seviyesi
+       hiç değişmeden kalıyor. */
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     body {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         padding: 20px;
@@ -176,7 +196,7 @@
         flex-direction: column;
         align-items: center;
         min-height: 100vh;
-        overflow-x: auto;
+        overflow-x: hidden;
         width: 100%;
     }
         
@@ -436,7 +456,9 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
         }
         
         .left-column {
@@ -1374,11 +1396,17 @@
             border-color: #e74c3c !important;
         }
 
-        /* MOBİL CİHAZLAR İÇİN SADECE KAYDIRMA - LAYOUT DEĞİŞMEZ */
+        /* MOBİL CİHAZLAR İÇİN - YATAY TAŞMA ENGELLENİR (overflow-x: auto DEĞİL).
+           Not: Önceki "auto" değeri, üçüncü parti bir widget (örn. Tawk.to canlı
+           destek balonu) sayfayı yatay olarak taşırdığında tarayıcının TÜM
+           SAYFAYI otomatik küçültmesine (zoom-out) neden oluyordu - sayfa
+           "masaüstü sitesi gibi" küçük ve sıkışık görünüyordu. "hidden" ile
+           taşan içerik (widget dahil) görsel olarak kırpılır ama sayfanın
+           kendisi her zaman telefon genişliğine tam oturur. */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                overflow-x: auto;
+                overflow-x: hidden;
                 align-items: flex-start;
             }
             
@@ -2779,6 +2807,23 @@ img {
     background: #a8354f;
 }
 
+/* iOS Safari, font-size'ı 16px'den küçük olan bir alana dokunulduğunda sayfayı
+   otomatik büyütüyor (kullanıcı kontrolü dışında bir zoom). Kullanıcı manuel
+   küçültse bile tam eski haline dönmeyebiliyor. Çözüm: SADECE odaklanma anında,
+   SADECE mobilde, ilgili alanın font boyutunu geçici olarak 16px'e çıkarmak -
+   CV'nin görünümü (odaklanılmamış haldeyken) hiç değişmez, otomatik zoom
+   tetiklenmez. Bu kural, stil bloğunun EN SONUNDA yer alır ki .right-column
+   .editable gibi eşit özgüllükteki diğer !important kuralları geçersiz kılsın. */
+@media (max-width: 480px) {
+    .editable:focus,
+    .right-column .editable:focus,
+    .left-column .editable:focus,
+    input:focus,
+    textarea:focus {
+        font-size: 16px !important;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -2897,7 +2942,7 @@ img {
                                 </div>
                             </div>
                             
-                            <div class="personal-info">
+                            <div class="personal-info" id="personal-info-section">
                                 <!-- Ad Soyad - Özel stil - ZORUNLU -->
                                 <div class="personal-info-item name-item" data-field="fullname">
                                     <div class="personal-info-label" style="display:none;" data-key="fullName">Ad Soyad</div>
@@ -6400,6 +6445,12 @@ function setupEditableFieldsForElement(element) {
                         this.classList.add('hidden-in-pdf');
                     }
                 }
+                // Odak kaybedince font boyutunu normale (12px) döndür - mobilde
+                // focus sırasında geçici olarak 16px yapılmıştı (iOS Safari zoom önlemi).
+                if (this.closest('.right-column')) {
+                    this.style.fontSize = '12px';
+                    this.style.lineHeight = '1.4';
+                }
             });
             
             el.addEventListener('input', function() {
@@ -6460,8 +6511,11 @@ function setupEditableFieldsForElement(element) {
                                 this.classList.remove('empty-field');
                             }
                             // Focus olduğunda font size kontrolü
+                            // Mobilde (480px altı) 16px kullanılır: iOS Safari,
+                            // odaklanılan alanın font'u 16px'den küçükse sayfayı
+                            // otomatik büyütüyor - bunu önlemek için gerekli.
                             if (this.closest('.right-column')) {
-                                this.style.fontSize = '12px';
+                                if (window.innerWidth <= 480) { this.style.setProperty('font-size', '16px', 'important'); } else { this.style.fontSize = '12px'; }
                                 this.style.lineHeight = '1.4';
                             }
                         });
@@ -6471,6 +6525,12 @@ function setupEditableFieldsForElement(element) {
     if (this.textContent.trim() === '') {
         this.textContent = placeholder;
         this.classList.add('empty-field');
+    }
+    // Odak kaybedince font boyutunu normale (12px) döndür - mobilde
+    // focus sırasında geçici olarak 16px yapılmıştı (iOS Safari zoom önlemi).
+    if (this.closest('.right-column')) {
+        this.style.fontSize = '12px';
+        this.style.lineHeight = '1.4';
     }
 });
                         
@@ -6483,7 +6543,7 @@ function setupEditableFieldsForElement(element) {
                             
                             // Input sırasında font size kontrolü
                             if (this.closest('.right-column')) {
-                                this.style.fontSize = '12px';
+                                if (window.innerWidth <= 480) { this.style.setProperty('font-size', '16px', 'important'); } else { this.style.fontSize = '12px'; }
                                 this.style.lineHeight = '1.4';
                             }
                         });
@@ -6844,7 +6904,7 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
                     element.addEventListener('input', function() {
                         // Font size kontrolü
                         if (this.closest('.right-column')) {
-                            this.style.fontSize = '12px';
+                            if (window.innerWidth <= 480) { this.style.setProperty('font-size', '16px', 'important'); } else { this.style.fontSize = '12px'; }
                             this.style.lineHeight = '1.4';
                         }
                     });
@@ -6852,7 +6912,7 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
                     // Focus event'inde de font size kontrolü
                     element.addEventListener('focus', function() {
                         if (this.closest('.right-column')) {
-                            this.style.fontSize = '12px';
+                            if (window.innerWidth <= 480) { this.style.setProperty('font-size', '16px', 'important'); } else { this.style.fontSize = '12px'; }
                             this.style.lineHeight = '1.4';
                         }
                     });
@@ -7779,11 +7839,18 @@ class PasteHandler {
     
     enforceStyles(element) {
         if (!this.isEditableField(element)) return;
+
+        // iOS Safari, font-size'ı 16px'den küçük olan bir alana odaklanıldığında
+        // sayfayı otomatik büyütüyor (kullanıcı kontrolü dışında bir zoom).
+        // Bu yüzden SADECE mobilde VE element şu an odaklıyken 16px kullanılır;
+        // odak yokken (normal görünüm) her zaman 12px kalır, CV görünümü değişmez.
+        const isMobileFocused = window.innerWidth <= 480 && document.activeElement === element;
+        const dynamicFontSize = isMobileFocused ? '16px' : '12px';
         
         // Sağ sütun için font ayarları
         if (element.closest('.right-column')) {
             const styles = {
-                'font-size': '12px',
+                'font-size': dynamicFontSize,
                 'line-height': '1.4',
                 'font-family': "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                 'color': '#555',
@@ -7797,17 +7864,19 @@ class PasteHandler {
                 element.style.setProperty(property, styles[property], 'important');
             });
             
-            // İç içe elementlerin stillerini de sıfırla
+            // İç içe elementlerin stillerini de sıfırla (font-size hariç -
+            // iç içe elementler ayrı odaklanamaz, 12px'te sabit kalmalı)
             element.querySelectorAll('*').forEach(child => {
                 Object.keys(styles).forEach(property => {
-                    child.style.setProperty(property, styles[property], 'important');
+                    const val = property === 'font-size' ? '12px' : styles[property];
+                    child.style.setProperty(property, val, 'important');
                 });
             });
         }
         
         // Sol sütun için font ayarları
         if (element.closest('.left-column')) {
-            element.style.fontSize = '12px';
+            element.style.fontSize = dynamicFontSize;
             element.style.lineHeight = '1.4';
         }
     }
@@ -8827,7 +8896,430 @@ s0.parentNode.insertBefore(s1,s0);
     document.addEventListener('compositionend', function (e) { if (isLangField(e.target)) clean(e.target); }, true);
 })();
 </script>
+
+
+
+<!-- ===== YENİ: Sabit alt eylem çubuğu ve eksik alan uyarı mesajı ===== -->
+<div id="sticky-action-bar">
+    <button type="button" id="sticky-preview-btn"></button>
+    <button type="button" id="sticky-pdf-btn"></button>
+</div>
+<div id="missing-field-toast"></div>
+
+<style>
+/* ============================================================
+   KULLANICI KOLAYLIĞI ÖZELLİKLERİ (5 madde)
+   ============================================================ */
+
+/* --- 1) Masaüstü/Mobil görünüm geçiş düğmesi --- */
+#view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#view-toggle-btn:hover { background: #f3f4f6; }
+
+/* --- 2) İlerleme göstergesi --- */
+#cv-progress-bar {
+    width: calc(100vw - 24px);
+    max-width: 600px;
+    min-width: 0;
+    margin: 10px auto;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-sizing: border-box;
+}
+#cv-progress-bar .cv-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 6px;
+}
+#cv-progress-bar .cv-progress-track {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+#cv-progress-bar .cv-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f59e0b, #10b981);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+    width: 0%;
+}
+
+/* --- 3) Hızlı Git menüsü --- */
+#quick-nav {
+    width: calc(100vw - 24px);
+    max-width: 600px;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px 10px 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+#quick-nav::-webkit-scrollbar { height: 4px; }
+#quick-nav::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+#quick-nav button {
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#quick-nav button:active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+.cv-toolbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: calc(100vw - 24px);
+    max-width: 600px;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0 auto 6px auto;
+    flex-wrap: wrap;
+}
+
+/* --- 4) Sabit (sticky) Önizleme + PDF bar --- */
+#sticky-action-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,255,255,0.98);
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+}
+#sticky-action-bar.visible { transform: translateY(0); }
+#sticky-action-bar button {
+    flex: 1;
+    padding: 12px 10px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+}
+#sticky-preview-btn { background: #f59e0b; color: #fff; }
+#sticky-pdf-btn { background: #10b981; color: #fff; }
+
+/* --- 5) Eksik alan uyarısı --- */
+.field-missing-highlight {
+    animation: fieldMissingPulse 1.6s ease 2;
+    outline: 3px solid #ef4444 !important;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+@keyframes fieldMissingPulse {
+    0%, 100% { outline-color: #ef4444; }
+    50% { outline-color: rgba(239,68,68,0.25); }
+}
+#missing-field-toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 10000;
+    background: #ef4444;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: all 0.25s ease;
+    max-width: 90vw;
+    text-align: center;
+}
+#missing-field-toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* main'in kendisi (page-wrapper'a göre) SINIRLI tutuluyor ki .cv-layout
+   kendi içinde (aşağıda tanımlı overflow-x:auto ile) YEREL bir kaydırma
+   alanı oluşturabilsin. main sınırlı olmazsa .cv-layout'un clientWidth'i
+   de scrollWidth'i ile eşit olup scroll edilecek bir şey kalmıyordu. */
+#main-content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+/* .a4-container (CV'nin PDF/A4 önizlemesi) kasıtlı olarak sabit genişlikte
+   (210mm) - bu, PDF çıktı kalitesi için gerekli, değiştirilmemeli. Onu saran
+   bu section'a yerel bir kaydırma alanı vererek, main-content sınırlı
+   kalırken (main'e width:100% verildi) kullanıcı .right-column'a (Hakkımda,
+   Eğitim, Deneyim...) parmağıyla yatay kaydırarak ulaşabiliyor. */
+section[aria-labelledby="cv-form-title"] {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    #sticky-action-bar button { font-size: 13px; padding: 11px 8px; }
+    #quick-nav button { padding: 6px 12px; font-size: 12px; }
+}
+</style>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ========================================================
+       1) MASAÜSTÜ / MOBİL GÖRÜNÜM GEÇİŞİ
+       ======================================================== */
+    function initViewToggle() {
+        var btn = document.getElementById('view-toggle-btn');
+        if (!btn) return;
+        var meta = document.getElementById('viewport-meta');
+        var isDesktop = false;
+
+        function label() {
+            btn.innerHTML = isDesktop ? '📱 Mobil Görünüm' : '🖥️ Masaüstü Görünüm';
+        }
+        btn.addEventListener('click', function () {
+            isDesktop = !isDesktop;
+            meta.setAttribute('content', isDesktop ? 'width=1024' : 'width=device-width, initial-scale=1.0');
+            label();
+        });
+        label();
+    }
+
+    /* ========================================================
+       2) İLERLEME GÖSTERGESİ
+       ======================================================== */
+    var progressLabels = {
+        tr: 'CV\'niz %{p} hazır', en: 'Your CV is {p}% ready', de: 'Ihr Lebenslauf ist zu {p}% fertig',
+        fr: 'Votre CV est prêt à {p}%', es: 'Su CV está {p}% listo', it: 'Il tuo CV è pronto al {p}%',
+        pt: 'Seu CV está {p}% pronto', ru: 'Ваше резюме готово на {p}%', ar: 'سيرتك الذاتية جاهزة بنسبة {p}%',
+        zh: '您的简历已完成 {p}%'
+    };
+
+    function isFilled(el) {
+        if (!el) return false;
+        if (el.classList && el.classList.contains('empty-field')) return false;
+        return el.textContent && el.textContent.trim().length > 0;
+    }
+
+    function computeProgress() {
+        var checks = [];
+        checks.push(isFilled(document.querySelector('.name-item .personal-info-value')));
+        checks.push(isFilled(document.querySelector('.personal-info-value.phone-input')));
+        checks.push(isFilled(document.querySelector('.personal-info-value.email-input')));
+        checks.push(isFilled(document.getElementById('about-text')));
+        checks.push(isFilled(document.querySelector('#education-container .education-institution')));
+        var expItem = document.querySelector('#experience-container .experience-item');
+        checks.push(!!(expItem && isFilled(expItem.querySelector('.item-title')) && isFilled(expItem.querySelector('.experience-company'))));
+        checks.push(!!document.querySelector('#skills-container .skill-item:not(.empty-field)'));
+        checks.push(!!document.querySelector('#languages-container .language-item .language-name:not(.empty-field)'));
+
+        var filled = checks.filter(Boolean).length;
+        return Math.round((filled / checks.length) * 100);
+    }
+
+    function updateProgress() {
+        var bar = document.getElementById('cv-progress-bar');
+        if (!bar) return;
+        var pct = computeProgress();
+        var lang = (document.getElementById('language-select') || {}).value || 'tr';
+        var tmpl = progressLabels[lang] || progressLabels.tr;
+        bar.querySelector('.cv-progress-text').textContent = tmpl.replace('{p}', pct);
+        bar.querySelector('.cv-progress-fill').style.width = pct + '%';
+    }
+
+    /* ========================================================
+       3) HIZLI GİT MENÜSÜ
+       ======================================================== */
+    var quickNavLabels = {
+        tr: ['Kişisel Bilgiler','Diller','Hakkımda','Eğitim','Deneyim','Projeler','Kurslar','Yetenekler','Referanslar'],
+        en: ['Personal Info','Languages','About','Education','Experience','Projects','Courses','Skills','References']
+    };
+    var quickNavTargets = ['personal-info-section','languages-section','about-section','education-section','experience-section','projects-section','courses-section','skills-section','references-section'];
+
+    function updateQuickNavLabels() {
+        var nav = document.getElementById('quick-nav');
+        if (!nav) return;
+        var lang = (document.getElementById('language-select') || {}).value || 'tr';
+        var labels = quickNavLabels[lang] || quickNavLabels.en;
+        var buttons = nav.querySelectorAll('button');
+        buttons.forEach(function (b, i) { if (labels[i]) b.textContent = labels[i]; });
+    }
+
+    function buildQuickNav() {
+        var nav = document.getElementById('quick-nav');
+        if (!nav) return;
+        quickNavTargets.forEach(function (id, i) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = (quickNavLabels.tr[i]);
+            b.addEventListener('click', function () {
+                var target = document.getElementById(id);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            nav.appendChild(b);
+        });
+    }
+
+    /* ========================================================
+       4) SABİT (STICKY) ÖNİZLEME + PDF BAR
+       ======================================================== */
+    function initStickyBar() {
+        var bar = document.getElementById('sticky-action-bar');
+        var controls = document.querySelector('.controls');
+        if (!bar || !controls) return;
+
+        document.getElementById('sticky-preview-btn').addEventListener('click', function () {
+            var b = document.getElementById('preview-cv');
+            if (b) b.click();
+        });
+        document.getElementById('sticky-pdf-btn').addEventListener('click', function () {
+            var b = document.getElementById('save-pdf');
+            if (b) b.click();
+        });
+
+        var ticking = false;
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function () {
+                // Sayfa az miktarda (30px) kaydırılınca bile hemen görünsün -
+                // kontrol barının tamamen ekrandan çıkmasını beklemez.
+                var show = window.scrollY > 30;
+                bar.classList.toggle('visible', show);
+                ticking = false;
+            });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    function updateStickyLabels() {
+        var lang = (document.getElementById('language-select') || {}).value || 'tr';
+        var t = (typeof translations !== 'undefined' && (translations[lang] || translations.tr)) || {};
+        var pBtn = document.getElementById('sticky-preview-btn');
+        var dBtn = document.getElementById('sticky-pdf-btn');
+        if (pBtn) pBtn.textContent = '👁️ ' + (t.preview || 'Önizleme');
+        if (dBtn) dBtn.textContent = '📄 ' + (t.downloadPdf || 'PDF İndir');
+    }
+
+    /* ========================================================
+       5) EKSİK ZORUNLU ALAN UYARISI
+       ======================================================== */
+    var missingFieldMsgs = {
+        tr: 'Lütfen işaretli alanı doldurun', en: 'Please fill in the highlighted field',
+        de: 'Bitte füllen Sie das markierte Feld aus', fr: 'Veuillez remplir le champ surligné',
+        es: 'Complete el campo resaltado', it: 'Compila il campo evidenziato',
+        pt: 'Preencha o campo destacado', ru: 'Пожалуйста, заполните выделенное поле',
+        ar: 'يرجى ملء الحقل المميز', zh: '请填写突出显示的字段'
+    };
+
+    function showMissingToast(msg) {
+        var toast = document.getElementById('missing-field-toast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('visible');
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(function () { toast.classList.remove('visible'); }, 2800);
+    }
+
+    function findFirstMissingRequiredField() {
+        var fields = document.querySelectorAll('.required-field');
+        for (var i = 0; i < fields.length; i++) {
+            var f = fields[i];
+            // görünmez (gizli bölüm/silinmiş satır içindeki) alanları atla
+            if (f.offsetParent === null) continue;
+            if (!isFilled(f)) return f;
+        }
+        return null;
+    }
+
+    function validateBeforePdf(e) {
+        var missing = findFirstMissingRequiredField();
+        if (!missing) return; // her şey dolu, PDF üretimine izin ver
+
+        e.stopImmediatePropagation();
+        e.preventDefault();
+
+        missing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        missing.classList.remove('field-missing-highlight');
+        void missing.offsetWidth; // reflow - animasyonu yeniden tetikle
+        missing.classList.add('field-missing-highlight');
+        setTimeout(function () { missing.classList.remove('field-missing-highlight'); }, 3300);
+
+        var lang = (document.getElementById('language-select') || {}).value || 'tr';
+        showMissingToast(missingFieldMsgs[lang] || missingFieldMsgs.tr);
+
+        setTimeout(function () {
+            try { missing.focus(); } catch (err) {}
+        }, 500);
+    }
+
+    function initPdfValidation() {
+        var btn = document.getElementById('save-pdf');
+        if (!btn) return;
+        btn.addEventListener('click', validateBeforePdf, true); // capture aşaması: mevcut kodu bozmadan önce çalışır
+    }
+
+    /* ========================================================
+       BAŞLAT
+       ======================================================== */
+    function initAll() {
+        initStickyBar();
+        initPdfValidation();
+        updateStickyLabels();
+
+        // Dil değişince sticky bar metinlerini güncelle
+        var langSelect = document.getElementById('language-select');
+        if (langSelect) {
+            langSelect.addEventListener('change', function () {
+                setTimeout(function () { updateStickyLabels(); }, 300);
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+        initAll();
+    }
+})();
+</script>
+
 </body>
-
-
 </html>
