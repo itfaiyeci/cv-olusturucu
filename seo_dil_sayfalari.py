@@ -134,6 +134,8 @@ def make_lang_page(root, code, d):
     for prop, val in [("twitter:url", u), ("twitter:title", d["title"]), ("twitter:description", d["desc"])]:
         s = sub_once(rf'<meta name="{prop}" content="[^"]*">', f'<meta name="{prop}" content="{val}">', s, prop)
     s = sub_once(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{u}">', s, "canonical")
+    # Sayfa altındaki blog linki o dilin bloguna gitsin (ör. https://mobilcv.net/de/)
+    s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{code}/"', s)
     name = "MobilCV – " + d["title"].split(" | ")[0]
     s = sub_once(r'"name": "MobilCV - Ücretsiz Online CV Oluşturucu"', f'"name": "{name}"', s, "JSON-LD name")
     s = sub_once(r'"description": "10 dil desteği ile[^"]*"', f'"description": "{d["desc"]}"', s, "JSON-LD description")
