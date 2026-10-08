@@ -66,6 +66,37 @@ LANGS = {
 }
 ALL = ["tr"] + list(LANGS)
 
+PRIVACY = {
+    "tr": ("https://mobilcv.net/gizlilik-politikasi.html", "Gizlilik Politikası"),
+    "en": ("https://mobilcv.net/en/privacy-policy.html", "Privacy Policy"),
+    "de": ("https://mobilcv.net/de/privacy-policy.html", "Datenschutzerklärung"),
+    "fr": ("https://mobilcv.net/fr/privacy-policy.html", "Politique de confidentialité"),
+    "es": ("https://mobilcv.net/es/privacy-policy.html", "Política de privacidad"),
+    "it": ("https://mobilcv.net/it/privacy-policy.html", "Informativa sulla privacy"),
+    "pt": ("https://mobilcv.net/pt/privacy-policy.html", "Política de privacidade"),
+    "ru": ("https://mobilcv.net/ru/privacy-policy.html", "Политика конфиденциальности"),
+    "ar": ("https://mobilcv.net/ar/privacy-policy.html", "سياسة الخصوصية"),
+    "zh": ("https://mobilcv.net/zh/privacy-policy.html", "隐私政策"),
+}
+
+
+def privacy_anchor(code):
+    url, label = PRIVACY[code]
+    return (f'<a href="{url}" data-privacy-link target="_blank" rel="noopener" '
+            f'style="display:inline-block;margin-top:8px;font-size:12px;">{label}</a>')
+
+
+def add_privacy_link(src):
+    """Kök sayfanın alt kısmına (blog linkinin altına) gizlilik politikası linki ekler (bir kez)."""
+    if "data-privacy-link" in src:
+        return src
+    m = re.search(r'<footer class="site-footer-link">[\s\S]*?</footer>', src)
+    if not m:
+        sys.exit("HATA: site-footer-link bulunamadi.")
+    block = m.group(0)
+    new_block = block.replace("</footer>", "    <br>" + privacy_anchor("tr") + "\n        </footer>")
+    return src[:m.start()] + new_block + src[m.end():]
+
 
 def url_of(code):
     return SITE + "/" if code == "tr" else f"{SITE}/{code}/"
@@ -134,6 +165,7 @@ def make_lang_page(root, code, d):
     for prop, val in [("twitter:url", u), ("twitter:title", d["title"]), ("twitter:description", d["desc"])]:
         s = sub_once(rf'<meta name="{prop}" content="[^"]*">', f'<meta name="{prop}" content="{val}">', s, prop)
     s = sub_once(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{u}">', s, "canonical")
+    s = re.sub(r'<a href="[^"]*" data-privacy-link[^>]*>[^<]*</a>', lambda m: privacy_anchor(code), s)
     # Sayfa altındaki blog linki o dilin bloguna gitsin (ör. https://mobilcv.net/de/)
     s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{code}/"', s)
     name = "MobilCV – " + d["title"].split(" | ")[0]
@@ -162,7 +194,7 @@ def main():
     if not p.exists():
         sys.exit("HATA: index.html bulunamadi. Scripti mobilcv.com deposunun kok klasorunde calistirin.")
     src = p.read_text(encoding="utf-8")
-    root = patch_root(src)
+    root = add_privacy_link(patch_root(src))
     pages = {c: make_lang_page(root, c, d) for c, d in LANGS.items()}  # once hepsini hazirla, hata varsa hicbir sey yazilmaz
 
     if root != src:
