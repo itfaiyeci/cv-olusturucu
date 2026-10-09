@@ -1338,6 +1338,17 @@
             background: white !important;
         }
         
+        /* Fotograf eklenmemisse PDF ve onizlemede "Fotograf eklemek icin tiklayin"
+           yazisi ve bos cerceve gorunmesin (daha once PDF'e basiliyordu). */
+        .pdf-mode #avatarText {
+            display: none !important;
+        }
+        .pdf-mode #avatarBox:not(:has(#avatar[src^="data:"])) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
         .pdf-mode #avatar {
             width: 100% !important;
             height: 100% !important;
