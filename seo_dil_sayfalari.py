@@ -527,6 +527,131 @@ def set_faq(s, code):
                     faq_jsonld(code), s, "FAQ JSON-LD")
 
 
+# ===================== CEREZ ONAYI (KVKK / GDPR) =====================
+GA_ID = "G-7KFT12L3X8"
+CONSENT = {
+    "tr": ("Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "Kabul et", "Reddet", "Ayrıntılar", "Çerez ayarları"),
+    "en": ("We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "Accept", "Reject", "Details", "Cookie settings"),
+    "de": ("Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "Akzeptieren", "Ablehnen", "Details", "Cookie-Einstellungen"),
+    "fr": ("Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "Accepter", "Refuser", "Détails", "Paramètres des cookies"),
+    "es": ("Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "Aceptar", "Rechazar", "Detalles", "Configuración de cookies"),
+    "it": ("Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "Accetta", "Rifiuta", "Dettagli", "Impostazioni cookie"),
+    "pt": ("Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "Aceitar", "Recusar", "Detalhes", "Configurações de cookies"),
+    "ru": ("Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "Принять", "Отклонить", "Подробнее", "Настройки cookie"),
+    "ar": ("نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "قبول", "رفض", "التفاصيل", "إعدادات ملفات تعريف الارتباط"),
+    "zh": ("我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "接受", "拒绝", "详情", "Cookie 设置"),
+}
+
+CONSENT_CSS = """
+        /* ===== CEREZ ONAY BANDI ===== */
+        #cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 2147483000; max-width: 640px; margin: 0 auto;
+            background: #fff; color: #1f2937; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); padding: 14px 16px;
+            font: 14px/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: none; }
+        #cookie-consent.show { display: block; }
+        #cookie-consent p { margin: 0 0 10px; }
+        #cookie-consent a { color: #2563eb; }
+        #cookie-consent .cc-btns { display: flex; gap: 10px; }
+        #cookie-consent button { flex: 1; padding: 10px 12px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+            border: 2px solid #2563eb; }
+        #cookie-consent .cc-accept { background: #2563eb; color: #fff; }
+        #cookie-consent .cc-reject { background: #fff; color: #2563eb; }
+        @media print { #cookie-consent { display: none !important; } }
+"""
+
+
+def consent_script():
+    data = {c: {"msg": v[0], "ok": v[1], "no": v[2], "more": v[3], "set": v[4], "url": PRIVACY[c][0]} for c, v in CONSENT.items()}
+    return ("""<script data-consent>
+    // Google Analytics YALNIZCA ziyaretci "Kabul et" derse yuklenir (KVKK / GDPR).
+    (function () {
+        var GA = '""" + GA_ID + """', KEY = 'mobilcv_consent';
+        var T = """ + json.dumps(data, ensure_ascii=False) + """;
+        function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+        function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+        function lang() {
+            var s = document.getElementById('language-select');
+            var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr';
+            return T[l] ? l : 'en';
+        }
+        function loadGA() {
+            if (window.__gaLoaded) return; window.__gaLoaded = true;
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { dataLayer.push(arguments); };
+            gtag('js', new Date()); gtag('config', GA);
+            var s = document.createElement('script'); s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA; document.head.appendChild(s);
+        }
+        function clearGA() {
+            var host = location.hostname.replace(/^www\\./, '');
+            document.cookie.split(';').forEach(function (c) {
+                var n = c.split('=')[0].trim();
+                if (n === '_ga' || n.indexOf('_ga_') === 0 || n === '_gid') {
+                    ['', '.' + host, location.hostname].forEach(function (d) {
+                        document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+                    });
+                }
+            });
+        }
+        var box;
+        function render() {
+            var t = T[lang()];
+            box.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+            box.innerHTML = '<p>' + t.msg + ' <a href="' + t.url + '" target="_blank" rel="noopener">' + t.more + '</a></p>' +
+                '<div class="cc-btns"><button type="button" class="cc-reject">' + t.no + '</button>' +
+                '<button type="button" class="cc-accept">' + t.ok + '</button></div>';
+            box.querySelector('.cc-accept').onclick = function () { put('granted'); box.classList.remove('show'); loadGA(); };
+            box.querySelector('.cc-reject').onclick = function () {
+                var was = window.__gaLoaded; put('denied'); clearGA(); box.classList.remove('show');
+                if (was) location.reload();
+            };
+            document.querySelectorAll('[data-cookie-settings]').forEach(function (a) { a.textContent = t.set; });
+        }
+        function show() { render(); box.classList.add('show'); }
+        document.addEventListener('DOMContentLoaded', function () {
+            box = document.createElement('div'); box.id = 'cookie-consent';
+            box.setAttribute('role', 'dialog'); box.setAttribute('aria-live', 'polite');
+            document.body.appendChild(box); render();
+            var v = get();
+            if (v === 'granted') loadGA(); else if (v !== 'denied') box.classList.add('show');
+            document.querySelectorAll('[data-cookie-settings]').forEach(function (a) {
+                a.addEventListener('click', function (e) { e.preventDefault(); show(); });
+            });
+            var sel = document.getElementById('language-select');
+            if (sel) sel.addEventListener('change', function () { setTimeout(render, 0); });
+        });
+    })();
+    </script>""")
+
+
+def consent_upgrade(s):
+    """Tawk.to'yu kaldirir, Google Analytics'i onay bandinin arkasina alir. Tekrar calistirmak zararsizdir."""
+    # 1) Tawk.to canli sohbet
+    s = re.sub(r"[ \t]*<!--Start of Tawk\.to Script-->\s*<!-- Tawk\.to[^>]*-->\s*<!--Start of Tawk\.to Script-->\s*"
+               r"<script type=\"text/javascript\">\s*var Tawk_API[\s\S]*?</script>\s*<!--End of Tawk\.to Script-->\s*", "\n", s)
+    if "embed.tawk.to" in s:
+        sys.exit("HATA: Tawk.to kodu beklenen bicimde degil; script durduruldu, hicbir dosya degismedi.")
+    # 2) Dogrudan yuklenen Google Analytics
+    if "data-consent" not in s:
+        s = sub_once(r"[ \t]*<!-- Google Analytics -->\s*<script async src=\"https://www\.googletagmanager\.com/gtag/js\?id=" + GA_ID +
+                     r"\"></script>\s*<script>\s*window\.dataLayer[\s\S]*?gtag\('config', '" + GA_ID + r"'\);\s*</script>\s*",
+                     "    <!-- Google Analytics: yalnizca onay verilirse yuklenir (sayfa sonundaki data-consent) -->\n", s,
+                     "Google Analytics blogu")
+        s = sub_once(r"</style>\s*</head>", CONSENT_CSS + "    </style>\n</head>", s, "</style></head> (cerez)")
+        s = sub_once(r"</body>\s*</html>\s*$", "    " + consent_script() + "\n</body>\n</html>\n", s, "</body> (cerez)")
+    else:
+        s = re.sub(r"<script data-consent>[\s\S]*?</script>", lambda m: consent_script(), s, count=1)
+    if "googletagmanager.com/gtag/js?id=" + GA_ID + "\"></script>" in s:
+        sys.exit("HATA: Google Analytics hala dogrudan yukleniyor; script durduruldu.")
+    # 3) Alt kisma "Cerez ayarlari" linki
+    if 'data-cookie-settings style=' not in s:
+        s = sub_once(r'(<a href="[^"]*" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a>)', None, s,
+                     "Threads linki (cerez ayarlari)",
+                     func=lambda m: m.group(1) + ' · <a href="#" data-cookie-settings style="font-size:12px;">' + CONSENT["tr"][4] + '</a>')
+    # 4) Eski yorumlardaki Tawk.to aciklamasini guncelle (yalnizca yorum)
+    s = s.replace("GA ve Tawk.to script'lerine kasıtlı olarak SRI eklenmedi", "GA script'ine kasıtlı olarak SRI eklenmedi")
+    return s
+
+
 def seo_upgrade(src, fonts_out):
     """Kok (Turkce) sayfaya SEO icerigini ekler / gunceller. Tekrar calistirmak zararsizdir."""
     s = set_header(src, "tr")
@@ -658,6 +783,8 @@ def make_lang_page(root, code, d):
     s = set_seo_block(s, code)
     s = set_faq(s, code)
     s = localize_static(s, code, root)
+    s = s.replace('data-cookie-settings style="font-size:12px;">' + CONSENT["tr"][4] + "<",
+                  'data-cookie-settings style="font-size:12px;">' + CONSENT[code][4] + "<")
     return s
 
 
@@ -678,7 +805,7 @@ def main():
         sys.exit("HATA: index.html bulunamadi. Scripti mobilcv.com deposunun kok klasorunde calistirin.")
     src = p.read_text(encoding="utf-8")
     fonts = {}
-    root = seo_upgrade(add_social(add_privacy_link(patch_root(src))), fonts)
+    root = consent_upgrade(seo_upgrade(add_social(add_privacy_link(patch_root(src))), fonts))
     pages = {c: make_lang_page(root, c, d) for c, d in LANGS.items()}  # once hepsini hazirla, hata varsa hicbir sey yazilmaz
 
     if root != src:

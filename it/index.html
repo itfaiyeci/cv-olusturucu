@@ -158,23 +158,15 @@
     
     <!-- Scripts -->
     <!-- SRI: sabit sürümlü kütüphaneler, hash npm@2.5.1/1.4.1/6.5.0 paketlerinden
-         doğrulandı. GA ve Tawk.to script'lerine kasıtlı olarak SRI eklenmedi çünkü
+         doğrulandı. GA script'ine kasıtlı olarak SRI eklenmedi çünkü
          onlar sürüm sabitlenmemiş, sağlayıcı tarafında habersiz güncellenen
          widget'lar - SRI eklemek bir sonraki güncellemede siteyi kırar. -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous">
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7KFT12L3X8"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-7KFT12L3X8');
-    </script>
-    
-    <style>
+    <!-- Google Analytics: yalnizca onay verilirse yuklenir (sayfa sonundaki data-consent) -->
+<style>
     /* CV RENK TEMASI DEĞİŞKENLERİ - varsayılan: Klasik Mavi (mevcut tasarım) */
     :root {
         --cv-accent: #3498db;
@@ -2866,6 +2858,20 @@ img {
         .seo-info a { color: #2563eb; }
         @media (max-width: 768px) { .seo-info { width: calc(100vw - 20px); max-width: none; padding: 20px 18px; } }
         @media print { .seo-info { display: none !important; } }
+    
+        /* ===== CEREZ ONAY BANDI ===== */
+        #cookie-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 2147483000; max-width: 640px; margin: 0 auto;
+            background: #fff; color: #1f2937; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); padding: 14px 16px;
+            font: 14px/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: none; }
+        #cookie-consent.show { display: block; }
+        #cookie-consent p { margin: 0 0 10px; }
+        #cookie-consent a { color: #2563eb; }
+        #cookie-consent .cc-btns { display: flex; gap: 10px; }
+        #cookie-consent button { flex: 1; padding: 10px 12px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+            border: 2px solid #2563eb; }
+        #cookie-consent .cc-accept { background: #2563eb; color: #fff; }
+        #cookie-consent .cc-reject { background: #fff; color: #2563eb; }
+        @media print { #cookie-consent { display: none !important; } }
     </style>
 </head>
 <body>
@@ -3236,7 +3242,7 @@ img {
             <a href="https://mobilcv.net/it/" target="_blank" rel="noopener">
                 <span data-key="visitBlogText">📝 Kariyer ipuçları, mülakat rehberleri ve CV tavsiyeleri için blogumuzu ziyaret edin</span>
             </a>
-            <br><a href="https://mobilcv.net/it/privacy-policy.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Informativa sulla privacy</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a>
+            <br><a href="https://mobilcv.net/it/privacy-policy.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Informativa sulla privacy</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="#" data-cookie-settings style="font-size:12px;">Impostazioni cookie</a>
         </footer>
 
         <!-- ÖNİZLEME MODALI -->
@@ -8882,21 +8888,6 @@ function saveCV() {
 	
     </script>
 	
-	<!--Start of Tawk.to Script-->
-<!-- Tawk.to - Kullanıcı Etkileşiminde Yükle -->
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68d93dfa3341941951f1d20e/1j689k7br';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
 
 <script>
 /* Son satırı silmeden önce onay: yalnızca içi DOLU bir satır silinecekse ve
@@ -9415,6 +9406,66 @@ s0.parentNode.insertBefore(s1,s0);
             setTimeout(need, 3000);
             var sel = document.getElementById('language-select');
             if (sel) sel.addEventListener('change', need);
+        });
+    })();
+    </script>
+    <script data-consent>
+    // Google Analytics YALNIZCA ziyaretci "Kabul et" derse yuklenir (KVKK / GDPR).
+    (function () {
+        var GA = 'G-7KFT12L3X8', KEY = 'mobilcv_consent';
+        var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}};
+        function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+        function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+        function lang() {
+            var s = document.getElementById('language-select');
+            var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr';
+            return T[l] ? l : 'en';
+        }
+        function loadGA() {
+            if (window.__gaLoaded) return; window.__gaLoaded = true;
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { dataLayer.push(arguments); };
+            gtag('js', new Date()); gtag('config', GA);
+            var s = document.createElement('script'); s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA; document.head.appendChild(s);
+        }
+        function clearGA() {
+            var host = location.hostname.replace(/^www\./, '');
+            document.cookie.split(';').forEach(function (c) {
+                var n = c.split('=')[0].trim();
+                if (n === '_ga' || n.indexOf('_ga_') === 0 || n === '_gid') {
+                    ['', '.' + host, location.hostname].forEach(function (d) {
+                        document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+                    });
+                }
+            });
+        }
+        var box;
+        function render() {
+            var t = T[lang()];
+            box.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+            box.innerHTML = '<p>' + t.msg + ' <a href="' + t.url + '" target="_blank" rel="noopener">' + t.more + '</a></p>' +
+                '<div class="cc-btns"><button type="button" class="cc-reject">' + t.no + '</button>' +
+                '<button type="button" class="cc-accept">' + t.ok + '</button></div>';
+            box.querySelector('.cc-accept').onclick = function () { put('granted'); box.classList.remove('show'); loadGA(); };
+            box.querySelector('.cc-reject').onclick = function () {
+                var was = window.__gaLoaded; put('denied'); clearGA(); box.classList.remove('show');
+                if (was) location.reload();
+            };
+            document.querySelectorAll('[data-cookie-settings]').forEach(function (a) { a.textContent = t.set; });
+        }
+        function show() { render(); box.classList.add('show'); }
+        document.addEventListener('DOMContentLoaded', function () {
+            box = document.createElement('div'); box.id = 'cookie-consent';
+            box.setAttribute('role', 'dialog'); box.setAttribute('aria-live', 'polite');
+            document.body.appendChild(box); render();
+            var v = get();
+            if (v === 'granted') loadGA(); else if (v !== 'denied') box.classList.add('show');
+            document.querySelectorAll('[data-cookie-settings]').forEach(function (a) {
+                a.addEventListener('click', function (e) { e.preventDefault(); show(); });
+            });
+            var sel = document.getElementById('language-select');
+            if (sel) sel.addEventListener('change', function () { setTimeout(render, 0); });
         });
     })();
     </script>
