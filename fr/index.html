@@ -2884,7 +2884,7 @@ img {
 .a4-container.tpl-classic .personal-info-item.name-item .personal-info-value { font-size: 26px !important; text-align: left !important; }
 .a4-container.tpl-classic .personal-info-item.title-item .personal-info-value { text-align: left !important; margin-bottom: 6px; }
 /* Iletisim bilgileri: sabit genislikte etiket + hemen yaninda deger (iki sutun) */
-.a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]):not(.hidden-in-pdf) {
+.a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]):not(.hidden-in-pdf):not(.jp-only) {
     display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; gap: 4px; margin: 0 !important; padding: 0 !important; border: 0 !important; min-width: 0;
 }
 .a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item) .personal-info-label { flex: 0 0 auto !important; width: auto !important; min-width: 23mm !important; margin: 0 !important; display: block !important; white-space: nowrap; }
@@ -6579,6 +6579,8 @@ function updateCalendarLanguage() {
 
 // Dil değiştiğinde takvimi güncelle
 document.getElementById('language-select').addEventListener('change', updateCalendarLanguage);
+// Dil kullanici tarafindan secildiyse hatirla (kod ile tetiklenen degisiklikler sayilmaz)
+document.getElementById('language-select').addEventListener('change', function (e) { if (e.isTrusted) { try { localStorage.setItem('mobilcv_lang_chosen', '1'); } catch (_) {} } });
 updateCalendarLanguage(); // İlk yükleme
 
             // Ekle/Çıkar butonlarını ayarla
@@ -8689,7 +8691,7 @@ class AutoSaveManager {
             if (!saved) return;
 
             const data = JSON.parse(saved);
-            this.applyData(data);
+            this.applyData(data, true);
         } catch (error) {
             console.error('Yükleme hatası:', error);
             this.clearSavedData();
@@ -8698,13 +8700,15 @@ class AutoSaveManager {
 
     // Bir veri nesnesini forma uygula
     // loadSavedData() (localStorage'dan) ve importFromFile() (yedek dosyasından) tarafından ortak kullanılır
-    applyData(data) {
+    applyData(data, fromAutosave) {
         if (!data || typeof data !== 'object') {
             throw new Error('Geçersiz veri');
         }
 
         // Dil ayarı
-        if (data.language && document.getElementById('language-select') && (window.MOBILCV_PAGE_LANG || 'tr') === 'tr') {
+        // Otomatik kayittan gelen dil yalnizca kullanici dili kendisi sectiyse uygulanir
+        var langChosen = false; try { langChosen = localStorage.getItem('mobilcv_lang_chosen') === '1'; } catch (e) {}
+        if (data.language && document.getElementById('language-select') && (window.MOBILCV_PAGE_LANG || 'tr') === 'tr' && (!fromAutosave || langChosen)) {
             document.getElementById('language-select').value = data.language;
             // Dil değişikliğini tetikle
             const event = new Event('change');
