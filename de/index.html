@@ -1356,6 +1356,11 @@
         .pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .right-column {
             padding-top: 10mm !important;
         }
+        /* Sayfa bolme olcumu aninda yapildigi icin gecis animasyonu kapali olmali;
+           yoksa olcum eski 200px bosluga gore yapilir ve sayfa erken bolunur. */
+        .pdf-mode .right-column {
+            transition: none !important;
+        }
         .pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-header {
             padding-top: 10mm !important;
         }
