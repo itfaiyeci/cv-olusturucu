@@ -71,6 +71,10 @@ LANGS = {
         title="免费在线制作简历 – 无需注册，下载PDF | MobilCV",
         desc="用手机免费制作专业简历，无需注册，无广告。您的数据只保存在浏览器中。几分钟即可下载PDF简历。",
         kw="免费制作简历, 在线简历制作, 简历模板, PDF简历, 无需注册"),
+    "ja": dict(locale="ja_JP",
+        title="履歴書を無料で作成 – 登録不要・スマホでPDF | MobilCV",
+        desc="スマホで履歴書を無料作成。会員登録不要・広告なし。入力内容はブラウザ内にのみ保存され、数分でPDFをダウンロードできます。",
+        kw="履歴書 作成 無料, 履歴書 テンプレート, 履歴書 PDF, 履歴書 スマホ, 履歴書 登録不要"),
 }
 ALL = ["tr"] + list(LANGS)
 
@@ -85,6 +89,7 @@ PRIVACY = {
     "ru": ("https://mobilcv.net/ru/privacy-policy.html", "Политика конфиденциальности"),
     "ar": ("https://mobilcv.net/ar/privacy-policy.html", "سياسة الخصوصية"),
     "zh": ("https://mobilcv.net/zh/privacy-policy.html", "隐私政策"),
+    "ja": ("https://mobilcv.net/en/privacy-policy.html", "プライバシーポリシー（英語）"),
 }
 
 
@@ -129,7 +134,7 @@ def add_privacy_link(src):
 C = {
 "tr": dict(
     h1="Ücretsiz CV Hazırla – Üye Olmadan",
-    sub="Telefondan 10 dilde profesyonel CV oluşturun, PDF olarak indirin",
+    sub="Telefondan 11 dilde profesyonel CV oluşturun, PDF olarak indirin",
     steps_t="3 adımda CV hazırlayın",
     steps=["Bilgilerinizi forma yazın: iletişim, deneyim, eğitim, yetenekler. İsterseniz fotoğraf ekleyin.",
            "Renk temasını ve CV dilini seçin; değişiklikleri önizlemede anında görün.",
@@ -139,21 +144,21 @@ C = {
          "<b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.",
          "<b>Bilgileriniz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucuya gönderilmez.",
          "<b>Telefon için tasarlandı:</b> Bilgisayar olmadan, birkaç dakikada CV hazırlayabilirsiniz.",
-         "<b>10 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça ve Çince."],
+         "<b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca."],
     faq_t="Sıkça Sorulan Sorular",
     faq=[("MobilCV gerçekten ücretsiz mi?", "Evet. CV oluşturmak ve PDF olarak indirmek tamamen ücretsizdir; gizli ücret veya filigran yoktur."),
          ("CV hazırlamak için üye olmam gerekiyor mu?", "Hayır. Üyelik, e-posta veya şifre gerekmez; sayfayı açıp hemen başlayabilirsiniz."),
          ("Bilgilerim nereye kaydediliyor?", "Bilgileriniz yalnızca kendi cihazınızda, tarayıcınızın yerel depolama alanında tutulur ve sunucularımıza gönderilmez. Silmek için Tümünü Temizle düğmesini kullanabilirsiniz."),
          ("Telefondan CV hazırlayabilir miyim?", "Evet. MobilCV telefonda kullanılmak üzere tasarlandı; bilgisayarda da çalışır."),
          ("CV'me fotoğraf ekleyebilir miyim?", "Evet. Fotoğraf eklemek isteğe bağlıdır; fotoğraf alanına dokunarak ekleyebilirsiniz."),
-         ("CV'mi hangi dillerde hazırlayabilirim?", "Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça ve Çince olmak üzere 10 dilde hazırlayabilirsiniz."),
+         ("CV'mi hangi dillerde hazırlayabilirim?", "Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca olmak üzere 11 dilde hazırlayabilirsiniz."),
          ("CV'mi nasıl indiririm?", "Formu doldurduktan sonra PDF İndir düğmesine basın. CV'niz PDF dosyası olarak cihazınıza kaydedilir.")],
     more="Meslek bazlı CV örnekleri ve CV yazma rehberleri için",
     more_link=("https://mobilcv.net/cv-ornekleri.html", "CV örneklerine göz atın"),
 ),
 "en": dict(
     h1="Free CV Maker – No Sign-Up",
-    sub="Create a professional CV on your phone in 10 languages and download it as PDF",
+    sub="Create a professional CV on your phone in 11 languages and download it as PDF",
     steps_t="Create your CV in 3 steps",
     steps=["Fill in your details: contact info, experience, education and skills. Add a photo if you like.",
            "Choose a colour theme and the CV language; see every change instantly in the preview.",
@@ -163,21 +168,21 @@ C = {
          "<b>No sign-up:</b> no email, password or account needed.",
          "<b>Your data stays with you:</b> your CV is kept only in your own browser and is never sent to a server.",
          "<b>Built for phones:</b> make a CV in minutes without a computer.",
-         "<b>10 languages:</b> English, Turkish, German, French, Spanish, Italian, Portuguese, Russian, Arabic and Chinese."],
+         "<b>11 languages:</b> English, Turkish, German, French, Spanish, Italian, Portuguese, Russian, Arabic, Chinese and Japanese."],
     faq_t="Frequently Asked Questions",
     faq=[("Is MobilCV really free?", "Yes. Creating your CV and downloading it as PDF is completely free, with no hidden fees or watermark."),
          ("Do I need to sign up?", "No. There is no account, email or password; just open the page and start."),
          ("Where is my information stored?", "Only on your own device, in your browser's local storage. It is never sent to our servers. Use the Clear All button to delete it."),
          ("Can I make a CV on my phone?", "Yes. MobilCV is designed for phones and also works on computers."),
          ("Can I add a photo to my CV?", "Yes. Adding a photo is optional; tap the photo area to add one."),
-         ("Which languages can I create my CV in?", "10 languages: English, Turkish, German, French, Spanish, Italian, Portuguese, Russian, Arabic and Chinese."),
+         ("Which languages can I create my CV in?", "11 languages: English, Turkish, German, French, Spanish, Italian, Portuguese, Russian, Arabic, Chinese and Japanese."),
          ("How do I download my CV?", "When you have filled in the form, tap Download PDF. Your CV is saved to your device as a PDF file.")],
     more="For CV examples by profession and writing tips,",
     more_link=("https://mobilcv.net/en/", "visit our career blog"),
 ),
 "de": dict(
     h1="Lebenslauf kostenlos erstellen – ohne Anmeldung",
-    sub="Professionellen Lebenslauf am Handy in 10 Sprachen erstellen und als PDF herunterladen",
+    sub="Professionellen Lebenslauf am Handy in 11 Sprachen erstellen und als PDF herunterladen",
     steps_t="In 3 Schritten zum Lebenslauf",
     steps=["Tragen Sie Ihre Angaben ein: Kontakt, Berufserfahrung, Ausbildung und Kenntnisse. Auf Wunsch mit Bewerbungsfoto.",
            "Wählen Sie Farbschema und Sprache des Lebenslaufs; jede Änderung sehen Sie sofort in der Vorschau.",
@@ -187,21 +192,21 @@ C = {
          "<b>Ohne Anmeldung:</b> keine E-Mail, kein Passwort, kein Konto.",
          "<b>Ihre Daten bleiben bei Ihnen:</b> Der Lebenslauf wird nur in Ihrem Browser gespeichert und nicht an einen Server gesendet.",
          "<b>Fürs Handy gemacht:</b> Lebenslauf in wenigen Minuten erstellen, ganz ohne Computer.",
-         "<b>10 Sprachen:</b> Deutsch, Englisch, Türkisch, Französisch, Spanisch, Italienisch, Portugiesisch, Russisch, Arabisch und Chinesisch."],
+         "<b>11 Sprachen:</b> Deutsch, Englisch, Türkisch, Französisch, Spanisch, Italienisch, Portugiesisch, Russisch, Arabisch, Chinesisch und Japanisch."],
     faq_t="Häufige Fragen",
     faq=[("Ist MobilCV wirklich kostenlos?", "Ja. Lebenslauf erstellen und als PDF herunterladen ist komplett kostenlos, ohne versteckte Kosten oder Wasserzeichen."),
          ("Muss ich mich anmelden?", "Nein. Sie brauchen kein Konto, keine E-Mail und kein Passwort; einfach Seite öffnen und loslegen."),
          ("Wo werden meine Daten gespeichert?", "Nur auf Ihrem eigenen Gerät im lokalen Speicher Ihres Browsers. Sie werden nicht an unsere Server übertragen. Mit Alles löschen entfernen Sie sie."),
          ("Kann ich den Lebenslauf am Handy erstellen?", "Ja. MobilCV ist für Smartphones gemacht und funktioniert auch am Computer."),
          ("Kann ich ein Bewerbungsfoto einfügen?", "Ja. Das Foto ist optional; tippen Sie auf das Fotofeld, um eines hinzuzufügen."),
-         ("In welchen Sprachen kann ich den Lebenslauf erstellen?", "In 10 Sprachen: Deutsch, Englisch, Türkisch, Französisch, Spanisch, Italienisch, Portugiesisch, Russisch, Arabisch und Chinesisch."),
+         ("In welchen Sprachen kann ich den Lebenslauf erstellen?", "In 11 Sprachen: Deutsch, Englisch, Türkisch, Französisch, Spanisch, Italienisch, Portugiesisch, Russisch, Arabisch, Chinesisch und Japanisch."),
          ("Wie lade ich meinen Lebenslauf herunter?", "Tippen Sie nach dem Ausfüllen auf PDF herunterladen. Der Lebenslauf wird als PDF-Datei auf Ihrem Gerät gespeichert.")],
     more="Tipps zu Lebenslauf und Bewerbung finden Sie",
     more_link=("https://mobilcv.net/de/", "in unserem Karriere-Blog"),
 ),
 "fr": dict(
     h1="Créer un CV gratuit – sans inscription",
-    sub="Créez un CV professionnel sur votre téléphone en 10 langues et téléchargez-le en PDF",
+    sub="Créez un CV professionnel sur votre téléphone en 11 langues et téléchargez-le en PDF",
     steps_t="Votre CV en 3 étapes",
     steps=["Saisissez vos informations : coordonnées, expérience, formation et compétences. Ajoutez une photo si vous le souhaitez.",
            "Choisissez un thème de couleur et la langue du CV ; chaque modification s'affiche aussitôt dans l'aperçu.",
@@ -211,21 +216,21 @@ C = {
          "<b>Sans inscription :</b> ni e-mail, ni mot de passe, ni compte.",
          "<b>Vos données restent chez vous :</b> votre CV est conservé uniquement dans votre navigateur, jamais envoyé à un serveur.",
          "<b>Pensé pour le téléphone :</b> créez un CV en quelques minutes, sans ordinateur.",
-         "<b>10 langues :</b> français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe et chinois."],
+         "<b>11 langues :</b> français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe, chinois et japonais."],
     faq_t="Questions fréquentes",
     faq=[("MobilCV est-il vraiment gratuit ?", "Oui. Créer votre CV et le télécharger en PDF est entièrement gratuit, sans frais cachés ni filigrane."),
          ("Dois-je m'inscrire ?", "Non. Aucun compte, e-mail ou mot de passe n'est nécessaire : ouvrez la page et commencez."),
          ("Où sont enregistrées mes informations ?", "Uniquement sur votre appareil, dans le stockage local de votre navigateur. Elles ne sont jamais envoyées à nos serveurs. Le bouton Tout effacer les supprime."),
          ("Puis-je créer mon CV sur mon téléphone ?", "Oui. MobilCV est conçu pour le téléphone et fonctionne aussi sur ordinateur."),
          ("Puis-je ajouter une photo à mon CV ?", "Oui. La photo est facultative ; touchez la zone photo pour en ajouter une."),
-         ("Dans quelles langues puis-je créer mon CV ?", "En 10 langues : français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe et chinois."),
+         ("Dans quelles langues puis-je créer mon CV ?", "En 11 langues : français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe, chinois et japonais."),
          ("Comment télécharger mon CV ?", "Une fois le formulaire rempli, appuyez sur Télécharger PDF. Votre CV est enregistré sur votre appareil au format PDF.")],
     more="Pour des conseils CV et entretien,",
     more_link=("https://mobilcv.net/fr/", "consultez notre blog carrière"),
 ),
 "es": dict(
     h1="Crear currículum gratis – sin registro",
-    sub="Crea un currículum profesional desde el móvil en 10 idiomas y descárgalo en PDF",
+    sub="Crea un currículum profesional desde el móvil en 11 idiomas y descárgalo en PDF",
     steps_t="Tu currículum en 3 pasos",
     steps=["Escribe tus datos: contacto, experiencia, formación y habilidades. Añade una foto si quieres.",
            "Elige un tema de color y el idioma del currículum; verás cada cambio al instante en la vista previa.",
@@ -235,21 +240,21 @@ C = {
          "<b>Sin registro:</b> no necesitas correo, contraseña ni cuenta.",
          "<b>Tus datos son tuyos:</b> el currículum se guarda solo en tu navegador y nunca se envía a un servidor.",
          "<b>Pensado para el móvil:</b> crea tu currículum en minutos, sin ordenador.",
-         "<b>10 idiomas:</b> español, inglés, turco, alemán, francés, italiano, portugués, ruso, árabe y chino."],
+         "<b>11 idiomas:</b> español, inglés, turco, alemán, francés, italiano, portugués, ruso, árabe, chino y japonés."],
     faq_t="Preguntas frecuentes",
     faq=[("¿MobilCV es realmente gratis?", "Sí. Crear tu currículum y descargarlo en PDF es totalmente gratis, sin cargos ocultos ni marca de agua."),
          ("¿Tengo que registrarme?", "No. No necesitas cuenta, correo ni contraseña: abre la página y empieza."),
          ("¿Dónde se guardan mis datos?", "Solo en tu propio dispositivo, en el almacenamiento local del navegador. Nunca se envían a nuestros servidores. Con Limpiar todo puedes borrarlos."),
          ("¿Puedo hacer el currículum desde el móvil?", "Sí. MobilCV está pensado para el móvil y también funciona en el ordenador."),
          ("¿Puedo añadir una foto?", "Sí. La foto es opcional; toca el área de la foto para añadirla."),
-         ("¿En qué idiomas puedo crear mi currículum?", "En 10 idiomas: español, inglés, turco, alemán, francés, italiano, portugués, ruso, árabe y chino."),
+         ("¿En qué idiomas puedo crear mi currículum?", "En 11 idiomas: español, inglés, turco, alemán, francés, italiano, portugués, ruso, árabe, chino y japonés."),
          ("¿Cómo descargo mi currículum?", "Cuando completes el formulario, pulsa Descargar PDF. El currículum se guarda en tu dispositivo como archivo PDF.")],
     more="Para consejos sobre currículum y entrevistas,",
     more_link=("https://mobilcv.net/es/", "visita nuestro blog de carrera"),
 ),
 "it": dict(
     h1="Crea il tuo CV gratis – senza registrazione",
-    sub="Crea un CV professionale dal telefono in 10 lingue e scaricalo in PDF",
+    sub="Crea un CV professionale dal telefono in 11 lingue e scaricalo in PDF",
     steps_t="Il tuo CV in 3 passaggi",
     steps=["Inserisci i tuoi dati: contatti, esperienze, formazione e competenze. Se vuoi, aggiungi una foto.",
            "Scegli il tema colore e la lingua del CV; ogni modifica appare subito nell'anteprima.",
@@ -259,21 +264,21 @@ C = {
          "<b>Senza registrazione:</b> niente e-mail, password o account.",
          "<b>I tuoi dati restano a te:</b> il CV resta solo nel tuo browser e non viene mai inviato a un server.",
          "<b>Pensato per il telefono:</b> crea un CV in pochi minuti, senza computer.",
-         "<b>10 lingue:</b> italiano, inglese, turco, tedesco, francese, spagnolo, portoghese, russo, arabo e cinese."],
+         "<b>11 lingue:</b> italiano, inglese, turco, tedesco, francese, spagnolo, portoghese, russo, arabo, cinese e giapponese."],
     faq_t="Domande frequenti",
     faq=[("MobilCV è davvero gratis?", "Sì. Creare il CV e scaricarlo in PDF è completamente gratuito, senza costi nascosti né filigrana."),
          ("Devo registrarmi?", "No. Non servono account, e-mail o password: apri la pagina e inizia."),
          ("Dove vengono salvati i miei dati?", "Solo sul tuo dispositivo, nella memoria locale del browser. Non vengono mai inviati ai nostri server. Con Pulisci tutto puoi cancellarli."),
          ("Posso creare il CV dal telefono?", "Sì. MobilCV è pensato per il telefono e funziona anche sul computer."),
          ("Posso aggiungere una foto al CV?", "Sì. La foto è facoltativa; tocca l'area della foto per aggiungerla."),
-         ("In quali lingue posso creare il CV?", "In 10 lingue: italiano, inglese, turco, tedesco, francese, spagnolo, portoghese, russo, arabo e cinese."),
+         ("In quali lingue posso creare il CV?", "In 11 lingue: italiano, inglese, turco, tedesco, francese, spagnolo, portoghese, russo, arabo, cinese e giapponese."),
          ("Come scarico il mio CV?", "Dopo aver compilato il modulo, tocca Scarica PDF. Il CV viene salvato sul dispositivo come file PDF.")],
     more="Per consigli su CV e colloqui,",
     more_link=("https://mobilcv.net/it/", "visita il nostro blog carriera"),
 ),
 "pt": dict(
     h1="Criar currículo grátis – sem cadastro",
-    sub="Crie um currículo profissional pelo celular em 10 idiomas e baixe em PDF",
+    sub="Crie um currículo profissional pelo celular em 11 idiomas e baixe em PDF",
     steps_t="Seu currículo em 3 passos",
     steps=["Preencha seus dados: contato, experiência, formação e habilidades. Se quiser, adicione uma foto.",
            "Escolha o tema de cores e o idioma do currículo; veja cada alteração na hora na pré-visualização.",
@@ -283,21 +288,21 @@ C = {
          "<b>Sem cadastro:</b> não precisa de e-mail, senha nem conta.",
          "<b>Seus dados ficam com você:</b> o currículo fica só no seu navegador e nunca é enviado a um servidor.",
          "<b>Feito para o celular:</b> crie seu currículo em minutos, sem computador.",
-         "<b>10 idiomas:</b> português, inglês, turco, alemão, francês, espanhol, italiano, russo, árabe e chinês."],
+         "<b>11 idiomas:</b> português, inglês, turco, alemão, francês, espanhol, italiano, russo, árabe, chinês e japonês."],
     faq_t="Perguntas frequentes",
     faq=[("O MobilCV é realmente grátis?", "Sim. Criar o currículo e baixar em PDF é totalmente grátis, sem taxas escondidas nem marca d'água."),
          ("Preciso fazer cadastro?", "Não. Você não precisa de conta, e-mail ou senha: é só abrir a página e começar."),
          ("Onde meus dados ficam salvos?", "Apenas no seu próprio dispositivo, no armazenamento local do navegador. Eles nunca são enviados aos nossos servidores. Use Limpar tudo para apagá-los."),
          ("Posso fazer o currículo pelo celular?", "Sim. O MobilCV foi feito para o celular e também funciona no computador."),
          ("Posso colocar foto no currículo?", "Sim. A foto é opcional; toque na área da foto para adicioná-la."),
-         ("Em quais idiomas posso criar meu currículo?", "Em 10 idiomas: português, inglês, turco, alemão, francês, espanhol, italiano, russo, árabe e chinês."),
+         ("Em quais idiomas posso criar meu currículo?", "Em 11 idiomas: português, inglês, turco, alemão, francês, espanhol, italiano, russo, árabe, chinês e japonês."),
          ("Como baixo meu currículo?", "Depois de preencher o formulário, toque em Baixar PDF. O currículo é salvo no seu dispositivo como arquivo PDF.")],
     more="Para dicas de currículo e entrevista,",
     more_link=("https://mobilcv.net/pt/", "visite nosso blog de carreira"),
 ),
 "ru": dict(
     h1="Создать резюме бесплатно – без регистрации",
-    sub="Создайте профессиональное резюме с телефона на 10 языках и скачайте в PDF",
+    sub="Создайте профессиональное резюме с телефона на 11 языках и скачайте в PDF",
     steps_t="Резюме за 3 шага",
     steps=["Заполните данные: контакты, опыт работы, образование и навыки. При желании добавьте фото.",
            "Выберите цветовую тему и язык резюме; все изменения сразу видны в предпросмотре.",
@@ -307,21 +312,21 @@ C = {
          "<b>Без регистрации:</b> не нужны e-mail, пароль или аккаунт.",
          "<b>Данные остаются у вас:</b> резюме хранится только в вашем браузере и не отправляется на сервер.",
          "<b>Создан для телефона:</b> резюме за несколько минут, без компьютера.",
-         "<b>10 языков:</b> русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский и китайский."],
+         "<b>11 языков:</b> русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский."],
     faq_t="Частые вопросы",
     faq=[("MobilCV действительно бесплатный?", "Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков."),
          ("Нужно ли регистрироваться?", "Нет. Не нужны аккаунт, e-mail или пароль: откройте страницу и начните."),
          ("Где хранятся мои данные?", "Только на вашем устройстве, в локальном хранилище браузера. Они не отправляются на наши серверы. Удалить их можно кнопкой Очистить все."),
          ("Можно ли создать резюме с телефона?", "Да. MobilCV создан для телефона и также работает на компьютере."),
          ("Можно ли добавить фото в резюме?", "Да. Фото необязательно; нажмите на область фото, чтобы добавить его."),
-         ("На каких языках можно создать резюме?", "На 10 языках: русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский и китайский."),
+         ("На каких языках можно создать резюме?", "На 11 языках: русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский."),
          ("Как скачать резюме?", "Заполнив форму, нажмите Скачать PDF. Резюме сохранится на вашем устройстве в виде PDF-файла.")],
     more="Советы по резюме и собеседованиям —",
     more_link=("https://mobilcv.net/ru/", "в нашем карьерном блоге"),
 ),
 "ar": dict(
     h1="أنشئ سيرتك الذاتية مجانًا – بدون تسجيل",
-    sub="أنشئ سيرة ذاتية احترافية من هاتفك بعشر لغات وحمّلها بصيغة PDF",
+    sub="أنشئ سيرة ذاتية احترافية من هاتفك بإحدى عشرة لغة وحمّلها بصيغة PDF",
     steps_t="سيرتك الذاتية في 3 خطوات",
     steps=["اكتب بياناتك: معلومات الاتصال والخبرات والتعليم والمهارات، وأضف صورة إن أردت.",
            "اختر لون التصميم ولغة السيرة الذاتية، وشاهد كل تغيير فورًا في المعاينة.",
@@ -331,21 +336,21 @@ C = {
          "<b>بدون تسجيل:</b> لا حاجة إلى بريد إلكتروني أو كلمة مرور أو حساب.",
          "<b>بياناتك تبقى معك:</b> تُحفظ السيرة الذاتية في متصفحك فقط ولا تُرسل إلى أي خادم.",
          "<b>مصمم للهاتف:</b> أنشئ سيرتك الذاتية في دقائق دون حاسوب.",
-         "<b>10 لغات:</b> العربية والإنجليزية والتركية والألمانية والفرنسية والإسبانية والإيطالية والبرتغالية والروسية والصينية."],
+         "<b>11 لغة:</b> العربية والإنجليزية والتركية والألمانية والفرنسية والإسبانية والإيطالية والبرتغالية والروسية والصينية واليابانية."],
     faq_t="الأسئلة الشائعة",
     faq=[("هل MobilCV مجاني فعلًا؟", "نعم. إنشاء السيرة الذاتية وتحميلها بصيغة PDF مجاني بالكامل، بلا رسوم خفية أو علامة مائية."),
          ("هل أحتاج إلى التسجيل؟", "لا. لا تحتاج إلى حساب أو بريد إلكتروني أو كلمة مرور، افتح الصفحة وابدأ."),
          ("أين تُحفظ بياناتي؟", "على جهازك فقط، في التخزين المحلي لمتصفحك، ولا تُرسل إلى خوادمنا أبدًا. يمكنك حذفها بزر مسح الكل."),
          ("هل يمكنني إنشاء السيرة الذاتية من الهاتف؟", "نعم. صُمم MobilCV للهاتف ويعمل أيضًا على الحاسوب."),
          ("هل يمكنني إضافة صورة؟", "نعم. الصورة اختيارية، اضغط على مكان الصورة لإضافتها."),
-         ("بأي لغات يمكنني إنشاء سيرتي الذاتية؟", "بعشر لغات: العربية والإنجليزية والتركية والألمانية والفرنسية والإسبانية والإيطالية والبرتغالية والروسية والصينية."),
+         ("بأي لغات يمكنني إنشاء سيرتي الذاتية؟", "بإحدى عشرة لغة: العربية والإنجليزية والتركية والألمانية والفرنسية والإسبانية والإيطالية والبرتغالية والروسية والصينية واليابانية."),
          ("كيف أحمّل سيرتي الذاتية؟", "بعد ملء النموذج اضغط تحميل PDF، فتُحفظ السيرة الذاتية على جهازك كملف PDF.")],
     more="لنصائح السيرة الذاتية والمقابلات",
     more_link=("https://mobilcv.net/ar/", "زر مدونتنا المهنية"),
 ),
 "zh": dict(
     h1="免费制作简历 – 无需注册",
-    sub="用手机以10种语言制作专业简历，并下载为PDF",
+    sub="用手机以11种语言制作专业简历，并下载为PDF",
     steps_t="3步完成简历",
     steps=["填写您的信息：联系方式、工作经历、教育背景和技能，也可以添加照片。",
            "选择颜色主题和简历语言，每次修改都能在预览中即时看到。",
@@ -355,17 +360,42 @@ C = {
          "<b>无需注册：</b>不需要邮箱、密码或账号。",
          "<b>数据只属于您：</b>简历只保存在您的浏览器中，不会发送到任何服务器。",
          "<b>为手机设计：</b>无需电脑，几分钟即可完成简历。",
-         "<b>10种语言：</b>中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语和阿拉伯语。"],
+         "<b>11种语言：</b>中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语、阿拉伯语和日语。"],
     faq_t="常见问题",
     faq=[("MobilCV 真的免费吗？", "是的。制作简历并下载PDF完全免费，没有隐藏费用，也没有水印。"),
          ("需要注册吗？", "不需要。无需账号、邮箱或密码，打开页面即可开始。"),
          ("我的信息保存在哪里？", "只保存在您自己的设备上，即浏览器的本地存储中，不会发送到我们的服务器。可以用“全部清除”按钮删除。"),
          ("可以用手机制作简历吗？", "可以。MobilCV 专为手机设计，在电脑上也能使用。"),
          ("可以在简历中添加照片吗？", "可以。照片是可选的，点击照片区域即可添加。"),
-         ("可以用哪些语言制作简历？", "共10种语言：中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语和阿拉伯语。"),
+         ("可以用哪些语言制作简历？", "共11种语言：中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语、阿拉伯语和日语。"),
          ("如何下载简历？", "填写完表格后点击“下载PDF”，简历会以PDF文件保存到您的设备。")],
     more="更多简历与面试技巧，",
     more_link=("https://mobilcv.net/zh/", "请访问我们的职业博客"),
+),
+
+"ja": dict(
+    h1="無料の履歴書作成ツール – 登録不要",
+    sub="スマホで11言語の履歴書を作成し、PDFでダウンロード",
+    steps_t="3ステップで履歴書を作成",
+    steps=["テンプレートで「履歴書（日本形式）」を選び、氏名・住所・学歴・職歴などを用紙に直接入力します。写真の追加は任意です。",
+           "画面に表示されている用紙がそのままPDFになります。「プレビュー」で仕上がりを確認できます。",
+           "<b>PDFをダウンロード</b>を押せば完成です。"],
+    why_t="MobilCVの特長",
+    why=["<b>完全無料：</b>隠れた料金、試用期間、透かしはありません。",
+         "<b>登録不要：</b>メールアドレスやパスワードは必要ありません。",
+         "<b>データは手元に：</b>入力内容はお使いのブラウザ内にのみ保存され、サーバーには送信されません。",
+         "<b>日本の履歴書形式：</b>厚生労働省の履歴書様式例を参考にしたレイアウトで、学歴・職歴は自動的に古い順に並びます。",
+         "<b>11言語：</b>日本語、英語、トルコ語、ドイツ語、フランス語、スペイン語、イタリア語、ポルトガル語、ロシア語、アラビア語、中国語。"],
+    faq_t="よくある質問",
+    faq=[("本当に無料ですか？", "はい。履歴書の作成とPDFのダウンロードは完全に無料です。透かしも入りません。"),
+         ("会員登録は必要ですか？", "いいえ。アカウント、メールアドレス、パスワードは不要です。ページを開いてすぐに始められます。"),
+         ("入力した情報はどこに保存されますか？", "お使いの端末のブラウザ内（ローカルストレージ）にのみ保存され、当サイトのサーバーには送信されません。「すべてクリア」ボタンで削除できます。"),
+         ("スマホで履歴書を作れますか？", "はい。MobilCVはスマートフォンでの利用を前提に設計されており、パソコンでも使えます。"),
+         ("写真なしでも作成できますか？", "はい。写真の追加は任意です。写真がない場合、写真欄は空白のままPDFに出力されます。"),
+         ("学歴・職歴の年月はどう入力しますか？", "「2018/04-2022/03」のように入力します。在職中・在学中の場合は「2023/04-」のように終了年月を空欄にしてください。"),
+         ("どのような形式でダウンロードできますか？", "A4サイズのPDFファイル（2ページ）として端末に保存されます。")],
+    more="キャリアのヒントや履歴書の書き方は、",
+    more_link=("https://mobilcv.net/en/", "英語のキャリアブログをご覧ください"),
 ),
 }
 
@@ -428,7 +458,7 @@ def url_of(code):
 
 def page_lang_script(code):
     return ("<script>window.MOBILCV_PAGE_LANG='" + code + "';"
-            "(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh)\\b/);"
+            "(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\\b/);"
             "if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>")
 
 
@@ -540,6 +570,7 @@ CONSENT = {
     "ru": ("Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "Принять", "Отклонить", "Подробнее", "Настройки cookie"),
     "ar": ("نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "قبول", "رفض", "التفاصيل", "إعدادات ملفات تعريف الارتباط"),
     "zh": ("我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "接受", "拒绝", "详情", "Cookie 设置"),
+    "ja": ("訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "同意する", "拒否する", "詳細", "Cookie設定"),
 }
 
 CONSENT_CSS = """
@@ -656,12 +687,12 @@ def seo_upgrade(src, fonts_out):
     """Kok (Turkce) sayfaya SEO icerigini ekler / gunceller. Tekrar calistirmak zararsizdir."""
     s = set_header(src, "tr")
     # JS'in dil degisince yazdigi baslik da ayni olsun (sira: tr en de fr es it pt ru ar zh)
-    order = ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh"]
+    order = ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"]
     for key, field in (("appTitle", "h1"), ("appDescription", "sub")):
         it = iter(order)
         s, n = re.subn(rf'"{key}":(\s*)"[^"]*"', lambda m: f'"{key}":{m.group(1)}"{C[next(it)][field]}"', s)
-        if n != 10:
-            sys.exit(f"HATA: {key} ceviri sayisi 10 degil ({n}); script durduruldu, hicbir dosya degismedi.")
+        if n != len(order):
+            sys.exit(f"HATA: {key} ceviri sayisi {len(order)} degil ({n}); script durduruldu, hicbir dosya degismedi.")
     # Turkce baslik
     s = sub_once(r"<title>[^<]*</title>", f"<title>{TR_TITLE}</title>", s, "title")
     s = sub_once(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{TR_TITLE}">', s, "og:title")
@@ -705,8 +736,9 @@ STATIC = {
     "ru": ["Перейти к основному содержанию", "Конструктор резюме", "Управление резюме", "Форма резюме", "Отмена", "Флаг", "Фото", "Выбрать в календаре"],
     "ar": ["انتقل إلى المحتوى الرئيسي", "منشئ السيرة الذاتية", "أدوات السيرة الذاتية", "نموذج السيرة الذاتية", "إلغاء", "العلم", "الصورة", "اختر من التقويم"],
     "zh": ["跳到主要内容", "简历生成器", "简历控制", "简历表单", "取消", "国旗", "照片", "从日历选择"],
+    "ja": ["メインコンテンツへスキップ", "履歴書作成ツール", "履歴書の操作", "履歴書フォーム", "キャンセル", "国旗", "写真", "カレンダーから選択"],
 }
-ORDER = ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh"]
+ORDER = ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"]
 
 # Dil degisince title / aria-label metinlerini de cevir (sitenin kendi ceviri kodu bunlari atliyordu)
 EXTRA_I18N = """<script data-extra-i18n>
@@ -732,7 +764,7 @@ EXTRA_I18N = """<script data-extra-i18n>
 
 def tr_value(root, key, code):
     vals = re.findall(rf'"{key}":\s*"([^"]*)"', root)
-    return vals[ORDER.index(code)] if len(vals) == 10 else None
+    return vals[ORDER.index(code)] if len(vals) == len(ORDER) else None
 
 
 def localize_static(s, code, root):
@@ -773,10 +805,11 @@ def make_lang_page(root, code, d):
     s = sub_once(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{u}">', s, "canonical")
     s = re.sub(r'<a href="[^"]*" data-privacy-link[^>]*>[^<]*</a>', lambda m: privacy_anchor(code), s)
     # Sayfa altındaki blog linki o dilin bloguna gitsin (ör. https://mobilcv.net/de/)
-    s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{code}/"', s)
+    blog = "en" if code == "ja" else code
+    s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{blog}/"', s)
     name = "MobilCV – " + d["title"].split(" | ")[0]
     s = sub_once(r'"name": "MobilCV - Ücretsiz Online CV Oluşturucu"', f'"name": "{name}"', s, "JSON-LD name")
-    s = sub_once(r'"description": "10 dil desteği ile[^"]*"', f'"description": "{d["desc"]}"', s, "JSON-LD description")
+    s = sub_once(r'"description": "1[01] dil desteği ile[^"]*"', f'"description": "{d["desc"]}"', s, "JSON-LD description")
     s = sub_once(r'"url": "https://www\.mobilcv\.com",', f'"url": "{u}",', s, "JSON-LD url")
     # Ana baslik, gorunur SSS bolumu ve FAQ verisi bu dilde
     s = set_header(s, code)
