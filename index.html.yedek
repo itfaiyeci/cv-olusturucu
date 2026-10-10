@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tr">
 <head>
-    <script>window.MOBILCV_PAGE_LANG='ru';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
+    <script>window.MOBILCV_PAGE_LANG='tr';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
     <!-- Not: Varsayılan MOBİL-KOLAY görünüm. Masaüstü görünümü artık aşağıdaki
          script ile eklenen bir düğmeyle isteğe bağlı olarak açılabiliyor. -->
     
     <!-- Primary Meta Tags -->
-    <title>Создать резюме бесплатно – без регистрации, в PDF | MobilCV</title>
-    <meta name="description" content="Создайте резюме бесплатно прямо с телефона – без регистрации и рекламы. Ваши данные остаются в браузере. Скачайте резюме в PDF за несколько минут.">
-    <meta name="keywords" content="создать резюме бесплатно, конструктор резюме, шаблон резюме, резюме pdf, резюме без регистрации">
+    <title>Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV</title>
+    <meta name="description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz kaydedilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
+    <meta name="keywords" content="cv oluşturma, cv hazırlama, online cv, ücretsiz cv, profesyonel cv, cv şablonları, pdf cv, iş başvurusu, özgeçmiş">
     <meta name="author" content="MobilCV">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.mobilcv.com/ru/">
-    <meta property="og:title" content="Создать резюме бесплатно – без регистрации, в PDF | MobilCV">
-    <meta property="og:description" content="Создайте резюме бесплатно прямо с телефона – без регистрации и рекламы. Ваши данные остаются в браузере. Скачайте резюме в PDF за несколько минут.">
+    <meta property="og:url" content="https://www.mobilcv.com/">
+    <meta property="og:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
+    <meta property="og:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz kaydedilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
     <meta property="og:image" content="https://www.mobilcv.com/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="MobilCV">
-    <meta property="og:locale" content="ru_RU">
+    <meta property="og:locale" content="tr_TR">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://www.mobilcv.com/ru/">
-    <meta name="twitter:title" content="Создать резюме бесплатно – без регистрации, в PDF | MobilCV">
-    <meta name="twitter:description" content="Создайте резюме бесплатно прямо с телефона – без регистрации и рекламы. Ваши данные остаются в браузере. Скачайте резюме в PDF за несколько минут.">
+    <meta name="twitter:url" content="https://www.mobilcv.com/">
+    <meta name="twitter:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
+    <meta name="twitter:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz kaydedilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
     <meta name="twitter:image" content="https://www.mobilcv.com/images/og-image.jpg">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.mobilcv.com/ru/">
+    <link rel="canonical" href="https://www.mobilcv.com/">
     
     <!-- Hreflang: her dil için ayrı URL varyantı (?lang=xx), arama motorlarının
          her dili ayrı ayrı indeksleyebilmesi için -->
@@ -61,9 +61,9 @@
     {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "MobilCV – Создать резюме бесплатно – без регистрации, в PDF",
-        "description": "Создайте резюме бесплатно прямо с телефона – без регистрации и рекламы. Ваши данные остаются в браузере. Скачайте резюме в PDF за несколько минут.",
-        "url": "https://www.mobilcv.com/ru/",
+        "name": "MobilCV - Ücretsiz Online CV Oluşturucu",
+        "description": "11 dil desteği ile ücretsiz profesyonel CV oluşturma aracı. PDF indirme, 4 renk teması, mobil uyumlu.",
+        "url": "https://www.mobilcv.com",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Any",
 		"inLanguage": ["tr", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"],
@@ -96,58 +96,58 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "MobilCV действительно бесплатный?",
+      "name": "MobilCV gerçekten ücretsiz mi?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков."
+        "text": "Evet. CV oluşturmak ve PDF olarak indirmek tamamen ücretsizdir; gizli ücret veya filigran yoktur."
       }
     },
     {
       "@type": "Question",
-      "name": "Нужно ли регистрироваться?",
+      "name": "CV hazırlamak için üye olmam gerekiyor mu?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Нет. Не нужны аккаунт, e-mail или пароль: откройте страницу и начните."
+        "text": "Hayır. Üyelik, e-posta veya şifre gerekmez; sayfayı açıp hemen başlayabilirsiniz."
       }
     },
     {
       "@type": "Question",
-      "name": "Где хранятся мои данные?",
+      "name": "Bilgilerim nereye kaydediliyor?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Только на вашем устройстве, в локальном хранилище браузера. Они не отправляются на наши серверы. Удалить их можно кнопкой Очистить все."
+        "text": "Bilgileriniz yalnızca kendi cihazınızda, tarayıcınızın yerel depolama alanında tutulur ve sunucularımıza gönderilmez. Silmek için Tümünü Temizle düğmesini kullanabilirsiniz."
       }
     },
     {
       "@type": "Question",
-      "name": "Можно ли создать резюме с телефона?",
+      "name": "Telefondan CV hazırlayabilir miyim?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Да. MobilCV создан для телефона и также работает на компьютере."
+        "text": "Evet. MobilCV telefonda kullanılmak üzere tasarlandı; bilgisayarda da çalışır."
       }
     },
     {
       "@type": "Question",
-      "name": "Можно ли добавить фото в резюме?",
+      "name": "CV'me fotoğraf ekleyebilir miyim?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Да. Фото необязательно; нажмите на область фото, чтобы добавить его."
+        "text": "Evet. Fotoğraf eklemek isteğe bağlıdır; fotoğraf alanına dokunarak ekleyebilirsiniz."
       }
     },
     {
       "@type": "Question",
-      "name": "На каких языках можно создать резюме?",
+      "name": "CV'mi hangi dillerde hazırlayabilirim?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "На 11 языках: русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский."
+        "text": "Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca olmak üzere 11 dilde hazırlayabilirsiniz."
       }
     },
     {
       "@type": "Question",
-      "name": "Как скачать резюме?",
+      "name": "CV'mi nasıl indiririm?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Заполнив форму, нажмите Скачать PDF. Резюме сохранится на вашем устройстве в виде PDF-файла."
+        "text": "Formu doldurduktan sonra PDF İndir düğmesine basın. CV'niz PDF dosyası olarak cihazınıza kaydedilir."
       }
     }
   ]
@@ -2884,7 +2884,7 @@ img {
 .a4-container.tpl-classic .personal-info-item.name-item .personal-info-value { font-size: 26px !important; text-align: left !important; }
 .a4-container.tpl-classic .personal-info-item.title-item .personal-info-value { text-align: left !important; margin-bottom: 6px; }
 /* Iletisim bilgileri: sabit genislikte etiket + hemen yaninda deger (iki sutun) */
-.a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]):not(.hidden-in-pdf):not(.jp-only) {
+.a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]):not(.hidden-in-pdf) {
     display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; gap: 4px; margin: 0 !important; padding: 0 !important; border: 0 !important; min-width: 0;
 }
 .a4-container.tpl-classic .personal-info-item:not(.name-item):not(.title-item) .personal-info-label { flex: 0 0 auto !important; width: auto !important; min-width: 23mm !important; margin: 0 !important; display: block !important; white-space: nowrap; }
@@ -3045,7 +3045,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 </head>
 <body>
     <!-- Skip to Main Content Link for Accessibility -->
-    <a href="#main-content" class="skip-link sr-only">Перейти к основному содержанию</a>
+    <a href="#main-content" class="skip-link sr-only">Ana içeriğe atla</a>
 
     <!-- POPUP UYARI -->
     <div class="popup-overlay" id="warning-popup">
@@ -3067,15 +3067,15 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     
     <div class="page-wrapper">
         <header class="header" role="banner">
-            <h1>Создать резюме бесплатно – без регистрации</h1>  
-            <p>Создайте профессиональное резюме с телефона на 11 языках и скачайте в PDF</p>
+            <h1>Ücretsiz CV Hazırla – Üye Olmadan</h1>  
+            <p>Telefondan 11 dilde profesyonel CV oluşturun, PDF olarak indirin</p>
         </header>
         
         <main id="main-content" role="main">
             <!-- Mevcut dil seçici, kontroller, CV formu burada -->
             
             <section aria-labelledby="cv-creator-title" class="language-selector">
-                <h2 id="cv-creator-title" class="sr-only">Конструктор резюме</h2>
+                <h2 id="cv-creator-title" class="sr-only">CV Oluşturucu</h2>
                 <label for="language-select" class="sr-only">Dil Seçin / Select Language:</label>
                 <div class="language-select-container">
                     <select id="language-select" class="flag-select">
@@ -3095,19 +3095,19 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             </section>
             
             <section aria-labelledby="controls-title" class="controls">
-                <h2 id="controls-title" class="sr-only">Управление резюме</h2>
+                <h2 id="controls-title" class="sr-only">CV Kontrolleri</h2>
                 <div class="template-picker" id="template-picker">
-                    <label for="template-select" id="template-label">Шаблон</label>
+                    <label for="template-select" id="template-label">Şablon</label>
                     <select id="template-select">
-                        <option value="" id="tpl-opt-modern">Современный</option>
-                        <option value="tpl-classic" id="tpl-opt-classic">Классический (в одну колонку)</option>
-                        <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Японское резюме (履歴書)</option>
+                        <option value="" id="tpl-opt-modern">Modern</option>
+                        <option value="tpl-classic" id="tpl-opt-classic">Klasik (tek sütun)</option>
+                        <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Japon tipi özgeçmiş (履歴書)</option>
                     </select>
                 </div>
-                <div class="theme-dots" id="theme-options" role="radiogroup" aria-label="Цветовая тема">
-                    <button type="button" class="theme-swatch active" data-theme="" aria-pressed="true" title="Классический синий" data-key-title="themeClassic" style="--dot-color:#3498db;"></button>
-                    <button type="button" class="theme-swatch" data-theme="theme-mono" aria-pressed="false" title="Минимализм" data-key-title="themeMono" style="--dot-color:#1a1a1a;"></button>
-                    <button type="button" class="theme-swatch" data-theme="theme-emerald" aria-pressed="false" title="Изумруд" data-key-title="themeEmerald" style="--dot-color:#0e7c5f;"></button>
+                <div class="theme-dots" id="theme-options" role="radiogroup" aria-label="Renk Teması">
+                    <button type="button" class="theme-swatch active" data-theme="" aria-pressed="true" title="Klasik Mavi" data-key-title="themeClassic" style="--dot-color:#3498db;"></button>
+                    <button type="button" class="theme-swatch" data-theme="theme-mono" aria-pressed="false" title="Minimalist" data-key-title="themeMono" style="--dot-color:#1a1a1a;"></button>
+                    <button type="button" class="theme-swatch" data-theme="theme-emerald" aria-pressed="false" title="Zümrüt" data-key-title="themeEmerald" style="--dot-color:#0e7c5f;"></button>
                     <button type="button" class="theme-swatch" data-theme="theme-executive" aria-pressed="false" title="Executive" data-key-title="themeExecutive" style="--dot-color:#a8781f;"></button>
                 </div>
                 <button id="clear-all" class="btn-danger">
@@ -3139,7 +3139,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             
             <!-- ANA CV FORMU -->
             <section aria-labelledby="cv-form-title">
-                <h2 id="cv-form-title" class="sr-only">Форма резюме</h2>
+                <h2 id="cv-form-title" class="sr-only">CV Formu</h2>
                 <div class="a4-container" id="cv-form">
                     <div class="cv-layout">
                         <!-- SOL SÜTUN - Kişisel Bilgiler -->
@@ -3147,7 +3147,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                             <div class="personal-header">
                                 <!-- Fotoğraf yükleme alanı -->
                                 <div id="avatarBox" data-hint="CV'niz için profesyonel bir fotoğraf ekleyin">
-                                    <img id="avatar" alt="Фото" />
+                                    <img id="avatar" alt="Fotoğraf" />
                                     <span id="avatarText">
                                         <span data-key="addPhoto">Fotoğraf eklemek için tıklayın</span>
                                         <span id="avatarSizeHint" class="avatar-size-hint" data-key="avatarBiometricSize">(Biyometrik ölçü: 50×60mm)</span>
@@ -3157,13 +3157,13 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                 </div>
                                 <!-- Fotoğraf konumlandırma (kaydırma) kontrolleri - sadece fotoğraf yüklüyken görünür -->
                                 <div id="avatarPanControls" class="avatar-pan-controls no-print">
-                                    <button type="button" id="avatarPanUp" class="avatar-pan-btn avatar-pan-up" title="Сдвинуть вверх" data-key-title="panUp">▲</button>
+                                    <button type="button" id="avatarPanUp" class="avatar-pan-btn avatar-pan-up" title="Yukarı kaydır" data-key-title="panUp">▲</button>
                                     <div class="avatar-pan-row">
-                                        <button type="button" id="avatarPanLeft" class="avatar-pan-btn avatar-pan-left" title="Сдвинуть влево" data-key-title="panLeft">◀</button>
-                                        <button type="button" id="avatarPanReset" class="avatar-pan-btn avatar-pan-reset" title="Центрировать" data-key-title="panReset">●</button>
-                                        <button type="button" id="avatarPanRight" class="avatar-pan-btn avatar-pan-right" title="Сдвинуть вправо" data-key-title="panRight">▶</button>
+                                        <button type="button" id="avatarPanLeft" class="avatar-pan-btn avatar-pan-left" title="Sola kaydır" data-key-title="panLeft">◀</button>
+                                        <button type="button" id="avatarPanReset" class="avatar-pan-btn avatar-pan-reset" title="Ortala" data-key-title="panReset">●</button>
+                                        <button type="button" id="avatarPanRight" class="avatar-pan-btn avatar-pan-right" title="Sağa kaydır" data-key-title="panRight">▶</button>
                                     </div>
-                                    <button type="button" id="avatarPanDown" class="avatar-pan-btn avatar-pan-down" title="Сдвинуть вниз" data-key-title="panDown">▼</button>
+                                    <button type="button" id="avatarPanDown" class="avatar-pan-btn avatar-pan-down" title="Aşağı kaydır" data-key-title="panDown">▼</button>
                                 </div>
                             </div>
                             
@@ -3216,7 +3216,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                 <div class="personal-info-item" data-field="birth-date">
                                     <div class="personal-info-label">
                                         <span data-key="birthDate">Doğum Tarihi</span>
-                                        <button class="date-picker-button" title="Выбрать в календаре">📅</button>
+                                        <button class="date-picker-button" title="Takvimden seç">📅</button>
                                     </div>
                                     <div class="personal-info-value editable birth-date-input" contenteditable="true" data-placeholder-key="birthDatePlaceholder" data-hint-key="birthDateHint"></div>
                                 </div>
@@ -3417,27 +3417,27 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 
         <!-- SEO_CONTENT_START -->
         <section class="seo-info" aria-labelledby="seo-steps-title">
-            <h2 id="seo-steps-title">Резюме за 3 шага</h2>
-            <ol><li>Заполните данные: контакты, опыт работы, образование и навыки. При желании добавьте фото.</li><li>Выберите цветовую тему и язык резюме; все изменения сразу видны в предпросмотре.</li><li>Нажмите <b>Скачать PDF</b>. Резюме готово к отправке.</li></ol>
-            <h2>Почему MobilCV?</h2>
-            <ul><li><b>Полностью бесплатно:</b> без скрытых платежей, пробного периода и водяных знаков.</li><li><b>Без регистрации:</b> не нужны e-mail, пароль или аккаунт.</li><li><b>Данные остаются у вас:</b> резюме хранится только в вашем браузере и не отправляется на сервер.</li><li><b>Создан для телефона:</b> резюме за несколько минут, без компьютера.</li><li><b>11 языков:</b> русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский.</li></ul>
-            <h2>Частые вопросы</h2>
-            <details><summary>MobilCV действительно бесплатный?</summary><p>Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков.</p></details>
-            <details><summary>Нужно ли регистрироваться?</summary><p>Нет. Не нужны аккаунт, e-mail или пароль: откройте страницу и начните.</p></details>
-            <details><summary>Где хранятся мои данные?</summary><p>Только на вашем устройстве, в локальном хранилище браузера. Они не отправляются на наши серверы. Удалить их можно кнопкой Очистить все.</p></details>
-            <details><summary>Можно ли создать резюме с телефона?</summary><p>Да. MobilCV создан для телефона и также работает на компьютере.</p></details>
-            <details><summary>Можно ли добавить фото в резюме?</summary><p>Да. Фото необязательно; нажмите на область фото, чтобы добавить его.</p></details>
-            <details><summary>На каких языках можно создать резюме?</summary><p>На 11 языках: русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский.</p></details>
-            <details><summary>Как скачать резюме?</summary><p>Заполнив форму, нажмите Скачать PDF. Резюме сохранится на вашем устройстве в виде PDF-файла.</p></details>
-            <p class="seo-more">Советы по резюме и собеседованиям — <a href="https://mobilcv.net/ru/" target="_blank" rel="noopener">в нашем карьерном блоге</a></p>
+            <h2 id="seo-steps-title">3 adımda CV hazırlayın</h2>
+            <ol><li>Bilgilerinizi forma yazın: iletişim, deneyim, eğitim, yetenekler. İsterseniz fotoğraf ekleyin.</li><li>Renk temasını ve CV dilini seçin; değişiklikleri önizlemede anında görün.</li><li><b>PDF İndir</b> düğmesine basın. CV'niz başvuruya hazır.</li></ol>
+            <h2>Neden MobilCV?</h2>
+            <ul><li><b>Tamamen ücretsiz:</b> Gizli ücret, deneme süresi veya filigran yok.</li><li><b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.</li><li><b>Bilgileriniz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucuya gönderilmez.</li><li><b>Telefon için tasarlandı:</b> Bilgisayar olmadan, birkaç dakikada CV hazırlayabilirsiniz.</li><li><b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca.</li></ul>
+            <h2>Sıkça Sorulan Sorular</h2>
+            <details><summary>MobilCV gerçekten ücretsiz mi?</summary><p>Evet. CV oluşturmak ve PDF olarak indirmek tamamen ücretsizdir; gizli ücret veya filigran yoktur.</p></details>
+            <details><summary>CV hazırlamak için üye olmam gerekiyor mu?</summary><p>Hayır. Üyelik, e-posta veya şifre gerekmez; sayfayı açıp hemen başlayabilirsiniz.</p></details>
+            <details><summary>Bilgilerim nereye kaydediliyor?</summary><p>Bilgileriniz yalnızca kendi cihazınızda, tarayıcınızın yerel depolama alanında tutulur ve sunucularımıza gönderilmez. Silmek için Tümünü Temizle düğmesini kullanabilirsiniz.</p></details>
+            <details><summary>Telefondan CV hazırlayabilir miyim?</summary><p>Evet. MobilCV telefonda kullanılmak üzere tasarlandı; bilgisayarda da çalışır.</p></details>
+            <details><summary>CV'me fotoğraf ekleyebilir miyim?</summary><p>Evet. Fotoğraf eklemek isteğe bağlıdır; fotoğraf alanına dokunarak ekleyebilirsiniz.</p></details>
+            <details><summary>CV'mi hangi dillerde hazırlayabilirim?</summary><p>Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca olmak üzere 11 dilde hazırlayabilirsiniz.</p></details>
+            <details><summary>CV'mi nasıl indiririm?</summary><p>Formu doldurduktan sonra PDF İndir düğmesine basın. CV'niz PDF dosyası olarak cihazınıza kaydedilir.</p></details>
+            <p class="seo-more">Meslek bazlı CV örnekleri ve CV yazma rehberleri için <a href="https://mobilcv.net/cv-ornekleri.html" target="_blank" rel="noopener">CV örneklerine göz atın</a></p>
         </section>
         <!-- SEO_CONTENT_END -->
 
         <footer class="site-footer-link">
-            <a href="https://mobilcv.net/ru/" target="_blank" rel="noopener">
+            <a href="https://mobilcv.net" target="_blank" rel="noopener">
                 <span data-key="visitBlogText">📝 Kariyer ipuçları, mülakat rehberleri ve CV tavsiyeleri için blogumuzu ziyaret edin</span>
             </a>
-            <br><a href="https://mobilcv.net/ru/about.html" data-about-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">О нас</a> · <a href="https://mobilcv.net/ru/terms.html" data-terms-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Условия использования</a> · <a href="https://mobilcv.net/ru/privacy-policy.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Политика конфиденциальности</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="#" data-cookie-settings style="font-size:12px;">Настройки cookie</a>
+            <br><a href="https://mobilcv.net/gizlilik-politikasi.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Gizlilik Politikası</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="#" data-cookie-settings style="font-size:12px;">Çerez ayarları</a>
         </footer>
 
         <!-- ÖNİZLEME MODALI -->
@@ -3490,7 +3490,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                     </tbody>
                 </table>
                 <div class="date-picker-actions">
-                    <button class="date-picker-cancel" id="date-picker-cancel">Отмена</button>
+                    <button class="date-picker-cancel" id="date-picker-cancel">İptal</button>
                     <button class="date-picker-confirm" id="date-picker-confirm">Tamam</button>
                 </div>
             </div>
@@ -6579,8 +6579,6 @@ function updateCalendarLanguage() {
 
 // Dil değiştiğinde takvimi güncelle
 document.getElementById('language-select').addEventListener('change', updateCalendarLanguage);
-// Dil kullanici tarafindan secildiyse hatirla (kod ile tetiklenen degisiklikler sayilmaz)
-document.getElementById('language-select').addEventListener('change', function (e) { if (e.isTrusted) { try { localStorage.setItem('mobilcv_lang_chosen', '1'); } catch (_) {} } });
 updateCalendarLanguage(); // İlk yükleme
 
             // Ekle/Çıkar butonlarını ayarla
@@ -8223,7 +8221,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bayrak elementi oluştur
     const flagElement = document.createElement('img');
     flagElement.className = 'selected-flag';
-    flagElement.alt = 'Флаг';
+    flagElement.alt = 'Bayrak';
     container.appendChild(flagElement);
     
     // Online bayrak URL'leri
@@ -8691,7 +8689,7 @@ class AutoSaveManager {
             if (!saved) return;
 
             const data = JSON.parse(saved);
-            this.applyData(data, true);
+            this.applyData(data);
         } catch (error) {
             console.error('Yükleme hatası:', error);
             this.clearSavedData();
@@ -8700,15 +8698,13 @@ class AutoSaveManager {
 
     // Bir veri nesnesini forma uygula
     // loadSavedData() (localStorage'dan) ve importFromFile() (yedek dosyasından) tarafından ortak kullanılır
-    applyData(data, fromAutosave) {
+    applyData(data) {
         if (!data || typeof data !== 'object') {
             throw new Error('Geçersiz veri');
         }
 
         // Dil ayarı
-        // Otomatik kayittan gelen dil yalnizca kullanici dili kendisi sectiyse uygulanir
-        var langChosen = false; try { langChosen = localStorage.getItem('mobilcv_lang_chosen') === '1'; } catch (e) {}
-        if (data.language && document.getElementById('language-select') && (window.MOBILCV_PAGE_LANG || 'tr') === 'tr' && (!fromAutosave || langChosen)) {
+        if (data.language && document.getElementById('language-select') && (window.MOBILCV_PAGE_LANG || 'tr') === 'tr') {
             document.getElementById('language-select').value = data.language;
             // Dil değişikliğini tetikle
             const event = new Event('change');
@@ -9912,7 +9908,7 @@ function saveCV() {
     // Google Analytics YALNIZCA ziyaretci "Kabul et" derse yuklenir (KVKK / GDPR).
     (function () {
         var GA = 'G-7KFT12L3X8', KEY = 'mobilcv_consent';
-        var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}, "ja": {"msg": "訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "ok": "同意する", "no": "拒否する", "more": "詳細", "set": "Cookie設定", "url": "https://mobilcv.net/ja/privacy-policy.html"}};
+        var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}, "ja": {"msg": "訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "ok": "同意する", "no": "拒否する", "more": "詳細", "set": "Cookie設定", "url": "https://mobilcv.net/en/privacy-policy.html"}};
         function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
         function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
         function lang() {

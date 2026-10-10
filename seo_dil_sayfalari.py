@@ -89,14 +89,23 @@ PRIVACY = {
     "ru": ("https://mobilcv.net/ru/privacy-policy.html", "Политика конфиденциальности"),
     "ar": ("https://mobilcv.net/ar/privacy-policy.html", "سياسة الخصوصية"),
     "zh": ("https://mobilcv.net/zh/privacy-policy.html", "隐私政策"),
-    "ja": ("https://mobilcv.net/en/privacy-policy.html", "プライバシーポリシー（英語）"),
+    "ja": ("https://mobilcv.net/ja/privacy-policy.html", "プライバシーポリシー"),
 }
+# Hakkimizda / Kullanim Kosullari (mobilcv.net'te, gizlilik_ve_bakim.py uretir)
+LEGAL = {"tr": ["Hakkımızda", "Kullanım Koşulları"], "en": ["About Us", "Terms of Use"], "de": ["Über uns", "Nutzungsbedingungen"], "fr": ["À propos", "Conditions d'utilisation"], "es": ["Quiénes somos", "Condiciones de uso"], "it": ["Chi siamo", "Condizioni d'uso"], "pt": ["Sobre nós", "Termos de uso"], "ru": ["О нас", "Условия использования"], "ar": ["من نحن", "شروط الاستخدام"], "zh": ["关于我们", "使用条款"], "ja": ["MobilCVについて", "利用規約"]}
+LEGAL_RE = (r'(?:<a href="[^"]*" data-about-link[^>]*>[^<]*</a> · <a href="[^"]*" data-terms-link[^>]*>[^<]*</a> · )?'
+            r'<a href="[^"]*" data-privacy-link[^>]*>[^<]*</a>')
 
 
 def privacy_anchor(code):
     url, label = PRIVACY[code]
-    return (f'<a href="{url}" data-privacy-link target="_blank" rel="noopener" '
-            f'style="display:inline-block;margin-top:8px;font-size:12px;">{label}</a>')
+    about, terms = LEGAL[code]
+    au, tu = (("https://mobilcv.net/hakkimizda.html", "https://mobilcv.net/kullanim-kosullari.html") if code == "tr"
+              else (f"https://mobilcv.net/{code}/about.html", f"https://mobilcv.net/{code}/terms.html"))
+    st = 'style="display:inline-block;margin-top:8px;font-size:12px;"'
+    return (f'<a href="{au}" data-about-link target="_blank" rel="noopener" {st}>{about}</a> · '
+            f'<a href="{tu}" data-terms-link target="_blank" rel="noopener" {st}>{terms}</a> · '
+            f'<a href="{url}" data-privacy-link target="_blank" rel="noopener" {st}>{label}</a>')
 
 
 INSTAGRAM = "https://www.instagram.com/mobilcvcom/"
@@ -121,7 +130,7 @@ def add_social(src):
 def add_privacy_link(src):
     """Kök sayfanın alt kısmına (blog linkinin altına) gizlilik politikası linki ekler (bir kez)."""
     if "data-privacy-link" in src:
-        return src
+        return re.sub(LEGAL_RE, lambda m: privacy_anchor("tr"), src)
     m = re.search(r'<footer class="site-footer-link">[\s\S]*?</footer>', src)
     if not m:
         sys.exit("HATA: site-footer-link bulunamadi.")
@@ -820,7 +829,7 @@ def make_lang_page(root, code, d):
     for prop, val in [("twitter:url", u), ("twitter:title", d["title"]), ("twitter:description", d["desc"])]:
         s = sub_once(rf'<meta name="{prop}" content="[^"]*">', f'<meta name="{prop}" content="{val}">', s, prop)
     s = sub_once(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{u}">', s, "canonical")
-    s = re.sub(r'<a href="[^"]*" data-privacy-link[^>]*>[^<]*</a>', lambda m: privacy_anchor(code), s)
+    s = re.sub(LEGAL_RE, lambda m: privacy_anchor(code), s)
     # Sayfa altındaki blog linki o dilin bloguna gitsin (ör. https://mobilcv.net/de/)
     blog = "en" if code == "ja" else code
     s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{blog}/"', s)
