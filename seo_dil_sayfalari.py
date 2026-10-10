@@ -377,7 +377,7 @@ C = {
     h1="無料の履歴書作成ツール – 登録不要",
     sub="スマホで11言語の履歴書を作成し、PDFでダウンロード",
     steps_t="3ステップで履歴書を作成",
-    steps=["テンプレートで「履歴書（日本形式）」を選び、氏名・住所・学歴・職歴などを用紙に直接入力します。写真の追加は任意です。",
+    steps=["テンプレートで「履歴書」を選び、氏名・住所・学歴・職歴などを用紙に直接入力します。写真の追加は任意です。",
            "画面に表示されている用紙がそのままPDFになります。「プレビュー」で仕上がりを確認できます。",
            "<b>PDFをダウンロード</b>を押せば完成です。"],
     why_t="MobilCVの特長",
@@ -786,16 +786,16 @@ def localize_static(s, code, root):
            "es": ("Plantilla", "Moderna", "Clásica (una columna)", "Currículum japonés (履歴書)"),
            "it": ("Modello", "Moderno", "Classico (una colonna)", "CV giapponese (履歴書)"),
            "pt": ("Modelo", "Moderno", "Clássico (uma coluna)", "Currículo japonês (履歴書)"),
-           "ru": ("Шаблон", "Современный", "Классический (одна колонка)", "Японское резюме (履歴書)"),
+           "ru": ("Шаблон", "Современный", "Классический (в одну колонку)", "Японское резюме (履歴書)"),
            "ar": ("القالب", "عصري", "كلاسيكي (عمود واحد)", "سيرة ذاتية يابانية (履歴書)"),
-           "zh": ("模板", "现代", "经典（单栏）", "日本履历书（履歴書）"),
-           "ja": ("テンプレート", "モダン", "クラシック（1段組）", "履歴書（日本形式）")}
+           "zh": ("模板", "现代", "经典（单栏）", "日式履历书（履歴書）"),
+           "ja": ("テンプレート", "モダン", "クラシック（1カラム）", "履歴書")}
     if code in TPL:
         t = TPL[code]
         pairs += [('id="template-label">Şablon</label>', 'id="template-label">' + t[0] + '</label>'),
                   ('id="tpl-opt-modern">Modern</option>', 'id="tpl-opt-modern">' + t[1] + '</option>'),
                   ('id="tpl-opt-classic">Klasik (tek sütun)</option>', 'id="tpl-opt-classic">' + t[2] + '</option>'),
-                  ('id="tpl-opt-rirekisho">Japon özgeçmişi (履歴書)</option>', 'id="tpl-opt-rirekisho">' + t[3] + '</option>')]
+                  ('id="tpl-opt-rirekisho">Japon tipi özgeçmiş (履歴書)</option>', 'id="tpl-opt-rirekisho">' + t[3] + '</option>')]
     for a, b in pairs:
         s = s.replace(a, b)
     # data-key-title olan dugmelerin title'i ve tema grubunun aria-label'i
