@@ -2976,6 +2976,17 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 .rec-box[dir="rtl"] h3 { margin: 0 0 6px 34px; }
 @media print { .rec-box { display: none !important; } }
 
+/* === RK DIL === */
+.rk-page:not([lang="ja"]) .rk-title h1 { letter-spacing: 0.5mm; font-size: 18pt; }
+.rk-page:not([lang="ja"]) .rk-hist .y { width: 15mm; }
+.rk-page:not([lang="ja"]) .rk-hist .m { width: 13mm; }
+.rk-page:not([lang="ja"]) .rk-hist th { font-size: 8.5pt; }
+.rk-page[lang]:not([lang="ja"]), .rk-page[lang]:not([lang="ja"]) * { font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic", sans-serif !important; }
+.rk-page[lang="zh"], .rk-page[lang="zh"] * { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif !important; }
+.rk-page[dir="rtl"] .rk-hist .r { text-align: left; }
+.rk-page[dir="rtl"] .rk-title h1 { letter-spacing: 0; }
+.rk-page[dir="rtl"] .rk-v { unicode-bidi: plaintext; }
+
 @media (max-width: 480px) {
     .editable:focus,
     .right-column .editable:focus,
@@ -10072,6 +10083,12 @@ function saveCV() {
 /* === RIREKISHO (履歴書): duzenleyici = PDF (ayni form) === */
 (function () {
     var FIRST = 22, MINLIC = 6;
+    /* === RK DIL: basliklar secilen dilde (Japonca'da eskisi gibi) === */
+    var RKT = {"tr": {"note": "Bu, Japon özgeçmişinin (履歴書) düzenidir. Japonya'daki işverenler çoğunlukla Japonca form bekler; gerekirse dili Japonca'ya çevirin.", "title": "Özgeçmiş", "asof": "Tarih", "name": "Ad Soyad", "birth": "Doğum tarihi", "age": "{a} yaşında", "gender": "Cinsiyet", "genderNote": "* Cinsiyet alanını doldurmak isteğe bağlıdır; boş bırakabilirsiniz.", "address": "Adres", "phone": "Telefon", "email": "E-posta", "contact": "İletişim adresi (yalnızca yukarıdaki adresten farklıysa)", "year": "Yıl", "month": "Ay", "hist1": "Eğitim ve iş deneyimi", "lic": "Ehliyet ve sertifikalar", "motive": "Başvuru nedeni, özel yetenekler, ilgi duyduğunuz alanlar, öne çıkan yönleriniz", "motivePh": "Başvuru nedeninizi ve güçlü yönlerinizi yazın", "wishes": "Kişisel tercihler (maaş, pozisyon, çalışma saatleri, çalışma yeri vb. ile ilgili bir tercihiniz varsa)", "wishesPh": "İsterseniz boş bırakabilirsiniz", "edu": "Eğitim", "work": "İş deneyimi", "none": "Yok", "present": "Halen devam ediyor", "entered": "başladı", "graduated": "mezun oldu", "studying": "devam ediyor", "joined": "işe başladı", "left": "ayrıldı", "driving": "Sürücü belgesi ({x})", "photo": "Fotoğraf<br><br>Eklemek için<br>dokunun", "photoTitle": "Fotoğraf ekle", "addH": "+ Eğitim/iş satırı ekle", "delRow": "− Son satırı sil", "addL": "+ Ehliyet/sertifika satırı ekle", "regen": "Tabloları bilgilerimden yeniden oluştur", "help": "Her alana doğrudan dokunarak yazabilirsiniz. Bu ekran olduğu gibi PDF olur.", "confirm": "Eğitim, iş ve sertifika tabloları girdiğiniz bilgilerden yeniden oluşturulacak. Elle yazdıklarınız silinir. Devam edilsin mi?"}, "en": {"note": "This is the layout of the Japanese résumé (履歴書). Employers in Japan usually expect it in Japanese; switch the language to Japanese if needed.", "title": "Curriculum Vitae", "asof": "Date", "name": "Full name", "birth": "Date of birth", "age": "age {a}", "gender": "Gender", "genderNote": "* The gender field is optional; you may leave it blank.", "address": "Address", "phone": "Phone", "email": "Email", "contact": "Contact address (only if different from the address above)", "year": "Year", "month": "Month", "hist1": "Education and work history", "lic": "Licences and certifications", "motive": "Motivation, special skills, favourite subjects, strengths", "motivePh": "Describe your motivation and strengths", "wishes": "Personal requests (salary, position, working hours, location, etc., if any)", "wishesPh": "You may leave this blank", "edu": "Education", "work": "Work experience", "none": "None", "present": "To present", "entered": "enrolled", "graduated": "graduated", "studying": "currently studying", "joined": "joined", "left": "left", "driving": "Driving licence ({x})", "photo": "Photo<br><br>Tap to<br>add a photo", "photoTitle": "Add photo", "addH": "+ Add education/work row", "delRow": "− Delete last row", "addL": "+ Add licence/certificate row", "regen": "Rebuild tables from my details", "help": "Tap any field to type directly. This screen becomes your PDF exactly as shown.", "confirm": "The education, work and certificate tables will be rebuilt from the details you entered. Anything you typed by hand will be replaced. Continue?"}, "de": {"note": "Dies ist das Layout des japanischen Lebenslaufs (履歴書). Arbeitgeber in Japan erwarten ihn meist auf Japanisch; stellen Sie bei Bedarf die Sprache auf Japanisch um.", "title": "Lebenslauf", "asof": "Stand", "name": "Name", "birth": "Geburtsdatum", "age": "{a} Jahre", "gender": "Geschlecht", "genderNote": "* Die Angabe des Geschlechts ist freiwillig; das Feld kann leer bleiben.", "address": "Anschrift", "phone": "Telefon", "email": "E-Mail", "contact": "Kontaktadresse (nur falls abweichend von der obigen Anschrift)", "year": "Jahr", "month": "Monat", "hist1": "Ausbildung und Berufserfahrung", "lic": "Führerschein und Zertifikate", "motive": "Motivation, besondere Fähigkeiten, Lieblingsfächer, Stärken", "motivePh": "Beschreiben Sie Ihre Motivation und Stärken", "wishes": "Persönliche Wünsche (Gehalt, Position, Arbeitszeit, Arbeitsort usw., falls vorhanden)", "wishesPh": "Kann leer bleiben", "edu": "Ausbildung", "work": "Berufserfahrung", "none": "Keine", "present": "Bis heute", "entered": "Beginn", "graduated": "Abschluss", "studying": "laufend", "joined": "Eintritt", "left": "Austritt", "driving": "Führerschein ({x})", "photo": "Foto<br><br>Tippen, um<br>ein Foto hinzuzufügen", "photoTitle": "Foto hinzufügen", "addH": "+ Zeile Ausbildung/Beruf", "delRow": "− Letzte Zeile löschen", "addL": "+ Zeile Führerschein/Zertifikat", "regen": "Tabellen aus meinen Angaben neu erstellen", "help": "Tippen Sie auf ein Feld, um direkt zu schreiben. Diese Ansicht wird genau so zum PDF.", "confirm": "Die Tabellen für Ausbildung, Beruf und Zertifikate werden aus Ihren Angaben neu erstellt. Von Hand Geschriebenes wird ersetzt. Fortfahren?"}, "fr": {"note": "Il s'agit de la mise en page du CV japonais (履歴書). Les employeurs au Japon l'attendent généralement en japonais ; passez la langue en japonais si nécessaire.", "title": "Curriculum vitae", "asof": "Date", "name": "Nom et prénom", "birth": "Date de naissance", "age": "{a} ans", "gender": "Sexe", "genderNote": "* Le champ « sexe » est facultatif ; vous pouvez le laisser vide.", "address": "Adresse", "phone": "Téléphone", "email": "E-mail", "contact": "Adresse de contact (uniquement si différente de l'adresse ci-dessus)", "year": "Année", "month": "Mois", "hist1": "Formation et expérience professionnelle", "lic": "Permis et certifications", "motive": "Motivation, compétences particulières, matières préférées, points forts", "motivePh": "Décrivez votre motivation et vos points forts", "wishes": "Souhaits personnels (salaire, poste, horaires, lieu de travail, etc., le cas échéant)", "wishesPh": "Vous pouvez laisser ce champ vide", "edu": "Formation", "work": "Expérience professionnelle", "none": "Aucune", "present": "À ce jour", "entered": "entrée", "graduated": "diplôme obtenu", "studying": "en cours", "joined": "entrée", "left": "départ", "driving": "Permis de conduire ({x})", "photo": "Photo<br><br>Touchez pour<br>ajouter une photo", "photoTitle": "Ajouter une photo", "addH": "+ Ligne formation/expérience", "delRow": "− Supprimer la dernière ligne", "addL": "+ Ligne permis/certificat", "regen": "Recréer les tableaux à partir de mes informations", "help": "Touchez un champ pour écrire directement. Cet écran devient votre PDF tel quel.", "confirm": "Les tableaux formation, expérience et certificats seront recréés à partir de vos informations. Ce que vous avez saisi à la main sera remplacé. Continuer ?"}, "es": {"note": "Este es el formato del currículum japonés (履歴書). Las empresas en Japón suelen esperarlo en japonés; cambia el idioma a japonés si lo necesitas.", "title": "Currículum", "asof": "Fecha", "name": "Nombre completo", "birth": "Fecha de nacimiento", "age": "{a} años", "gender": "Sexo", "genderNote": "* El campo «sexo» es opcional; puedes dejarlo en blanco.", "address": "Dirección", "phone": "Teléfono", "email": "Correo electrónico", "contact": "Dirección de contacto (solo si es distinta de la anterior)", "year": "Año", "month": "Mes", "hist1": "Formación y experiencia laboral", "lic": "Permisos y certificaciones", "motive": "Motivación, habilidades especiales, materias favoritas, puntos fuertes", "motivePh": "Describe tu motivación y tus puntos fuertes", "wishes": "Preferencias personales (salario, puesto, horario, lugar de trabajo, etc., si las hay)", "wishesPh": "Puedes dejarlo en blanco", "edu": "Formación", "work": "Experiencia laboral", "none": "Ninguna", "present": "Hasta la actualidad", "entered": "ingreso", "graduated": "graduación", "studying": "en curso", "joined": "incorporación", "left": "salida", "driving": "Permiso de conducir ({x})", "photo": "Foto<br><br>Toca para<br>añadir una foto", "photoTitle": "Añadir foto", "addH": "+ Fila de formación/experiencia", "delRow": "− Borrar la última fila", "addL": "+ Fila de permiso/certificado", "regen": "Volver a crear las tablas con mis datos", "help": "Toca cualquier campo para escribir directamente. Esta pantalla será tu PDF tal cual.", "confirm": "Las tablas de formación, experiencia y certificados se crearán de nuevo con los datos que introdujiste. Lo que escribiste a mano se sustituirá. ¿Continuar?"}, "it": {"note": "Questo è il formato del curriculum giapponese (履歴書). I datori di lavoro in Giappone di solito lo richiedono in giapponese; se serve, passa alla lingua giapponese.", "title": "Curriculum vitae", "asof": "Data", "name": "Nome e cognome", "birth": "Data di nascita", "age": "{a} anni", "gender": "Sesso", "genderNote": "* Il campo «sesso» è facoltativo; puoi lasciarlo vuoto.", "address": "Indirizzo", "phone": "Telefono", "email": "E-mail", "contact": "Recapito (solo se diverso dall'indirizzo sopra)", "year": "Anno", "month": "Mese", "hist1": "Istruzione ed esperienza lavorativa", "lic": "Patenti e certificazioni", "motive": "Motivazione, competenze particolari, materie preferite, punti di forza", "motivePh": "Descrivi la tua motivazione e i tuoi punti di forza", "wishes": "Preferenze personali (retribuzione, ruolo, orario, sede, ecc., se presenti)", "wishesPh": "Puoi lasciarlo vuoto", "edu": "Istruzione", "work": "Esperienza lavorativa", "none": "Nessuna", "present": "Ad oggi", "entered": "iscrizione", "graduated": "diploma/laurea", "studying": "in corso", "joined": "assunzione", "left": "cessazione", "driving": "Patente di guida ({x})", "photo": "Foto<br><br>Tocca per<br>aggiungere una foto", "photoTitle": "Aggiungi foto", "addH": "+ Riga istruzione/lavoro", "delRow": "− Elimina l'ultima riga", "addL": "+ Riga patente/certificato", "regen": "Ricrea le tabelle dai miei dati", "help": "Tocca un campo per scrivere direttamente. Questa schermata diventa il tuo PDF così com'è.", "confirm": "Le tabelle di istruzione, lavoro e certificati verranno ricreate dai dati inseriti. Ciò che hai scritto a mano verrà sostituito. Continuare?"}, "pt": {"note": "Este é o formato do currículo japonês (履歴書). Empregadores no Japão geralmente esperam o documento em japonês; mude o idioma para japonês se necessário.", "title": "Currículo", "asof": "Data", "name": "Nome completo", "birth": "Data de nascimento", "age": "{a} anos", "gender": "Sexo", "genderNote": "* O campo «sexo» é opcional; você pode deixá-lo em branco.", "address": "Endereço", "phone": "Telefone", "email": "E-mail", "contact": "Endereço para contato (somente se diferente do endereço acima)", "year": "Ano", "month": "Mês", "hist1": "Formação e experiência profissional", "lic": "Habilitação e certificações", "motive": "Motivação, habilidades especiais, matérias favoritas, pontos fortes", "motivePh": "Descreva sua motivação e seus pontos fortes", "wishes": "Preferências pessoais (salário, cargo, horário, local de trabalho etc., se houver)", "wishesPh": "Pode deixar em branco", "edu": "Formação", "work": "Experiência profissional", "none": "Nenhuma", "present": "Até o momento", "entered": "ingresso", "graduated": "conclusão", "studying": "em andamento", "joined": "admissão", "left": "desligamento", "driving": "Carteira de habilitação ({x})", "photo": "Foto<br><br>Toque para<br>adicionar uma foto", "photoTitle": "Adicionar foto", "addH": "+ Linha de formação/experiência", "delRow": "− Excluir a última linha", "addL": "+ Linha de habilitação/certificado", "regen": "Recriar as tabelas com meus dados", "help": "Toque em qualquer campo para escrever diretamente. Esta tela vira o seu PDF exatamente assim.", "confirm": "As tabelas de formação, experiência e certificados serão recriadas com os dados que você informou. O que você digitou à mão será substituído. Continuar?"}, "ru": {"note": "Это формат японского резюме (履歴書). Работодатели в Японии обычно ждут его на японском языке; при необходимости переключите язык на японский.", "title": "Резюме", "asof": "Дата", "name": "ФИО", "birth": "Дата рождения", "age": "возраст: {a}", "gender": "Пол", "genderNote": "* Поле «пол» заполнять необязательно.", "address": "Адрес", "phone": "Телефон", "email": "Эл. почта", "contact": "Контактный адрес (только если отличается от указанного выше)", "year": "Год", "month": "Мес.", "hist1": "Образование и опыт работы", "lic": "Водительские права и сертификаты", "motive": "Мотивация, особые навыки, любимые предметы, сильные стороны", "motivePh": "Опишите свою мотивацию и сильные стороны", "wishes": "Личные пожелания (зарплата, должность, график, место работы и т. п., если есть)", "wishesPh": "Можно оставить пустым", "edu": "Образование", "work": "Опыт работы", "none": "Нет", "present": "По настоящее время", "entered": "поступление", "graduated": "окончание", "studying": "обучение продолжается", "joined": "приём на работу", "left": "увольнение", "driving": "Водительские права ({x})", "photo": "Фото<br><br>Нажмите, чтобы<br>добавить фото", "photoTitle": "Добавить фото", "addH": "+ Строка образования/работы", "delRow": "− Удалить последнюю строку", "addL": "+ Строка прав/сертификата", "regen": "Заново заполнить таблицы из моих данных", "help": "Нажмите на любое поле, чтобы писать прямо в нём. Этот экран станет вашим PDF без изменений.", "confirm": "Таблицы образования, работы и сертификатов будут заново заполнены из введённых данных. Всё, что вы вписали вручную, будет заменено. Продолжить?"}, "ar": {"note": "هذا هو تنسيق السيرة الذاتية اليابانية (履歴書). عادةً ما يتوقع أصحاب العمل في اليابان أن تكون باللغة اليابانية؛ غيّر اللغة إلى اليابانية عند الحاجة.", "title": "السيرة الذاتية", "asof": "التاريخ", "name": "الاسم الكامل", "birth": "تاريخ الميلاد", "age": "العمر: {a}", "gender": "الجنس", "genderNote": "* تعبئة خانة الجنس اختيارية، ويمكن تركها فارغة.", "address": "العنوان", "phone": "الهاتف", "email": "البريد الإلكتروني", "contact": "عنوان المراسلة (فقط إذا كان مختلفًا عن العنوان أعلاه)", "year": "السنة", "month": "الشهر", "hist1": "التعليم والخبرة العملية", "lic": "الرخص والشهادات", "motive": "دوافع التقديم، المهارات الخاصة، المواد المفضلة، نقاط القوة", "motivePh": "اكتب دوافعك ونقاط قوتك", "wishes": "تفضيلات شخصية (الراتب، الوظيفة، ساعات العمل، مكان العمل، إن وجدت)", "wishesPh": "يمكن تركها فارغة", "edu": "التعليم", "work": "الخبرة العملية", "none": "لا يوجد", "present": "حتى الآن", "entered": "بداية الدراسة", "graduated": "التخرج", "studying": "قيد الدراسة", "joined": "بداية العمل", "left": "انتهاء العمل", "driving": "رخصة قيادة ({x})", "photo": "الصورة<br><br>اضغط<br>لإضافة صورة", "photoTitle": "إضافة صورة", "addH": "+ إضافة سطر تعليم/عمل", "delRow": "− حذف السطر الأخير", "addL": "+ إضافة سطر رخصة/شهادة", "regen": "إعادة إنشاء الجداول من بياناتي", "help": "اضغط على أي خانة للكتابة مباشرة. ستصبح هذه الشاشة ملف PDF كما هي.", "confirm": "ستتم إعادة إنشاء جداول التعليم والعمل والشهادات من البيانات التي أدخلتها، وسيُستبدل ما كتبته يدويًا. هل تريد المتابعة؟"}, "zh": {"note": "这是日本履历书（履歴書）的格式。日本的雇主通常希望使用日文填写；如有需要，请将语言切换为日语。", "title": "履历表", "asof": "日期", "name": "姓名", "birth": "出生日期", "age": "{a}岁", "gender": "性别", "genderNote": "* 性别栏可选填，也可以留空。", "address": "现住址", "phone": "电话", "email": "电子邮箱", "contact": "联系地址（仅在与上述地址不同时填写）", "year": "年", "month": "月", "hist1": "学历・工作经历", "lic": "执照・资格证书", "motive": "求职动机、特长、喜欢的学科、自我推荐", "motivePh": "请填写求职动机和自身优势", "wishes": "本人希望（如对薪资、职位、工作时间、工作地点等有要求请填写）", "wishesPh": "可以留空", "edu": "学历", "work": "工作经历", "none": "无", "present": "至今", "entered": "入学", "graduated": "毕业", "studying": "在读", "joined": "入职", "left": "离职", "driving": "驾驶执照（{x}）", "photo": "照片<br><br>点击<br>添加照片", "photoTitle": "添加照片", "addH": "+ 添加学历/工作经历行", "delRow": "− 删除最后一行", "addL": "+ 添加执照/证书行", "regen": "根据我的信息重新生成表格", "help": "点击任意栏位即可直接输入。此画面将原样生成PDF。", "confirm": "将根据您填写的信息重新生成学历、工作经历和证书表格，手动输入的内容会被替换。是否继续？"}};
+    function rkLang() { var s = document.getElementById('language-select'); var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'ja'; return (l === 'ja' || RKT[l]) ? l : 'en'; }
+    function JA() { return rkLang() === 'ja'; }
+    function L(k) { return (RKT[rkLang()] || RKT.en)[k]; }
+    function fmtDate(y, m, d) { try { return new Intl.DateTimeFormat(rkLang(), { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(+y, +m - 1, +d)); } catch (e) { return d + '.' + m + '.' + y; } }
     window.rkState = window.rkState || { history: [], licenses: [], gender: '', contactKana: '', contact: '', contactPhone: '', contactEmail: '' };
 
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -10084,7 +10101,7 @@ function saveCV() {
         var i = s.indexOf('-');
         if (i < 0) return { start: null, end: ym(s), ongoing: false };
         var a = ym(s.slice(0, i)), bs = s.slice(i + 1).trim(), b = ym(bs);
-        var now = new Date(), ongoing = !bs || /現在|在職|在学|present|now|devam|halen/i.test(bs);
+        var now = new Date(), ongoing = !bs || /現在|在職|在学|present|now|devam|halen|günümüz|aktuell|heute|présent|actuel|aujourd|actualidad|presente|oggi|atual|настоящ|н\.в\.|الآن|حالي|至今|现在/i.test(bs);
         if (b && !ongoing) {
             if (b.m == null && b.y >= now.getFullYear()) ongoing = true;
             if (b.m != null && (b.y > now.getFullYear() || (b.y === now.getFullYear() && b.m > now.getMonth() + 1))) ongoing = true;
@@ -10113,48 +10130,52 @@ function saveCV() {
 
     /* --- Standart formdan otomatik satir uretimi --- */
     function genHistory(data) {
-        var rows = [row(null, '学　歴', 'c')];
+        var ja = JA(), sep = ja ? '　' : ' – ', rtl = rkLang() === 'ar';
+        function F(n, w) { return rtl ? w + ' – \u2068' + n + '\u2069' : n + sep + w; }
+        var W = ja ? { edu: '学　歴', work: '職　歴', none: 'なし', present: '現在に至る', entered: '入学', graduated: '卒業', studying: '在学中', joined: '入社', left: '退社' } : RKT[rkLang()] || RKT.en;
+        var rows = [row(null, W.edu, 'c')];
         (data.education || []).filter(function (e) { return e && (e.institution || '').trim(); })
             .map(function (e) { return { n: e.institution.trim(), r: parseRange(e.date) }; })
             .sort(function (a, b) { return key(a.r.start || a.r.end) - key(b.r.start || b.r.end); })
             .forEach(function (e) {
-                if (e.r.start) rows.push(row(e.r.start, e.n + '　入学'));
-                if (e.r.end) rows.push(row(e.r.end, e.n + '　卒業'));
-                if (e.r.ongoing) rows.push(row(null, e.n + '　在学中'));
+                if (e.r.start) rows.push(row(e.r.start, F(e.n, W.entered)));
+                if (e.r.end) rows.push(row(e.r.end, F(e.n, W.graduated)));
+                if (e.r.ongoing) rows.push(row(null, F(e.n, W.studying)));
                 if (!e.r.start && !e.r.end && !e.r.ongoing) rows.push(row(null, e.n));
             });
-        rows.push(row(null, '職　歴', 'c'));
+        rows.push(row(null, W.work, 'c'));
         var exp = (data.experience || []).filter(function (e) { return e && ((e.company || '').trim() || (e.title || '').trim()); })
             .map(function (e) { return { c: (e.company || '').trim(), t: (e.title || '').trim(), d: (e.description || '').trim(), r: parseRange(e.duration) }; })
             .sort(function (a, b) { return key(a.r.start || a.r.end) - key(b.r.start || b.r.end); });
-        if (!exp.length) rows.push(row(null, 'なし'));
-        var on = false;
+        if (!exp.length) rows.push(row(null, W.none));
+        var on = false, ind = ja ? '　' : '   ';
         exp.forEach(function (e) {
             var n = e.c || e.t;
-            rows.push(row(e.r.start, n + '　入社'));
-            if (e.c && e.t) rows.push(row(null, '　' + e.t));
-            if (e.d) rows.push(row(null, '　' + e.d));
-            if (e.r.end) rows.push(row(e.r.end, n + '　退社'));
+            rows.push(row(e.r.start, F(n, W.joined)));
+            if (e.c && e.t) rows.push(row(null, ind + e.t));
+            if (e.d) rows.push(row(null, ind + e.d));
+            if (e.r.end) rows.push(row(e.r.end, F(n, W.left)));
             if (e.r.ongoing) on = true;
         });
-        if (on) rows.push(row(null, '現在に至る'));
-        rows.push(row(null, '以上', 'r'));
+        if (on) rows.push(row(null, W.present));
+        if (ja) rows.push(row(null, '以上', 'r'));
         while (rows.length < FIRST) rows.push(row(null, ''));
         return rows;
     }
     function genLicenses(data) {
-        var rows = [];
+        var rows = [], ja = JA(), sfx = ja ? suffix : function (t) { return t; };
         (data.courses || []).filter(function (c) { return c && (c.title || '').trim(); })
-            .forEach(function (c) { rows.push(row(ym(c.date), suffix(c.title.trim()))); });
+            .forEach(function (c) { rows.push(row(ym(c.date), sfx(c.title.trim()))); });
         var dl = ((data.personalInfo || {})['driving-license'] || '').trim();
         if (dl) {
             var dm = dl.match(/^(\d{4})(?:\s*[\/\.年]\s*(\d{1,2}))?\s*月?\s*(.*)$/), dd = null, dt = dl;
             if (dm) { dd = { y: +dm[1], m: dm[2] ? +dm[2] : null }; dt = dm[3].trim(); }
-            if (!/免許/.test(dt)) dt = '運転免許（' + dt + '）';
-            rows.push(row(dd, suffix(dt)));
+            if (ja) { if (!/免許/.test(dt)) dt = '運転免許（' + dt + '）'; }
+            else if (!/ehliyet|sürücü|licen|führerschein|permis|patente|habilita|права|رخصة|驾/i.test(dt)) dt = L('driving').replace('{x}', dt);
+            rows.push(row(dd, sfx(dt)));
         }
         rows.sort(function (a, b) { return (a.y ? +a.y * 100 + (+a.m || 0) : 999999) - (b.y ? +b.y * 100 + (+b.m || 0) : 999999); });
-        if (!rows.length) rows.push(row(null, '特になし'));
+        if (!rows.length) rows.push(row(null, ja ? '特になし' : L('none')));
         while (rows.length < MINLIC) rows.push(row(null, ''));
         return rows;
     }
@@ -10183,7 +10204,8 @@ function saveCV() {
         return String(now.getFullYear() - y - ((now.getMonth() + 1 < mo || (now.getMonth() + 1 === mo && now.getDate() < d)) ? 1 : 0));
     }
     function histTable(E, title, rows, offset, kind) {
-        var h = '<table class="rk-hist rk-outer"><tr><th class="y">年</th><th class="m">月</th><th>' + title + '</th></tr>';
+        var ja = JA();
+        var h = '<table class="rk-hist rk-outer"><tr><th class="y">' + (ja ? '年' : esc(L('year'))) + '</th><th class="m">' + (ja ? '月' : esc(L('month'))) + '</th><th>' + title + '</th></tr>';
         rows.forEach(function (r, i) {
             var k = kind + ':' + (offset + i);
             h += '<tr><td class="y">' + cell(E, k + ':y', r.y, '', '') + '</td><td class="m">' + cell(E, k + ':m', r.m, '', '') +
@@ -10192,6 +10214,48 @@ function saveCV() {
         return h + '</table>';
     }
     function render(E) {
+        if (JA()) return renderJa(E);
+        var S = window.rkState, now = new Date(), lg = rkLang(), dir = lg === 'ar' ? ' dir="rtl"' : '';
+        var avatar = document.getElementById('avatar');
+        var photo = (avatar && /^data:/.test(avatar.getAttribute('src') || '')) ? avatar.getAttribute('src') : '';
+        var b = birthParts(), a = age(b);
+        var sm = function (t) { return '<span class="rk-small">' + esc(t) + '</span>'; };
+        var birth = E
+            ? sm(L('birth')) + ' ' + cell(E, 'bD', b.d, 'DD') + ' / ' + cell(E, 'bM', b.m, 'MM') + ' / ' + cell(E, 'bY', b.y, 'YYYY') + ' (' + esc(L('age')).replace('{a}', '<span class="rk-age">' + esc(a) + '</span>') + ')'
+            : sm(L('birth')) + ' ' + (b.y ? esc(fmtDate(b.y, b.m, b.d)) + ' (' + esc(L('age').replace('{a}', a)) + ')' : '');
+        var h1 = S.history.slice(0, FIRST), h2 = S.history.slice(FIRST);
+        var photoBox = '<div class="rk-photo' + (E ? ' rk-photo-ed' : '') + (!E && !photo ? ' rk-photo-empty' : '') + '"' + (E ? ' title="' + esc(L('photoTitle')) + '"' : '') + '>' +
+            (photo ? '<img src="' + photo + '" alt="">' : (E ? L('photo') : '')) + '</div>';
+        var p1 = '<div class="rk-page" lang="' + lg + '"' + dir + '>' +
+            '<div class="rk-title"><h1>' + esc(L('title')) + '</h1><div class="rk-date">' + esc(L('asof')) + ': ' + esc(fmtDate(now.getFullYear(), now.getMonth() + 1, now.getDate())) + '</div></div>' +
+            '<div class="rk-top"><table class="rk-outer">' +
+                '<tr><td class="rk-name" colspan="2" style="height:24mm">' + sm(L('name')) + '<br>' + cell(E, 'pi:fullname', pi('fullname'), L('name')) + '</td></tr>' +
+                '<tr><td style="height:12mm">' + birth + '</td><td class="rk-small" style="width:26mm">' + esc(L('gender')) + '<br>' + cell(E, 'st:gender', S.gender || '', '') + '</td></tr>' +
+            '</table>' + photoBox + '</div>' +
+            '<div class="rk-small" style="margin-top:1mm">' + esc(L('genderNote')) + '</div>' +
+            '<table class="rk-outer" style="margin-top:2mm">' +
+                '<tr><td style="width:62%;height:18mm">' + sm(L('address')) + '<br>' + cell(E, 'pi:address', pi('address'), '') + '</td>' +
+                    '<td class="rk-small rk-contact">' + esc(L('phone')) + '<br>' + cell(E, 'pi:phone', pi('phone'), '') + '<br><br>' + esc(L('email')) + '<br>' + cell(E, 'pi:email', pi('email'), 'name@example.com') + '</td></tr>' +
+                '<tr><td style="height:14mm">' + sm(L('contact')) + '<br>' + cell(E, 'st:contact', S.contact || '', '') + '</td>' +
+                    '<td class="rk-small rk-contact">' + esc(L('phone')) + '<br>' + cell(E, 'st:contactPhone', S.contactPhone || '', '') + '<br><br>' + esc(L('email')) + '<br>' + cell(E, 'st:contactEmail', S.contactEmail || '', '') + '</td></tr>' +
+            '</table>' +
+            '<div style="margin-top:2mm">' + histTable(E, esc(L('hist1')), h1, 0, 'h') + '</div>' +
+            '</div>';
+        var lic = S.licenses;
+        var used = (h2.length ? (h2.length + 1) * 7.6 + 3 : 0) + (lic.length + 1) * 7.6;
+        var free = Math.max(80, 255 - used - 24), boxH = Math.round(free * 0.6), wishH = Math.round(free * 0.4);
+        var motive = about(), wishes = pi('jp-wishes');
+        var p2 = '<div class="rk-page" lang="' + lg + '"' + dir + '>' +
+            (h2.length ? histTable(E, esc(L('hist1')), h2, FIRST, 'h') + '<div style="height:3mm"></div>' : '') +
+            histTable(E, esc(L('lic')), lic, 0, 'l') +
+            '<table class="rk-box rk-outer" style="margin-top:3mm"><tr><td class="lbl">' + esc(L('motive')) + '</td></tr>' +
+                '<tr><td class="txt" style="height:' + boxH + 'mm">' + cell(E, 'about', motive, L('motivePh'), 'rk-block') + '</td></tr></table>' +
+            '<table class="rk-box rk-outer" style="margin-top:3mm"><tr><td class="lbl">' + esc(L('wishes')) + '</td></tr>' +
+                '<tr><td class="txt" style="height:' + wishH + 'mm">' + cell(E, 'pi:jp-wishes', wishes, L('wishesPh'), 'rk-block') + '</td></tr></table>' +
+            '</div>';
+        return [p1, p2];
+    }
+    function renderJa(E) {
         var S = window.rkState, now = new Date();
         var avatar = document.getElementById('avatar');
         var photo = (avatar && /^data:/.test(avatar.getAttribute('src') || '')) ? avatar.getAttribute('src') : '';
@@ -10240,18 +10304,19 @@ function saveCV() {
     var wrap = null;
     function controls(which) {
         if (which === 1) return '';
+        var ja = JA();
         return '<div class="rk-ctrl no-print">' +
-            '<button type="button" data-rk="h+">+ 学歴・職歴の行を追加</button>' +
-            '<button type="button" data-rk="h-">− 最後の行を削除</button>' +
-            '<button type="button" data-rk="l+">+ 免許・資格の行を追加</button>' +
-            '<button type="button" data-rk="l-">− 最後の行を削除</button>' +
-            '<button type="button" data-rk="regen" class="rk-regen">学歴・職歴・免許を自動作成し直す</button>' +
+            '<button type="button" data-rk="h+">' + (ja ? '+ 学歴・職歴の行を追加' : esc(L('addH'))) + '</button>' +
+            '<button type="button" data-rk="h-">' + (ja ? '− 最後の行を削除' : esc(L('delRow'))) + '</button>' +
+            '<button type="button" data-rk="l+">' + (ja ? '+ 免許・資格の行を追加' : esc(L('addL'))) + '</button>' +
+            '<button type="button" data-rk="l-">' + (ja ? '− 最後の行を削除' : esc(L('delRow'))) + '</button>' +
+            '<button type="button" data-rk="regen" class="rk-regen">' + (ja ? '学歴・職歴・免許を自動作成し直す' : esc(L('regen'))) + '</button>' +
             '</div>';
     }
     function draw() {
         if (!wrap) return;
         var pages = render(true);
-        wrap.innerHTML = '<div class="rk-help no-print">各欄を直接タップして入力できます。この画面がそのままPDFになります。</div>' +
+        wrap.innerHTML = '<div class="rk-help no-print">' + (JA() ? '各欄を直接タップして入力できます。この画面がそのままPDFになります。' : esc(L('help')) + '<br><span style="color:#64748b">' + esc(L('note')) + '</span>') + '</div>' +
             pages[0] + controls(1) + '<div style="height:14px"></div>' + pages[1] + controls(2);
     }
     function onInput(e) {
@@ -10286,7 +10351,7 @@ function saveCV() {
         if (k === 'l+') S.licenses.push(row(null, ''));
         if (k === 'l-' && S.licenses.length > MINLIC) S.licenses.pop();
         if (k === 'regen') {
-            if (!confirm('学歴・職歴と免許・資格の欄を、入力済みの学歴・職歴・資格から作成し直します。手入力した内容は上書きされます。よろしいですか？')) return;
+            if (!confirm(JA() ? '学歴・職歴と免許・資格の欄を、入力済みの学歴・職歴・資格から作成し直します。手入力した内容は上書きされます。よろしいですか？' : L('confirm'))) return;
             ensureState(true);
         }
         draw();
@@ -10305,10 +10370,15 @@ function saveCV() {
         var av = document.getElementById('avatar');
         if (av && window.MutationObserver) new MutationObserver(function () { if (window.currentCvTemplate === 'tpl-rirekisho') draw(); }).observe(av, { attributes: true, attributeFilter: ['src'] });
     }
+    // Dil degisince: otomatik uretilen tablolar yeni dilde yeniden olusur, basliklar degisir
+    (function () {
+        var s = document.getElementById('language-select');
+        if (s) s.addEventListener('change', function () { setTimeout(function () { if (window.currentCvTemplate === 'tpl-rirekisho') { ensureState(false); draw(); } }, 0); });
+    })();
     window.rkShow = function (on) {
         setup();
         var form = document.getElementById('cv-form');
-        if (on) { ensureState(false); draw(); wrap.style.display = ''; if (form) form.style.display = 'none'; if (window.ensureJpFont) window.ensureJpFont(wrap.textContent); }
+        if (on) { ensureState(false); draw(); wrap.style.display = ''; if (form) form.style.display = 'none'; if (window.ensureJpFont && JA()) window.ensureJpFont(wrap.textContent); }
         else { if (wrap) wrap.style.display = 'none'; if (form) form.style.display = ''; }
     };
     window.rkRedraw = function () { if (window.currentCvTemplate === 'tpl-rirekisho') { ensureState(false); draw(); } };
@@ -10329,14 +10399,14 @@ function saveCV() {
             var doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
             var els = host.querySelectorAll('.rk-page');
             (async function () {
-                if (window.ensureJpFont) await window.ensureJpFont(host.textContent);
+                if (window.ensureJpFont && JA()) await window.ensureJpFont(host.textContent);
                 for (var i = 0; i < els.length; i++) {
                     var txt = els[i].textContent;
                     var canvas = await html2canvas(els[i], { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true,
                         onclone: function (cd) {
                             // Ekranda gizli cizilen form, yalnizca kopya belgede gorunur olsun
                             var h = cd.querySelector('.rk-host'); if (h) h.style.visibility = 'visible';
-                            return window.jpFontInDoc ? window.jpFontInDoc(cd, txt) : null; } });
+                            return (window.jpFontInDoc && JA()) ? window.jpFontInDoc(cd, txt) : null; } });
                     if (i > 0) doc.addPage();
                     doc.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 210, 297, '', 'FAST');
                 }
