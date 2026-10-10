@@ -2862,7 +2862,8 @@ img {
    .editable gibi eşit özgüllükteki diğer !important kuralları geçersiz kılsın. */
 /* === SABLON: KLASIK (tek sutun) === */
 /* Sablon secici */
-.template-picker { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 12px; font-size: 14px; color: #475569; }
+.template-picker { grid-column: 1 / -1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 12px; font-size: 14px; color: #475569; }
+.template-picker select { min-width: 0; max-width: 100%; }
 .template-picker label { white-space: nowrap; flex: 0 0 auto; width: auto; margin: 0; }
 .template-picker select { font-size: 15px; padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #1e293b; cursor: pointer; }
 
