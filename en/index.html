@@ -1348,6 +1348,17 @@
             box-shadow: none !important;
             background: transparent !important;
         }
+        /* Fotograf yoksa PDF'te fotograf alani ve sag sutundaki ust bosluk kapansin;
+           isim ve "Hakkimda" sayfanin ustunden baslasin. */
+        .pdf-mode #avatarBox:not(:has(#avatar[src^="data:"])) {
+            display: none !important;
+        }
+        .pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .right-column {
+            padding-top: 10mm !important;
+        }
+        .pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-header {
+            padding-top: 10mm !important;
+        }
 
         .pdf-mode #avatar {
             width: 100% !important;
