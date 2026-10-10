@@ -2960,6 +2960,22 @@ img {
 html[lang="ja"] .a4-container, .rk-page, .rk-page * { font-family: "MobilCV JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif !important; }
 html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-content .a4-container * { font-family: "MobilCV JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif !important; }
 
+/* === TAVSIYE KUTUSU === */
+.rec-box { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 10050; width: min(420px, calc(100vw - 24px));
+  background: #fff; color: #1e293b; border-radius: 16px; box-shadow: 0 12px 40px rgba(15,23,42,.25); padding: 18px 18px 14px; font-family: inherit; }
+.rec-box h3 { margin: 0 34px 6px 0; font-size: 17px; }
+.rec-box p { margin: 0 0 12px; font-size: 14px; color: #475569; line-height: 1.45; }
+.rec-box .rec-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.rec-box .rec-btns a, .rec-box .rec-btns button { flex: 1 1 auto; text-align: center; border: 0; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; color: #fff; }
+.rec-box .rec-share { background: #2563eb; }
+.rec-box .rec-wa { background: #16a34a; }
+.rec-box .rec-li { background: #0a66c2; }
+.rec-box .rec-copy { background: #e2e8f0; color: #1e293b !important; }
+.rec-box .rec-x { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border: 0; border-radius: 50%; background: #f1f5f9; color: #475569; font-size: 18px; line-height: 30px; cursor: pointer; }
+.rec-box[dir="rtl"] .rec-x { right: auto; left: 10px; }
+.rec-box[dir="rtl"] h3 { margin: 0 0 6px 34px; }
+@media print { .rec-box { display: none !important; } }
+
 @media (max-width: 480px) {
     .editable:focus,
     .right-column .editable:focus,
@@ -8178,6 +8194,7 @@ if (socialMediaSection) {
             document.getElementById('save-pdf').addEventListener('click', function() {
                 generateCvPdf().then(doc => {
                     doc.save('CV.pdf');
+                    if (window.mobilcvRecommend) setTimeout(window.mobilcvRecommend, 1500);
                 }).catch(error => {
                     console.error('PDF oluşturma hatası:', error);
                     alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
@@ -10358,6 +10375,42 @@ function saveCV() {
     var t = document.getElementById('template-select');
     if (t) t.addEventListener('change', function () { setTimeout(pre, 50); });
     setTimeout(pre, 1500);
+})();
+</script>
+<script>
+/* === TAVSIYE KUTUSU: PDF indirildikten sonra, 14 gunde en fazla bir kez. Hicbir veri gonderilmez. === */
+(function () {
+    var T = {"tr": ["CV'niz hazır!", "MobilCV'yi faydalı bulduysanız, iş arayan bir tanıdığınıza önerebilirsiniz.", "Paylaş", "Linki kopyala", "Kopyalandı ✓", "Kapat", "Ücretsiz ve üyeliksiz CV hazırlama aracı:"], "en": ["Your CV is ready!", "If MobilCV helped you, you can recommend it to someone who is looking for a job.", "Share", "Copy link", "Copied ✓", "Close", "Free CV builder, no sign-up needed:"], "de": ["Ihr Lebenslauf ist fertig!", "Wenn Ihnen MobilCV geholfen hat, empfehlen Sie es gern jemandem, der gerade auf Jobsuche ist.", "Teilen", "Link kopieren", "Kopiert ✓", "Schließen", "Kostenloser Lebenslauf-Generator, ohne Anmeldung:"], "fr": ["Votre CV est prêt !", "Si MobilCV vous a été utile, vous pouvez le recommander à une personne en recherche d'emploi.", "Partager", "Copier le lien", "Copié ✓", "Fermer", "Créateur de CV gratuit, sans inscription :"], "es": ["¡Tu currículum está listo!", "Si MobilCV te ha sido útil, puedes recomendarlo a alguien que esté buscando trabajo.", "Compartir", "Copiar enlace", "Copiado ✓", "Cerrar", "Creador de currículum gratis, sin registro:"], "it": ["Il tuo CV è pronto!", "Se MobilCV ti è stato utile, puoi consigliarlo a chi sta cercando lavoro.", "Condividi", "Copia link", "Copiato ✓", "Chiudi", "Creatore di CV gratuito, senza registrazione:"], "pt": ["Seu currículo está pronto!", "Se o MobilCV foi útil, você pode recomendá-lo a alguém que esteja procurando emprego.", "Compartilhar", "Copiar link", "Copiado ✓", "Fechar", "Criador de currículo grátis, sem cadastro:"], "ru": ["Ваше резюме готово!", "Если MobilCV оказался полезен, порекомендуйте его тому, кто сейчас ищет работу.", "Поделиться", "Скопировать ссылку", "Скопировано ✓", "Закрыть", "Бесплатный конструктор резюме без регистрации:"], "ar": ["سيرتك الذاتية جاهزة!", "إذا كان MobilCV مفيدًا لك، يمكنك أن توصي به لشخص يبحث عن عمل.", "مشاركة", "نسخ الرابط", "تم النسخ ✓", "إغلاق", "أداة مجانية لإنشاء السيرة الذاتية دون تسجيل:"], "zh": ["您的简历已完成！", "如果MobilCV对您有帮助，欢迎推荐给正在找工作的朋友。", "分享", "复制链接", "已复制 ✓", "关闭", "免费简历制作工具，无需注册："], "ja": ["履歴書が完成しました！", "MobilCVがお役に立ちましたら、就職活動中の方にぜひご紹介ください。", "共有", "リンクをコピー", "コピーしました ✓", "閉じる", "登録不要の無料履歴書作成ツール："]};
+    var KEY = 'mobilcv_rec_ts', GAP = 14 * 24 * 3600 * 1000;
+    function lang() { var s = document.getElementById('language-select'); var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; return T[l] ? l : 'en'; }
+    function siteUrl(l) { return 'https://www.mobilcv.com/' + (l === 'tr' ? '' : l + '/'); }
+    function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; return e; }
+    window.mobilcvRecommend = function (force) {
+        try { var last = +localStorage.getItem(KEY) || 0; if (!force && Date.now() - last < GAP) return; localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
+        var old = document.querySelector('.rec-box'); if (old) old.remove();
+        var l = lang(), t = T[l], url = siteUrl(l) + '?utm_source=recommend&utm_medium=share', msg = t[6] + ' ' + url;
+        var box = el('div', 'rec-box'); box.setAttribute('role', 'dialog'); box.setAttribute('aria-live', 'polite');
+        if (l === 'ar') box.setAttribute('dir', 'rtl');
+        var x = el('button', 'rec-x', '×'); x.type = 'button'; x.setAttribute('aria-label', t[5]); x.onclick = function () { box.remove(); };
+        box.appendChild(x); box.appendChild(el('h3', '', t[0])); box.appendChild(el('p', '', t[1]));
+        var btns = el('div', 'rec-btns');
+        if (navigator.share) {
+            var sh = el('button', 'rec-share', t[2]); sh.type = 'button';
+            sh.onclick = function () { navigator.share({ title: 'MobilCV', text: t[6], url: url }).catch(function () {}); };
+            btns.appendChild(sh);
+        }
+        var wa = el('a', 'rec-wa', 'WhatsApp'); wa.href = 'https://wa.me/?text=' + encodeURIComponent(msg); wa.target = '_blank'; wa.rel = 'noopener';
+        var li = el('a', 'rec-li', 'LinkedIn'); li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url); li.target = '_blank'; li.rel = 'noopener';
+        var cp = el('button', 'rec-copy', t[3]); cp.type = 'button';
+        cp.onclick = function () {
+            function ok() { cp.textContent = t[4]; }
+            if (navigator.clipboard) navigator.clipboard.writeText(url).then(ok, function () {}); else { var i = document.createElement('input'); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand('copy'); ok(); } catch (e) {} i.remove(); }
+        };
+        btns.appendChild(wa); btns.appendChild(li); btns.appendChild(cp);
+        box.appendChild(btns);
+        document.body.appendChild(box);
+        setTimeout(function () { if (box.parentNode) box.remove(); }, 30000);
+    };
 })();
 </script>
 </body>
