@@ -7418,14 +7418,28 @@ if (socialMediaSection) {
 
                 const marginX = 10;
                 const maxWidth = 190; // 210mm sayfa - 2x10mm kenar boşluğu
-                const lineHeight = 5;
                 const pageBottom = 290;
                 const totalPages = doc.internal.getNumberOfPages();
                 let currentPage = 1;
                 doc.setPage(currentPage);
                 let y = 10;
 
-                doc.setFontSize(9);
+                // Gorunmez katman tum metni tasimali: satirlar mevcut sayfalara
+                // sigmiyorsa satir araligini ve yazi boyutunu kucult (gorunmez
+                // oldugu icin goruntuyu etkilemez). Aksi halde son bolumler
+                // (or. Diller) metin katmanindan dusuyordu.
+                let fontSize = 9;
+                let lineHeight = 5;
+                doc.setFontSize(fontSize);
+                const usable = (pageBottom - 10) * totalPages;
+                for (let attempt = 0; attempt < 6; attempt++) {
+                    let count = 0;
+                    for (const line of lines) count += doc.splitTextToSize(line, maxWidth).length;
+                    if (count * lineHeight <= usable - lineHeight * totalPages) break;
+                    fontSize = Math.max(3, fontSize * 0.8);
+                    lineHeight = Math.max(1.5, lineHeight * 0.8);
+                    doc.setFontSize(fontSize);
+                }
 
                 for (const line of lines) {
                     const wrapped = doc.splitTextToSize(line, maxWidth);
