@@ -7235,94 +7235,131 @@ if (socialMediaSection) {
                     const t = String(text).trim();
                     if (t) lines.push(t);
                 };
+                // ATS'lerin bolumleri ayirt edebilmesi icin: bir bolumde en az bir
+                // satir eklendiyse, o bolumun (secili dildeki) basligini basa koy.
+                const sectionTitle = (id) => {
+                    const el = document.querySelector('#' + id + ' .section-title');
+                    return el ? el.textContent.trim() : '';
+                };
+                const withTitle = (id, fn) => {
+                    const start = lines.length;
+                    fn();
+                    if (lines.length > start) {
+                        const title = sectionTitle(id);
+                        if (title) lines.splice(start, 0, title);
+                    }
+                };
 
                 // Kişisel bilgiler (ad, unvan, telefon, e-posta, adres, doğum tarihi, ehliyet vb.)
                 document.querySelectorAll('#cv-form .personal-info-item').forEach(item => {
                     if (item.classList.contains('hidden-in-pdf')) return;
                     const valueEl = item.querySelector('.personal-info-value');
                     if (!valueEl || valueEl.classList.contains('empty-field')) return;
-                    push(valueEl.textContent);
+                    // Etiket gorunuyorsa "Telefon: 0555..." seklinde yaz (ad/unvan etiketleri gizli)
+                    const labelEl = item.querySelector('.personal-info-label');
+                    let label = '';
+                    if (labelEl && labelEl.style.display !== 'none') {
+                        const keyEl = labelEl.querySelector('[data-key]') || labelEl;
+                        label = keyEl.textContent.trim();
+                    }
+                    push(label ? label + ': ' + valueEl.textContent.trim() : valueEl.textContent);
                 });
 
                 // Hakkımda
-                const about = document.getElementById('about-text');
-                if (about && !about.classList.contains('empty-field')) {
-                    push(about.textContent);
-                }
+                withTitle('about-section', () => {
+                    const about = document.getElementById('about-text');
+                    if (about && !about.classList.contains('empty-field')) {
+                        push(about.textContent);
+                    }
+                });
 
                 // Eğitim
-                document.querySelectorAll('#education-container .education-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const inst = item.querySelector('.education-institution');
-                    const date = item.querySelector('.education-date');
-                    if (inst && !inst.classList.contains('empty-field')) push(inst.textContent);
-                    if (date && !date.classList.contains('empty-field')) push(date.textContent);
+                withTitle('education-section', () => {
+                    document.querySelectorAll('#education-container .education-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const inst = item.querySelector('.education-institution');
+                        const date = item.querySelector('.education-date');
+                        if (inst && !inst.classList.contains('empty-field')) push(inst.textContent);
+                        if (date && !date.classList.contains('empty-field')) push(date.textContent);
+                    });
                 });
 
                 // İş deneyimi
-                document.querySelectorAll('#experience-container .experience-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const title = item.querySelector('.item-title');
-                    const company = item.querySelector('.experience-company');
-                    const duration = item.querySelector('.experience-duration');
-                    const desc = item.querySelector('.item-description');
-                    if (title && !title.classList.contains('empty-field')) push(title.textContent);
-                    if (company && !company.classList.contains('empty-field')) push(company.textContent);
-                    if (duration && !duration.classList.contains('empty-field')) push(duration.textContent);
-                    if (desc && !desc.classList.contains('empty-field')) push(desc.textContent);
+                withTitle('experience-section', () => {
+                    document.querySelectorAll('#experience-container .experience-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const title = item.querySelector('.item-title');
+                        const company = item.querySelector('.experience-company');
+                        const duration = item.querySelector('.experience-duration');
+                        const desc = item.querySelector('.item-description');
+                        if (title && !title.classList.contains('empty-field')) push(title.textContent);
+                        if (company && !company.classList.contains('empty-field')) push(company.textContent);
+                        if (duration && !duration.classList.contains('empty-field')) push(duration.textContent);
+                        if (desc && !desc.classList.contains('empty-field')) push(desc.textContent);
+                    });
                 });
 
                 // Projeler
-                document.querySelectorAll('#projects-container .project-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const title = item.querySelector('.item-title');
-                    const tech = item.querySelector('.project-tech');
-                    const date = item.querySelector('.project-date');
-                    const desc = item.querySelector('.item-description');
-                    const link = item.querySelector('.project-link');
-                    if (title && !title.classList.contains('empty-field')) push(title.textContent);
-                    if (tech && !tech.classList.contains('empty-field')) push(tech.textContent);
-                    if (date && !date.classList.contains('empty-field')) push(date.textContent);
-                    if (desc && !desc.classList.contains('empty-field')) push(desc.textContent);
-                    if (link && !link.classList.contains('empty-field')) push(link.textContent);
+                withTitle('projects-section', () => {
+                    document.querySelectorAll('#projects-container .project-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const title = item.querySelector('.item-title');
+                        const tech = item.querySelector('.project-tech');
+                        const date = item.querySelector('.project-date');
+                        const desc = item.querySelector('.item-description');
+                        const link = item.querySelector('.project-link');
+                        if (title && !title.classList.contains('empty-field')) push(title.textContent);
+                        if (tech && !tech.classList.contains('empty-field')) push(tech.textContent);
+                        if (date && !date.classList.contains('empty-field')) push(date.textContent);
+                        if (desc && !desc.classList.contains('empty-field')) push(desc.textContent);
+                        if (link && !link.classList.contains('empty-field')) push(link.textContent);
+                    });
                 });
 
                 // Kurslar
-                document.querySelectorAll('#courses-container .course-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const title = item.querySelector('.item-title');
-                    const inst = item.querySelector('.course-institution');
-                    const date = item.querySelector('.course-date');
-                    if (title && !title.classList.contains('empty-field')) push(title.textContent);
-                    if (inst && !inst.classList.contains('empty-field')) push(inst.textContent);
-                    if (date && !date.classList.contains('empty-field')) push(date.textContent);
+                withTitle('courses-section', () => {
+                    document.querySelectorAll('#courses-container .course-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const title = item.querySelector('.item-title');
+                        const inst = item.querySelector('.course-institution');
+                        const date = item.querySelector('.course-date');
+                        if (title && !title.classList.contains('empty-field')) push(title.textContent);
+                        if (inst && !inst.classList.contains('empty-field')) push(inst.textContent);
+                        if (date && !date.classList.contains('empty-field')) push(date.textContent);
+                    });
                 });
 
                 // Yetenekler
-                document.querySelectorAll('#skills-container .skill-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    push(item.textContent);
+                withTitle('skills-section', () => {
+                    document.querySelectorAll('#skills-container .skill-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        push(item.textContent);
+                    });
                 });
 
                 // Referanslar
-                document.querySelectorAll('#references-container .reference-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const name = item.querySelector('.reference-name');
-                    const position = item.querySelector('.reference-position');
-                    const phone = item.querySelector('.reference-phone');
-                    if (name && !name.classList.contains('empty-field')) push(name.textContent);
-                    if (position && !position.classList.contains('empty-field')) push(position.textContent);
-                    if (phone && !phone.classList.contains('empty-field')) push(phone.textContent);
+                withTitle('references-section', () => {
+                    document.querySelectorAll('#references-container .reference-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const name = item.querySelector('.reference-name');
+                        const position = item.querySelector('.reference-position');
+                        const phone = item.querySelector('.reference-phone');
+                        if (name && !name.classList.contains('empty-field')) push(name.textContent);
+                        if (position && !position.classList.contains('empty-field')) push(position.textContent);
+                        if (phone && !phone.classList.contains('empty-field')) push(phone.textContent);
+                    });
                 });
 
                 // Diller
-                document.querySelectorAll('#languages-container .language-item').forEach(item => {
-                    if (item.classList.contains('hidden-in-pdf')) return;
-                    const nameEl = item.querySelector('.language-name');
-                    const levelEl = item.querySelector('.language-level');
-                    const name = (nameEl && !nameEl.classList.contains('empty-field')) ? nameEl.textContent.trim() : '';
-                    const level = (levelEl && !levelEl.classList.contains('empty-field')) ? levelEl.textContent.trim() : '';
-                    push([name, level].filter(Boolean).join(' - '));
+                withTitle('languages-section', () => {
+                    document.querySelectorAll('#languages-container .language-item').forEach(item => {
+                        if (item.classList.contains('hidden-in-pdf')) return;
+                        const nameEl = item.querySelector('.language-name');
+                        const levelEl = item.querySelector('.language-level');
+                        const name = (nameEl && !nameEl.classList.contains('empty-field')) ? nameEl.textContent.trim() : '';
+                        const level = (levelEl && !levelEl.classList.contains('empty-field')) ? levelEl.textContent.trim() : '';
+                        push([name, level].filter(Boolean).join(' - '));
+                    });
                 });
 
                 // Sosyal medya
