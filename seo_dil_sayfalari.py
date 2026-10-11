@@ -879,11 +879,10 @@ def main():
         (Path(c) / "index.html").write_text(page, encoding="utf-8")
         print(f"{c}/index.html olusturuldu  ->  {url_of(c)}")
 
-    target = Path("sitemap.xml")
-    if target.exists():
-        target = Path("sitemap-diller.xml")
-    target.write_text(sitemap(), encoding="utf-8")
-    print(f"{target} yazildi.")
+    # Iki dosya da ayni guncel icerikle yazilir (robots.txt ikisini de gosterir)
+    for target in (Path("sitemap.xml"), Path("sitemap-diller.xml")):
+        target.write_text(sitemap(), encoding="utf-8")
+        print(f"{target} yazildi.")
     print("\nTAMAM. Simdi degisiklikleri GitHub'a gonderin (commit + push).")
 
 

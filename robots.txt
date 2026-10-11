@@ -28,6 +28,7 @@ Crawl-delay: 1
 
 # Sitemap
 Sitemap: https://www.mobilcv.com/sitemap.xml
+Sitemap: https://www.mobilcv.com/sitemap-diller.xml
 
 # Host (isteğe bağlı)
 Host: www.mobilcv.com
