@@ -585,7 +585,7 @@ def set_faq(s, code):
 
 
 # ===================== CEREZ ONAYI (KVKK / GDPR) =====================
-GA_ID = "G-7KFT12L3X8"
+GA_ID = "G-4W6V8KX8D8"
 CONSENT = {
     "tr": ("Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "Kabul et", "Reddet", "Ayrıntılar", "Çerez ayarları"),
     "en": ("We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "Accept", "Reject", "Details", "Cookie settings"),
