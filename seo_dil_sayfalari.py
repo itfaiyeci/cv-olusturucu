@@ -97,6 +97,19 @@ LEGAL_RE = (r'(?:<a href="[^"]*" data-about-link[^>]*>[^<]*</a> · <a href="[^"]
             r'<a href="[^"]*" data-privacy-link[^>]*>[^<]*</a>')
 
 
+# Rehber linkleri (mobilcv.net). TR -> Turkce rehberler, digerleri -> Ingilizce rehberler
+GUIDES = {"tr": ["Rehberler:", "Ülkelere göre CV kuralları", "Motivasyon mektubu nasıl yazılır?"], "en": ["Guides:", "CV rules by country", "How to write a motivation letter"], "de": ["Ratgeber (auf Englisch):", "CV-Regeln nach Ländern", "Motivationsschreiben verfassen"], "fr": ["Guides (en anglais) :", "Règles du CV par pays", "Rédiger une lettre de motivation"], "es": ["Guías (en inglés):", "Normas del CV por país", "Cómo escribir una carta de motivación"], "it": ["Guide (in inglese):", "Regole del CV per paese", "Come scrivere una lettera motivazionale"], "pt": ["Guias (em inglês):", "Regras do currículo por país", "Como escrever uma carta de motivação"], "ru": ["Статьи (на английском):", "Правила резюме по странам", "Как написать мотивационное письмо"], "ar": ["أدلة (بالإنجليزية):", "قواعد السيرة الذاتية حسب البلد", "كيف تكتب خطاب الدافع"], "zh": ["指南（英文）：", "各国简历规则", "如何写动机信"], "ja": ["ガイド（英語）：", "国別の履歴書・CVのルール", "モチベーションレターの書き方"]}
+GUIDES_RE = r'<br><span data-guides[^>]*>[\s\S]*?</span>'
+
+
+def guides_html(code):
+    t = GUIDES[code]
+    u1, u2 = (("https://mobilcv.net/ulkelere-gore-cv-kurallari.html", "https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html") if code == "tr"
+              else ("https://mobilcv.net/en/cv-rules-by-country.html", "https://mobilcv.net/en/how-to-write-a-motivation-letter.html"))
+    return (f'<br><span data-guides style="display:inline-block;margin-top:8px;font-size:13px;">📘 {t[0]} '
+            f'<a href="{u1}" target="_blank" rel="noopener">{t[1]}</a> · <a href="{u2}" target="_blank" rel="noopener">{t[2]}</a></span>')
+
+
 def privacy_anchor(code):
     url, label = PRIVACY[code]
     about, terms = LEGAL[code]
@@ -130,7 +143,12 @@ def add_social(src):
 def add_privacy_link(src):
     """Kök sayfanın alt kısmına (blog linkinin altına) gizlilik politikası linki ekler (bir kez)."""
     if "data-privacy-link" in src:
-        return re.sub(LEGAL_RE, lambda m: privacy_anchor("tr"), src)
+        src = re.sub(LEGAL_RE, lambda m: privacy_anchor("tr"), src)
+        if "data-guides" in src:
+            return re.sub(GUIDES_RE, lambda m: guides_html("tr"), src)
+        anchor = '<span data-key="visitBlogText">'
+        i = src.index(anchor); j = src.index("</a>", i) + len("</a>")
+        return src[:j] + "\n            " + guides_html("tr") + src[j:]
     m = re.search(r'<footer class="site-footer-link">[\s\S]*?</footer>', src)
     if not m:
         sys.exit("HATA: site-footer-link bulunamadi.")
@@ -830,6 +848,7 @@ def make_lang_page(root, code, d):
         s = sub_once(rf'<meta name="{prop}" content="[^"]*">', f'<meta name="{prop}" content="{val}">', s, prop)
     s = sub_once(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{u}">', s, "canonical")
     s = re.sub(LEGAL_RE, lambda m: privacy_anchor(code), s)
+    s = re.sub(GUIDES_RE, lambda m: guides_html(code), s)
     # Sayfa altındaki blog linki o dilin bloguna gitsin (ör. https://mobilcv.net/de/)
     blog = "en" if code == "ja" else code
     s = re.sub(r'href="https://mobilcv\.net/?"', f'href="https://mobilcv.net/{blog}/"', s)

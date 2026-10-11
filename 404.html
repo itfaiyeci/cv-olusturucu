@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>404 | MobilCV</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', -apple-system, Roboto, 'Noto Sans', Arial, sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.box { background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(15,23,42,.08); padding: 40px 28px; max-width: 480px; width: 100%; text-align: center; }
+.logo { font-size: 1.8em; font-weight: 900; text-decoration: none; color: #0f172a; }
+.logo span { color: #2563eb; }
+.code { font-size: 4em; font-weight: 900; color: #cbd5e1; margin: 16px 0 4px; }
+h1 { font-size: 1.4em; margin-bottom: 10px; }
+p { color: #475569; line-height: 1.5; margin-bottom: 24px; }
+.btns { display: flex; flex-direction: column; gap: 10px; }
+.btns a { display: block; padding: 13px 18px; border-radius: 40px; font-weight: 700; text-decoration: none; }
+.b1 { background: #2563eb; color: #fff; }
+.b2 { border: 1px solid #cbd5e1; color: #1e293b; }
+</style>
+</head>
+<body>
+<div class="box">
+  <a class="logo" href="https://www.mobilcv.com/" dir="ltr">Mobil<span>CV</span></a>
+  <div class="code">404</div>
+  <h1 id="t">Sayfa bulunamadı</h1>
+  <p id="d">Aradığınız sayfa taşınmış ya da kaldırılmış olabilir.</p>
+  <div class="btns"><a class="b1" id="b1" href="https://www.mobilcv.com/">CV oluştur</a><a class="b2" id="b2" href="https://mobilcv.net/">CV örnekleri ve rehberler</a></div>
+</div>
+<script>
+(function () {
+  var T = {"tr": ["Sayfa bulunamadı", "Aradığınız sayfa taşınmış ya da kaldırılmış olabilir.", "CV oluştur", "CV örnekleri ve rehberler"], "en": ["Page not found", "The page you are looking for may have been moved or removed.", "Create a CV", "CV examples and guides"], "de": ["Seite nicht gefunden", "Die gesuchte Seite wurde möglicherweise verschoben oder entfernt.", "Lebenslauf erstellen", "Ratgeber"], "fr": ["Page introuvable", "La page que vous cherchez a peut-être été déplacée ou supprimée.", "Créer un CV", "Guides"], "es": ["Página no encontrada", "Es posible que la página que buscas se haya movido o eliminado.", "Crear un currículum", "Guías"], "it": ["Pagina non trovata", "La pagina che cerchi potrebbe essere stata spostata o rimossa.", "Crea un CV", "Guide"], "pt": ["Página não encontrada", "A página que você procura pode ter sido movida ou removida.", "Criar currículo", "Guias"], "ru": ["Страница не найдена", "Возможно, страница была перемещена или удалена.", "Создать резюме", "Статьи"], "ar": ["الصفحة غير موجودة", "ربما نُقلت الصفحة التي تبحث عنها أو حُذفت.", "أنشئ سيرتك الذاتية", "المقالات"], "zh": ["页面未找到", "您要查找的页面可能已被移动或删除。", "制作简历", "文章"], "ja": ["ページが見つかりません", "お探しのページは移動または削除された可能性があります。", "履歴書を作成", "ガイド"]}, NP = {"tr": "/", "en": "/en/", "ja": "/en/"};
+  var m = location.pathname.match(/^\/(en|de|fr|es|it|pt|ru|ar|zh|ja)(\/|$)/), l = m ? m[1] : null;
+  if (!l) { var n = (navigator.language || 'en').slice(0, 2).toLowerCase(); l = T[n] ? n : 'en'; }
+  var t = T[l] || T.en;
+  document.documentElement.lang = l; if (l === 'ar') document.documentElement.dir = 'rtl';
+  document.getElementById('t').textContent = t[0]; document.getElementById('d').textContent = t[1];
+  var b1 = document.getElementById('b1'), b2 = document.getElementById('b2');
+  b1.textContent = t[2]; b1.href = 'https://www.mobilcv.com/' + (l === 'tr' ? '' : l + '/');
+  b2.textContent = t[3]; b2.href = 'https://mobilcv.net' + (NP[l] || '/' + l + '/');
+  document.title = t[0] + ' | MobilCV';
+})();
+</script>
+</body>
+</html>
