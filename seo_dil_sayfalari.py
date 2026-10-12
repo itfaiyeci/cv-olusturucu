@@ -123,8 +123,10 @@ def privacy_anchor(code):
 
 INSTAGRAM = "https://www.instagram.com/mobilcvcom/"
 THREADS = "https://www.threads.com/@mobilcvcom"
+TIKTOK = "https://www.tiktok.com/@mobilcv.com"
 SOCIAL_LINKS = (' · <a href="' + INSTAGRAM + '" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a>'
-                ' · <a href="' + THREADS + '" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a>')
+                ' · <a href="' + THREADS + '" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a>'
+                ' · <a href="' + TIKTOK + '" target="_blank" rel="noopener me" style="font-size:12px;">TikTok</a>')
 
 
 def add_social(src):
@@ -136,7 +138,7 @@ def add_social(src):
     if '"sameAs"' not in s:
         s = sub_once(r'("author": \{\s*"@type": "Organization",\s*"name": "MobilCV",\s*"url": "https://www\.mobilcv\.com")(\s*\})',
                      None, s, "JSON-LD author",
-                     func=lambda m: m.group(1) + ',\n            "sameAs": ["' + INSTAGRAM + '", "' + THREADS + '"]' + m.group(2))
+                     func=lambda m: m.group(1) + ',\n            "sameAs": ["' + INSTAGRAM + '", "' + THREADS + '", "' + TIKTOK + '"]' + m.group(2))
     return s
 
 
