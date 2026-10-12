@@ -34,6 +34,8 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.mobilcv.com/">
+    <script data-lang-redirect>/* Eski ?lang=xx adresleri kendi dil sayfasina (Search Console: kopya/standart sayfa) */
+    (function(){try{var m=location.search.match(/[?&]lang=(tr|en|de|fr|es|it|pt|ru|ar|zh|ja)(?:&|$)/);if(!m)return;var cur=(document.documentElement.getAttribute('lang')||'tr').slice(0,2);if(m[1]===cur)return;location.replace('/'+(m[1]==='tr'?'':m[1]+'/'));}catch(e){}})();</script>
     
     <!-- Hreflang: her dil için ayrı URL varyantı (?lang=xx), arama motorlarının
          her dili ayrı ayrı indeksleyebilmesi için -->
