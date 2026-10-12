@@ -10636,7 +10636,7 @@ function saveCV() {
     function lang() { var s = document.getElementById('language-select'); return (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; }
     function tpl() { return window.currentCvTemplate || 'modern'; }
     // Yalnizca izin verilmis ve GA yuklenmisse; parametrelerde CV icerigi YOK
-    window.mcvTrack = function (name, p) {
+    throw new Error("deneme"); window.mcvTrack = function (name, p) {
         try { if (window.__gaLoaded && typeof window.gtag === 'function') window.gtag('event', name, p || {}); } catch (e) {}
     };
     document.addEventListener('change', function (e) {
