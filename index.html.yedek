@@ -9,7 +9,7 @@
     
     <!-- Primary Meta Tags -->
     <title>Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV</title>
-    <meta name="description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
+    <meta name="description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta name="keywords" content="cv oluşturma, cv hazırlama, online cv, ücretsiz cv, profesyonel cv, cv şablonları, pdf cv, iş başvurusu, özgeçmiş">
     <meta name="author" content="MobilCV">
     <meta name="robots" content="index, follow">
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mobilcv.com/">
     <meta property="og:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
-    <meta property="og:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
+    <meta property="og:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta property="og:image" content="https://www.mobilcv.com/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -29,11 +29,13 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.mobilcv.com/">
     <meta name="twitter:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
-    <meta name="twitter:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi dakikalar içinde oluşturun.">
+    <meta name="twitter:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta name="twitter:image" content="https://www.mobilcv.com/images/og-image.jpg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.mobilcv.com/">
+    <script data-lang-redirect>/* Eski ?lang=xx adresleri kendi dil sayfasina (Search Console: kopya/standart sayfa) */
+    (function(){try{var m=location.search.match(/[?&]lang=(tr|en|de|fr|es|it|pt|ru|ar|zh|ja)(?:&|$)/);if(!m)return;var cur=(document.documentElement.getAttribute('lang')||'tr').slice(0,2);if(m[1]===cur)return;location.replace('/'+(m[1]==='tr'?'':m[1]+'/'));}catch(e){}})();</script>
     
     <!-- Hreflang: her dil için ayrı URL varyantı (?lang=xx), arama motorlarının
          her dili ayrı ayrı indeksleyebilmesi için -->
@@ -77,7 +79,7 @@
             "@type": "Organization",
             "name": "MobilCV",
             "url": "https://www.mobilcv.com",
-            "sameAs": ["https://www.instagram.com/mobilcvcom/", "https://www.threads.com/@mobilcvcom"]
+            "sameAs": ["https://www.instagram.com/mobilcvcom/", "https://www.threads.com/@mobilcvcom", "https://www.tiktok.com/@mobilcv.com"]
         },
         "featureList": [
             "Ücretsiz CV oluşturma",
@@ -2911,6 +2913,51 @@ img {
 .a4-container.tpl-classic.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .right-column,
 .a4-container.tpl-classic.pdf-mode .cv-layout:has(#avatar[src^="data:"]) .right-column { padding-top: 6mm !important; }
 
+/* === SABLON: UST BASLIK (fotograf solda; ad soyad fotografin ust hizasinda, meslek altinda;
+   diger tum bilgiler fotografin altindan itibaren tam genislikte) ===
+   Klasik sablonun tek sutun govdesini kullanir (form'da tpl-classic de vardir).
+   4 sutunlu izgara: [foto 30mm][ad/meslek...] ; iletisim satirlari iki esit yarim (her biri 2 sutun).
+   personal-info "display: contents" ile kendi ogelerini bu izgaraya birakir. */
+#cv-form.tpl-top .left-column { display: grid !important; grid-template-columns: 30mm calc((100% - 12mm) / 3 - 36mm) calc((100% - 6mm) / 2 - (100% - 12mm) / 3 - 6mm) calc((100% - 12mm) * 2 / 3 - (100% - 6mm) / 2) calc(((100% - 12mm) / 3 - 6mm) / 2) calc(((100% - 12mm) / 3 - 6mm) / 2) !important; grid-template-rows: auto 1fr; column-gap: 6mm !important; row-gap: 3px; grid-auto-flow: row dense !important; align-items: start; text-align: start; padding: 8mm 12mm 6mm !important; }
+#cv-form.tpl-top .personal-header { grid-column: 1; grid-row: 1 / span 2; margin: 0 0 4mm !important; padding: 0 !important; }
+#cv-form.tpl-top #avatarBox { width: 30mm !important; height: 36mm !important; min-width: 30mm !important; min-height: 36mm !important; max-width: 30mm !important; max-height: 36mm !important; margin: 0 !important; }
+#cv-form.tpl-top #avatarText { font-size: 10px; padding: 0 2mm; }
+#cv-form.tpl-top #avatarSizeHint { display: none !important; }
+#cv-form.tpl-top .personal-info { display: contents !important; }
+#cv-form.tpl-top .personal-info-item.name-item { grid-column: 2 / -1 !important; grid-row: 1; align-self: start; margin: 0 !important; padding: 0 !important; display: block !important; }
+#cv-form.tpl-top .personal-info-item.title-item { grid-column: 2 / -1 !important; grid-row: 2; align-self: start; margin: 0 !important; padding: 0 !important; display: block !important; }
+#cv-form.tpl-top .personal-info-item.name-item .personal-info-value { font-size: 28px !important; line-height: 1.15; text-align: left !important; margin: 0 !important; }
+#cv-form.tpl-top .personal-info-item.title-item .personal-info-value { font-size: 16px !important; text-align: left !important; margin: 3px 0 0 !important; }
+/* Iletisim: iki dikey sutun. Sol: Dogum Tarihi, Ehliyet, Adres (alt alta). Sag: Telefon, E-posta (alt alta).
+   "row dense" ile sag sutun da fotografin hemen altindan baslar; bos alan olursa alttakiler yukari kayar. */
+#cv-form.tpl-top .personal-info-item:not(.name-item):not(.title-item) { grid-column: span 2 !important; order: 9; }
+#cv-form.tpl-top .personal-info-item[data-field="phone"]:not(.name-item):not(.title-item) { grid-column: 4 / span 3 !important; order: 1; }
+#cv-form.tpl-top .personal-info-item[data-field="email"]:not(.name-item):not(.title-item) { grid-column: 4 / span 3 !important; order: 2; }
+#cv-form.tpl-top .personal-info-item[data-field="birth-date"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 3; }
+#cv-form.tpl-top .personal-info-item[data-field="driving-license"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 4; }
+#cv-form.tpl-top .personal-info-item[data-field="address"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 5; }
+#cv-form.tpl-top .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]) > .personal-info-label { min-width: 24mm !important; width: auto !important; flex: 0 0 auto !important; }
+#cv-form.tpl-top .personal-info-item[data-field="social-media"]:not(.name-item):not(.title-item) { grid-column: 1 / -1 !important; }
+/* Sosyal medya: baglantilar yan yana, sik */
+#cv-form.tpl-top .personal-info-item[data-field="social-media"] .social-media-container { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; align-items: center; gap: 2px 10mm !important; }
+#cv-form.tpl-top .personal-info-item[data-field="social-media"] .social-media-item { width: auto !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: flex !important; align-items: center; gap: 6px; }
+#cv-form.tpl-top:not(.pdf-mode) .social-media-item .social-media-value { min-width: 50mm !important; flex: 1 1 auto !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item .social-media-value { border: 0 !important; width: auto !important; min-width: 0 !important; padding: 0 !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item:has(.social-media-value.empty-field) { display: none !important; }
+/* Govde sonu: Diller (sol yari) + Sosyal Medya (sag yari) ayni satirda.
+   #tpl-top-row JS ile olusturulur; display'de !important YOK (PDF sayfa bolme satir ici display:none kullanir). */
+#tpl-top-row { display: flex; gap: 10mm; align-items: flex-start; margin-top: 12px; }
+#tpl-top-row > * { flex: 1 1 0; min-width: 0; }
+#cv-form.tpl-top #tpl-top-row .languages-section { margin-top: 0 !important; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"]:not(.hidden-in-pdf) { display: block !important; margin: 0 !important; padding: 0 !important; border: 0 !important; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"] > .personal-info-label { display: block !important; width: auto !important; min-width: 0 !important; font-size: 15px !important; font-weight: 700 !important; color: var(--cv-text-primary) !important; border-bottom: 2px solid var(--cv-accent, #3498db) !important; padding: 0 0 5px !important; margin: 0 0 10px !important; text-align: start; white-space: normal; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"] .social-media-container { flex-direction: column !important; align-items: stretch !important; gap: 4px !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"]:not(:has(.social-media-value:not(.empty-field))) { display: none !important; }
+/* PDF: fotograf yoksa ad ve meslek tam genislik */
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3128,6 +3175,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                     <select id="template-select">
                         <option value="" id="tpl-opt-modern">Modern</option>
                         <option value="tpl-classic" id="tpl-opt-classic">Klasik (tek sütun)</option>
+                        <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
                         <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Japon tipi özgeçmiş (履歴書)</option>
                     </select>
                 </div>
@@ -3447,7 +3495,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">3 adımda CV hazırlayın</h2>
             <ol><li>Bilgilerinizi forma yazın: iletişim, deneyim, eğitim, yetenekler. İsterseniz fotoğraf ekleyin.</li><li>Renk temasını ve CV dilini seçin; değişiklikleri önizlemede anında görün.</li><li><b>PDF İndir</b> düğmesine basın. CV'niz başvuruya hazır.</li></ol>
             <h2>Neden MobilCV?</h2>
-            <ul><li><b>Tamamen ücretsiz:</b> Gizli ücret, deneme süresi veya filigran yok.</li><li><b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.</li><li><b>Bilgileriniz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucuya gönderilmez.</li><li><b>Telefon için tasarlandı:</b> Bilgisayar olmadan, birkaç dakikada CV hazırlayabilirsiniz.</li><li><b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca.</li></ul>
+            <ul><li><b>Tamamen ücretsiz:</b> Gizli ücret, deneme süresi veya filigran yok.</li><li><b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.</li><li><b>Bilgileriniz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucuya gönderilmez.</li><li><b>Telefon için tasarlandı:</b> Bilgisayar olmadan, telefondan CV hazırlayabilirsiniz.</li><li><b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca.</li></ul>
             <h2>Sıkça Sorulan Sorular</h2>
             <details><summary>MobilCV gerçekten ücretsiz mi?</summary><p>Evet. CV oluşturmak ve PDF olarak indirmek tamamen ücretsizdir; gizli ücret veya filigran yoktur.</p></details>
             <details><summary>CV hazırlamak için üye olmam gerekiyor mu?</summary><p>Hayır. Üyelik, e-posta veya şifre gerekmez; sayfayı açıp hemen başlayabilirsiniz.</p></details>
@@ -3465,7 +3513,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 <span data-key="visitBlogText">📝 Kariyer ipuçları, mülakat rehberleri ve CV tavsiyeleri için blogumuzu ziyaret edin</span>
             </a>
             <br><span data-guides style="display:inline-block;margin-top:8px;font-size:13px;">📘 Rehberler: <a href="https://mobilcv.net/ulkelere-gore-cv-kurallari.html" target="_blank" rel="noopener">Ülkelere göre CV kuralları</a> · <a href="https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html" target="_blank" rel="noopener">Motivasyon mektubu nasıl yazılır?</a></span>
-            <br><a href="https://mobilcv.net/hakkimizda.html" data-about-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Hakkımızda</a> · <a href="https://mobilcv.net/kullanim-kosullari.html" data-terms-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Kullanım Koşulları</a> · <a href="https://mobilcv.net/gizlilik-politikasi.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Gizlilik Politikası</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="#" data-cookie-settings style="font-size:12px;">Çerez ayarları</a>
+            <br><a href="https://mobilcv.net/hakkimizda.html" data-about-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Hakkımızda</a> · <a href="https://mobilcv.net/kullanim-kosullari.html" data-terms-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Kullanım Koşulları</a> · <a href="https://mobilcv.net/gizlilik-politikasi.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Gizlilik Politikası</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="https://www.tiktok.com/@mobilcv.com" target="_blank" rel="noopener me" style="font-size:12px;">TikTok</a> · <a href="#" data-cookie-settings style="font-size:12px;">Çerez ayarları</a>
         </footer>
 
         <!-- ÖNİZLEME MODALI -->
@@ -3708,7 +3756,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Sağa kaydır",
                 "panReset": "Ortala",
                 "visitBlogText": "📝 Kariyer ipuçları, mülakat rehberleri ve CV tavsiyeleri için blogumuzu ziyaret edin",
-                "trustIntroText": "Üye olmadan, birkaç dakikada profesyonel PDF CV'nizi oluşturun. Bilgileriniz yalnızca bu tarayıcıda saklanır, sunucumuza gönderilmez. Aşağıdaki alanları doldurmaya başlayın.",
+                "trustIntroText": "Üye olmadan profesyonel PDF CV'nizi oluşturun. Bilgileriniz yalnızca bu tarayıcıda saklanır, sunucumuza gönderilmez. Aşağıdaki alanları doldurmaya başlayın.",
                 
                 // İpucu Metinleri
                 "fullNameHint": "Tam adınızı yazın",
@@ -3727,7 +3775,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Sadece rakam girin, tire otomatik eklenecek",
                 "experienceTitleHint": "Çalıştığınız pozisyon",
                 "experienceCompanyHint": "Çalıştığınız şirket",
-                "experienceDateHint": "Sadece rakam girin, tire otomatik eklenecek",
+                "experienceDateHint": "Sadece rakam girin, tire otomatik eklenir. Devam eden iş için: 2019 - Halen",
                 "experienceDescriptionHint": "Görevleriniz ve projeleriniz",
                 "courseTitleHint": "Kurs veya sertifika adı",
                 "courseInstitutionHint": "Eğitimi veren kurum",
@@ -3899,7 +3947,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Move right",
                 "panReset": "Center",
                 "visitBlogText": "📝 Visit our blog for career tips, interview guides and CV advice",
-                "trustIntroText": "Create your professional PDF CV in a few minutes, without signing up. Your details stay in this browser and are not sent to our servers. Start filling in the fields below.",
+                "trustIntroText": "Create your professional PDF CV without signing up. Your details stay in this browser and are not sent to our servers. Start filling in the fields below.",
                 "fullNameHint": "Write your full name",
                 "professionHint": "e.g.: Software Developer, Accounting Specialist",
                 "phoneHint": "Enter only numbers, format will be applied automatically",
@@ -3916,7 +3964,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Enter only numbers, dash will be added automatically",
                 "experienceTitleHint": "Position you worked in",
                 "experienceCompanyHint": "Company you worked for",
-                "experienceDateHint": "Enter only numbers, dash will be added automatically",
+                "experienceDateHint": "Enter only numbers, the dash is added automatically. Current job: 2019 - Present",
                 "experienceDescriptionHint": "Your duties and projects",
                 "courseTitleHint": "Course or certificate name",
                 "courseInstitutionHint": "Institution that provided the training",
@@ -4084,7 +4132,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Nach rechts verschieben",
                 "panReset": "Zentrieren",
                 "visitBlogText": "📝 Besuchen Sie unseren Blog für Karrieretipps, Interviewratgeber und Lebenslauf-Beratung",
-                "trustIntroText": "Erstellen Sie Ihren professionellen Lebenslauf als PDF in wenigen Minuten, ohne Anmeldung. Ihre Daten bleiben in diesem Browser und werden nicht an unsere Server gesendet. Beginnen Sie unten mit dem Ausfüllen.",
+                "trustIntroText": "Erstellen Sie Ihren professionellen Lebenslauf als PDF, ohne Anmeldung. Ihre Daten bleiben in diesem Browser und werden nicht an unsere Server gesendet. Beginnen Sie unten mit dem Ausfüllen.",
                 "fullNameHint": "Schreiben Sie Ihren vollständigen Namen",
                 "professionHint": "z.B.: Softwareentwickler, Buchhaltungsspezialist",
                 "phoneHint": "Geben Sie nur Zahlen ein, das Format wird automatisch angewendet",
@@ -4101,7 +4149,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Geben Sie nur Zahlen ein, Bindestrich wird automatisch hinzugefügt",
                 "experienceTitleHint": "Position, in der Sie gearbeitet haben",
                 "experienceCompanyHint": "Unternehmen, für das Sie gearbeitet haben",
-                "experienceDateHint": "Geben Sie nur Zahlen ein, Bindestrich wird automatisch hinzugefügt",
+                "experienceDateHint": "Nur Zahlen eingeben, der Bindestrich wird automatisch ergänzt. Aktuelle Stelle: 2019 - heute",
                 "experienceDescriptionHint": "Ihre Aufgaben und Projekte",
                 "courseTitleHint": "Kurs- oder Zertifikatname",
                 "courseInstitutionHint": "Institution, die die Schulung durchgeführt hat",
@@ -4268,7 +4316,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Déplacer à droite",
                 "panReset": "Centrer",
                 "visitBlogText": "📝 Visitez notre blog pour des conseils de carrière, des guides d'entretien et des astuces CV",
-                "trustIntroText": "Créez votre CV professionnel en PDF en quelques minutes, sans inscription. Vos données restent dans ce navigateur et ne sont pas envoyées à nos serveurs. Commencez à remplir les champs ci-dessous.",
+                "trustIntroText": "Créez votre CV professionnel en PDF, sans inscription. Vos données restent dans ce navigateur et ne sont pas envoyées à nos serveurs. Commencez à remplir les champs ci-dessous.",
                 "fullNameHint": "Écrivez votre nom complet",
                 "professionHint": "ex: Développeur de logiciels, Spécialiste comptable",
                 "phoneHint": "Saisissez uniquement des chiffres, le format sera appliqué automatiquement",
@@ -4285,7 +4333,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Saisissez uniquement des chiffres, le tiret sera ajouté automatiquement",
                 "experienceTitleHint": "Poste que vous avez occupé",
                 "experienceCompanyHint": "Entreprise pour laquelle vous avez travaillé",
-                "experienceDateHint": "Saisissez uniquement des chiffres, le tiret sera ajouté automatiquement",
+                "experienceDateHint": "Saisissez uniquement des chiffres, le tiret est ajouté automatiquement. Poste actuel : 2019 - aujourd'hui",
                 "experienceDescriptionHint": "Vos tâches et projets",
                 "courseTitleHint": "Nom du cours ou du certificat",
                 "courseInstitutionHint": "Institution qui a fourni la formation",
@@ -4452,7 +4500,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Mover a la derecha",
                 "panReset": "Centrar",
                 "visitBlogText": "📝 Visita nuestro blog para consejos de carrera, guías de entrevistas y consejos de CV",
-                "trustIntroText": "Crea tu CV profesional en PDF en pocos minutos, sin registro. Tus datos se quedan en este navegador y no se envían a nuestros servidores. Comienza a completar los campos a continuación.",
+                "trustIntroText": "Crea tu CV profesional en PDF, sin registro. Tus datos se quedan en este navegador y no se envían a nuestros servidores. Comienza a completar los campos a continuación.",
                 "fullNameHint": "Escribe tu nombre completo",
                 "professionHint": "ej: Desarrollador de software, Especialista en contabilidad",
                 "phoneHint": "Ingresa solo números, el formato se aplicará automáticamente",
@@ -4469,7 +4517,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Ingresa solo números, el guión se agregará automáticamente",
                 "experienceTitleHint": "Puesto en el que trabajaste",
                 "experienceCompanyHint": "Empresa para la que trabajaste",
-                "experienceDateHint": "Ingresa solo números, el guión se agregará automáticamente",
+                "experienceDateHint": "Ingresa solo números, el guion se agrega automáticamente. Empleo actual: 2019 - actualidad",
                 "experienceDescriptionHint": "Tus tareas y proyectos",
                 "courseTitleHint": "Nombre del curso o certificado",
                 "courseInstitutionHint": "Institución que proporcionó la formación",
@@ -4636,7 +4684,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Sposta a destra",
                 "panReset": "Centra",
                 "visitBlogText": "📝 Visita il nostro blog per consigli di carriera, guide ai colloqui e consigli sul CV",
-                "trustIntroText": "Crea il tuo CV professionale in PDF in pochi minuti, senza registrazione. I tuoi dati restano in questo browser e non vengono inviati ai nostri server. Inizia a compilare i campi qui sotto.",
+                "trustIntroText": "Crea il tuo CV professionale in PDF, senza registrazione. I tuoi dati restano in questo browser e non vengono inviati ai nostri server. Inizia a compilare i campi qui sotto.",
                 "fullNameHint": "Scrivi il tuo nome completo",
                 "professionHint": "es: Sviluppatore software, Specialista contabile",
                 "phoneHint": "Inserisci solo numeri, il formato sarà applicato automaticamente",
@@ -4653,7 +4701,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Inserisci solo numeri, il trattino sarà aggiunto automaticamente",
                 "experienceTitleHint": "Posizione in cui hai lavorato",
                 "experienceCompanyHint": "Azienda per cui hai lavorato",
-                "experienceDateHint": "Inserisci solo numeri, il trattino sarà aggiunto automaticamente",
+                "experienceDateHint": "Inserisci solo numeri, il trattino viene aggiunto automaticamente. Lavoro attuale: 2019 - oggi",
                 "experienceDescriptionHint": "Le tue mansioni e progetti",
                 "courseTitleHint": "Nome del corso o certificato",
                 "courseInstitutionHint": "Istituzione che ha fornito la formazione",
@@ -4820,7 +4868,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Mover para direita",
                 "panReset": "Centralizar",
                 "visitBlogText": "📝 Visite nosso blog para dicas de carreira, guias de entrevista e conselhos de CV",
-                "trustIntroText": "Crie seu currículo profissional em PDF em poucos minutos, sem cadastro. Seus dados ficam neste navegador e não são enviados aos nossos servidores. Comece a preencher os campos abaixo.",
+                "trustIntroText": "Crie seu currículo profissional em PDF, sem cadastro. Seus dados ficam neste navegador e não são enviados aos nossos servidores. Comece a preencher os campos abaixo.",
                 "fullNameHint": "Escreva seu nome completo",
                 "professionHint": "ex: Desenvolvedor de software, Especialista em contabilidade",
                 "phoneHint": "Digite apenas números, o formato será aplicado automaticamente",
@@ -4837,7 +4885,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Digite apenas números, o traço será adicionado automaticamente",
                 "experienceTitleHint": "Cargo em que você trabalhou",
                 "experienceCompanyHint": "Empresa para a qual você trabalhou",
-                "experienceDateHint": "Digite apenas números, o traço será adicionado automaticamente",
+                "experienceDateHint": "Digite apenas números, o traço é adicionado automaticamente. Emprego atual: 2019 - atual",
                 "experienceDescriptionHint": "Suas tarefas e projetos",
                 "courseTitleHint": "Nome do curso ou certificado",
                 "courseInstitutionHint": "Instituição que forneceu o treinamento",
@@ -5004,7 +5052,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "Сдвинуть вправо",
                 "panReset": "Центрировать",
                 "visitBlogText": "📝 Посетите наш блог для получения советов по карьере, руководств по собеседованиям и советов по резюме",
-                "trustIntroText": "Создайте профессиональное резюме в формате PDF за несколько минут без регистрации. Ваши данные остаются в этом браузере и не отправляются на наши серверы. Начните заполнять поля ниже.",
+                "trustIntroText": "Создайте профессиональное резюме в формате PDF без регистрации. Ваши данные остаются в этом браузере и не отправляются на наши серверы. Начните заполнять поля ниже.",
                 "fullNameHint": "Напишите свое полное имя",
                 "professionHint": "напр: Разработчик программного обеспечения, Специалист по бухгалтерии",
                 "phoneHint": "Вводите только цифры, формат будет применен автоматически",
@@ -5021,7 +5069,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "Вводите только цифры, дефис будет добавлен автоматически",
                 "experienceTitleHint": "Должность, на которой вы работали",
                 "experienceCompanyHint": "Компания, в которой вы работали",
-                "experienceDateHint": "Вводите только цифры, дефис будет добавлен автоматически",
+                "experienceDateHint": "Вводите только цифры, дефис добавится автоматически. Текущая работа: 2019 - н. в.",
                 "experienceDescriptionHint": "Ваши обязанности и проекты",
                 "courseTitleHint": "Название курса или сертификата",
                 "courseInstitutionHint": "Учреждение, предоставившее обучение",
@@ -5188,7 +5236,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "تحريك لليمين",
                 "panReset": "توسيط",
                 "visitBlogText": "📝 قم بزيارة مدونتنا للحصول على نصائح مهنية وأدلة المقابلات ونصائح السيرة الذاتية",
-                "trustIntroText": "أنشئ سيرتك الذاتية الاحترافية بصيغة PDF في دقائق، دون تسجيل. تبقى بياناتك في هذا المتصفح ولا تُرسل إلى خوادمنا. ابدأ بملء الحقول أدناه.",
+                "trustIntroText": "أنشئ سيرتك الذاتية الاحترافية بصيغة PDF دون تسجيل. تبقى بياناتك في هذا المتصفح ولا تُرسل إلى خوادمنا. ابدأ بملء الحقول أدناه.",
                 "fullNameHint": "اكتب اسمك الكامل",
                 "professionHint": "مثال: مطور برمجيات، أخصائي محاسبة",
                 "phoneHint": "أدخل أرقامًا فقط، سيتم تطبيق التنسيق تلقائيًا",
@@ -5205,7 +5253,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "أدخل أرقامًا فقط، سيتم إضافة الشرطة تلقائيًا",
                 "experienceTitleHint": "المنصب الذي عملت فيه",
                 "experienceCompanyHint": "الشركة التي عملت فيها",
-                "experienceDateHint": "أدخل أرقامًا فقط، سيتم إضافة الشرطة تلقائيًا",
+                "experienceDateHint": "أدخل أرقامًا فقط، وستُضاف الشرطة تلقائيًا. للعمل الحالي: 2019 - حتى الآن",
                 "experienceDescriptionHint": "مهامك ومشاريعك",
                 "courseTitleHint": "اسم الدورة أو الشهادة",
                 "courseInstitutionHint": "المؤسسة التي قدمت التدريب",
@@ -5372,7 +5420,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "右移",
                 "panReset": "居中",
                 "visitBlogText": "📝 访问我们的博客获取职业建议、面试指南和简历建议",
-                "trustIntroText": "无需注册，几分钟即可创建专业的PDF简历。您的数据只保存在此浏览器中，不会发送到我们的服务器。请在下方开始填写。",
+                "trustIntroText": "无需注册，即可创建专业的PDF简历。您的数据只保存在此浏览器中，不会发送到我们的服务器。请在下方开始填写。",
                 "fullNameHint": "写下您的全名",
                 "professionHint": "例如: 软件开发人员, 会计专家",
                 "phoneHint": "只输入数字, 格式将自动应用",
@@ -5389,7 +5437,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "educationDateHint": "只输入数字, 连字符将自动添加",
                 "experienceTitleHint": "您工作的职位",
                 "experienceCompanyHint": "您工作的公司",
-                "experienceDateHint": "只输入数字, 连字符将自动添加",
+                "experienceDateHint": "只输入数字，连字符将自动添加。当前工作：2019 - 至今",
                 "experienceDescriptionHint": "您的职责和项目",
                 "courseTitleHint": "课程或证书名称",
                 "courseInstitutionHint": "提供培训的机构",
@@ -5556,7 +5604,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "panRight": "右へ移動",
                 "panReset": "中央に戻す",
                 "visitBlogText": "📝 キャリアのヒント、面接ガイド、履歴書のアドバイスはブログへ",
-                "trustIntroText": "登録不要・入力内容はこのブラウザ内にのみ保存され、サーバーには送信されません。数分で履歴書PDFを作成できます。",
+                "trustIntroText": "登録不要・入力内容はこのブラウザ内にのみ保存され、サーバーには送信されません。履歴書PDFを作成できます。",
                 "fullNameHint": "氏名を入力してください",
                 "professionHint": "例：ソフトウェアエンジニア、経理担当",
                 "phoneHint": "数字のみ入力してください。ハイフンは自動で入ります",
@@ -6120,7 +6168,7 @@ class SocialMediaManager {
 						// Eğer element sadece placeholder içeriyorsa veya boşsa, güncelle
 							const currentText = element.textContent.trim();
 								const oldPlaceholder = element.getAttribute('data-placeholder-old');
-									if (currentText === '' || currentText === oldPlaceholder) {
+									if (currentText === '' || currentText === oldPlaceholder || element.classList.contains('empty-field')) {
 										element.textContent = placeholderText;
 											element.classList.add('empty-field');
 							}
@@ -7138,6 +7186,8 @@ function hideHintBubble(hintBubble) {
                         // harf/rakam atlamasına yol açabiliyordu. Doğrulama 'input' aşamasında yapılır.
                         if (e.isComposing || e.keyCode === 229 || e.key === 'Unidentified' || e.key === 'Process') return;
                         if (window.isJapaneseMode && window.isJapaneseMode() && /^[\/\.\-]$/.test(e.key)) return;
+                        if (!(window.isJapaneseMode && window.isJapaneseMode()) && e.key && e.key.length === 1 && /[\p{L} ]/u.test(e.key)
+                            && /^\d{4}/.test(e.target.textContent.trim())) return; // "2019 - Halen"
                         // Sadece rakam, backspace, delete, ok tuşlarına izin ver
                         const allowedKeys = [
                             'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 
@@ -7200,6 +7250,21 @@ function hideHintBubble(hintBubble) {
             
             function validateDateInput(input) {
                 let value = input.textContent.trim();
+                // Devam eden is: "2019 - Halen" / "2019 - Present" (Japonca haric; orada "2019/04-" kullanilir)
+                const __dph = (input.getAttribute('data-placeholder') || '').trim();
+                if (value !== '' && value !== __dph && !(window.isJapaneseMode && window.isJapaneseMode())) {
+                    const __pm = value.match(/^(\d{4})\s*[-\u2013\u2014]?\s*([^\d\s\-\u2013\u2014][^\d]{0,24})$/);
+                    if (__pm) {
+                        const __v = __pm[1] + ' - ' + __pm[2].replace(/\s+/g, ' ').replace(/^\s+/, '');
+                        if (input.textContent !== __v) {
+                            input.textContent = __v;
+                            const r = document.createRange(), sel = window.getSelection();
+                            r.selectNodeContents(input); r.collapse(false); sel.removeAllRanges(); sel.addRange(r);
+                        }
+                        input.classList.remove('invalid'); input.classList.remove('empty-field');
+                        return;
+                    }
+                }
                 if (window.isJapaneseMode && window.isJapaneseMode()) {
                     let v = value.replace(/[^\d\/\.\-]/g, '').replace(/\./g, '/').substring(0, 15);
                     if (input.textContent !== v) {
@@ -7291,6 +7356,14 @@ function hideHintBubble(hintBubble) {
             
             function validatePhoneInput(input) {
                 let value = input.textContent.trim();
+                // MCV_PLACEHOLDER_GUARD: yer tutucu (ornek numara) gercek veri gibi bicimlendirilmesin
+                const __ph = (input.getAttribute('data-placeholder') || '').trim();
+                const __dg = value.replace(/[^\d]/g, '');
+                if (value !== '' && (value === __ph || __dg === '5551234567' || __dg === '09000000000')) {
+                    if (__ph && input.textContent !== __ph) input.textContent = __ph;
+                    input.classList.add('empty-field');
+                    return;
+                }
                 if (window.isJapaneseMode && window.isJapaneseMode()) {
                     let d = value.replace(/[^\d]/g, '').substring(0, 11);
                     let f = d;
@@ -7959,7 +8032,7 @@ if (socialMediaSection) {
                 ];
                 // Klasik sablonda diller govdenin (sag sutun) sonunda: sayfa bolmeye dahil et
                 const langSec = document.getElementById('languages-section');
-                if (langSec && langSec.closest('.right-column')) {
+                if (langSec && langSec.closest('.right-column') && !langSec.closest('#tpl-top-row')) {
                     sectionsConfig.push({ sectionId: 'languages-section', itemSelector: '.language-item' });
                 }
 
@@ -7986,6 +8059,10 @@ if (socialMediaSection) {
                         blocks.push({ elements: [items[i]], sectionId: cfg.sectionId, titleEl: title, isHeaderBlock: false });
                     }
                 });
+                const topRow = document.getElementById('tpl-top-row');
+                if (topRow && topRow.closest('.right-column') && getComputedStyle(topRow).display !== 'none') {
+                    blocks.push({ elements: [topRow], sectionId: 'tpl-top-row', titleEl: null, isHeaderBlock: false });
+                }
 
                 return blocks;
             }
@@ -9941,7 +10018,7 @@ function saveCV() {
     <script data-consent>
     // Google Analytics YALNIZCA ziyaretci "Kabul et" derse yuklenir (KVKK / GDPR).
     (function () {
-        var GA = 'G-7KFT12L3X8', KEY = 'mobilcv_consent';
+        var GA = 'G-4W6V8KX8D8', KEY = 'mobilcv_consent';
         var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}, "ja": {"msg": "訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "ok": "同意する", "no": "拒否する", "more": "詳細", "set": "Cookie設定", "url": "https://mobilcv.net/ja/privacy-policy.html"}};
         function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
         function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
@@ -10002,17 +10079,17 @@ function saveCV() {
 /* === SABLON SECICI (Modern / Klasik) === */
 (function () {
     var L = {
-        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)'],
-        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)'],
-        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)'],
-        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)'],
-        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)'],
-        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)'],
-        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)'],
-        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)'],
-        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)'],
-        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）'],
-        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書']
+        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)', 'Üst başlık (fotoğraf solda)'],
+        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)', 'Header (photo on the left)'],
+        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)', 'Kopfbereich (Foto links)'],
+        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)', 'En-tête (photo à gauche)'],
+        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)', 'Encabezado (foto a la izquierda)'],
+        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)', 'Intestazione (foto a sinistra)'],
+        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)', 'Cabeçalho (foto à esquerda)'],
+        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)', 'Шапка (фото слева)'],
+        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)', 'ترويسة (الصورة على الجانب)'],
+        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）', '页眉式（照片在左）'],
+        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書', 'ヘッダー型（写真は左）']
     };
     var form = document.getElementById('cv-form');
     var select = document.getElementById('template-select');
@@ -10028,22 +10105,41 @@ function saveCV() {
         document.getElementById('tpl-opt-modern').textContent = t[1];
         document.getElementById('tpl-opt-classic').textContent = t[2];
         document.getElementById('tpl-opt-rirekisho').textContent = t[3];
+        document.getElementById('tpl-opt-top').textContent = t[4];
     }
 
     function applyTemplate(name) {
-        name = (name === 'tpl-classic' || name === 'tpl-rirekisho') ? name : '';
+        name = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top') ? name : '';
         // Rirekisho: duzenleyicide klasik yerlesim kullanilir, PDF ayri bir form olarak uretilir
-        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho');
+        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top');
         var lang = document.getElementById('languages-section');
         var left = form.querySelector('.left-column');
         var right = form.querySelector('.right-column');
         form.classList.toggle('tpl-classic', classicLayout);
         form.classList.toggle('tpl-rirekisho', name === 'tpl-rirekisho');
+        form.classList.toggle('tpl-top', name === 'tpl-top');
         // Diller bolumu: klasikte govdenin sonuna, modernde kenar cubuguna
         if (lang && left && right) {
             if (classicLayout) { if (lang.parentNode !== right) right.appendChild(lang); }
             else { if (lang.parentNode !== left) left.appendChild(lang); }
         }
+        // Ust baslik sablonu: Diller ve Sosyal Medya govdenin sonunda yan yana
+        (function (on) {
+            var soc = form.querySelector('.personal-info-item[data-field="social-media"]');
+            var pi = document.getElementById('personal-info-section');
+            var row = document.getElementById('tpl-top-row');
+            if (!lang || !right || !soc || !pi) return;
+            if (on) {
+                if (!row) { row = document.createElement('div'); row.id = 'tpl-top-row'; }
+                if (row.parentNode !== right || row.nextSibling) right.appendChild(row);
+                if (lang.parentNode !== row) row.appendChild(lang);
+                if (soc.parentNode !== row) row.appendChild(soc);
+            } else if (row) {
+                if (soc.parentNode === row) pi.appendChild(soc);
+                if (lang.parentNode === row) (classicLayout ? right : left).appendChild(lang);
+                row.parentNode && row.parentNode.removeChild(row);
+            }
+        })(name === 'tpl-top');
         if (window.rkShow) window.rkShow(name === 'tpl-rirekisho');
         select.value = name;
         var changed = (window.currentCvTemplate || '') !== name;

@@ -98,16 +98,16 @@ LEGAL_RE = (r'(?:<a href="[^"]*" data-about-link[^>]*>[^<]*</a> · <a href="[^"]
 
 
 # Rehber linkleri (mobilcv.net). TR -> Turkce rehberler, digerleri -> Ingilizce rehberler
-GUIDES = {"tr": ["Rehberler:", "Ülkelere göre CV kuralları", "Motivasyon mektubu nasıl yazılır?"], "en": ["Guides:", "CV rules by country", "How to write a motivation letter"], "de": ["Ratgeber (auf Englisch):", "CV-Regeln nach Ländern", "Motivationsschreiben verfassen"], "fr": ["Guides (en anglais) :", "Règles du CV par pays", "Rédiger une lettre de motivation"], "es": ["Guías (en inglés):", "Normas del CV por país", "Cómo escribir una carta de motivación"], "it": ["Guide (in inglese):", "Regole del CV per paese", "Come scrivere una lettera motivazionale"], "pt": ["Guias (em inglês):", "Regras do currículo por país", "Como escrever uma carta de motivação"], "ru": ["Статьи (на английском):", "Правила резюме по странам", "Как написать мотивационное письмо"], "ar": ["أدلة (بالإنجليزية):", "قواعد السيرة الذاتية حسب البلد", "كيف تكتب خطاب الدافع"], "zh": ["指南（英文）：", "各国简历规则", "如何写动机信"], "ja": ["ガイド（英語）：", "国別の履歴書・CVのルール", "モチベーションレターの書き方"]}
+GUIDES = {"tr": ["Rehberler:", "Ülkelere göre CV kuralları", "Motivasyon mektubu nasıl yazılır?", "CV'de başarı cümlesi: Google XYZ formülü"], "en": ["Guides:", "CV rules by country", "How to write a motivation letter", "CV bullet points: the Google XYZ formula"], "de": ["Ratgeber (auf Englisch):", "CV-Regeln nach Ländern", "Motivationsschreiben verfassen", "Die Google-XYZ-Formel für den Lebenslauf"], "fr": ["Guides (en anglais) :", "Règles du CV par pays", "Rédiger une lettre de motivation", "La formule XYZ de Google pour le CV"], "es": ["Guías (en inglés):", "Normas del CV por país", "Cómo escribir una carta de motivación", "La fórmula XYZ de Google para el CV"], "it": ["Guide (in inglese):", "Regole del CV per paese", "Come scrivere una lettera motivazionale", "La formula XYZ di Google per il CV"], "pt": ["Guias (em inglês):", "Regras do currículo por país", "Como escrever uma carta de motivação", "A fórmula XYZ do Google para o currículo"], "ru": ["Статьи (на английском):", "Правила резюме по странам", "Как написать мотивационное письмо", "Формула XYZ от Google для резюме"], "ar": ["أدلة (بالإنجليزية):", "قواعد السيرة الذاتية حسب البلد", "كيف تكتب خطاب الدافع", "صيغة XYZ من Google للسيرة الذاتية"], "zh": ["指南（英文）：", "各国简历规则", "如何写动机信", "简历成就句：Google XYZ 公式"], "ja": ["ガイド（英語）：", "国別の履歴書・CVのルール", "モチベーションレターの書き方", "職務経歴の書き方：Google XYZフォーミュラ"]}
 GUIDES_RE = r'<br><span data-guides[^>]*>[\s\S]*?</span>'
 
 
 def guides_html(code):
     t = GUIDES[code]
-    u1, u2 = (("https://mobilcv.net/ulkelere-gore-cv-kurallari.html", "https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html") if code == "tr"
-              else ("https://mobilcv.net/en/cv-rules-by-country.html", "https://mobilcv.net/en/how-to-write-a-motivation-letter.html"))
+    u1, u2, u3 = (("https://mobilcv.net/ulkelere-gore-cv-kurallari.html", "https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html", "https://mobilcv.net/google-xyz-formulu-cv.html") if code == "tr"
+              else ("https://mobilcv.net/en/cv-rules-by-country.html", "https://mobilcv.net/en/how-to-write-a-motivation-letter.html", "https://mobilcv.net/en/google-xyz-formula-resume.html"))
     return (f'<br><span data-guides style="display:inline-block;margin-top:8px;font-size:13px;">📘 {t[0]} '
-            f'<a href="{u1}" target="_blank" rel="noopener">{t[1]}</a> · <a href="{u2}" target="_blank" rel="noopener">{t[2]}</a></span>')
+            f'<a href="{u1}" target="_blank" rel="noopener">{t[1]}</a> · <a href="{u2}" target="_blank" rel="noopener">{t[2]}</a> · <a href="{u3}" target="_blank" rel="noopener">{t[3]}</a></span>')
 
 
 def privacy_anchor(code):
