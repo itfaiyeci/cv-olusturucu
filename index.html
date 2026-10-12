@@ -2911,6 +2911,51 @@ img {
 .a4-container.tpl-classic.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .right-column,
 .a4-container.tpl-classic.pdf-mode .cv-layout:has(#avatar[src^="data:"]) .right-column { padding-top: 6mm !important; }
 
+/* === SABLON: UST BASLIK (fotograf solda; ad soyad fotografin ust hizasinda, meslek altinda;
+   diger tum bilgiler fotografin altindan itibaren tam genislikte) ===
+   Klasik sablonun tek sutun govdesini kullanir (form'da tpl-classic de vardir).
+   4 sutunlu izgara: [foto 30mm][ad/meslek...] ; iletisim satirlari iki esit yarim (her biri 2 sutun).
+   personal-info "display: contents" ile kendi ogelerini bu izgaraya birakir. */
+#cv-form.tpl-top .left-column { display: grid !important; grid-template-columns: 30mm calc((100% - 12mm) / 3 - 36mm) calc((100% - 6mm) / 2 - (100% - 12mm) / 3 - 6mm) calc((100% - 12mm) * 2 / 3 - (100% - 6mm) / 2) calc(((100% - 12mm) / 3 - 6mm) / 2) calc(((100% - 12mm) / 3 - 6mm) / 2) !important; grid-template-rows: auto 1fr; column-gap: 6mm !important; row-gap: 3px; grid-auto-flow: row dense !important; align-items: start; text-align: start; padding: 8mm 12mm 6mm !important; }
+#cv-form.tpl-top .personal-header { grid-column: 1; grid-row: 1 / span 2; margin: 0 0 4mm !important; padding: 0 !important; }
+#cv-form.tpl-top #avatarBox { width: 30mm !important; height: 36mm !important; min-width: 30mm !important; min-height: 36mm !important; max-width: 30mm !important; max-height: 36mm !important; margin: 0 !important; }
+#cv-form.tpl-top #avatarText { font-size: 10px; padding: 0 2mm; }
+#cv-form.tpl-top #avatarSizeHint { display: none !important; }
+#cv-form.tpl-top .personal-info { display: contents !important; }
+#cv-form.tpl-top .personal-info-item.name-item { grid-column: 2 / -1 !important; grid-row: 1; align-self: start; margin: 0 !important; padding: 0 !important; display: block !important; }
+#cv-form.tpl-top .personal-info-item.title-item { grid-column: 2 / -1 !important; grid-row: 2; align-self: start; margin: 0 !important; padding: 0 !important; display: block !important; }
+#cv-form.tpl-top .personal-info-item.name-item .personal-info-value { font-size: 28px !important; line-height: 1.15; text-align: left !important; margin: 0 !important; }
+#cv-form.tpl-top .personal-info-item.title-item .personal-info-value { font-size: 16px !important; text-align: left !important; margin: 3px 0 0 !important; }
+/* Iletisim: iki dikey sutun. Sol: Dogum Tarihi, Ehliyet, Adres (alt alta). Sag: Telefon, E-posta (alt alta).
+   "row dense" ile sag sutun da fotografin hemen altindan baslar; bos alan olursa alttakiler yukari kayar. */
+#cv-form.tpl-top .personal-info-item:not(.name-item):not(.title-item) { grid-column: span 2 !important; order: 9; }
+#cv-form.tpl-top .personal-info-item[data-field="phone"]:not(.name-item):not(.title-item) { grid-column: 4 / span 3 !important; order: 1; }
+#cv-form.tpl-top .personal-info-item[data-field="email"]:not(.name-item):not(.title-item) { grid-column: 4 / span 3 !important; order: 2; }
+#cv-form.tpl-top .personal-info-item[data-field="birth-date"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 3; }
+#cv-form.tpl-top .personal-info-item[data-field="driving-license"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 4; }
+#cv-form.tpl-top .personal-info-item[data-field="address"]:not(.name-item):not(.title-item) { grid-column: 1 / span 3 !important; order: 5; }
+#cv-form.tpl-top .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]) > .personal-info-label { min-width: 24mm !important; width: auto !important; flex: 0 0 auto !important; }
+#cv-form.tpl-top .personal-info-item[data-field="social-media"]:not(.name-item):not(.title-item) { grid-column: 1 / -1 !important; }
+/* Sosyal medya: baglantilar yan yana, sik */
+#cv-form.tpl-top .personal-info-item[data-field="social-media"] .social-media-container { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; align-items: center; gap: 2px 10mm !important; }
+#cv-form.tpl-top .personal-info-item[data-field="social-media"] .social-media-item { width: auto !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: flex !important; align-items: center; gap: 6px; }
+#cv-form.tpl-top:not(.pdf-mode) .social-media-item .social-media-value { min-width: 50mm !important; flex: 1 1 auto !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item .social-media-value { border: 0 !important; width: auto !important; min-width: 0 !important; padding: 0 !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item:has(.social-media-value.empty-field) { display: none !important; }
+/* Govde sonu: Diller (sol yari) + Sosyal Medya (sag yari) ayni satirda.
+   #tpl-top-row JS ile olusturulur; display'de !important YOK (PDF sayfa bolme satir ici display:none kullanir). */
+#tpl-top-row { display: flex; gap: 10mm; align-items: flex-start; margin-top: 12px; }
+#tpl-top-row > * { flex: 1 1 0; min-width: 0; }
+#cv-form.tpl-top #tpl-top-row .languages-section { margin-top: 0 !important; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"]:not(.hidden-in-pdf) { display: block !important; margin: 0 !important; padding: 0 !important; border: 0 !important; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"] > .personal-info-label { display: block !important; width: auto !important; min-width: 0 !important; font-size: 15px !important; font-weight: 700 !important; color: var(--cv-text-primary) !important; border-bottom: 2px solid var(--cv-accent, #3498db) !important; padding: 0 0 5px !important; margin: 0 0 10px !important; text-align: start; white-space: normal; }
+#cv-form.tpl-top #tpl-top-row .personal-info-item[data-field="social-media"] .social-media-container { flex-direction: column !important; align-items: stretch !important; gap: 4px !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"]:not(:has(.social-media-value:not(.empty-field))) { display: none !important; }
+/* PDF: fotograf yoksa ad ve meslek tam genislik */
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3128,6 +3173,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                     <select id="template-select">
                         <option value="" id="tpl-opt-modern">Modern</option>
                         <option value="tpl-classic" id="tpl-opt-classic">Klasik (tek sütun)</option>
+                        <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
                         <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Japon tipi özgeçmiş (履歴書)</option>
                     </select>
                 </div>
@@ -7959,7 +8005,7 @@ if (socialMediaSection) {
                 ];
                 // Klasik sablonda diller govdenin (sag sutun) sonunda: sayfa bolmeye dahil et
                 const langSec = document.getElementById('languages-section');
-                if (langSec && langSec.closest('.right-column')) {
+                if (langSec && langSec.closest('.right-column') && !langSec.closest('#tpl-top-row')) {
                     sectionsConfig.push({ sectionId: 'languages-section', itemSelector: '.language-item' });
                 }
 
@@ -7986,6 +8032,10 @@ if (socialMediaSection) {
                         blocks.push({ elements: [items[i]], sectionId: cfg.sectionId, titleEl: title, isHeaderBlock: false });
                     }
                 });
+                const topRow = document.getElementById('tpl-top-row');
+                if (topRow && topRow.closest('.right-column') && getComputedStyle(topRow).display !== 'none') {
+                    blocks.push({ elements: [topRow], sectionId: 'tpl-top-row', titleEl: null, isHeaderBlock: false });
+                }
 
                 return blocks;
             }
@@ -10002,17 +10052,17 @@ function saveCV() {
 /* === SABLON SECICI (Modern / Klasik) === */
 (function () {
     var L = {
-        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)'],
-        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)'],
-        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)'],
-        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)'],
-        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)'],
-        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)'],
-        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)'],
-        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)'],
-        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)'],
-        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）'],
-        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書']
+        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)', 'Üst başlık (fotoğraf solda)'],
+        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)', 'Header (photo on the left)'],
+        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)', 'Kopfbereich (Foto links)'],
+        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)', 'En-tête (photo à gauche)'],
+        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)', 'Encabezado (foto a la izquierda)'],
+        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)', 'Intestazione (foto a sinistra)'],
+        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)', 'Cabeçalho (foto à esquerda)'],
+        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)', 'Шапка (фото слева)'],
+        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)', 'ترويسة (الصورة على الجانب)'],
+        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）', '页眉式（照片在左）'],
+        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書', 'ヘッダー型（写真は左）']
     };
     var form = document.getElementById('cv-form');
     var select = document.getElementById('template-select');
@@ -10028,22 +10078,41 @@ function saveCV() {
         document.getElementById('tpl-opt-modern').textContent = t[1];
         document.getElementById('tpl-opt-classic').textContent = t[2];
         document.getElementById('tpl-opt-rirekisho').textContent = t[3];
+        document.getElementById('tpl-opt-top').textContent = t[4];
     }
 
     function applyTemplate(name) {
-        name = (name === 'tpl-classic' || name === 'tpl-rirekisho') ? name : '';
+        name = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top') ? name : '';
         // Rirekisho: duzenleyicide klasik yerlesim kullanilir, PDF ayri bir form olarak uretilir
-        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho');
+        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top');
         var lang = document.getElementById('languages-section');
         var left = form.querySelector('.left-column');
         var right = form.querySelector('.right-column');
         form.classList.toggle('tpl-classic', classicLayout);
         form.classList.toggle('tpl-rirekisho', name === 'tpl-rirekisho');
+        form.classList.toggle('tpl-top', name === 'tpl-top');
         // Diller bolumu: klasikte govdenin sonuna, modernde kenar cubuguna
         if (lang && left && right) {
             if (classicLayout) { if (lang.parentNode !== right) right.appendChild(lang); }
             else { if (lang.parentNode !== left) left.appendChild(lang); }
         }
+        // Ust baslik sablonu: Diller ve Sosyal Medya govdenin sonunda yan yana
+        (function (on) {
+            var soc = form.querySelector('.personal-info-item[data-field="social-media"]');
+            var pi = document.getElementById('personal-info-section');
+            var row = document.getElementById('tpl-top-row');
+            if (!lang || !right || !soc || !pi) return;
+            if (on) {
+                if (!row) { row = document.createElement('div'); row.id = 'tpl-top-row'; }
+                if (row.parentNode !== right || row.nextSibling) right.appendChild(row);
+                if (lang.parentNode !== row) row.appendChild(lang);
+                if (soc.parentNode !== row) row.appendChild(soc);
+            } else if (row) {
+                if (soc.parentNode === row) pi.appendChild(soc);
+                if (lang.parentNode === row) (classicLayout ? right : left).appendChild(lang);
+                row.parentNode && row.parentNode.removeChild(row);
+            }
+        })(name === 'tpl-top');
         if (window.rkShow) window.rkShow(name === 'tpl-rirekisho');
         select.value = name;
         var changed = (window.currentCvTemplate || '') !== name;
