@@ -1,0 +1,69 @@
+name: Kalite kontrol
+
+# Her degisiklikte, her pull request'te ve her gece calisir. Hata olursa GitHub e-posta gonderir.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '17 3 * * *'   # her gece 06:17 (Turkiye)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  islev:
+    name: Islev testi (11 dil, PDF)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Testleri calistir
+        run: |
+          python -m http.server 8000 >/dev/null 2>&1 &
+          sleep 2
+          python tests/smoke.py http://localhost:8000/
+
+  icerik:
+    name: Icerik ve dogruluk kontrolu (iki site)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - run: git clone --depth 1 https://github.com/itfaiyeci/mobilcv-net /tmp/net
+      - name: Kontrol
+        run: |
+          set +e
+          STRICT=1 python3 /tmp/net/haftalik_kontrol.py . /tmp/net /tmp/rapor.md > /dev/null
+          code=$?
+          cat /tmp/rapor.md >> "$GITHUB_STEP_SUMMARY"
+          exit $code
+
+  canli:
+    name: Canli site erisilebilir mi
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Kontrol
+        run: |
+          python3 - <<'PY'
+          import sys, urllib.request
+          urls = ["https://www.mobilcv.com/", "https://www.mobilcv.com/en/", "https://mobilcv.net/", "https://mobilcv.net/en/"]
+          bad = []
+          for u in urls:
+              try:
+                  r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "MobilCV-kalite"}), timeout=30)
+                  body = r.read().decode("utf-8", "ignore")
+                  ok = r.status == 200 and "MobilCV" in body and 'rel="canonical"' in body
+              except Exception as ex:
+                  ok, body = False, str(ex)
+              print(("OK  " if ok else "HATA"), u)
+              if not ok: bad.append(u)
+          sys.exit(1 if bad else 0)
+          PY
