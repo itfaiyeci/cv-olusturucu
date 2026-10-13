@@ -2867,6 +2867,20 @@ img {
 .template-picker select { min-width: 0; max-width: 100%; }
 .template-picker label { white-space: nowrap; flex: 0 0 auto; width: auto; margin: 0; }
 .template-picker select { font-size: 15px; padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #1e293b; cursor: pointer; }
+.template-picker { flex-direction: column; align-items: stretch; gap: 6px; }
+#template-label { font-size: 13px; font-weight: 600; color: #475569; text-align: center; }
+.tpl-buttons { display: flex; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 0 1px #cbd5e1; background: #fff; }
+.tpl-btn { flex: 1 1 0; min-width: 0; margin: 0; padding: 9px 6px; border: none; border-left: 1px solid #e2e8f0; background: transparent; color: #334155; font-size: 14px; font-weight: 600; line-height: 1.2; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: none; border-radius: 0; min-height: 40px; transition: background .15s ease, color .15s ease; }
+.tpl-btn:first-child { border-left: none; }
+.tpl-btn:hover { background: #f1f5f9; }
+.tpl-btn.active { background: #1e293b; color: #fff; }
+.tpl-btn:focus-visible { outline: 2px solid #1e293b; outline-offset: -3px; }
+@media (max-width: 480px) {
+  .tpl-buttons { flex-wrap: wrap; }
+  .tpl-btn { flex: 1 1 50%; border-top: 1px solid #e2e8f0; font-size: 13px; }
+  .tpl-btn:nth-child(-n+2) { border-top: none; }
+  .tpl-btn:nth-child(3) { border-left: none; }
+}
 
 /* Klasik: ust baslik bandi + tek sutun govde. Ayni DOM, sadece yerlesim. */
 .a4-container.tpl-classic .cv-layout { flex-direction: column !important; }
@@ -3170,8 +3184,14 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <section aria-labelledby="controls-title" class="controls">
                 <h2 id="controls-title" class="sr-only">CV Kontrolleri</h2>
                 <div class="template-picker" id="template-picker">
-                    <label for="template-select" id="template-label">Şablon</label>
-                    <select id="template-select">
+                    <span id="template-label">Şablon</span>
+                    <div class="tpl-buttons" id="tpl-buttons" role="radiogroup" aria-labelledby="template-label">
+                        <button type="button" class="tpl-btn active" data-tpl="" aria-checked="true" role="radio" id="tpl-btn-modern">Modern</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-classic" aria-checked="false" role="radio" id="tpl-btn-classic">Klasik</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-top" aria-checked="false" role="radio" id="tpl-btn-top">Standart</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-rirekisho" aria-checked="false" role="radio" id="tpl-btn-rirekisho">Rirekisho (履歴書)</button>
+                    </div>
+                    <select id="template-select" hidden aria-hidden="true" tabindex="-1">
                         <option value="" id="tpl-opt-modern">Modern</option>
                         <option value="tpl-classic" id="tpl-opt-classic">Klasik (tek sütun)</option>
                         <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
@@ -9677,6 +9697,11 @@ function saveCV() {
     transition: transform 0.25s ease;
 }
 #sticky-action-bar.visible { transform: translateY(0); }
+@media (min-width: 860px) {
+    #sticky-action-bar { left: 50%; right: auto; width: 794px; max-width: calc(100% - 32px); box-sizing: border-box;
+        border: 1px solid #e5e7eb; border-bottom: none; border-radius: 14px 14px 0 0; transform: translate(-50%, 110%); }
+    #sticky-action-bar.visible { transform: translate(-50%, 0); }
+}
 #sticky-action-bar button {
     flex: 1;
     padding: 12px 10px;
@@ -10108,6 +10133,33 @@ function saveCV() {
         document.getElementById('tpl-opt-classic').textContent = t[2];
         document.getElementById('tpl-opt-rirekisho').textContent = t[3];
         document.getElementById('tpl-opt-top').textContent = t[4];
+        var b = B[currentLang()] || B.en;
+        ['modern', 'classic', 'top', 'rirekisho'].forEach(function (k, i) {
+            var el = document.getElementById('tpl-btn-' + k);
+            if (el) { el.textContent = b[i]; el.title = b[i]; }
+        });
+    }
+    // Dugme etiketleri: Modern, Klasik, Standart, Rirekisho
+    var B = {
+        tr: ['Modern', 'Klasik', 'Standart', 'Rirekisho (履歴書)'],
+        en: ['Modern', 'Classic', 'Standard', 'Rirekisho (履歴書)'],
+        de: ['Modern', 'Klassisch', 'Standard', 'Rirekisho (履歴書)'],
+        fr: ['Moderne', 'Classique', 'Standard', 'Rirekisho (履歴書)'],
+        es: ['Moderna', 'Clásica', 'Estándar', 'Rirekisho (履歴書)'],
+        it: ['Moderno', 'Classico', 'Standard', 'Rirekisho (履歴書)'],
+        pt: ['Moderno', 'Clássico', 'Padrão', 'Rirekisho (履歴書)'],
+        ru: ['Современный', 'Классический', 'Стандартный', 'Rirekisho (履歴書)'],
+        ar: ['عصري', 'كلاسيكي', 'قياسي', 'Rirekisho (履歴書)'],
+        zh: ['现代', '经典', '标准', 'Rirekisho (履歴書)'],
+        ja: ['モダン', 'クラシック', 'スタンダード', '履歴書']
+    };
+    function syncButtons(name) {
+        var all = document.querySelectorAll('#tpl-buttons .tpl-btn');
+        for (var i = 0; i < all.length; i++) {
+            var on = (all[i].getAttribute('data-tpl') || '') === name;
+            all[i].classList.toggle('active', on);
+            all[i].setAttribute('aria-checked', on ? 'true' : 'false');
+        }
     }
 
     function applyTemplate(name) {
@@ -10144,6 +10196,7 @@ function saveCV() {
         })(name === 'tpl-top');
         if (window.rkShow) window.rkShow(name === 'tpl-rirekisho');
         select.value = name;
+        syncButtons(name);
         var changed = (window.currentCvTemplate || '') !== name;
         window.currentCvTemplate = name;
         if (changed && window.autoSaveManager && window.autoSaveManager.debouncedSave) {
@@ -10159,12 +10212,19 @@ function saveCV() {
         try { localStorage.setItem(CH, '1'); } catch (e) {}
         applyTemplate(select.value);
     });
-    // Japonca secilince varsayilan sablon Japon ozgecmisi (履歴書); baska dile donunce Modern
+    var tb = document.getElementById('tpl-buttons');
+    if (tb) tb.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest('.tpl-btn');
+        if (!btn) return;
+        var v = btn.getAttribute('data-tpl') || '';
+        try { localStorage.setItem(CH, '1'); } catch (er) {}
+        applyTemplate(v);
+        if (e.isTrusted && window.mcvTrack) window.mcvTrack('template_select', { cv_template: v || 'modern', cv_language: currentLang() });
+    });
+    // Her dilde ilk acilista Modern; kullanici kendisi sablon secmediyse kayitli sablon da Modern'e doner
     function autoForLang() {
         if (chosen()) return;
-        var l = currentLang();
-        if (l === 'ja' && window.currentCvTemplate !== 'tpl-rirekisho') applyTemplate('tpl-rirekisho');
-        else if (l !== 'ja' && window.currentCvTemplate === 'tpl-rirekisho') applyTemplate('');
+        if ((window.currentCvTemplate || '') !== '') applyTemplate('');
     }
     var ls = document.getElementById('language-select');
     if (ls) ls.addEventListener('change', function () { setTimeout(function () { localize(); autoForLang(); }, 0); });
@@ -10175,7 +10235,7 @@ function saveCV() {
     try {
         var key = (window.autoSaveManager && window.autoSaveManager.storageKey) || 'mobilcv_data';
         var saved = JSON.parse(localStorage.getItem(key) || 'null');
-        if (saved && typeof saved.template === 'string') applyTemplate(saved.template);
+        if (saved && typeof saved.template === 'string') applyTemplate(chosen() ? saved.template : '');
     } catch (e) {}
 })();
 </script>
