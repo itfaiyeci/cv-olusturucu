@@ -164,9 +164,8 @@
          doğrulandı. GA script'ine kasıtlı olarak SRI eklenmedi çünkü
          onlar sürüm sabitlenmemiş, sağlayıcı tarafında habersiz güncellenen
          widget'lar - SRI eklemek bir sonraki güncellemede siteyi kırar. -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous">
+    <script defer src="/lib/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+    <script defer src="/lib/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
     
     <!-- Google Analytics: yalnizca onay verilirse yuklenir (sayfa sonundaki data-consent) -->
 <style>
@@ -3512,7 +3511,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <a href="https://mobilcv.net" target="_blank" rel="noopener">
                 <span data-key="visitBlogText">📝 Kariyer ipuçları, mülakat rehberleri ve CV tavsiyeleri için blogumuzu ziyaret edin</span>
             </a>
-            <br><span data-guides style="display:inline-block;margin-top:8px;font-size:13px;">📘 Rehberler: <a href="https://mobilcv.net/ulkelere-gore-cv-kurallari.html" target="_blank" rel="noopener">Ülkelere göre CV kuralları</a> · <a href="https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html" target="_blank" rel="noopener">Motivasyon mektubu nasıl yazılır?</a></span>
+            <br><span data-guides style="display:inline-block;margin-top:8px;font-size:13px;">📘 Rehberler: <a href="https://mobilcv.net/ulkelere-gore-cv-kurallari.html" target="_blank" rel="noopener">Ülkelere göre CV kuralları</a> · <a href="https://mobilcv.net/motivasyon-mektubu-nasil-yazilir.html" target="_blank" rel="noopener">Motivasyon mektubu nasıl yazılır?</a> · <a href="https://mobilcv.net/google-xyz-formulu-cv.html" target="_blank" rel="noopener">CV'de başarı cümlesi: Google XYZ formülü</a></span>
             <br><a href="https://mobilcv.net/hakkimizda.html" data-about-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Hakkımızda</a> · <a href="https://mobilcv.net/kullanim-kosullari.html" data-terms-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Kullanım Koşulları</a> · <a href="https://mobilcv.net/gizlilik-politikasi.html" data-privacy-link target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:12px;">Gizlilik Politikası</a> · <a href="https://www.instagram.com/mobilcvcom/" data-social-link target="_blank" rel="noopener me" style="font-size:12px;">Instagram</a> · <a href="https://www.threads.com/@mobilcvcom" target="_blank" rel="noopener me" style="font-size:12px;">Threads</a> · <a href="https://www.tiktok.com/@mobilcv.com" target="_blank" rel="noopener me" style="font-size:12px;">TikTok</a> · <a href="#" data-cookie-settings style="font-size:12px;">Çerez ayarları</a>
         </footer>
 
@@ -8287,7 +8286,10 @@ if (socialMediaSection) {
                     if (window.mobilcvRecommend) setTimeout(window.mobilcvRecommend, 1500);
                 }).catch(error => {
                     console.error('PDF oluşturma hatası:', error);
-                    alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+                    if (window.mcvReportError) window.mcvReportError('pdf', error && (error.message || error), '');
+                    var __m = {"tr": "PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.", "en": "Something went wrong while creating the PDF. Please try again.", "de": "Beim Erstellen der PDF ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.", "fr": "Une erreur s'est produite lors de la création du PDF. Veuillez réessayer.", "es": "Se produjo un error al crear el PDF. Inténtalo de nuevo.", "it": "Si è verificato un errore durante la creazione del PDF. Riprova.", "pt": "Ocorreu um erro ao criar o PDF. Tente novamente.", "ru": "При создании PDF произошла ошибка. Пожалуйста, попробуйте ещё раз.", "ar": "حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.", "zh": "生成 PDF 时出错，请重试。", "ja": "PDFの作成中にエラーが発生しました。もう一度お試しください。"};
+                    var __s = document.getElementById('language-select');
+                    alert(__m[(__s && __s.value) || window.MOBILCV_PAGE_LANG || 'tr'] || __m.en);
                 });
             });
 
@@ -8335,17 +8337,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Online bayrak URL'leri
     const flagUrls = {
-        'tr': 'https://flagcdn.com/w20/tr.png',
-        'en': 'https://flagcdn.com/w20/gb.png',
-        'de': 'https://flagcdn.com/w20/de.png',
-        'fr': 'https://flagcdn.com/w20/fr.png',
-        'es': 'https://flagcdn.com/w20/es.png',
-        'it': 'https://flagcdn.com/w20/it.png',
-        'pt': 'https://flagcdn.com/w20/pt.png',
-        'ru': 'https://flagcdn.com/w20/ru.png',
-        'ar': 'https://flagcdn.com/w20/sa.png',
-        'zh': 'https://flagcdn.com/w20/cn.png',
-        'ja': 'https://flagcdn.com/w20/jp.png'
+        'tr': '/images/flags/tr.svg',
+        'en': '/images/flags/gb.svg',
+        'de': '/images/flags/de.svg',
+        'fr': '/images/flags/fr.svg',
+        'es': '/images/flags/es.svg',
+        'it': '/images/flags/it.svg',
+        'pt': '/images/flags/pt.svg',
+        'ru': '/images/flags/ru.svg',
+        'ar': '/images/flags/sa.svg',
+        'zh': '/images/flags/cn.svg',
+        'ja': '/images/flags/jp.svg'
     };
     
     function updateFlag() {
@@ -10639,6 +10641,22 @@ function saveCV() {
     window.mcvTrack = function (name, p) {
         try { if (window.__gaLoaded && typeof window.gtag === 'function') window.gtag('event', name, p || {}); } catch (e) {}
     };
+    // Gercek kullanici hatalari: yalnizca hata turu, kisa mesaj ve dosya:satir. CV icerigi gonderilmez.
+    // Sayfa basina en fazla 3 bildirim; yalnizca cerez izni verilmis ve Analytics yuklenmisse gider.
+    var __errN = 0;
+    window.mcvReportError = function (kind, msg, src) {
+        if (__errN >= 3) return; __errN++;
+        var m = String(msg || '').replace(/\s+/g, ' ').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[e-posta]').replace(/\d{6,}/g, '[sayi]').slice(0, 100);
+        window.mcvTrack('js_error', { err_kind: kind, err_msg: m, err_src: String(src || '').split('/').pop().slice(0, 60), cv_language: lang(), cv_template: tpl() });
+    };
+    window.addEventListener('error', function (e) {
+        var t = e && e.target;
+        if (t && t !== window && (t.src || t.href)) { if (t.tagName === 'SCRIPT' || t.tagName === 'LINK') window.mcvReportError('resource', 'load failed', t.src || t.href); return; }
+        window.mcvReportError('js', e && e.message, (e && e.filename || '') + ':' + (e && e.lineno || ''));
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) {
+        var r = e && e.reason; window.mcvReportError('promise', (r && r.message) || r, '');
+    });
     document.addEventListener('change', function (e) {
         if (!e.isTrusted) return;
         var t = e.target;

@@ -589,17 +589,17 @@ def set_faq(s, code):
 # ===================== CEREZ ONAYI (KVKK / GDPR) =====================
 GA_ID = "G-4W6V8KX8D8"
 CONSENT = {
-    "tr": ("Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "Kabul et", "Reddet", "Ayrıntılar", "Çerez ayarları"),
-    "en": ("We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "Accept", "Reject", "Details", "Cookie settings"),
-    "de": ("Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "Akzeptieren", "Ablehnen", "Details", "Cookie-Einstellungen"),
-    "fr": ("Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "Accepter", "Refuser", "Détails", "Paramètres des cookies"),
-    "es": ("Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "Aceptar", "Rechazar", "Detalles", "Configuración de cookies"),
-    "it": ("Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "Accetta", "Rifiuta", "Dettagli", "Impostazioni cookie"),
-    "pt": ("Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "Aceitar", "Recusar", "Detalhes", "Configurações de cookies"),
-    "ru": ("Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "Принять", "Отклонить", "Подробнее", "Настройки cookie"),
-    "ar": ("نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "قبول", "رفض", "التفاصيل", "إعدادات ملفات تعريف الارتباط"),
-    "zh": ("我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "接受", "拒绝", "详情", "Cookie 设置"),
-    "ja": ("訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "同意する", "拒否する", "詳細", "Cookie設定"),
+    "tr": ("Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır. Analytics verileri ABD dahil yurt dışındaki sunucularda işlenebilir.", "Kabul et", "Reddet", "Ayrıntılar", "Çerez ayarları"),
+    "en": ("We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device. Analytics data may be processed on servers abroad, including in the US.", "Accept", "Reject", "Details", "Cookie settings"),
+    "de": ("Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät. Analytics-Daten können auf Servern im Ausland, auch in den USA, verarbeitet werden.", "Akzeptieren", "Ablehnen", "Details", "Cookie-Einstellungen"),
+    "fr": ("Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil. Les données d'Analytics peuvent être traitées sur des serveurs à l'étranger, notamment aux États-Unis.", "Accepter", "Refuser", "Détails", "Paramètres des cookies"),
+    "es": ("Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo. Los datos de Analytics pueden tratarse en servidores en el extranjero, incluido Estados Unidos.", "Aceptar", "Rechazar", "Detalles", "Configuración de cookies"),
+    "it": ("Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo. I dati di Analytics possono essere trattati su server all'estero, anche negli Stati Uniti.", "Accetta", "Rifiuta", "Dettagli", "Impostazioni cookie"),
+    "pt": ("Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo. Os dados do Analytics podem ser tratados em servidores no exterior, inclusive nos EUA.", "Aceitar", "Recusar", "Detalhes", "Configurações de cookies"),
+    "ru": ("Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве. Данные Analytics могут обрабатываться на серверах за рубежом, в том числе в США.", "Принять", "Отклонить", "Подробнее", "Настройки cookie"),
+    "ar": ("نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك. قد تُعالج بيانات Analytics على خوادم خارج بلدك، بما في ذلك الولايات المتحدة.", "قبول", "رفض", "التفاصيل", "إعدادات ملفات تعريف الارتباط"),
+    "zh": ("我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。Analytics 数据可能在境外（包括美国）的服务器上处理。", "接受", "拒绝", "详情", "Cookie 设置"),
+    "ja": ("訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。Analyticsのデータは米国を含む国外のサーバーで処理される場合があります。", "同意する", "拒否する", "詳細", "Cookie設定"),
 }
 
 CONSENT_CSS = """
