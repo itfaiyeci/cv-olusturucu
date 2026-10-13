@@ -3039,7 +3039,8 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 /* === RK DIL === */
 .rk-page:not([lang="ja"]) .rk-title h1 { letter-spacing: 0.5mm; font-size: 18pt; }
 .rk-page:not([lang="ja"]) .rk-hist .y { width: 15mm; }
-.rk-page:not([lang="ja"]) .rk-hist .m { width: 13mm; }
+.rk-page:not([lang="ja"]) .rk-hist .m { width: 15mm; }
+.rk-page:not([lang="ja"]) .rk-hist th.m, .rk-page:not([lang="ja"]) .rk-hist th.y { white-space: nowrap; font-size: 8pt; padding-left: 0; padding-right: 0; }
 .rk-page:not([lang="ja"]) .rk-hist th { font-size: 8.5pt; }
 .rk-page[lang]:not([lang="ja"]), .rk-page[lang]:not([lang="ja"]) * { font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic", sans-serif !important; }
 .rk-page[lang="zh"], .rk-page[lang="zh"] * { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif !important; }
@@ -7259,7 +7260,7 @@ function hideHintBubble(hintBubble) {
                             'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
                             'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', ' '
                         ];
-                        if (!allowedKeys.includes(e.key) && !/^[\p{L}]$/u.test(e.key)) {
+                        /* seviye-rakam */ if (!allowedKeys.includes(e.key) && !/^[\p{L}\p{N}+\-\/]$/u.test(e.key)) {
                             e.preventDefault();
                             return false;
                         }
@@ -9556,6 +9557,7 @@ function saveCV() {
    klavyelerinde harf atlattığı için doğrulama 'input' aşamasına taşındı. */
 (function () {
     function clean(t) {
+        if (t.classList.contains('language-level')) return; // seviye: B2, C1 gibi rakamlara izin
         var s = t.textContent, k = s.replace(/\p{N}/gu, '');
         if (k !== s) {
             t.textContent = k;
