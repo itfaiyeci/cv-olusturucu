@@ -8287,7 +8287,10 @@ if (socialMediaSection) {
                     if (window.mobilcvRecommend) setTimeout(window.mobilcvRecommend, 1500);
                 }).catch(error => {
                     console.error('PDF oluşturma hatası:', error);
-                    alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+                    if (window.mcvReportError) window.mcvReportError('pdf', error && (error.message || error), '');
+                    var __m = {"tr": "PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.", "en": "Something went wrong while creating the PDF. Please try again.", "de": "Beim Erstellen der PDF ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.", "fr": "Une erreur s'est produite lors de la création du PDF. Veuillez réessayer.", "es": "Se produjo un error al crear el PDF. Inténtalo de nuevo.", "it": "Si è verificato un errore durante la creazione del PDF. Riprova.", "pt": "Ocorreu um erro ao criar o PDF. Tente novamente.", "ru": "При создании PDF произошла ошибка. Пожалуйста, попробуйте ещё раз.", "ar": "حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.", "zh": "生成 PDF 时出错，请重试。", "ja": "PDFの作成中にエラーが発生しました。もう一度お試しください。"};
+                    var __s = document.getElementById('language-select');
+                    alert(__m[(__s && __s.value) || window.MOBILCV_PAGE_LANG || 'tr'] || __m.en);
                 });
             });
 
@@ -10639,6 +10642,22 @@ function saveCV() {
     window.mcvTrack = function (name, p) {
         try { if (window.__gaLoaded && typeof window.gtag === 'function') window.gtag('event', name, p || {}); } catch (e) {}
     };
+    // Gercek kullanici hatalari: yalnizca hata turu, kisa mesaj ve dosya:satir. CV icerigi gonderilmez.
+    // Sayfa basina en fazla 3 bildirim; yalnizca cerez izni verilmis ve Analytics yuklenmisse gider.
+    var __errN = 0;
+    window.mcvReportError = function (kind, msg, src) {
+        if (__errN >= 3) return; __errN++;
+        var m = String(msg || '').replace(/\s+/g, ' ').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[e-posta]').replace(/\d{6,}/g, '[sayi]').slice(0, 100);
+        window.mcvTrack('js_error', { err_kind: kind, err_msg: m, err_src: String(src || '').split('/').pop().slice(0, 60), cv_language: lang(), cv_template: tpl() });
+    };
+    window.addEventListener('error', function (e) {
+        var t = e && e.target;
+        if (t && t !== window && (t.src || t.href)) { if (t.tagName === 'SCRIPT' || t.tagName === 'LINK') window.mcvReportError('resource', 'load failed', t.src || t.href); return; }
+        window.mcvReportError('js', e && e.message, (e && e.filename || '') + ':' + (e && e.lineno || ''));
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) {
+        var r = e && e.reason; window.mcvReportError('promise', (r && r.message) || r, '');
+    });
     document.addEventListener('change', function (e) {
         if (!e.isTrusted) return;
         var t = e.target;
