@@ -311,8 +311,8 @@
             grid-column: 1 / -1;
             display: flex;
             width: 100%;
-            height: 20px;
-            border-radius: 10px;
+            height: 32px; /* dokunma alani (eski 20px) */
+            border-radius: 16px;
             overflow: hidden;
             margin-bottom: 4px;
             box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
@@ -1736,10 +1736,11 @@
             color: #3498db;
             border: none;
             border-radius: 0;
-            padding: 0;
+            /* Dokunma alani ~36x32 px; negatif kenar boslugu satir duzenini korur */
+            padding: 9px;
+            margin: -9px -9px -9px -4px;
             font-size: 14px;
             cursor: pointer;
-            margin-left: 5px;
             transition: all 0.2s;
             flex-shrink: 0;
             width: auto;
@@ -2863,6 +2864,9 @@ img {
    CV'nin görünümü (odaklanılmamış haldeyken) hiç değişmez, otomatik zoom
    tetiklenmez. Bu kural, stil bloğunun EN SONUNDA yer alır ki .right-column
    .editable gibi eşit özgüllükteki diğer !important kuralları geçersiz kılsın. */
+.swipe-hint { position: sticky; left: 0; display: block; width: calc(100vw - 30px); max-width: 100%; box-sizing: border-box; margin: 0 0 8px; padding: 10px 14px; min-height: 40px; border: 0; border-radius: 10px; background: #1e293b; color: #fff; font: 600 14px/1.3 inherit; font-family: inherit; text-align: center; cursor: pointer; box-shadow: none; }
+.swipe-hint[hidden] { display: none !important; }
+@media print { .swipe-hint { display: none !important; } }
 /* === SABLON: KLASIK (tek sutun) === */
 /* Sablon secici */
 .template-picker { grid-column: 1 / -1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 12px; font-size: 14px; color: #475569; }
@@ -3266,6 +3270,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <!-- ANA CV FORMU -->
             <section aria-labelledby="cv-form-title">
                 <h2 id="cv-form-title" class="sr-only">Modulo del CV</h2>
+                <button type="button" id="swipe-hint" class="swipe-hint no-print" hidden>Diğer bölümler sağda — kaydırın →</button>
                 <div class="a4-container" id="cv-form">
                     <div class="cv-layout">
                         <!-- SOL SÜTUN - Kişisel Bilgiler -->
@@ -3342,7 +3347,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                 <div class="personal-info-item" data-field="birth-date">
                                     <div class="personal-info-label">
                                         <span data-key="birthDate">Doğum Tarihi</span>
-                                        <button class="date-picker-button" title="Scegli dal calendario">📅</button>
+                                        <button type="button" class="date-picker-button" title="Scegli dal calendario">📅</button>
                                     </div>
                                     <div class="personal-info-value editable birth-date-input" contenteditable="true" data-placeholder-key="birthDatePlaceholder" data-hint-key="birthDateHint"></div>
                                 </div>
@@ -10057,6 +10062,32 @@ function saveCV() {
 })();
 </script>
 
+    <script data-swipe-hint>
+    // Telefonda CV formunun sag sutunu (Hakkimda, Egitim, Deneyim...) ekran disinda kalir ve yatay kaydirma ister.
+    // Bir kez gosterilen ipucu: dokununca saga kaydirir; kullanici bir kez kaydirinca gizlenir ve tekrar gosterilmez.
+    (function () {
+        var T = { tr: 'Diğer bölümler sağda — kaydırın →', en: 'More sections on the right — swipe →', de: 'Weitere Abschnitte rechts – wischen →', fr: 'Autres sections à droite – faites glisser →', es: 'Más secciones a la derecha: desliza →', it: 'Altre sezioni a destra: scorri →', pt: 'Mais seções à direita: deslize →', ru: 'Остальные разделы справа — проведите →', ar: 'مزيد من الأقسام على اليمين — اسحب →', zh: '右侧还有更多栏目，滑动查看 →', ja: '右側に他の項目があります。スワイプ →' };
+        var KEY = 'mobilcv_swipe_seen';
+        function seen() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+        function mark() { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+        function lang() { var s = document.getElementById('language-select'); var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; return T[l] ? l : 'en'; }
+        document.addEventListener('DOMContentLoaded', function () {
+            var hint = document.getElementById('swipe-hint'), form = document.getElementById('cv-form');
+            if (!hint || !form) return;
+            var sc = form.parentElement, done = false;
+            function text() { hint.textContent = T[lang()]; hint.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr'); }
+            function hide() { if (done) return; done = true; hint.hidden = true; mark(); }
+            function check() { if (done) return; hint.hidden = !(sc.scrollWidth > sc.clientWidth + 20); }
+            if (seen()) { hint.hidden = true; return; }
+            text(); check();
+            sc.addEventListener('scroll', function () { if (sc.scrollLeft > 40) hide(); }, { passive: true });
+            hint.addEventListener('click', function () { try { sc.scrollBy({ left: Math.round(sc.clientWidth * 0.8), behavior: 'smooth' }); } catch (e) { sc.scrollLeft += Math.round(sc.clientWidth * 0.8); } });
+            window.addEventListener('resize', check);
+            var sel = document.getElementById('language-select');
+            if (sel) sel.addEventListener('change', function () { setTimeout(text, 0); });
+        });
+    })();
+    </script>
     <script data-extra-i18n>
     (function () {
         function apply() {
