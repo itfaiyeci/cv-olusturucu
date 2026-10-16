@@ -103,7 +103,7 @@
       "name": "本当に無料ですか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "はい。履歴書の作成とPDFのダウンロードは完全に無料です。透かしも入りません。"
+        "text": "はい。履歴書の作成とPDFのダウンロードは完全に無料です。透かしも入りません。PDFのダウンロードに支払いは不要で、解約が必要なサブスクリプションもありません。"
       }
     },
     {
@@ -2973,6 +2973,35 @@ img {
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* has-secicisini desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
+   Siniflar yalnizca tarayici bu seciciyi desteklemiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            display: none !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column {
+            padding-top: 10mm !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header {
+            padding-top: 10mm !important;
+        }
+.a4-container.tpl-classic.pdf-mode .personal-info-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info { grid-column: 1 / -1; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column,
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-photo:not(#fb_) .right-column { padding-top: 6mm !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3517,9 +3546,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">3ステップで履歴書を作成</h2>
             <ol><li>テンプレートで「履歴書」を選び、氏名・住所・学歴・職歴などを用紙に直接入力します。写真の追加は任意です。</li><li>画面に表示されている用紙がそのままPDFになります。「プレビュー」で仕上がりを確認できます。</li><li><b>PDFをダウンロード</b>を押せば完成です。</li></ol>
             <h2>MobilCVの特長</h2>
-            <ul><li><b>完全無料：</b>隠れた料金、試用期間、透かしはありません。</li><li><b>登録不要：</b>メールアドレスやパスワードは必要ありません。</li><li><b>履歴書は手元に：</b>入力内容はお使いのブラウザ内にのみ保存され、当サイトのサーバーには送信されません。</li><li><b>日本の履歴書形式：</b>厚生労働省の履歴書様式例を参考にしたレイアウトで、学歴・職歴は自動的に古い順に並びます。</li><li><b>11言語：</b>日本語、英語、トルコ語、ドイツ語、フランス語、スペイン語、イタリア語、ポルトガル語、ロシア語、アラビア語、中国語。</li></ul>
+            <ul><li><b>完全無料：</b>PDFのダウンロードに支払いは不要、解約が必要なサブスクリプションもありません。試用期間や透かしもありません。</li><li><b>登録不要：</b>メールアドレスやパスワードは必要ありません。</li><li><b>履歴書は手元に：</b>入力内容はお使いのブラウザ内にのみ保存され、当サイトのサーバーには送信されません。</li><li><b>日本の履歴書形式：</b>厚生労働省の履歴書様式例を参考にしたレイアウトで、学歴・職歴は自動的に古い順に並びます。</li><li><b>11言語：</b>日本語、英語、トルコ語、ドイツ語、フランス語、スペイン語、イタリア語、ポルトガル語、ロシア語、アラビア語、中国語。</li></ul>
             <h2>よくある質問</h2>
-            <details><summary>本当に無料ですか？</summary><p>はい。履歴書の作成とPDFのダウンロードは完全に無料です。透かしも入りません。</p></details>
+            <details><summary>本当に無料ですか？</summary><p>はい。履歴書の作成とPDFのダウンロードは完全に無料です。透かしも入りません。PDFのダウンロードに支払いは不要で、解約が必要なサブスクリプションもありません。</p></details>
             <details><summary>会員登録は必要ですか？</summary><p>いいえ。アカウント、メールアドレス、パスワードは不要です。ページを開いてすぐに始められます。</p></details>
             <details><summary>入力した情報はどこに保存されますか？</summary><p>お使いの端末のブラウザ内（ローカルストレージ）にのみ保存され、当サイトのサーバーには送信されません。「すべてクリア」ボタンで削除できます。</p></details>
             <details><summary>スマホで履歴書を作れますか？</summary><p>はい。MobilCVはスマートフォンでの利用を前提に設計されており、パソコンでも使えます。</p></details>
@@ -7503,6 +7532,28 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
             }
 
             // Boş alanları PDF'de gizleme fonksiyonu
+            /* has-secicisi yedegi: eski tarayicilarda (destek yoksa) PDF kurallari icin siniflari ayarla */
+            function hasFallbackSync(root) {
+                try { if (window.CSS && CSS.supports && CSS.supports('selector(:has(a))')) return; } catch (e) {}
+                root = root || document;
+                root.querySelectorAll('.cv-layout, #avatarBox').forEach(function (el) {
+                    var ok = !!el.querySelector('#avatar[src^="data:"]');
+                    el.classList.toggle('fb-photo', ok);
+                    el.classList.toggle('fb-nophoto', !ok);
+                });
+                root.querySelectorAll('.personal-info-item').forEach(function (el) {
+                    var empty = Array.prototype.some.call(el.children, function (c) {
+                        return c.classList.contains('personal-info-value') && c.classList.contains('empty-field');
+                    });
+                    el.classList.toggle('fb-empty', empty);
+                    if (el.getAttribute('data-field') === 'social-media') {
+                        el.classList.toggle('fb-sm-empty', !el.querySelector('.social-media-value:not(.empty-field)'));
+                    }
+                });
+                root.querySelectorAll('.social-media-item').forEach(function (el) {
+                    el.classList.toggle('fb-empty', !!el.querySelector('.social-media-value.empty-field'));
+                });
+            }
             function hideEmptyFieldsForPDF() {
                 // Tüm editable alanları kontrol et
                 document.querySelectorAll('.editable').forEach(element => {
@@ -8019,6 +8070,7 @@ if (socialMediaSection) {
                 
                 // Boş alanları gizle
                 hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -8107,6 +8159,7 @@ if (socialMediaSection) {
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
+                        hasFallbackSync(clonedDoc);
 
                         const clonedEditables = clonedDoc.querySelectorAll('.editable');
                         clonedEditables.forEach(editable => {
@@ -8177,6 +8230,7 @@ if (socialMediaSection) {
 
                     const cvForm = document.getElementById('cv-form');
                     const rightColumn = cvForm.querySelector('.right-column');
+                    hasFallbackSync();
                     cvForm.classList.add('pdf-mode');
 
                     const originalPaddingTop = rightColumn.style.paddingTop;

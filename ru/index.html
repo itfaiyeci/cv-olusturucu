@@ -103,7 +103,7 @@
       "name": "MobilCV действительно бесплатный?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков."
+        "text": "Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков. За скачивание PDF платить не нужно, и нет подписки, которую пришлось бы отменять."
       }
     },
     {
@@ -2973,6 +2973,35 @@ img {
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* has-secicisini desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
+   Siniflar yalnizca tarayici bu seciciyi desteklemiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            display: none !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column {
+            padding-top: 10mm !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header {
+            padding-top: 10mm !important;
+        }
+.a4-container.tpl-classic.pdf-mode .personal-info-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info { grid-column: 1 / -1; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column,
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-photo:not(#fb_) .right-column { padding-top: 6mm !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3517,9 +3546,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">Резюме за 3 шага</h2>
             <ol><li>Заполните данные: контакты, опыт работы, образование и навыки. При желании добавьте фото.</li><li>Выберите цветовую тему и язык резюме; все изменения сразу видны в предпросмотре.</li><li>Нажмите <b>Скачать PDF</b>. Резюме готово к отправке.</li></ol>
             <h2>Почему MobilCV?</h2>
-            <ul><li><b>Полностью бесплатно:</b> без скрытых платежей, пробного периода и водяных знаков.</li><li><b>Без регистрации:</b> не нужны e-mail, пароль или аккаунт.</li><li><b>Резюме остаётся у вас:</b> резюме хранится только в вашем браузере и не отправляется на наш сервер.</li><li><b>Создан для телефона:</b> резюме прямо с телефона, без компьютера.</li><li><b>11 языков:</b> русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский.</li></ul>
+            <ul><li><b>Полностью бесплатно:</b> не нужно платить за скачивание PDF, нет подписки, которую надо отменять, нет пробного периода и водяных знаков.</li><li><b>Без регистрации:</b> не нужны e-mail, пароль или аккаунт.</li><li><b>Резюме остаётся у вас:</b> резюме хранится только в вашем браузере и не отправляется на наш сервер.</li><li><b>Создан для телефона:</b> резюме прямо с телефона, без компьютера.</li><li><b>11 языков:</b> русский, английский, турецкий, немецкий, французский, испанский, итальянский, португальский, арабский, китайский и японский.</li></ul>
             <h2>Частые вопросы</h2>
-            <details><summary>MobilCV действительно бесплатный?</summary><p>Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков.</p></details>
+            <details><summary>MobilCV действительно бесплатный?</summary><p>Да. Создать резюме и скачать его в PDF можно полностью бесплатно, без скрытых платежей и водяных знаков. За скачивание PDF платить не нужно, и нет подписки, которую пришлось бы отменять.</p></details>
             <details><summary>Нужно ли регистрироваться?</summary><p>Нет. Не нужны аккаунт, e-mail или пароль: откройте страницу и начните.</p></details>
             <details><summary>Где хранятся мои данные?</summary><p>Только на вашем устройстве, в локальном хранилище браузера. Они не отправляются на наши серверы. Удалить их можно кнопкой Очистить все.</p></details>
             <details><summary>Можно ли создать резюме с телефона?</summary><p>Да. MobilCV создан для телефона и также работает на компьютере.</p></details>
@@ -7503,6 +7532,28 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
             }
 
             // Boş alanları PDF'de gizleme fonksiyonu
+            /* has-secicisi yedegi: eski tarayicilarda (destek yoksa) PDF kurallari icin siniflari ayarla */
+            function hasFallbackSync(root) {
+                try { if (window.CSS && CSS.supports && CSS.supports('selector(:has(a))')) return; } catch (e) {}
+                root = root || document;
+                root.querySelectorAll('.cv-layout, #avatarBox').forEach(function (el) {
+                    var ok = !!el.querySelector('#avatar[src^="data:"]');
+                    el.classList.toggle('fb-photo', ok);
+                    el.classList.toggle('fb-nophoto', !ok);
+                });
+                root.querySelectorAll('.personal-info-item').forEach(function (el) {
+                    var empty = Array.prototype.some.call(el.children, function (c) {
+                        return c.classList.contains('personal-info-value') && c.classList.contains('empty-field');
+                    });
+                    el.classList.toggle('fb-empty', empty);
+                    if (el.getAttribute('data-field') === 'social-media') {
+                        el.classList.toggle('fb-sm-empty', !el.querySelector('.social-media-value:not(.empty-field)'));
+                    }
+                });
+                root.querySelectorAll('.social-media-item').forEach(function (el) {
+                    el.classList.toggle('fb-empty', !!el.querySelector('.social-media-value.empty-field'));
+                });
+            }
             function hideEmptyFieldsForPDF() {
                 // Tüm editable alanları kontrol et
                 document.querySelectorAll('.editable').forEach(element => {
@@ -8019,6 +8070,7 @@ if (socialMediaSection) {
                 
                 // Boş alanları gizle
                 hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -8107,6 +8159,7 @@ if (socialMediaSection) {
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
+                        hasFallbackSync(clonedDoc);
 
                         const clonedEditables = clonedDoc.querySelectorAll('.editable');
                         clonedEditables.forEach(editable => {
@@ -8177,6 +8230,7 @@ if (socialMediaSection) {
 
                     const cvForm = document.getElementById('cv-form');
                     const rightColumn = cvForm.querySelector('.right-column');
+                    hasFallbackSync();
                     cvForm.classList.add('pdf-mode');
 
                     const originalPaddingTop = rightColumn.style.paddingTop;

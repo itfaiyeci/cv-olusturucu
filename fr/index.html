@@ -103,7 +103,7 @@
       "name": "MobilCV est-il vraiment gratuit ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Oui. Créer votre CV et le télécharger en PDF est entièrement gratuit, sans frais cachés ni filigrane."
+        "text": "Oui. Créer votre CV et le télécharger en PDF est entièrement gratuit, sans frais cachés ni filigrane. Le téléchargement du PDF n'est jamais payant et il n'y a aucun abonnement à résilier."
       }
     },
     {
@@ -2973,6 +2973,35 @@ img {
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* has-secicisini desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
+   Siniflar yalnizca tarayici bu seciciyi desteklemiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            display: none !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column {
+            padding-top: 10mm !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header {
+            padding-top: 10mm !important;
+        }
+.a4-container.tpl-classic.pdf-mode .personal-info-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info { grid-column: 1 / -1; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column,
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-photo:not(#fb_) .right-column { padding-top: 6mm !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3517,9 +3546,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">Votre CV en 3 étapes</h2>
             <ol><li>Saisissez vos informations : coordonnées, expérience, formation et compétences. Ajoutez une photo si vous le souhaitez.</li><li>Choisissez un thème de couleur et la langue du CV ; chaque modification s'affiche aussitôt dans l'aperçu.</li><li>Appuyez sur <b>Télécharger PDF</b>. Votre CV est prêt à être envoyé.</li></ol>
             <h2>Pourquoi MobilCV ?</h2>
-            <ul><li><b>Entièrement gratuit :</b> aucun frais caché, aucune période d'essai, aucun filigrane.</li><li><b>Sans inscription :</b> ni e-mail, ni mot de passe, ni compte.</li><li><b>Votre CV reste chez vous :</b> votre CV est conservé uniquement dans votre navigateur, jamais envoyé à notre serveur.</li><li><b>Pensé pour le téléphone :</b> créez un CV depuis votre téléphone, sans ordinateur.</li><li><b>11 langues :</b> français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe, chinois et japonais.</li></ul>
+            <ul><li><b>Entièrement gratuit :</b> aucun paiement pour télécharger le PDF, aucun abonnement à résilier, aucune période d'essai, aucun filigrane.</li><li><b>Sans inscription :</b> ni e-mail, ni mot de passe, ni compte.</li><li><b>Votre CV reste chez vous :</b> votre CV est conservé uniquement dans votre navigateur, jamais envoyé à notre serveur.</li><li><b>Pensé pour le téléphone :</b> créez un CV depuis votre téléphone, sans ordinateur.</li><li><b>11 langues :</b> français, anglais, turc, allemand, espagnol, italien, portugais, russe, arabe, chinois et japonais.</li></ul>
             <h2>Questions fréquentes</h2>
-            <details><summary>MobilCV est-il vraiment gratuit ?</summary><p>Oui. Créer votre CV et le télécharger en PDF est entièrement gratuit, sans frais cachés ni filigrane.</p></details>
+            <details><summary>MobilCV est-il vraiment gratuit ?</summary><p>Oui. Créer votre CV et le télécharger en PDF est entièrement gratuit, sans frais cachés ni filigrane. Le téléchargement du PDF n'est jamais payant et il n'y a aucun abonnement à résilier.</p></details>
             <details><summary>Dois-je m'inscrire ?</summary><p>Non. Aucun compte, e-mail ou mot de passe n'est nécessaire : ouvrez la page et commencez.</p></details>
             <details><summary>Où sont enregistrées mes informations ?</summary><p>Uniquement sur votre appareil, dans le stockage local de votre navigateur. Elles ne sont jamais envoyées à nos serveurs. Le bouton Tout effacer les supprime.</p></details>
             <details><summary>Puis-je créer mon CV sur mon téléphone ?</summary><p>Oui. MobilCV est conçu pour le téléphone et fonctionne aussi sur ordinateur.</p></details>
@@ -7503,6 +7532,28 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
             }
 
             // Boş alanları PDF'de gizleme fonksiyonu
+            /* has-secicisi yedegi: eski tarayicilarda (destek yoksa) PDF kurallari icin siniflari ayarla */
+            function hasFallbackSync(root) {
+                try { if (window.CSS && CSS.supports && CSS.supports('selector(:has(a))')) return; } catch (e) {}
+                root = root || document;
+                root.querySelectorAll('.cv-layout, #avatarBox').forEach(function (el) {
+                    var ok = !!el.querySelector('#avatar[src^="data:"]');
+                    el.classList.toggle('fb-photo', ok);
+                    el.classList.toggle('fb-nophoto', !ok);
+                });
+                root.querySelectorAll('.personal-info-item').forEach(function (el) {
+                    var empty = Array.prototype.some.call(el.children, function (c) {
+                        return c.classList.contains('personal-info-value') && c.classList.contains('empty-field');
+                    });
+                    el.classList.toggle('fb-empty', empty);
+                    if (el.getAttribute('data-field') === 'social-media') {
+                        el.classList.toggle('fb-sm-empty', !el.querySelector('.social-media-value:not(.empty-field)'));
+                    }
+                });
+                root.querySelectorAll('.social-media-item').forEach(function (el) {
+                    el.classList.toggle('fb-empty', !!el.querySelector('.social-media-value.empty-field'));
+                });
+            }
             function hideEmptyFieldsForPDF() {
                 // Tüm editable alanları kontrol et
                 document.querySelectorAll('.editable').forEach(element => {
@@ -8019,6 +8070,7 @@ if (socialMediaSection) {
                 
                 // Boş alanları gizle
                 hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -8107,6 +8159,7 @@ if (socialMediaSection) {
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
+                        hasFallbackSync(clonedDoc);
 
                         const clonedEditables = clonedDoc.querySelectorAll('.editable');
                         clonedEditables.forEach(editable => {
@@ -8177,6 +8230,7 @@ if (socialMediaSection) {
 
                     const cvForm = document.getElementById('cv-form');
                     const rightColumn = cvForm.querySelector('.right-column');
+                    hasFallbackSync();
                     cvForm.classList.add('pdf-mode');
 
                     const originalPaddingTop = rightColumn.style.paddingTop;

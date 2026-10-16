@@ -103,7 +103,7 @@
       "name": "MobilCV 真的免费吗？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "是的。制作简历并下载PDF完全免费，没有隐藏费用，也没有水印。"
+        "text": "是的。制作简历并下载PDF完全免费，没有隐藏费用，也没有水印。下载PDF无需付费，也没有需要取消的订阅。"
       }
     },
     {
@@ -2973,6 +2973,35 @@ img {
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* has-secicisini desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
+   Siniflar yalnizca tarayici bu seciciyi desteklemiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            display: none !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column {
+            padding-top: 10mm !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header {
+            padding-top: 10mm !important;
+        }
+.a4-container.tpl-classic.pdf-mode .personal-info-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info { grid-column: 1 / -1; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column,
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-photo:not(#fb_) .right-column { padding-top: 6mm !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3517,9 +3546,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">3步完成简历</h2>
             <ol><li>填写您的信息：联系方式、工作经历、教育背景和技能，也可以添加照片。</li><li>选择颜色主题和简历语言，每次修改都能在预览中即时看到。</li><li>点击<b>下载PDF</b>，简历即可用于投递。</li></ol>
             <h2>为什么选择 MobilCV？</h2>
-            <ul><li><b>完全免费：</b>没有隐藏费用、没有试用期、没有水印。</li><li><b>无需注册：</b>不需要邮箱、密码或账号。</li><li><b>简历只属于您：</b>简历只保存在您的浏览器中，不会发送到我们的服务器。</li><li><b>为手机设计：</b>无需电脑，用手机即可完成简历。</li><li><b>11种语言：</b>中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语、阿拉伯语和日语。</li></ul>
+            <ul><li><b>完全免费：</b>下载PDF无需付费，没有需要取消的订阅，没有试用期，也没有水印。</li><li><b>无需注册：</b>不需要邮箱、密码或账号。</li><li><b>简历只属于您：</b>简历只保存在您的浏览器中，不会发送到我们的服务器。</li><li><b>为手机设计：</b>无需电脑，用手机即可完成简历。</li><li><b>11种语言：</b>中文、英语、土耳其语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语、阿拉伯语和日语。</li></ul>
             <h2>常见问题</h2>
-            <details><summary>MobilCV 真的免费吗？</summary><p>是的。制作简历并下载PDF完全免费，没有隐藏费用，也没有水印。</p></details>
+            <details><summary>MobilCV 真的免费吗？</summary><p>是的。制作简历并下载PDF完全免费，没有隐藏费用，也没有水印。下载PDF无需付费，也没有需要取消的订阅。</p></details>
             <details><summary>需要注册吗？</summary><p>不需要。无需账号、邮箱或密码，打开页面即可开始。</p></details>
             <details><summary>我的信息保存在哪里？</summary><p>只保存在您自己的设备上，即浏览器的本地存储中，不会发送到我们的服务器。可以用“全部清除”按钮删除。</p></details>
             <details><summary>可以用手机制作简历吗？</summary><p>可以。MobilCV 专为手机设计，在电脑上也能使用。</p></details>
@@ -7503,6 +7532,28 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
             }
 
             // Boş alanları PDF'de gizleme fonksiyonu
+            /* has-secicisi yedegi: eski tarayicilarda (destek yoksa) PDF kurallari icin siniflari ayarla */
+            function hasFallbackSync(root) {
+                try { if (window.CSS && CSS.supports && CSS.supports('selector(:has(a))')) return; } catch (e) {}
+                root = root || document;
+                root.querySelectorAll('.cv-layout, #avatarBox').forEach(function (el) {
+                    var ok = !!el.querySelector('#avatar[src^="data:"]');
+                    el.classList.toggle('fb-photo', ok);
+                    el.classList.toggle('fb-nophoto', !ok);
+                });
+                root.querySelectorAll('.personal-info-item').forEach(function (el) {
+                    var empty = Array.prototype.some.call(el.children, function (c) {
+                        return c.classList.contains('personal-info-value') && c.classList.contains('empty-field');
+                    });
+                    el.classList.toggle('fb-empty', empty);
+                    if (el.getAttribute('data-field') === 'social-media') {
+                        el.classList.toggle('fb-sm-empty', !el.querySelector('.social-media-value:not(.empty-field)'));
+                    }
+                });
+                root.querySelectorAll('.social-media-item').forEach(function (el) {
+                    el.classList.toggle('fb-empty', !!el.querySelector('.social-media-value.empty-field'));
+                });
+            }
             function hideEmptyFieldsForPDF() {
                 // Tüm editable alanları kontrol et
                 document.querySelectorAll('.editable').forEach(element => {
@@ -8019,6 +8070,7 @@ if (socialMediaSection) {
                 
                 // Boş alanları gizle
                 hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -8107,6 +8159,7 @@ if (socialMediaSection) {
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
+                        hasFallbackSync(clonedDoc);
 
                         const clonedEditables = clonedDoc.querySelectorAll('.editable');
                         clonedEditables.forEach(editable => {
@@ -8177,6 +8230,7 @@ if (socialMediaSection) {
 
                     const cvForm = document.getElementById('cv-form');
                     const rightColumn = cvForm.querySelector('.right-column');
+                    hasFallbackSync();
                     cvForm.classList.add('pdf-mode');
 
                     const originalPaddingTop = rightColumn.style.paddingTop;

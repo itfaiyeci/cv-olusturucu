@@ -3,13 +3,15 @@
 <head>
     <script>window.MOBILCV_PAGE_LANG='tr';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
     <meta charset="UTF-8">
+    <script id="mcv-storage-shim">(function(){function mem(){var d={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}['localStorage','sessionStorage'].forEach(function(n){try{var st=window[n],t='__mcv_t';st.setItem(t,t);st.removeItem(t)}catch(e){try{Object.defineProperty(window,n,{value:mem(),configurable:true,writable:true})}catch(e2){}}})})();</script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
     <!-- Not: Varsayılan MOBİL-KOLAY görünüm. Masaüstü görünümü artık aşağıdaki
          script ile eklenen bir düğmeyle isteğe bağlı olarak açılabiliyor. -->
     
     <!-- Primary Meta Tags -->
     <title>Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV</title>
-    <meta name="description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
+    <meta name="description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, CV bilgileriniz sunucumuza gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta name="keywords" content="cv oluşturma, cv hazırlama, online cv, ücretsiz cv, profesyonel cv, cv şablonları, pdf cv, iş başvurusu, özgeçmiş">
     <meta name="author" content="MobilCV">
     <meta name="robots" content="index, follow">
@@ -18,7 +20,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mobilcv.com/">
     <meta property="og:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
-    <meta property="og:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
+    <meta property="og:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, CV bilgileriniz sunucumuza gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta property="og:image" content="https://www.mobilcv.com/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -29,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.mobilcv.com/">
     <meta name="twitter:title" content="Ücretsiz CV Hazırla – Üyeliksiz, Telefondan PDF | MobilCV">
-    <meta name="twitter:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, bilgileriniz sunucuya gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
+    <meta name="twitter:description" content="Üyeliksiz ve reklamsız! Telefondan ücretsiz CV hazırlayın, CV bilgileriniz sunucumuza gönderilmez. 11 dil desteği ile PDF CV'nizi oluşturun.">
     <meta name="twitter:image" content="https://www.mobilcv.com/images/og-image.jpg">
     
     <!-- Canonical URL -->
@@ -2867,6 +2869,20 @@ img {
 .template-picker select { min-width: 0; max-width: 100%; }
 .template-picker label { white-space: nowrap; flex: 0 0 auto; width: auto; margin: 0; }
 .template-picker select { font-size: 15px; padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #1e293b; cursor: pointer; }
+.template-picker { flex-direction: column; align-items: stretch; gap: 6px; }
+#template-label { font-size: 13px; font-weight: 600; color: #475569; text-align: center; }
+.tpl-buttons { display: flex; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 0 1px #cbd5e1; background: #fff; }
+.tpl-btn { flex: 1 1 0; min-width: 0; margin: 0; padding: 9px 6px; border: none; border-left: 1px solid #e2e8f0; background: transparent; color: #334155; font-size: 14px; font-weight: 600; line-height: 1.2; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: none; border-radius: 0; min-height: 40px; transition: background .15s ease, color .15s ease; }
+.tpl-btn:first-child { border-left: none; }
+.tpl-btn:hover { background: #f1f5f9; }
+.tpl-btn.active { background: #1e293b; color: #fff; }
+.tpl-btn:focus-visible { outline: 2px solid #1e293b; outline-offset: -3px; }
+@media (max-width: 480px) {
+  .tpl-buttons { flex-wrap: wrap; }
+  .tpl-btn { flex: 1 1 50%; border-top: 1px solid #e2e8f0; font-size: 13px; }
+  .tpl-btn:nth-child(-n+2) { border-top: none; }
+  .tpl-btn:nth-child(3) { border-left: none; }
+}
 
 /* Klasik: ust baslik bandi + tek sutun govde. Ayni DOM, sadece yerlesim. */
 .a4-container.tpl-classic .cv-layout { flex-direction: column !important; }
@@ -2957,6 +2973,35 @@ img {
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* :has() desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
+   Siniflar yalnizca :has() desteklenmiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            border-color: transparent !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+.pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
+            display: none !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column {
+            padding-top: 10mm !important;
+        }
+.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header {
+            padding-top: 10mm !important;
+        }
+.a4-container.tpl-classic.pdf-mode .personal-info-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-header { display: none !important; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info { grid-column: 1 / -1; }
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .right-column,
+.a4-container.tpl-classic.pdf-mode .cv-layout.fb-photo:not(#fb_) .right-column { padding-top: 6mm !important; }
+#cv-form.tpl-top.pdf-mode .social-media-item.fb-empty.fb-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode #tpl-top-row .personal-info-item[data-field="social-media"].fb-sm-empty.fb-sm-empty { display: none !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.name-item,
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
+#cv-form.tpl-top.pdf-mode .cv-layout.fb-nophoto:not(#fb_) .personal-info-item.title-item { margin-bottom: 4mm !important; }
+
 /* === SABLON: RIREKISHO === */
 .jp-only { display: none !important; }
 .a4-container.tpl-rirekisho .jp-only.section { display: block !important; }
@@ -3025,7 +3070,8 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 /* === RK DIL === */
 .rk-page:not([lang="ja"]) .rk-title h1 { letter-spacing: 0.5mm; font-size: 18pt; }
 .rk-page:not([lang="ja"]) .rk-hist .y { width: 15mm; }
-.rk-page:not([lang="ja"]) .rk-hist .m { width: 13mm; }
+.rk-page:not([lang="ja"]) .rk-hist .m { width: 15mm; }
+.rk-page:not([lang="ja"]) .rk-hist th.m, .rk-page:not([lang="ja"]) .rk-hist th.y { white-space: nowrap; font-size: 8pt; padding-left: 0; padding-right: 0; }
 .rk-page:not([lang="ja"]) .rk-hist th { font-size: 8.5pt; }
 .rk-page[lang]:not([lang="ja"]), .rk-page[lang]:not([lang="ja"]) * { font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", "Noto Sans Arabic", sans-serif !important; }
 .rk-page[lang="zh"], .rk-page[lang="zh"] * { font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif !important; }
@@ -3170,8 +3216,14 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <section aria-labelledby="controls-title" class="controls">
                 <h2 id="controls-title" class="sr-only">CV Kontrolleri</h2>
                 <div class="template-picker" id="template-picker">
-                    <label for="template-select" id="template-label">Şablon</label>
-                    <select id="template-select">
+                    <span id="template-label">Şablon</span>
+                    <div class="tpl-buttons" id="tpl-buttons" role="radiogroup" aria-labelledby="template-label">
+                        <button type="button" class="tpl-btn active" data-tpl="" aria-checked="true" role="radio" id="tpl-btn-modern">Modern</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-classic" aria-checked="false" role="radio" id="tpl-btn-classic">Klasik</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-top" aria-checked="false" role="radio" id="tpl-btn-top">Standart</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-rirekisho" aria-checked="false" role="radio" id="tpl-btn-rirekisho">Rirekisho (履歴書)</button>
+                    </div>
+                    <select id="template-select" hidden aria-hidden="true" tabindex="-1">
                         <option value="" id="tpl-opt-modern">Modern</option>
                         <option value="tpl-classic" id="tpl-opt-classic">Klasik (tek sütun)</option>
                         <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
@@ -3494,7 +3546,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             <h2 id="seo-steps-title">3 adımda CV hazırlayın</h2>
             <ol><li>Bilgilerinizi forma yazın: iletişim, deneyim, eğitim, yetenekler. İsterseniz fotoğraf ekleyin.</li><li>Renk temasını ve CV dilini seçin; değişiklikleri önizlemede anında görün.</li><li><b>PDF İndir</b> düğmesine basın. CV'niz başvuruya hazır.</li></ol>
             <h2>Neden MobilCV?</h2>
-            <ul><li><b>Tamamen ücretsiz:</b> Gizli ücret, deneme süresi veya filigran yok.</li><li><b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.</li><li><b>Bilgileriniz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucuya gönderilmez.</li><li><b>Telefon için tasarlandı:</b> Bilgisayar olmadan, telefondan CV hazırlayabilirsiniz.</li><li><b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca.</li></ul>
+            <ul><li><b>Tamamen ücretsiz:</b> Gizli ücret, deneme süresi veya filigran yok.</li><li><b>Üyelik yok:</b> E-posta, şifre veya hesap gerekmez.</li><li><b>CV'niz sizde kalır:</b> CV'niz yalnızca kendi tarayıcınızda tutulur, sunucumuza gönderilmez.</li><li><b>Telefon için tasarlandı:</b> Bilgisayar olmadan, telefondan CV hazırlayabilirsiniz.</li><li><b>11 dil:</b> Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Rusça, Arapça, Çince ve Japonca.</li></ul>
             <h2>Sıkça Sorulan Sorular</h2>
             <details><summary>MobilCV gerçekten ücretsiz mi?</summary><p>Evet. CV oluşturmak ve PDF olarak indirmek tamamen ücretsizdir; gizli ücret veya filigran yoktur.</p></details>
             <details><summary>CV hazırlamak için üye olmam gerekiyor mu?</summary><p>Hayır. Üyelik, e-posta veya şifre gerekmez; sayfayı açıp hemen başlayabilirsiniz.</p></details>
@@ -7239,7 +7291,7 @@ function hideHintBubble(hintBubble) {
                             'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
                             'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', ' '
                         ];
-                        if (!allowedKeys.includes(e.key) && !/^[\p{L}]$/u.test(e.key)) {
+                        /* seviye-rakam */ if (!allowedKeys.includes(e.key) && !/^[\p{L}\p{N}+\-\/]$/u.test(e.key)) {
                             e.preventDefault();
                             return false;
                         }
@@ -7480,6 +7532,28 @@ if (phoneNumber.startsWith('90') && phoneNumber.length > 10) {
             }
 
             // Boş alanları PDF'de gizleme fonksiyonu
+            /* :has() yedegi: eski tarayicilarda (:has desteklenmiyorsa) PDF kurallari icin siniflari ayarla */
+            function hasFallbackSync(root) {
+                try { if (window.CSS && CSS.supports && CSS.supports('selector(:has(a))')) return; } catch (e) {}
+                root = root || document;
+                root.querySelectorAll('.cv-layout, #avatarBox').forEach(function (el) {
+                    var ok = !!el.querySelector('#avatar[src^="data:"]');
+                    el.classList.toggle('fb-photo', ok);
+                    el.classList.toggle('fb-nophoto', !ok);
+                });
+                root.querySelectorAll('.personal-info-item').forEach(function (el) {
+                    var empty = Array.prototype.some.call(el.children, function (c) {
+                        return c.classList.contains('personal-info-value') && c.classList.contains('empty-field');
+                    });
+                    el.classList.toggle('fb-empty', empty);
+                    if (el.getAttribute('data-field') === 'social-media') {
+                        el.classList.toggle('fb-sm-empty', !el.querySelector('.social-media-value:not(.empty-field)'));
+                    }
+                });
+                root.querySelectorAll('.social-media-item').forEach(function (el) {
+                    el.classList.toggle('fb-empty', !!el.querySelector('.social-media-value.empty-field'));
+                });
+            }
             function hideEmptyFieldsForPDF() {
                 // Tüm editable alanları kontrol et
                 document.querySelectorAll('.editable').forEach(element => {
@@ -7996,6 +8070,7 @@ if (socialMediaSection) {
                 
                 // Boş alanları gizle
                 hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -8084,6 +8159,7 @@ if (socialMediaSection) {
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
+                        hasFallbackSync(clonedDoc);
 
                         const clonedEditables = clonedDoc.querySelectorAll('.editable');
                         clonedEditables.forEach(editable => {
@@ -8154,6 +8230,7 @@ if (socialMediaSection) {
 
                     const cvForm = document.getElementById('cv-form');
                     const rightColumn = cvForm.querySelector('.right-column');
+                    hasFallbackSync();
                     cvForm.classList.add('pdf-mode');
 
                     const originalPaddingTop = rightColumn.style.paddingTop;
@@ -9536,6 +9613,7 @@ function saveCV() {
    klavyelerinde harf atlattığı için doğrulama 'input' aşamasına taşındı. */
 (function () {
     function clean(t) {
+        if (t.classList.contains('language-level')) return; // seviye: B2, C1 gibi rakamlara izin
         var s = t.textContent, k = s.replace(/\p{N}/gu, '');
         if (k !== s) {
             t.textContent = k;
@@ -9677,6 +9755,11 @@ function saveCV() {
     transition: transform 0.25s ease;
 }
 #sticky-action-bar.visible { transform: translateY(0); }
+@media (min-width: 860px) {
+    #sticky-action-bar { left: 50%; right: auto; width: 794px; max-width: calc(100% - 32px); box-sizing: border-box;
+        border: 1px solid #e5e7eb; border-bottom: none; border-radius: 14px 14px 0 0; transform: translate(-50%, 110%); }
+    #sticky-action-bar.visible { transform: translate(-50%, 0); }
+}
 #sticky-action-bar button {
     flex: 1;
     padding: 12px 10px;
@@ -10021,7 +10104,7 @@ function saveCV() {
     // Google Analytics YALNIZCA ziyaretci "Kabul et" derse yuklenir (KVKK / GDPR).
     (function () {
         var GA = 'G-4W6V8KX8D8', KEY = 'mobilcv_consent';
-        var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}, "ja": {"msg": "訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。", "ok": "同意する", "no": "拒否する", "more": "詳細", "set": "Cookie設定", "url": "https://mobilcv.net/ja/privacy-policy.html"}};
+        var T = {"tr": {"msg": "Ziyaret istatistikleri için Google Analytics çerezlerini kullanmak istiyoruz. CV bilgileriniz bundan etkilenmez ve cihazınızda kalır. Analytics verileri ABD dahil yurt dışındaki sunucularda işlenebilir.", "ok": "Kabul et", "no": "Reddet", "more": "Ayrıntılar", "set": "Çerez ayarları", "url": "https://mobilcv.net/gizlilik-politikasi.html"}, "en": {"msg": "We'd like to use Google Analytics cookies to count visits. Your CV data is not affected and stays on your device. Analytics data may be processed on servers abroad, including in the US.", "ok": "Accept", "no": "Reject", "more": "Details", "set": "Cookie settings", "url": "https://mobilcv.net/en/privacy-policy.html"}, "de": {"msg": "Wir möchten Google-Analytics-Cookies verwenden, um Besuche zu zählen. Ihre Lebenslaufdaten sind davon nicht betroffen und bleiben auf Ihrem Gerät. Analytics-Daten können auf Servern im Ausland, auch in den USA, verarbeitet werden.", "ok": "Akzeptieren", "no": "Ablehnen", "more": "Details", "set": "Cookie-Einstellungen", "url": "https://mobilcv.net/de/privacy-policy.html"}, "fr": {"msg": "Nous souhaitons utiliser des cookies Google Analytics pour mesurer les visites. Les données de votre CV ne sont pas concernées et restent sur votre appareil. Les données d'Analytics peuvent être traitées sur des serveurs à l'étranger, notamment aux États-Unis.", "ok": "Accepter", "no": "Refuser", "more": "Détails", "set": "Paramètres des cookies", "url": "https://mobilcv.net/fr/privacy-policy.html"}, "es": {"msg": "Queremos usar cookies de Google Analytics para contar las visitas. Los datos de tu currículum no se ven afectados y se quedan en tu dispositivo. Los datos de Analytics pueden tratarse en servidores en el extranjero, incluido Estados Unidos.", "ok": "Aceptar", "no": "Rechazar", "more": "Detalles", "set": "Configuración de cookies", "url": "https://mobilcv.net/es/privacy-policy.html"}, "it": {"msg": "Vorremmo usare i cookie di Google Analytics per contare le visite. I dati del tuo CV non sono coinvolti e restano sul tuo dispositivo. I dati di Analytics possono essere trattati su server all'estero, anche negli Stati Uniti.", "ok": "Accetta", "no": "Rifiuta", "more": "Dettagli", "set": "Impostazioni cookie", "url": "https://mobilcv.net/it/privacy-policy.html"}, "pt": {"msg": "Gostaríamos de usar cookies do Google Analytics para contar as visitas. Os dados do seu currículo não são afetados e ficam no seu dispositivo. Os dados do Analytics podem ser tratados em servidores no exterior, inclusive nos EUA.", "ok": "Aceitar", "no": "Recusar", "more": "Detalhes", "set": "Configurações de cookies", "url": "https://mobilcv.net/pt/privacy-policy.html"}, "ru": {"msg": "Мы хотим использовать файлы cookie Google Analytics для подсчёта посещений. Данные вашего резюме это не затрагивает — они остаются на вашем устройстве. Данные Analytics могут обрабатываться на серверах за рубежом, в том числе в США.", "ok": "Принять", "no": "Отклонить", "more": "Подробнее", "set": "Настройки cookie", "url": "https://mobilcv.net/ru/privacy-policy.html"}, "ar": {"msg": "نود استخدام ملفات تعريف الارتباط من Google Analytics لإحصاء الزيارات. لا يتأثر محتوى سيرتك الذاتية ويبقى على جهازك. قد تُعالج بيانات Analytics على خوادم خارج بلدك، بما في ذلك الولايات المتحدة.", "ok": "قبول", "no": "رفض", "more": "التفاصيل", "set": "إعدادات ملفات تعريف الارتباط", "url": "https://mobilcv.net/ar/privacy-policy.html"}, "zh": {"msg": "我们希望使用 Google Analytics Cookie 统计访问量。您的简历数据不受影响，仍只保存在您的设备上。Analytics 数据可能在境外（包括美国）的服务器上处理。", "ok": "接受", "no": "拒绝", "more": "详情", "set": "Cookie 设置", "url": "https://mobilcv.net/zh/privacy-policy.html"}, "ja": {"msg": "訪問数を集計するためにGoogle AnalyticsのCookieを使用したいと考えています。履歴書のデータには影響せず、お使いの端末内に保存されたままです。Analyticsのデータは米国を含む国外のサーバーで処理される場合があります。", "ok": "同意する", "no": "拒否する", "more": "詳細", "set": "Cookie設定", "url": "https://mobilcv.net/ja/privacy-policy.html"}};
         function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
         function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
         function lang() {
@@ -10108,6 +10191,33 @@ function saveCV() {
         document.getElementById('tpl-opt-classic').textContent = t[2];
         document.getElementById('tpl-opt-rirekisho').textContent = t[3];
         document.getElementById('tpl-opt-top').textContent = t[4];
+        var b = B[currentLang()] || B.en;
+        ['modern', 'classic', 'top', 'rirekisho'].forEach(function (k, i) {
+            var el = document.getElementById('tpl-btn-' + k);
+            if (el) { el.textContent = b[i]; el.title = b[i]; }
+        });
+    }
+    // Dugme etiketleri: Modern, Klasik, Standart, Rirekisho
+    var B = {
+        tr: ['Modern', 'Klasik', 'Standart', 'Rirekisho (履歴書)'],
+        en: ['Modern', 'Classic', 'Standard', 'Rirekisho (履歴書)'],
+        de: ['Modern', 'Klassisch', 'Standard', 'Rirekisho (履歴書)'],
+        fr: ['Moderne', 'Classique', 'Standard', 'Rirekisho (履歴書)'],
+        es: ['Moderna', 'Clásica', 'Estándar', 'Rirekisho (履歴書)'],
+        it: ['Moderno', 'Classico', 'Standard', 'Rirekisho (履歴書)'],
+        pt: ['Moderno', 'Clássico', 'Padrão', 'Rirekisho (履歴書)'],
+        ru: ['Современный', 'Классический', 'Стандартный', 'Rirekisho (履歴書)'],
+        ar: ['عصري', 'كلاسيكي', 'قياسي', 'Rirekisho (履歴書)'],
+        zh: ['现代', '经典', '标准', 'Rirekisho (履歴書)'],
+        ja: ['モダン', 'クラシック', 'スタンダード', '履歴書']
+    };
+    function syncButtons(name) {
+        var all = document.querySelectorAll('#tpl-buttons .tpl-btn');
+        for (var i = 0; i < all.length; i++) {
+            var on = (all[i].getAttribute('data-tpl') || '') === name;
+            all[i].classList.toggle('active', on);
+            all[i].setAttribute('aria-checked', on ? 'true' : 'false');
+        }
     }
 
     function applyTemplate(name) {
@@ -10144,6 +10254,7 @@ function saveCV() {
         })(name === 'tpl-top');
         if (window.rkShow) window.rkShow(name === 'tpl-rirekisho');
         select.value = name;
+        syncButtons(name);
         var changed = (window.currentCvTemplate || '') !== name;
         window.currentCvTemplate = name;
         if (changed && window.autoSaveManager && window.autoSaveManager.debouncedSave) {
@@ -10159,12 +10270,19 @@ function saveCV() {
         try { localStorage.setItem(CH, '1'); } catch (e) {}
         applyTemplate(select.value);
     });
-    // Japonca secilince varsayilan sablon Japon ozgecmisi (履歴書); baska dile donunce Modern
+    var tb = document.getElementById('tpl-buttons');
+    if (tb) tb.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest('.tpl-btn');
+        if (!btn) return;
+        var v = btn.getAttribute('data-tpl') || '';
+        try { localStorage.setItem(CH, '1'); } catch (er) {}
+        applyTemplate(v);
+        if (e.isTrusted && window.mcvTrack) window.mcvTrack('template_select', { cv_template: v || 'modern', cv_language: currentLang() });
+    });
+    // Her dilde ilk acilista Modern; kullanici kendisi sablon secmediyse kayitli sablon da Modern'e doner
     function autoForLang() {
         if (chosen()) return;
-        var l = currentLang();
-        if (l === 'ja' && window.currentCvTemplate !== 'tpl-rirekisho') applyTemplate('tpl-rirekisho');
-        else if (l !== 'ja' && window.currentCvTemplate === 'tpl-rirekisho') applyTemplate('');
+        if ((window.currentCvTemplate || '') !== '') applyTemplate('');
     }
     var ls = document.getElementById('language-select');
     if (ls) ls.addEventListener('change', function () { setTimeout(function () { localize(); autoForLang(); }, 0); });
@@ -10175,7 +10293,7 @@ function saveCV() {
     try {
         var key = (window.autoSaveManager && window.autoSaveManager.storageKey) || 'mobilcv_data';
         var saved = JSON.parse(localStorage.getItem(key) || 'null');
-        if (saved && typeof saved.template === 'string') applyTemplate(saved.template);
+        if (saved && typeof saved.template === 'string') applyTemplate(chosen() ? saved.template : '');
     } catch (e) {}
 })();
 </script>
