@@ -10088,6 +10088,179 @@ function saveCV() {
         });
     })();
     </script>
+    <script data-cv-kolaylik>
+    // 1) Telefonda uzun alanlara ilk dokunuşta "klavyedeki mikrofonla konuşarak yazabilirsiniz" ipucu (en fazla 2 kez).
+    // 2) PDF indirmeden önce yumuşak kalite kontrolü: yalnızca öneri gösterir, "Yine de indir" ile devam edilir.
+    // Hiçbir bilgi bir yere gönderilmez; her şey tarayıcıda çalışır.
+    (function () {
+        var L = {
+            tr: { mic: '🎤 İpucu: Çoğu telefon klavyesindeki mikrofon simgesine basıp konuşarak da yazabilirsiniz.', title: 'PDF öncesi kısa kontrol', sub: 'Bunlar yalnızca öneri; karar sizin. Maddeye dokunursanız ilgili alana gider.', fix: 'Düzenle', go: 'Yine de PDF indir',
+                  dateOrder: 'Bitiş yılı başlangıçtan önce görünüyor: {x}', future: 'İleri bir tarih var: {x}', noDesc: 'Bu deneyimde açıklama yok: {x}. Ne yaptığınızı 1–2 cümleyle yazmak işverene fikir verir.', sort: 'Deneyimler en yeniden eskiye sıralı değil. Genelde en yeni iş en üstte yazılır.', aboutLong: 'Hakkımda bölümü uzun ({x} karakter). Kısaltmak okunmasını kolaylaştırır.', email: 'E-postada yazım hatası olabilir: {x}', phone: 'Telefon numarası 10 haneden kısa görünüyor.', prof: 'Meslek / unvan boş. Adınızdan sonra ilk okunan satır budur.' },
+            en: { mic: '🎤 Tip: On most phone keyboards you can tap the microphone and speak instead of typing.', title: 'Quick check before the PDF', sub: 'These are only suggestions; it is your call. Tap an item to go to the field.', fix: 'Edit', go: 'Download PDF anyway',
+                  dateOrder: 'End year appears to be before the start year: {x}', future: 'There is a future date: {x}', noDesc: 'This experience has no description: {x}. One or two sentences on what you did help employers.', sort: 'Experience is not ordered newest first. The most recent job is usually listed at the top.', aboutLong: 'Your About section is long ({x} characters). A shorter one is easier to read.', email: 'Your email may contain a typo: {x}', phone: 'The phone number looks too short.', prof: 'Job title is empty. It is the first line read after your name.' },
+            de: { mic: '🎤 Tipp: Bei den meisten Handy-Tastaturen können Sie auf das Mikrofon tippen und diktieren.', title: 'Kurzer Check vor dem PDF', sub: 'Nur Vorschläge – Sie entscheiden. Tippen Sie auf einen Punkt, um zum Feld zu springen.', fix: 'Bearbeiten', go: 'PDF trotzdem herunterladen',
+                  dateOrder: 'Endjahr liegt scheinbar vor dem Startjahr: {x}', future: 'Ein Datum liegt in der Zukunft: {x}', noDesc: 'Diese Station hat keine Beschreibung: {x}. Ein, zwei Sätze zu Ihren Aufgaben helfen Arbeitgebern.', sort: 'Die Berufserfahrung ist nicht von neu nach alt sortiert. Üblich ist die aktuelle Stelle oben.', aboutLong: 'Ihr Profiltext ist lang ({x} Zeichen). Kürzer ist leichter lesbar.', email: 'Möglicher Tippfehler in der E-Mail: {x}', phone: 'Die Telefonnummer wirkt zu kurz.', prof: 'Berufsbezeichnung ist leer. Sie ist die erste Zeile nach Ihrem Namen.' },
+            fr: { mic: '🎤 Astuce : sur la plupart des claviers de téléphone, touchez le micro pour dicter au lieu de taper.', title: 'Vérification rapide avant le PDF', sub: 'Ce ne sont que des suggestions, à vous de décider. Touchez un point pour aller au champ.', fix: 'Modifier', go: 'Télécharger le PDF quand même',
+                  dateOrder: 'L’année de fin semble antérieure à l’année de début : {x}', future: 'Une date est dans le futur : {x}', noDesc: 'Cette expérience n’a pas de description : {x}. Une ou deux phrases sur vos missions aident les recruteurs.', sort: 'Les expériences ne sont pas classées de la plus récente à la plus ancienne. Le poste le plus récent est généralement en haut.', aboutLong: 'Votre présentation est longue ({x} caractères). Plus courte, elle se lit mieux.', email: 'Faute de frappe possible dans l’e-mail : {x}', phone: 'Le numéro de téléphone semble trop court.', prof: 'Le poste / titre est vide. C’est la première ligne lue après votre nom.' },
+            es: { mic: '🎤 Consejo: en la mayoría de los teclados del móvil puedes tocar el micrófono y dictar.', title: 'Revisión rápida antes del PDF', sub: 'Son solo sugerencias; tú decides. Toca un punto para ir al campo.', fix: 'Editar', go: 'Descargar PDF de todos modos',
+                  dateOrder: 'El año de fin parece anterior al de inicio: {x}', future: 'Hay una fecha futura: {x}', noDesc: 'Esta experiencia no tiene descripción: {x}. Una o dos frases sobre lo que hacías ayudan al empleador.', sort: 'La experiencia no está ordenada de la más reciente a la más antigua. Lo habitual es poner el último empleo arriba.', aboutLong: 'Tu perfil es largo ({x} caracteres). Más corto se lee mejor.', email: 'Puede haber un error en el correo: {x}', phone: 'El número de teléfono parece demasiado corto.', prof: 'El puesto / título está vacío. Es la primera línea que se lee tras tu nombre.' },
+            it: { mic: '🎤 Suggerimento: sulla maggior parte delle tastiere del telefono puoi toccare il microfono e dettare.', title: 'Controllo rapido prima del PDF', sub: 'Sono solo suggerimenti: decidi tu. Tocca una voce per andare al campo.', fix: 'Modifica', go: 'Scarica il PDF comunque',
+                  dateOrder: 'L’anno di fine sembra precedente a quello di inizio: {x}', future: 'C’è una data futura: {x}', noDesc: 'Questa esperienza non ha descrizione: {x}. Una o due frasi su cosa facevi aiutano il datore di lavoro.', sort: 'Le esperienze non sono in ordine dalla più recente. Di solito il lavoro più recente va in alto.', aboutLong: 'Il profilo è lungo ({x} caratteri). Più breve si legge meglio.', email: 'Possibile errore di battitura nell’e-mail: {x}', phone: 'Il numero di telefono sembra troppo corto.', prof: 'Professione / titolo vuoto. È la prima riga letta dopo il nome.' },
+            pt: { mic: '🎤 Dica: na maioria dos teclados de celular você pode tocar no microfone e ditar.', title: 'Verificação rápida antes do PDF', sub: 'São apenas sugestões; você decide. Toque em um item para ir ao campo.', fix: 'Editar', go: 'Baixar PDF mesmo assim',
+                  dateOrder: 'O ano de término parece anterior ao de início: {x}', future: 'Há uma data futura: {x}', noDesc: 'Esta experiência não tem descrição: {x}. Uma ou duas frases sobre o que você fazia ajudam o empregador.', sort: 'As experiências não estão da mais recente para a mais antiga. Normalmente o emprego mais recente vem primeiro.', aboutLong: 'Seu resumo está longo ({x} caracteres). Mais curto é mais fácil de ler.', email: 'Pode haver um erro de digitação no e-mail: {x}', phone: 'O número de telefone parece curto demais.', prof: 'Profissão / cargo está vazio. É a primeira linha lida depois do seu nome.' },
+            ru: { mic: '🎤 Совет: на большинстве клавиатур телефона можно нажать на микрофон и диктовать.', title: 'Короткая проверка перед PDF', sub: 'Это лишь советы — решать вам. Нажмите на пункт, чтобы перейти к полю.', fix: 'Исправить', go: 'Всё равно скачать PDF',
+                  dateOrder: 'Год окончания раньше года начала: {x}', future: 'Указана будущая дата: {x}', noDesc: 'У этого места работы нет описания: {x}. Одно-два предложения о ваших задачах помогут работодателю.', sort: 'Опыт не упорядочен от нового к старому. Обычно последнее место работы указывают первым.', aboutLong: 'Раздел «О себе» длинный ({x} символов). Короче — легче читать.', email: 'Возможна опечатка в e-mail: {x}', phone: 'Номер телефона выглядит слишком коротким.', prof: 'Должность не указана. Это первая строка после имени.' },
+            ar: { mic: '🎤 نصيحة: في معظم لوحات مفاتيح الهاتف يمكنك الضغط على الميكروفون والتحدث بدل الكتابة.', title: 'فحص سريع قبل PDF', sub: 'هذه اقتراحات فقط والقرار لك. اضغط على أي بند للانتقال إلى الحقل.', fix: 'تعديل', go: 'تنزيل PDF على أي حال',
+                  dateOrder: 'يبدو أن سنة الانتهاء قبل سنة البدء: {x}', future: 'يوجد تاريخ في المستقبل: {x}', noDesc: 'هذه الخبرة بلا وصف: {x}. جملة أو جملتان عمّا كنت تفعله تفيد صاحب العمل.', sort: 'الخبرات ليست مرتبة من الأحدث إلى الأقدم. عادةً يُكتب أحدث عمل في الأعلى.', aboutLong: 'قسم «نبذة عني» طويل ({x} حرفًا). الأقصر أسهل في القراءة.', email: 'قد يكون في البريد الإلكتروني خطأ إملائي: {x}', phone: 'يبدو رقم الهاتف قصيرًا جدًا.', prof: 'المسمى الوظيفي فارغ. إنه أول سطر يُقرأ بعد اسمك.' },
+            zh: { mic: '🎤 提示：大多数手机键盘都可以点麦克风图标，用语音代替打字。', title: '生成 PDF 前快速检查', sub: '以下仅为建议，由您决定。点击条目可跳转到对应栏位。', fix: '去修改', go: '仍然下载 PDF',
+                  dateOrder: '结束年份似乎早于开始年份：{x}', future: '有一个未来的日期：{x}', noDesc: '这段经历没有描述：{x}。用一两句话写明您的工作内容会对雇主有帮助。', sort: '工作经历没有按从新到旧排列。通常最近的工作写在最上面。', aboutLong: '“关于我”较长（{x} 个字符）。短一些更易阅读。', email: '邮箱可能有拼写错误：{x}', phone: '电话号码似乎太短。', prof: '职业 / 职位为空。这是姓名后第一行会被看到的内容。' },
+            ja: { mic: '🎤 ヒント：多くのスマホのキーボードでは、マイクのアイコンを押して音声で入力できます。', title: 'PDF作成前のかんたんチェック', sub: 'あくまで提案です。判断はあなたに任せます。項目をタップすると入力欄に移動します。', fix: '修正する', go: 'このままPDFをダウンロード',
+                  dateOrder: '終了年が開始年より前になっています：{x}', future: '未来の日付があります：{x}', noDesc: 'この職歴には説明がありません：{x}。仕事内容を1～2文で書くと採用担当者に伝わりやすくなります。', sort: '職歴が新しい順に並んでいません。一般的には最新の職歴を一番上に書きます。', aboutLong: '自己紹介が長めです（{x}文字）。短いほうが読みやすくなります。', email: 'メールアドレスに入力ミスがあるかもしれません：{x}', phone: '電話番号が短すぎるようです。', prof: '職業・肩書きが空欄です。氏名の次に読まれる行です。' }
+        };
+        function lang() { var s = document.getElementById('language-select'); var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; return L[l] ? l : 'en'; }
+        function t(k, x) { var s = (L[lang()][k] || L.en[k]); return x == null ? s : s.replace('{x}', x); }
+        function txt(el) {
+            if (!el || el.offsetParent === null) return '';
+            if (el.classList.contains('empty-field')) return '';
+            var v = (el.textContent || '').trim();
+            return v === (el.getAttribute('data-placeholder') || '').trim() ? '' : v;
+        }
+        function jp() { return !!(window.isJapaneseMode && window.isJapaneseMode()); }
+
+        /* ---------- 1) Mikrofon ipucu ---------- */
+        var MIC_KEY = 'mobilcv_mic_tip';
+        function micCount() { try { return parseInt(localStorage.getItem(MIC_KEY) || '0', 10) || 0; } catch (e) { return 2; } }
+        var micShownThisPage = false;
+        function showMicTip() {
+            if (micShownThisPage || micCount() >= 2) return;
+            var wp = document.getElementById('warning-popup');
+            if (wp && wp.offsetParent !== null && getComputedStyle(wp).display !== 'none') return; // ilk açılış uyarısı açıkken gösterme
+            micShownThisPage = true;
+            try { localStorage.setItem(MIC_KEY, String(micCount() + 1)); } catch (e) {}
+            var d = document.createElement('div');
+            d.className = 'mcv-mic-tip'; d.setAttribute('role', 'status');
+            d.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+            d.textContent = t('mic');
+            d.addEventListener('click', function () { d.remove(); });
+            document.body.appendChild(d);
+            setTimeout(function () { d.classList.add('on'); }, 20);
+            setTimeout(function () { d.classList.remove('on'); setTimeout(function () { d.remove(); }, 300); }, 6000);
+        }
+        document.addEventListener('focusin', function (e) {
+            var el = e.target;
+            if (!el || !el.matches || !el.matches('#about-text, .item-description')) return;
+            var touch = false; try { touch = window.matchMedia('(pointer: coarse)').matches; } catch (er) {}
+            if (touch) showMicTip();
+        });
+
+        /* ---------- 2) PDF öncesi kontrol ---------- */
+        var TYPO = { 'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmal.com': 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com', 'gmail.cm': 'gmail.com', 'gmail.om': 'gmail.com',
+            'hotmial.com': 'hotmail.com', 'hotmal.com': 'hotmail.com', 'hotmail.co': 'hotmail.com', 'hotmail.con': 'hotmail.com', 'hotmai.com': 'hotmail.com',
+            'outlok.com': 'outlook.com', 'outlook.co': 'outlook.com', 'outlook.con': 'outlook.com', 'yaho.com': 'yahoo.com', 'yahoo.co': 'yahoo.com', 'yahoo.con': 'yahoo.com',
+            'icloud.co': 'icloud.com', 'icloud.con': 'icloud.com', 'iclod.com': 'icloud.com' };
+        function years(el) {
+            var v = txt(el); if (!v) return null;
+            var m = v.match(/^(\d{4})\s*[-–—\/]?\s*(\d{4})?/); if (!m) return null;
+            return { s: +m[1], e: m[2] ? +m[2] : null, raw: v };
+        }
+        function collect() {
+            var out = [], now = new Date().getFullYear();
+            function add(msg, el) { out.push({ msg: msg, el: el }); }
+            var prof = document.querySelector('.title-item .personal-info-value');
+            if (prof && prof.offsetParent !== null && !txt(prof)) add(t('prof'), prof);
+            var em = document.getElementById('email-input'), ev = txt(em).toLowerCase();
+            var dom = ev.split('@')[1];
+            if (dom && TYPO[dom]) add(t('email', ev + ' → ' + ev.split('@')[0] + '@' + TYPO[dom]), em);
+            if (lang() === 'tr') {
+                var ph = document.querySelector('.personal-info-value.phone-input'), pd = txt(ph).replace(/\D/g, '');
+                if (pd) { pd = pd.replace(/^90/, '').replace(/^0/, ''); if (pd.length < 10) add(t('phone'), ph); }
+            }
+            var ab = document.getElementById('about-text'), al = txt(ab).length;
+            if (al > 700) add(t('aboutLong', al), ab);
+            if (!jp()) {
+                var starts = [];
+                document.querySelectorAll('#experience-container .experience-item').forEach(function (it) {
+                    var title = txt(it.querySelector('.item-title')), comp = txt(it.querySelector('.experience-company'));
+                    var name = [title, comp].filter(Boolean).join(' – ');
+                    var dEl = it.querySelector('.experience-duration'), y = years(dEl);
+                    if (y) {
+                        starts.push(y.s);
+                        if (y.e && y.e < y.s) add(t('dateOrder', name || y.raw), dEl);
+                        else if (y.s > now || (y.e && y.e > now)) add(t('future', name || y.raw), dEl);
+                    }
+                    var desc = it.querySelector('.item-description');
+                    if (title && desc && desc.offsetParent !== null && !txt(desc)) add(t('noDesc', name), desc);
+                });
+                for (var i = 1; i < starts.length; i++) { if (starts[i] > starts[i - 1]) { add(t('sort'), document.getElementById('experience-section')); break; } }
+                document.querySelectorAll('#education-container .education-date').forEach(function (dEl) {
+                    var y = years(dEl); if (!y) return;
+                    if (y.e && y.e < y.s) add(t('dateOrder', y.raw), dEl);
+                    else if (y.s > now + 6) add(t('future', y.raw), dEl);
+                });
+            }
+            return out;
+        }
+        var bypass = false;
+        function closeBox() { var o = document.querySelector('.mcv-check-ov'); if (o) o.remove(); }
+        function showBox(items, btn) {
+            closeBox();
+            var ov = document.createElement('div'); ov.className = 'mcv-check-ov';
+            ov.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+            var box = document.createElement('div'); box.className = 'mcv-check-box'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+            var h = document.createElement('h3'); h.textContent = t('title'); box.appendChild(h);
+            var p = document.createElement('p'); p.textContent = t('sub'); box.appendChild(p);
+            var ul = document.createElement('ul');
+            items.forEach(function (it) {
+                var li = document.createElement('li'); li.textContent = it.msg; li.tabIndex = 0;
+                li.addEventListener('click', function () {
+                    closeBox();
+                    if (it.el) { it.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(function () { try { it.el.focus(); } catch (e) {} }, 450); }
+                });
+                ul.appendChild(li);
+            });
+            box.appendChild(ul);
+            var row = document.createElement('div'); row.className = 'mcv-check-row';
+            var b1 = document.createElement('button'); b1.type = 'button'; b1.className = 'mcv-fix'; b1.textContent = t('fix');
+            b1.addEventListener('click', function () { var f = items[0]; closeBox(); if (f && f.el) { f.el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } });
+            var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'mcv-go'; b2.textContent = t('go');
+            b2.addEventListener('click', function () { closeBox(); bypass = true; btn.click(); });
+            row.appendChild(b1); row.appendChild(b2); box.appendChild(row);
+            ov.appendChild(box);
+            ov.addEventListener('click', function (e) { if (e.target === ov) closeBox(); });
+            document.body.appendChild(ov);
+            setTimeout(function () { b1.focus(); }, 30);
+        }
+        // "load" sonrası kaydedilir: mevcut zorunlu alan kontrolü (capture) önce çalışsın; eksik varsa bu hiç çalışmaz.
+        window.addEventListener('load', function () {
+            var btn = document.getElementById('save-pdf'); if (!btn) return;
+            btn.addEventListener('click', function (e) {
+                if (bypass) { bypass = false; return; }
+                var items; try { items = collect(); } catch (er) { return; }
+                if (!items.length) return;
+                e.stopImmediatePropagation(); e.preventDefault();
+                showBox(items, btn);
+            }, true);
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeBox(); });
+    })();
+    </script>
+    <style data-cv-kolaylik>
+    .mcv-mic-tip { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%) translateY(12px); z-index: 2147483000; max-width: min(92vw, 420px);
+        background: #1e3a8a; color: #fff; font: 600 14px/1.4 system-ui, sans-serif; padding: 12px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+        opacity: 0; transition: all .25s ease; text-align: center; cursor: pointer; }
+    .mcv-mic-tip.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .mcv-check-ov { position: fixed; inset: 0; z-index: 2147483001; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .mcv-check-box { background: #fff; color: #0f172a; width: 100%; max-width: 440px; max-height: 85vh; overflow: auto; border-radius: 16px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.3); font-family: system-ui, sans-serif; }
+    .mcv-check-box h3 { margin: 0 0 6px; font-size: 18px; }
+    .mcv-check-box p { margin: 0 0 12px; font-size: 13px; color: #475569; }
+    .mcv-check-box ul { margin: 0 0 16px; padding: 0; list-style: none; }
+    .mcv-check-box li { padding: 10px 12px; margin-bottom: 8px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; font-size: 14px; line-height: 1.4; cursor: pointer; }
+    [dir="rtl"] .mcv-check-box li { border-left: 0; border-right: 4px solid #f59e0b; }
+    .mcv-check-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .mcv-check-row button { flex: 1 1 140px; min-height: 44px; border: 0; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .mcv-fix { background: #e2e8f0; color: #0f172a; }
+    .mcv-go { background: #10b981; color: #fff; }
+    </style>
     <script data-extra-i18n>
     (function () {
         function apply() {
