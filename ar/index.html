@@ -10089,32 +10089,32 @@ function saveCV() {
     })();
     </script>
     <script data-cv-kolaylik>
-    // 1) Telefonda uzun alanlara ilk dokunuşta "klavyedeki mikrofonla konuşarak yazabilirsiniz" ipucu (en fazla 2 kez).
+    // 1) Yazarken yardım: meslek, Hakkımda, deneyim açıklaması ve yetenek alanına dokununca altında kısa yönerge + örnek (× ile o alan için kapatılır).
     // 2) PDF indirmeden önce yumuşak kalite kontrolü: yalnızca öneri gösterir, "Yine de indir" ile devam edilir.
     // Hiçbir bilgi bir yere gönderilmez; her şey tarayıcıda çalışır.
     (function () {
         var L = {
-            tr: { mic: '🎤 İpucu: Çoğu telefon klavyesindeki mikrofon simgesine basıp konuşarak da yazabilirsiniz.', title: 'PDF öncesi kısa kontrol', sub: 'Bunlar yalnızca öneri; karar sizin. Maddeye dokunursanız ilgili alana gider.', fix: 'Düzenle', go: 'Yine de PDF indir',
+            tr: { title: 'PDF öncesi kısa kontrol', sub: 'Bunlar yalnızca öneri; karar sizin. Maddeye dokunursanız ilgili alana gider.', fix: 'Düzenle', go: 'Yine de PDF indir',
                   dateOrder: 'Bitiş yılı başlangıçtan önce görünüyor: {x}', future: 'İleri bir tarih var: {x}', noDesc: 'Bu deneyimde açıklama yok: {x}. Ne yaptığınızı 1–2 cümleyle yazmak işverene fikir verir.', sort: 'Deneyimler en yeniden eskiye sıralı değil. Genelde en yeni iş en üstte yazılır.', aboutLong: 'Hakkımda bölümü uzun ({x} karakter). Kısaltmak okunmasını kolaylaştırır.', email: 'E-postada yazım hatası olabilir: {x}', phone: 'Telefon numarası 10 haneden kısa görünüyor.', prof: 'Meslek / unvan boş. Adınızdan sonra ilk okunan satır budur.' },
-            en: { mic: '🎤 Tip: On most phone keyboards you can tap the microphone and speak instead of typing.', title: 'Quick check before the PDF', sub: 'These are only suggestions; it is your call. Tap an item to go to the field.', fix: 'Edit', go: 'Download PDF anyway',
+            en: { title: 'Quick check before the PDF', sub: 'These are only suggestions; it is your call. Tap an item to go to the field.', fix: 'Edit', go: 'Download PDF anyway',
                   dateOrder: 'End year appears to be before the start year: {x}', future: 'There is a future date: {x}', noDesc: 'This experience has no description: {x}. One or two sentences on what you did help employers.', sort: 'Experience is not ordered newest first. The most recent job is usually listed at the top.', aboutLong: 'Your About section is long ({x} characters). A shorter one is easier to read.', email: 'Your email may contain a typo: {x}', phone: 'The phone number looks too short.', prof: 'Job title is empty. It is the first line read after your name.' },
-            de: { mic: '🎤 Tipp: Bei den meisten Handy-Tastaturen können Sie auf das Mikrofon tippen und diktieren.', title: 'Kurzer Check vor dem PDF', sub: 'Nur Vorschläge – Sie entscheiden. Tippen Sie auf einen Punkt, um zum Feld zu springen.', fix: 'Bearbeiten', go: 'PDF trotzdem herunterladen',
+            de: { title: 'Kurzer Check vor dem PDF', sub: 'Nur Vorschläge – Sie entscheiden. Tippen Sie auf einen Punkt, um zum Feld zu springen.', fix: 'Bearbeiten', go: 'PDF trotzdem herunterladen',
                   dateOrder: 'Endjahr liegt scheinbar vor dem Startjahr: {x}', future: 'Ein Datum liegt in der Zukunft: {x}', noDesc: 'Diese Station hat keine Beschreibung: {x}. Ein, zwei Sätze zu Ihren Aufgaben helfen Arbeitgebern.', sort: 'Die Berufserfahrung ist nicht von neu nach alt sortiert. Üblich ist die aktuelle Stelle oben.', aboutLong: 'Ihr Profiltext ist lang ({x} Zeichen). Kürzer ist leichter lesbar.', email: 'Möglicher Tippfehler in der E-Mail: {x}', phone: 'Die Telefonnummer wirkt zu kurz.', prof: 'Berufsbezeichnung ist leer. Sie ist die erste Zeile nach Ihrem Namen.' },
-            fr: { mic: '🎤 Astuce : sur la plupart des claviers de téléphone, touchez le micro pour dicter au lieu de taper.', title: 'Vérification rapide avant le PDF', sub: 'Ce ne sont que des suggestions, à vous de décider. Touchez un point pour aller au champ.', fix: 'Modifier', go: 'Télécharger le PDF quand même',
+            fr: { title: 'Vérification rapide avant le PDF', sub: 'Ce ne sont que des suggestions, à vous de décider. Touchez un point pour aller au champ.', fix: 'Modifier', go: 'Télécharger le PDF quand même',
                   dateOrder: 'L’année de fin semble antérieure à l’année de début : {x}', future: 'Une date est dans le futur : {x}', noDesc: 'Cette expérience n’a pas de description : {x}. Une ou deux phrases sur vos missions aident les recruteurs.', sort: 'Les expériences ne sont pas classées de la plus récente à la plus ancienne. Le poste le plus récent est généralement en haut.', aboutLong: 'Votre présentation est longue ({x} caractères). Plus courte, elle se lit mieux.', email: 'Faute de frappe possible dans l’e-mail : {x}', phone: 'Le numéro de téléphone semble trop court.', prof: 'Le poste / titre est vide. C’est la première ligne lue après votre nom.' },
-            es: { mic: '🎤 Consejo: en la mayoría de los teclados del móvil puedes tocar el micrófono y dictar.', title: 'Revisión rápida antes del PDF', sub: 'Son solo sugerencias; tú decides. Toca un punto para ir al campo.', fix: 'Editar', go: 'Descargar PDF de todos modos',
+            es: { title: 'Revisión rápida antes del PDF', sub: 'Son solo sugerencias; tú decides. Toca un punto para ir al campo.', fix: 'Editar', go: 'Descargar PDF de todos modos',
                   dateOrder: 'El año de fin parece anterior al de inicio: {x}', future: 'Hay una fecha futura: {x}', noDesc: 'Esta experiencia no tiene descripción: {x}. Una o dos frases sobre lo que hacías ayudan al empleador.', sort: 'La experiencia no está ordenada de la más reciente a la más antigua. Lo habitual es poner el último empleo arriba.', aboutLong: 'Tu perfil es largo ({x} caracteres). Más corto se lee mejor.', email: 'Puede haber un error en el correo: {x}', phone: 'El número de teléfono parece demasiado corto.', prof: 'El puesto / título está vacío. Es la primera línea que se lee tras tu nombre.' },
-            it: { mic: '🎤 Suggerimento: sulla maggior parte delle tastiere del telefono puoi toccare il microfono e dettare.', title: 'Controllo rapido prima del PDF', sub: 'Sono solo suggerimenti: decidi tu. Tocca una voce per andare al campo.', fix: 'Modifica', go: 'Scarica il PDF comunque',
+            it: { title: 'Controllo rapido prima del PDF', sub: 'Sono solo suggerimenti: decidi tu. Tocca una voce per andare al campo.', fix: 'Modifica', go: 'Scarica il PDF comunque',
                   dateOrder: 'L’anno di fine sembra precedente a quello di inizio: {x}', future: 'C’è una data futura: {x}', noDesc: 'Questa esperienza non ha descrizione: {x}. Una o due frasi su cosa facevi aiutano il datore di lavoro.', sort: 'Le esperienze non sono in ordine dalla più recente. Di solito il lavoro più recente va in alto.', aboutLong: 'Il profilo è lungo ({x} caratteri). Più breve si legge meglio.', email: 'Possibile errore di battitura nell’e-mail: {x}', phone: 'Il numero di telefono sembra troppo corto.', prof: 'Professione / titolo vuoto. È la prima riga letta dopo il nome.' },
-            pt: { mic: '🎤 Dica: na maioria dos teclados de celular você pode tocar no microfone e ditar.', title: 'Verificação rápida antes do PDF', sub: 'São apenas sugestões; você decide. Toque em um item para ir ao campo.', fix: 'Editar', go: 'Baixar PDF mesmo assim',
+            pt: { title: 'Verificação rápida antes do PDF', sub: 'São apenas sugestões; você decide. Toque em um item para ir ao campo.', fix: 'Editar', go: 'Baixar PDF mesmo assim',
                   dateOrder: 'O ano de término parece anterior ao de início: {x}', future: 'Há uma data futura: {x}', noDesc: 'Esta experiência não tem descrição: {x}. Uma ou duas frases sobre o que você fazia ajudam o empregador.', sort: 'As experiências não estão da mais recente para a mais antiga. Normalmente o emprego mais recente vem primeiro.', aboutLong: 'Seu resumo está longo ({x} caracteres). Mais curto é mais fácil de ler.', email: 'Pode haver um erro de digitação no e-mail: {x}', phone: 'O número de telefone parece curto demais.', prof: 'Profissão / cargo está vazio. É a primeira linha lida depois do seu nome.' },
-            ru: { mic: '🎤 Совет: на большинстве клавиатур телефона можно нажать на микрофон и диктовать.', title: 'Короткая проверка перед PDF', sub: 'Это лишь советы — решать вам. Нажмите на пункт, чтобы перейти к полю.', fix: 'Исправить', go: 'Всё равно скачать PDF',
+            ru: { title: 'Короткая проверка перед PDF', sub: 'Это лишь советы — решать вам. Нажмите на пункт, чтобы перейти к полю.', fix: 'Исправить', go: 'Всё равно скачать PDF',
                   dateOrder: 'Год окончания раньше года начала: {x}', future: 'Указана будущая дата: {x}', noDesc: 'У этого места работы нет описания: {x}. Одно-два предложения о ваших задачах помогут работодателю.', sort: 'Опыт не упорядочен от нового к старому. Обычно последнее место работы указывают первым.', aboutLong: 'Раздел «О себе» длинный ({x} символов). Короче — легче читать.', email: 'Возможна опечатка в e-mail: {x}', phone: 'Номер телефона выглядит слишком коротким.', prof: 'Должность не указана. Это первая строка после имени.' },
-            ar: { mic: '🎤 نصيحة: في معظم لوحات مفاتيح الهاتف يمكنك الضغط على الميكروفون والتحدث بدل الكتابة.', title: 'فحص سريع قبل PDF', sub: 'هذه اقتراحات فقط والقرار لك. اضغط على أي بند للانتقال إلى الحقل.', fix: 'تعديل', go: 'تنزيل PDF على أي حال',
+            ar: { title: 'فحص سريع قبل PDF', sub: 'هذه اقتراحات فقط والقرار لك. اضغط على أي بند للانتقال إلى الحقل.', fix: 'تعديل', go: 'تنزيل PDF على أي حال',
                   dateOrder: 'يبدو أن سنة الانتهاء قبل سنة البدء: {x}', future: 'يوجد تاريخ في المستقبل: {x}', noDesc: 'هذه الخبرة بلا وصف: {x}. جملة أو جملتان عمّا كنت تفعله تفيد صاحب العمل.', sort: 'الخبرات ليست مرتبة من الأحدث إلى الأقدم. عادةً يُكتب أحدث عمل في الأعلى.', aboutLong: 'قسم «نبذة عني» طويل ({x} حرفًا). الأقصر أسهل في القراءة.', email: 'قد يكون في البريد الإلكتروني خطأ إملائي: {x}', phone: 'يبدو رقم الهاتف قصيرًا جدًا.', prof: 'المسمى الوظيفي فارغ. إنه أول سطر يُقرأ بعد اسمك.' },
-            zh: { mic: '🎤 提示：大多数手机键盘都可以点麦克风图标，用语音代替打字。', title: '生成 PDF 前快速检查', sub: '以下仅为建议，由您决定。点击条目可跳转到对应栏位。', fix: '去修改', go: '仍然下载 PDF',
+            zh: { title: '生成 PDF 前快速检查', sub: '以下仅为建议，由您决定。点击条目可跳转到对应栏位。', fix: '去修改', go: '仍然下载 PDF',
                   dateOrder: '结束年份似乎早于开始年份：{x}', future: '有一个未来的日期：{x}', noDesc: '这段经历没有描述：{x}。用一两句话写明您的工作内容会对雇主有帮助。', sort: '工作经历没有按从新到旧排列。通常最近的工作写在最上面。', aboutLong: '“关于我”较长（{x} 个字符）。短一些更易阅读。', email: '邮箱可能有拼写错误：{x}', phone: '电话号码似乎太短。', prof: '职业 / 职位为空。这是姓名后第一行会被看到的内容。' },
-            ja: { mic: '🎤 ヒント：多くのスマホのキーボードでは、マイクのアイコンを押して音声で入力できます。', title: 'PDF作成前のかんたんチェック', sub: 'あくまで提案です。判断はあなたに任せます。項目をタップすると入力欄に移動します。', fix: '修正する', go: 'このままPDFをダウンロード',
+            ja: { title: 'PDF作成前のかんたんチェック', sub: 'あくまで提案です。判断はあなたに任せます。項目をタップすると入力欄に移動します。', fix: '修正する', go: 'このままPDFをダウンロード',
                   dateOrder: '終了年が開始年より前になっています：{x}', future: '未来の日付があります：{x}', noDesc: 'この職歴には説明がありません：{x}。仕事内容を1～2文で書くと採用担当者に伝わりやすくなります。', sort: '職歴が新しい順に並んでいません。一般的には最新の職歴を一番上に書きます。', aboutLong: '自己紹介が長めです（{x}文字）。短いほうが読みやすくなります。', email: 'メールアドレスに入力ミスがあるかもしれません：{x}', phone: '電話番号が短すぎるようです。', prof: '職業・肩書きが空欄です。氏名の次に読まれる行です。' }
         };
         function lang() { var s = document.getElementById('language-select'); var l = (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; return L[l] ? l : 'en'; }
@@ -10127,30 +10127,52 @@ function saveCV() {
         }
         function jp() { return !!(window.isJapaneseMode && window.isJapaneseMode()); }
 
-        /* ---------- 1) Mikrofon ipucu ---------- */
-        var MIC_KEY = 'mobilcv_mic_tip';
-        function micCount() { try { return parseInt(localStorage.getItem(MIC_KEY) || '0', 10) || 0; } catch (e) { return 2; } }
-        var micShownThisPage = false;
-        function showMicTip() {
-            if (micShownThisPage || micCount() >= 2) return;
-            var wp = document.getElementById('warning-popup');
-            if (wp && wp.offsetParent !== null && getComputedStyle(wp).display !== 'none') return; // ilk açılış uyarısı açıkken gösterme
-            micShownThisPage = true;
-            try { localStorage.setItem(MIC_KEY, String(micCount() + 1)); } catch (e) {}
-            var d = document.createElement('div');
-            d.className = 'mcv-mic-tip'; d.setAttribute('role', 'status');
-            d.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
-            d.textContent = t('mic');
-            d.addEventListener('click', function () { d.remove(); });
-            document.body.appendChild(d);
-            setTimeout(function () { d.classList.add('on'); }, 20);
-            setTimeout(function () { d.classList.remove('on'); setTimeout(function () { d.remove(); }, 300); }, 6000);
+        /* ---------- 1) Yazarken yardım: alana dokununca altında "nasıl yazılır + örnek" notu ---------- */
+        var HELP = {
+            tr: { prof: 'Ne iş yaptığınızı tek satırda yazın. Örnek: Kasiyer, Forklift Operatörü, Muhasebe Uzmanı', about: '2–3 cümle yeterli: ne iş yaptığınız, neyi iyi yaptığınız ve nasıl bir iş aradığınız. Örnek: “Perakendede 4 yıl kasa ve müşteri hizmetleri deneyimim var. Yoğun saatlerde hızlı ve dikkatli çalışırım. Tam zamanlı bir mağaza görevi arıyorum.”', desc: 'Her görevi yaptığınız işle başlayan kısa bir cümleyle yazın; sayı verebiliyorsanız ekleyin. Örnek: “Kasa açılış ve kapanışını yaptım. Haftalık stok sayımına katıldım.” Yalnızca gerçekten yaptığınız işleri yazın.', skill: 'Her kutuya bir yetenek yazın; yenisi için “+ Yetenek Ekle”. Örnek: MS Excel · Müşteri iletişimi · Forklift kullanımı', close: 'Kapat' },
+            en: { prof: 'Write what you do in one line. Example: Cashier, Forklift Operator, Accountant', about: 'Two or three sentences: what you do, what you are good at and what kind of job you want. Example: “I have 4 years of retail experience at the till and in customer service. I work fast and carefully at busy times. I am looking for a full-time store role.”', desc: 'Write each task as a short sentence starting with what you did; add numbers if you can. Example: “Opened and closed the till. Took part in weekly stock counts.” Only list work you really did.', skill: 'One skill per box; tap “+ Add Skill” for another. Example: MS Excel · Customer communication · Forklift operation', close: 'Close' },
+            de: { prof: 'Schreiben Sie Ihren Beruf in eine Zeile. Beispiel: Kassierer/in, Staplerfahrer/in, Buchhalter/in', about: 'Zwei bis drei Sätze: was Sie machen, was Sie gut können und welche Stelle Sie suchen. Beispiel: „Ich habe 4 Jahre Erfahrung im Einzelhandel an der Kasse und im Kundenservice. Auch in Stoßzeiten arbeite ich schnell und sorgfältig. Ich suche eine Vollzeitstelle im Verkauf.“', desc: 'Jede Aufgabe als kurzer Satz, der mit Ihrer Tätigkeit beginnt; Zahlen, wenn möglich. Beispiel: „Kasse geöffnet und abgerechnet. An der wöchentlichen Inventur mitgewirkt.“ Nur Tätigkeiten angeben, die Sie wirklich ausgeübt haben.', skill: 'Pro Feld eine Fähigkeit; weitere mit „+ Fähigkeit hinzufügen“. Beispiel: MS Excel · Kundenkommunikation · Staplerfahren', close: 'Schließen' },
+            fr: { prof: 'Indiquez votre métier en une ligne. Exemple : Caissier/ère, Cariste, Comptable', about: 'Deux ou trois phrases : ce que vous faites, vos points forts et le poste recherché. Exemple : « J’ai 4 ans d’expérience en caisse et en service client dans la grande distribution. Je travaille vite et avec soin aux heures de pointe. Je recherche un poste en magasin à temps plein. »', desc: 'Une phrase courte par mission, qui commence par ce que vous avez fait ; ajoutez des chiffres si possible. Exemple : « Ouverture et clôture de caisse. Participation à l’inventaire hebdomadaire. » N’indiquez que ce que vous avez réellement fait.', skill: 'Une compétence par case ; « + Ajouter une compétence » pour en ajouter. Exemple : MS Excel · Relation client · Conduite de chariot élévateur', close: 'Fermer' },
+            es: { prof: 'Escribe tu profesión en una línea. Ejemplo: Cajero/a, Operador/a de carretilla, Contable', about: 'Dos o tres frases: a qué te dedicas, en qué destacas y qué trabajo buscas. Ejemplo: «Tengo 4 años de experiencia en caja y atención al cliente en comercio. Trabajo rápido y con cuidado en horas punta. Busco un puesto en tienda a jornada completa».', desc: 'Cada tarea en una frase corta que empiece por lo que hiciste; añade cifras si puedes. Ejemplo: «Apertura y cierre de caja. Participación en el inventario semanal». Incluye solo lo que hiciste de verdad.', skill: 'Una habilidad por casilla; «+ Agregar habilidad» para otra. Ejemplo: MS Excel · Atención al cliente · Manejo de carretilla', close: 'Cerrar' },
+            it: { prof: 'Scrivi la tua professione in una riga. Esempio: Cassiere/a, Carrellista, Contabile', about: 'Due o tre frasi: cosa fai, in cosa sei bravo e che lavoro cerchi. Esempio: «Ho 4 anni di esperienza in cassa e assistenza clienti nel commercio. Lavoro in modo rapido e preciso nelle ore di punta. Cerco un impiego in negozio a tempo pieno».', desc: 'Ogni mansione in una frase breve che inizi con ciò che hai fatto; aggiungi numeri se puoi. Esempio: «Apertura e chiusura cassa. Partecipazione all’inventario settimanale». Indica solo ciò che hai fatto davvero.', skill: 'Una competenza per casella; «+ Aggiungi competenza» per un’altra. Esempio: MS Excel · Relazione con i clienti · Uso del carrello elevatore', close: 'Chiudi' },
+            pt: { prof: 'Escreva sua profissão em uma linha. Exemplo: Operador(a) de caixa, Operador(a) de empilhadeira, Contador(a)', about: 'Duas ou três frases: o que você faz, no que é bom e que trabalho procura. Exemplo: “Tenho 4 anos de experiência em caixa e atendimento no varejo. Trabalho com rapidez e atenção nos horários de pico. Procuro uma vaga em loja em tempo integral.”', desc: 'Cada tarefa em uma frase curta começando pelo que você fez; inclua números se puder. Exemplo: “Abertura e fechamento de caixa. Participação no inventário semanal.” Inclua apenas o que você realmente fez.', skill: 'Uma habilidade por campo; “+ Adicionar habilidade” para outra. Exemplo: MS Excel · Atendimento ao cliente · Operação de empilhadeira', close: 'Fechar' },
+            ru: { prof: 'Укажите профессию одной строкой. Пример: Кассир, Водитель погрузчика, Бухгалтер', about: 'Два-три предложения: чем вы занимаетесь, в чём сильны и какую работу ищете. Пример: «4 года опыта работы кассиром и с клиентами в рознице. В часы пик работаю быстро и внимательно. Ищу работу в магазине на полный день».', desc: 'Каждую задачу — коротким предложением, начиная с того, что вы делали; добавьте цифры, если можете. Пример: «Открывал и закрывал кассу. Участвовал в еженедельной инвентаризации». Указывайте только то, что действительно делали.', skill: 'Один навык в поле; для нового — «+ Добавить навык». Пример: MS Excel · Общение с клиентами · Работа на погрузчике', close: 'Закрыть' },
+            ar: { prof: 'اكتب مهنتك في سطر واحد. مثال: أمين صندوق، سائق رافعة شوكية، محاسب', about: 'جملتان أو ثلاث: ماذا تعمل، وفيم تتميز، وأي عمل تبحث عنه. مثال: «لدي خبرة 4 سنوات في الصندوق وخدمة العملاء في متاجر التجزئة. أعمل بسرعة ودقة في أوقات الذروة. أبحث عن وظيفة بدوام كامل في متجر».', desc: 'اكتب كل مهمة في جملة قصيرة تبدأ بما قمت به، وأضف أرقامًا إن أمكن. مثال: «فتح الصندوق وإغلاقه. المشاركة في الجرد الأسبوعي». اكتب فقط ما قمت به فعلًا.', skill: 'مهارة واحدة في كل خانة؛ اضغط «+ أضف مهارة» لإضافة أخرى. مثال: MS Excel · التواصل مع العملاء · قيادة الرافعة الشوكية', close: 'إغلاق' },
+            zh: { prof: '用一行写明您的职业。例如：收银员、叉车司机、会计', about: '两三句话即可：您做什么工作、擅长什么、想找什么样的工作。例如：“我有 4 年零售收银和客户服务经验。高峰时段也能快速、细致地工作。希望找一份全职门店工作。”', desc: '每项工作用一句以所做事情开头的短句来写，能写数字就写上。例如：“负责收银开班和结账。参与每周库存盘点。”只写您真正做过的工作。', skill: '每个框填写一项技能；点“+ 添加技能”可再加一项。例如：MS Excel · 客户沟通 · 叉车操作', close: '关闭' },
+            ja: { prof: '職業を1行で書きます。例：レジ係、フォークリフトオペレーター、経理担当', about: '2～3文で十分です：どんな仕事をしてきたか、得意なこと、希望する仕事。例：「小売店でレジと接客を4年間担当しました。混雑時も速く丁寧に対応できます。フルタイムの店舗勤務を希望しています。」', desc: '各業務を「何をしたか」から始まる短い文で書き、数字があれば加えます。例：「レジの開設・締め作業を担当。週1回の棚卸しに参加。」実際に行った業務だけを書きましょう。', skill: '1つの欄に1つのスキルを書き、「+ スキルを追加」で増やします。例：MS Excel・接客・フォークリフト運転', close: '閉じる' }
+        };
+        function h(k) { var o = HELP[lang()] || HELP.en; return o[k] || HELP.en[k]; }
+        var HKEY = 'mobilcv_help_off';
+        function off() { try { return JSON.parse(localStorage.getItem(HKEY) || '{}'); } catch (e) { return {}; } }
+        function setOff(k) { try { var o = off(); o[k] = 1; localStorage.setItem(HKEY, JSON.stringify(o)); } catch (e) {} }
+        function kindOf(el) {
+            if (el.matches('.title-item .personal-info-value')) return 'prof';
+            if (el.id === 'about-text') return 'about';
+            if (el.matches('.experience-item .item-description')) return 'desc';
+            if (el.matches('.skill-item')) return 'skill';
+            return null;
         }
+        function removeHelp() { document.querySelectorAll('.mcv-help').forEach(function (n) { n.remove(); }); }
         document.addEventListener('focusin', function (e) {
-            var el = e.target;
-            if (!el || !el.matches || !el.matches('#about-text, .item-description')) return;
-            var touch = false; try { touch = window.matchMedia('(pointer: coarse)').matches; } catch (er) {}
-            if (touch) showMicTip();
+            var el = e.target; if (!el || !el.matches) return;
+            var k = kindOf(el); if (!k) return;
+            removeHelp();
+            if (off()[k]) return;
+            var box = document.createElement('div'); box.className = 'mcv-help'; box.setAttribute('contenteditable', 'false');
+            box.setAttribute('dir', lang() === 'ar' ? 'rtl' : 'ltr');
+            var tx = document.createElement('span'); tx.textContent = h(k); box.appendChild(tx);
+            var x = document.createElement('button'); x.type = 'button'; x.className = 'mcv-help-x'; x.textContent = '×'; x.setAttribute('aria-label', h('close'));
+            x.addEventListener('pointerdown', function (ev) { ev.preventDefault(); });
+            x.addEventListener('mousedown', function (ev) { ev.preventDefault(); });
+            x.addEventListener('click', function () { setOff(k); removeHelp(); });
+            box.appendChild(x);
+            if (k === 'prof') el.closest('.title-item').appendChild(box);
+            else if (k === 'skill') { var c = document.getElementById('skills-container'); c.parentNode.insertBefore(box, c.nextSibling); }
+            else el.parentNode.insertBefore(box, el.nextSibling);
+        });
+        document.addEventListener('focusout', function () { setTimeout(function () { var a = document.activeElement; if (!a || !a.matches || !kindOf(a)) removeHelp(); }, 0); });
+        ['save-pdf', 'preview-cv', 'share-cv', 'export-data'].forEach(function (id) {
+            document.addEventListener('pointerdown', function (e) { if (e.target && e.target.closest && e.target.closest('#' + id)) removeHelp(); }, true);
         });
 
         /* ---------- 2) PDF öncesi kontrol ---------- */
@@ -10245,10 +10267,10 @@ function saveCV() {
     })();
     </script>
     <style data-cv-kolaylik>
-    .mcv-mic-tip { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%) translateY(12px); z-index: 2147483000; max-width: min(92vw, 420px);
-        background: #1e3a8a; color: #fff; font: 600 14px/1.4 system-ui, sans-serif; padding: 12px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.25);
-        opacity: 0; transition: all .25s ease; text-align: center; cursor: pointer; }
-    .mcv-mic-tip.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .mcv-help { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0 8px; padding: 10px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;
+        color: #1e3a8a; font: 400 13px/1.45 system-ui, sans-serif; font-style: normal; text-align: start; white-space: normal; width: 100%; max-width: calc(100vw - 40px); box-sizing: border-box; }
+    .mcv-help span { flex: 1; }
+    .mcv-help-x { flex: none; border: 0; background: transparent; color: #1e3a8a; font-size: 20px; line-height: 1; min-width: 32px; min-height: 32px; cursor: pointer; }
     .mcv-check-ov { position: fixed; inset: 0; z-index: 2147483001; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
     .mcv-check-box { background: #fff; color: #0f172a; width: 100%; max-width: 440px; max-height: 85vh; overflow: auto; border-radius: 16px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.3); font-family: system-ui, sans-serif; }
     .mcv-check-box h3 { margin: 0 0 6px; font-size: 18px; }
