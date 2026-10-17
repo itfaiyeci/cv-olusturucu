@@ -3907,7 +3907,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "The content you entered in the last entry will be deleted. Are you sure?",
                 "preview": "Preview",
                 "savePDF": "Download PDF",
-                "exportData": "Download Backup",
+                "exportData": "Save Backup",
                 "importData": "Load Backup",
                 "importSuccess": "Backup loaded successfully!",
                 "importError": "Invalid backup file!",
@@ -4092,7 +4092,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "Der Inhalt im letzten Eintrag wird gelöscht. Sind Sie sicher?",
                 "preview": "Vorschau",
                 "savePDF": "PDF herunterladen",
-                "exportData": "Backup herunterladen",
+                "exportData": "Backup speichern",
                 "importData": "Backup laden",
                 "importSuccess": "Backup erfolgreich geladen!",
                 "importError": "Ungültige Backup-Datei!",
@@ -4460,7 +4460,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "Se eliminará el contenido de la última entrada. ¿Está seguro?",
                 "preview": "Vista previa",
                 "savePDF": "Descargar PDF",
-                "exportData": "Descargar copia",
+                "exportData": "Guardar copia",
                 "importData": "Cargar copia",
                 "importSuccess": "¡Copia de seguridad cargada con éxito!",
                 "importError": "¡Archivo de copia de seguridad no válido!",
@@ -4644,7 +4644,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "Il contenuto dell'ultima voce verrà eliminato. Sei sicuro?",
                 "preview": "Anteprima",
                 "savePDF": "Scarica PDF",
-                "exportData": "Scarica backup",
+                "exportData": "Salva backup",
                 "importData": "Carica backup",
                 "importSuccess": "Backup caricato con successo!",
                 "importError": "File di backup non valido!",
@@ -4828,7 +4828,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "O conteúdo da última entrada será excluído. Tem certeza?",
                 "preview": "Pré-visualização",
                 "savePDF": "Baixar PDF",
-                "exportData": "Baixar backup",
+                "exportData": "Salvar backup",
                 "importData": "Carregar backup",
                 "importSuccess": "Backup carregado com sucesso!",
                 "importError": "Arquivo de backup inválido!",
@@ -5012,7 +5012,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "Содержимое последней записи будет удалено. Вы уверены?",
                 "preview": "Предпросмотр",
                 "savePDF": "Скачать PDF",
-                "exportData": "Скачать копию",
+                "exportData": "Сохранить копию",
                 "importData": "Загрузить копию",
                 "importSuccess": "Резервная копия успешно загружена!",
                 "importError": "Недействительный файл резервной копии!",
@@ -5196,7 +5196,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "سيتم حذف المحتوى الموجود في آخر إدخال. هل أنت متأكد؟",
                 "preview": "معاينة",
                 "savePDF": "تحميل PDF",
-                "exportData": "تنزيل نسخة",
+                "exportData": "حفظ نسخة",
                 "importData": "تحميل نسخة",
                 "importSuccess": "تم تحميل النسخة الاحتياطية بنجاح!",
                 "importError": "ملف النسخة الاحتياطية غير صالح!",
@@ -5380,7 +5380,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "confirmRemoveItem": "最后一项中的内容将被删除。确定吗？",
                 "preview": "预览",
                 "savePDF": "下载PDF",
-                "exportData": "下载备份",
+                "exportData": "保存备份",
                 "importData": "加载备份",
                 "importSuccess": "备份加载成功！",
                 "importError": "无效的备份文件！",
@@ -10085,6 +10085,33 @@ function saveCV() {
             window.addEventListener('resize', check);
             var sel = document.getElementById('language-select');
             if (sel) sel.addEventListener('change', function () { setTimeout(text, 0); });
+        });
+    })();
+    </script>
+    <style data-buton-boyut>
+    /* Kontrol düğmeleri telefonda okunaklı olsun: yazı 10px -> 15px, simge 1.5 kat. Uzun dillerde metin kutu içinde alt satıra sarılır. */
+    .controls > button { font-size: 15px !important; line-height: 1.2; white-space: normal; overflow-wrap: normal; word-break: normal; hyphens: manual; min-height: 48px; }
+    .controls > button > span:first-child { font-size: 1.5em; line-height: 1; flex: none; }
+    .controls > button > .button-text { min-width: 0; }
+    </style>
+    <script data-buton-sigdir>
+    // Kelimeler bölünmez; bir düğmede en uzun kelime sığmıyorsa yalnızca o düğmenin yazısı 15px'ten 11px'e kadar küçültülür.
+    (function () {
+        function fit() {
+            document.querySelectorAll('.controls > button').forEach(function (bt) {
+                bt.style.removeProperty('font-size');
+                var t = bt.querySelector('.button-text'); if (!t || bt.offsetParent === null) return;
+                var fs = 15;
+                function over() { return t.scrollWidth > t.clientWidth + 1 || bt.scrollWidth > bt.clientWidth + 1; }
+                while (over() && fs > 11) { fs -= 1; bt.style.setProperty('font-size', fs + 'px', 'important'); }
+            });
+        }
+        function later() { setTimeout(fit, 350); }
+        document.addEventListener('DOMContentLoaded', function () {
+            fit(); later();
+            var sel = document.getElementById('language-select'); if (sel) sel.addEventListener('change', later);
+            window.addEventListener('resize', later);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
         });
     })();
     </script>
