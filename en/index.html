@@ -10251,7 +10251,17 @@ function saveCV() {
             if (!el) return; var k = kindOf(el); if (!k) return;
             if (!document.querySelector('.mcv-help')) yardimGoster(el, k);
         });
-        document.addEventListener('focusout', function () { setTimeout(function () { var a = document.activeElement; if (!a || !a.matches || (!kindOf(a) && !a.closest('.mcv-help'))) removeHelp(); }, 0); });
+        var sonKutuDokunma = 0;
+        document.addEventListener('pointerdown', function (e) { if (e.target && e.target.closest && e.target.closest('.mcv-help')) sonKutuDokunma = Date.now(); }, true);
+        document.addEventListener('focusout', function () { setTimeout(function () {
+            if (Date.now() - sonKutuDokunma < 2500) return; // telefonda seçim listesi açılınca odak geçici olarak kaybolur
+            var a = document.activeElement; if (!a || !a.matches || (!kindOf(a) && !a.closest('.mcv-help'))) removeHelp();
+        }, 0); });
+        document.addEventListener('pointerdown', function (e) {
+            // kutu dışına ve yardım alanları dışına dokununca kapat
+            var t = e.target; if (!t || !t.closest || t.closest('.mcv-help') || (t.matches && kindOf(t)) || t.closest('#about-text, .item-description, .skill-item, .title-item .personal-info-value')) return;
+            if (document.querySelector('.mcv-help')) setTimeout(function () { var a = document.activeElement; if (!a || !a.matches || (!kindOf(a) && !a.closest('.mcv-help'))) removeHelp(); }, 0);
+        }, true);
         ['save-pdf', 'preview-cv', 'share-cv', 'export-data'].forEach(function (id) {
             document.addEventListener('pointerdown', function (e) { if (e.target && e.target.closest && e.target.closest('#' + id)) removeHelp(); }, true);
         });
@@ -10261,8 +10271,8 @@ function saveCV() {
            Örnek cümlelerdeki sayılar "…" ile boş bırakılmıştır; kullanıcı kendi gerçek bilgisini yazar. */
         var ONERI_YOL = '/oneri/';
         var OT = {
-            tr: { baslik: 'Mesleğe göre öneriler', sec: 'Meslek seçin…', kNot: 'Dokunarak ekleyin. Yalnızca gerçekten bildiklerinizi seçin.', cNot: 'Dokunarak ekleyin, sonra … yerine kendi bilginizi yazın. Yalnızca gerçekten yaptıklarınızı ekleyin.', ornek: '{x} CV örneğini gör', eklendi: 'eklendi', dolu: 'Yetenek sınırına ulaşıldı.', geri: '← CV\'ye dön', tam: 'Örnek sayfanın tamamını aç ↗', ornekBas: '{x} CV örneği', bilgi: 'Bu bir örnektir; kendi bilgilerinizi yazın. Yazdıklarınız bu sayfada duruyor.' },
-            en: { baslik: 'Suggestions for your job', sec: 'Choose a job…', kNot: 'Tap to add. Only pick skills you really have.', cNot: 'Tap to add, then replace … with your own details. Only add things you really did.', ornek: 'See the {x} CV example', eklendi: 'added', dolu: 'Skill limit reached.', geri: '← Back to my CV', tam: 'Open the full example page ↗', ornekBas: '{x} CV example', bilgi: 'This is an example; write your own details. What you typed stays on this page.' }
+            tr: { baslik: 'Mesleğe göre öneriler', sec: 'Meslek seçin…', pNot: 'Listeden seçerseniz mesleğiniz alana yazılır; isterseniz sonra düzenleyin.', kNot: 'Dokunarak ekleyin. Yalnızca gerçekten bildiklerinizi seçin.', cNot: 'Dokunarak ekleyin, sonra … yerine kendi bilginizi yazın. Yalnızca gerçekten yaptıklarınızı ekleyin.', ornek: '{x} CV örneğini gör', eklendi: 'eklendi', dolu: 'Yetenek sınırına ulaşıldı.', geri: '← CV\'ye dön', tam: 'Örnek sayfanın tamamını aç ↗', ornekBas: '{x} CV örneği', bilgi: 'Bu bir örnektir; kendi bilgilerinizi yazın. Yazdıklarınız bu sayfada duruyor.' },
+            en: { baslik: 'Suggestions for your job', sec: 'Choose a job…', pNot: 'Pick from the list to fill in your job title; you can edit it afterwards.', kNot: 'Tap to add. Only pick skills you really have.', cNot: 'Tap to add, then replace … with your own details. Only add things you really did.', ornek: 'See the {x} CV example', eklendi: 'added', dolu: 'Skill limit reached.', geri: '← Back to my CV', tam: 'Open the full example page ↗', ornekBas: '{x} CV example', bilgi: 'This is an example; write your own details. What you typed stays on this page.' }
         };
         var oneriVeri = {}, oneriYukleniyor = {}, seciliMeslek = {};
         function ot(k) { var l = OT[lang()] ? lang() : 'en'; return OT[l][k]; }
@@ -10353,7 +10363,8 @@ function saveCV() {
                 if (k === 'prof' && !on) on = meslekBul(d, (el.textContent || ''));
                 function ciz(m) {
                     govde.innerHTML = '';
-                    if (!m) return;
+                    if (!m) { if (k === 'prof') { var pn0 = document.createElement('div'); pn0.className = 'mcv-oneri-not'; pn0.textContent = ot('pNot'); govde.appendChild(pn0); } return; }
+                    if (k === 'prof') { var pn = document.createElement('div'); pn.className = 'mcv-oneri-not'; pn.textContent = ot('pNot'); govde.appendChild(pn); }
                     if (k !== 'prof') {
                         var not = document.createElement('div'); not.className = 'mcv-oneri-not'; not.textContent = ot(k === 'skill' ? 'kNot' : 'cNot'); govde.appendChild(not);
                         var cipler = document.createElement('div'); cipler.className = 'mcv-cipler';
@@ -10385,6 +10396,8 @@ function saveCV() {
                 sec.addEventListener('change', function () {
                     var m = d.filter(function (x) { return x.s === sec.value; })[0];
                     seciliMeslek[l] = m ? m.s : ''; ciz(m);
+                    if (m && k === 'prof') { yazVeBildir(el, m.n.replace(/\s*\(.*?\)\s*/g, ' ').trim()); }
+                    sonKutuDokunma = Date.now();
                 });
                 box.appendChild(bol);
             }).catch(function () {});
