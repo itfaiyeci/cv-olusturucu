@@ -10208,8 +10208,8 @@ function saveCV() {
            Örnek cümlelerdeki sayılar "…" ile boş bırakılmıştır; kullanıcı kendi gerçek bilgisini yazar. */
         var ONERI_YOL = '/oneri/';
         var OT = {
-            tr: { baslik: 'Mesleğe göre öneriler', sec: 'Meslek seçin…', kNot: 'Dokunarak ekleyin. Yalnızca gerçekten bildiklerinizi seçin.', cNot: 'Dokunarak ekleyin, sonra … yerine kendi bilginizi yazın. Yalnızca gerçekten yaptıklarınızı ekleyin.', ornek: '{x} CV örneğini gör', eklendi: 'eklendi', dolu: 'Yetenek sınırına ulaşıldı.' },
-            en: { baslik: 'Suggestions for your job', sec: 'Choose a job…', kNot: 'Tap to add. Only pick skills you really have.', cNot: 'Tap to add, then replace … with your own details. Only add things you really did.', ornek: 'See the {x} CV example', eklendi: 'added', dolu: 'Skill limit reached.' }
+            tr: { baslik: 'Mesleğe göre öneriler', sec: 'Meslek seçin…', kNot: 'Dokunarak ekleyin. Yalnızca gerçekten bildiklerinizi seçin.', cNot: 'Dokunarak ekleyin, sonra … yerine kendi bilginizi yazın. Yalnızca gerçekten yaptıklarınızı ekleyin.', ornek: '{x} CV örneğini gör', eklendi: 'eklendi', dolu: 'Yetenek sınırına ulaşıldı.', geri: '← CV\'ye dön', tam: 'Örnek sayfanın tamamını aç ↗', ornekBas: '{x} CV örneği', bilgi: 'Bu bir örnektir; kendi bilgilerinizi yazın. Yazdıklarınız bu sayfada duruyor.' },
+            en: { baslik: 'Suggestions for your job', sec: 'Choose a job…', kNot: 'Tap to add. Only pick skills you really have.', cNot: 'Tap to add, then replace … with your own details. Only add things you really did.', ornek: 'See the {x} CV example', eklendi: 'added', dolu: 'Skill limit reached.', geri: '← Back to my CV', tam: 'Open the full example page ↗', ornekBas: '{x} CV example', bilgi: 'This is an example; write your own details. What you typed stays on this page.' }
         };
         var oneriVeri = {}, oneriYukleniyor = {}, seciliMeslek = {};
         function ot(k) { var l = OT[lang()] ? lang() : 'en'; return OT[l][k]; }
@@ -10253,6 +10253,32 @@ function saveCV() {
             if (!bos) return false;
             yazVeBildir(bos, ad); return true;
         }
+        // Örnek CV'yi sayfadan çıkmadan gösterir (telefonda yeni sekme kafa karıştırıyordu). Geri tuşu pencereyi kapatır.
+        var ornekGecmis = false;
+        function ornekKapat(geriDe) {
+            var o = document.querySelector('.mcv-ornek-ov'); if (!o) return;
+            o.remove(); document.documentElement.style.overflow = '';
+            if (ornekGecmis) { ornekGecmis = false; if (geriDe) { try { history.back(); } catch (e) {} } }
+        }
+        window.addEventListener('popstate', function () { if (document.querySelector('.mcv-ornek-ov')) { ornekGecmis = false; ornekKapat(false); } });
+        function ornekAc(m) {
+            ornekKapat(true);
+            var ov = document.createElement('div'); ov.className = 'mcv-ornek-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+            var ust = document.createElement('div'); ust.className = 'mcv-ornek-ust';
+            var g = document.createElement('button'); g.type = 'button'; g.className = 'mcv-ornek-geri'; g.textContent = ot('geri');
+            g.addEventListener('click', function () { ornekKapat(true); });
+            var bs = document.createElement('span'); bs.className = 'mcv-ornek-bas'; bs.textContent = ot('ornekBas').replace('{x}', m.n);
+            ust.appendChild(g); ust.appendChild(bs); ov.appendChild(ust);
+            var ic = document.createElement('div'); ic.className = 'mcv-ornek-ic';
+            var bilgi = document.createElement('p'); bilgi.textContent = ot('bilgi'); ic.appendChild(bilgi);
+            var img = document.createElement('img'); img.alt = ot('ornekBas').replace('{x}', m.n); img.src = m.u.replace(/\.html$/, '.png'); img.loading = 'eager'; ic.appendChild(img);
+            var tam = document.createElement('a'); tam.href = m.u; tam.target = '_blank'; tam.rel = 'noopener'; tam.textContent = ot('tam'); ic.appendChild(tam);
+            ov.appendChild(ic);
+            document.body.appendChild(ov); document.documentElement.style.overflow = 'hidden';
+            try { history.pushState({ mcvOrnek: 1 }, ''); ornekGecmis = true; } catch (e) {}
+            setTimeout(function () { g.focus(); }, 30);
+        }
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') ornekKapat(true); });
         function engelle(n) { ['pointerdown', 'mousedown'].forEach(function (ev) { n.addEventListener(ev, function (e) { e.preventDefault(); }); }); }
         function oneriEkle(box, k, el) {
             var l = lang(); if (l !== 'tr' && l !== 'en') return;
@@ -10297,7 +10323,9 @@ function saveCV() {
                         govde.appendChild(cipler);
                     }
                     var a = document.createElement('a'); a.href = m.u; a.target = '_blank'; a.rel = 'noopener'; a.className = 'mcv-oneri-link';
-                    a.textContent = '📄 ' + ot('ornek').replace('{x}', m.n) + ' ↗'; engelle(a); govde.appendChild(a);
+                    a.textContent = '📄 ' + ot('ornek').replace('{x}', m.n); engelle(a);
+                    a.addEventListener('click', function (e) { e.preventDefault(); ornekAc(m); });
+                    govde.appendChild(a);
                 }
                 if (on) sec.value = on.s;
                 ciz(on);
@@ -10415,6 +10443,14 @@ function saveCV() {
     .mcv-cip { background: #fff; color: #1e3a8a; border: 1px solid #93c5fd; border-radius: 999px; padding: 6px 12px; font-size: 13px; line-height: 1.3; min-height: 34px; text-align: start; white-space: normal; cursor: pointer; display: inline-block; font-weight: 500; }
     .mcv-cip:disabled { background: #dcfce7; border-color: #86efac; color: #166534; cursor: default; }
     .mcv-oneri-link { display: inline-block; margin-top: 8px; font-size: 13px; color: #1d4ed8; }
+    .mcv-ornek-ov { position: fixed; inset: 0; z-index: 2147483002; background: #f1f5f9; display: flex; flex-direction: column; }
+    .mcv-ornek-ust { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #1e3a8a; color: #fff; flex: none; }
+    .mcv-ornek-geri { background: #fff; color: #1e3a8a; border: 0; border-radius: 10px; padding: 10px 14px; font-size: 16px; font-weight: 700; min-height: 44px; cursor: pointer; flex: none; display: inline-flex; white-space: nowrap; }
+    .mcv-ornek-bas { font: 600 15px/1.3 system-ui, sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mcv-ornek-ic { flex: 1; overflow: auto; padding: 12px; text-align: center; -webkit-overflow-scrolling: touch; }
+    .mcv-ornek-ic p { margin: 0 auto 10px; max-width: 640px; font: 400 13px/1.4 system-ui, sans-serif; color: #334155; }
+    .mcv-ornek-ic img { display: block; margin: 0 auto; min-height: 120px; width: 100%; max-width: 640px; height: auto; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.15); border-radius: 4px; }
+    .mcv-ornek-ic a { display: block; margin: 12px 0 24px; font: 600 14px system-ui, sans-serif; color: #1d4ed8; }
     .mcv-check-ov { position: fixed; inset: 0; z-index: 2147483001; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
     .mcv-check-box { background: #fff; color: #0f172a; width: 100%; max-width: 440px; max-height: 85vh; overflow: auto; border-radius: 16px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.3); font-family: system-ui, sans-serif; }
     .mcv-check-box h3 { margin: 0 0 6px; font-size: 18px; }
