@@ -10122,9 +10122,9 @@ function saveCV() {
     (function () {
         var L = {
             tr: { title: 'PDF öncesi kısa kontrol', sub: 'Bunlar yalnızca öneri; karar sizin. Maddeye dokunursanız ilgili alana gider.', fix: 'Düzenle', go: 'Yine de PDF indir',
-                  dateOrder: 'Bitiş yılı başlangıçtan önce görünüyor: {x}', future: 'İleri bir tarih var: {x}', noDesc: 'Bu deneyimde açıklama yok: {x}. Ne yaptığınızı 1–2 cümleyle yazmak işverene fikir verir.', sort: 'Deneyimler en yeniden eskiye sıralı değil. Genelde en yeni iş en üstte yazılır.', aboutLong: 'Hakkımda bölümü uzun ({x} karakter). Kısaltmak okunmasını kolaylaştırır.', email: 'E-postada yazım hatası olabilir: {x}', phone: 'Telefon numarası 10 haneden kısa görünüyor.', prof: 'Meslek / unvan boş. Adınızdan sonra ilk okunan satır budur.' },
+                  dateOrder: 'Bitiş yılı başlangıçtan önce görünüyor: {x}', future: 'İleri bir tarih var: {x}', noDesc: 'Bu deneyimde açıklama yok: {x}. Ne yaptığınızı 1–2 cümleyle yazmak işverene fikir verir.', sort: 'Deneyimler en yeniden eskiye sıralı değil. Genelde en yeni iş en üstte yazılır.', aboutLong: 'Hakkımda bölümü uzun ({x} karakter). Kısaltmak okunmasını kolaylaştırır.', email: 'E-postada yazım hatası olabilir: {x}', phone: 'Telefon numarası 10 haneden kısa görünüyor.', prof: 'Meslek / unvan boş. Adınızdan sonra ilk okunan satır budur.', blank: 'Örnek cümlede doldurulmamış yer (…) var: {x}. Kendi bilginizi yazın ya da cümleyi silin.' },
             en: { title: 'Quick check before the PDF', sub: 'These are only suggestions; it is your call. Tap an item to go to the field.', fix: 'Edit', go: 'Download PDF anyway',
-                  dateOrder: 'End year appears to be before the start year: {x}', future: 'There is a future date: {x}', noDesc: 'This experience has no description: {x}. One or two sentences on what you did help employers.', sort: 'Experience is not ordered newest first. The most recent job is usually listed at the top.', aboutLong: 'Your About section is long ({x} characters). A shorter one is easier to read.', email: 'Your email may contain a typo: {x}', phone: 'The phone number looks too short.', prof: 'Job title is empty. It is the first line read after your name.' },
+                  dateOrder: 'End year appears to be before the start year: {x}', future: 'There is a future date: {x}', noDesc: 'This experience has no description: {x}. One or two sentences on what you did help employers.', sort: 'Experience is not ordered newest first. The most recent job is usually listed at the top.', aboutLong: 'Your About section is long ({x} characters). A shorter one is easier to read.', email: 'Your email may contain a typo: {x}', phone: 'The phone number looks too short.', prof: 'Job title is empty. It is the first line read after your name.', blank: 'An example sentence still has a blank (…): {x}. Fill in your own details or remove the sentence.' },
             de: { title: 'Kurzer Check vor dem PDF', sub: 'Nur Vorschläge – Sie entscheiden. Tippen Sie auf einen Punkt, um zum Feld zu springen.', fix: 'Bearbeiten', go: 'PDF trotzdem herunterladen',
                   dateOrder: 'Endjahr liegt scheinbar vor dem Startjahr: {x}', future: 'Ein Datum liegt in der Zukunft: {x}', noDesc: 'Diese Station hat keine Beschreibung: {x}. Ein, zwei Sätze zu Ihren Aufgaben helfen Arbeitgebern.', sort: 'Die Berufserfahrung ist nicht von neu nach alt sortiert. Üblich ist die aktuelle Stelle oben.', aboutLong: 'Ihr Profiltext ist lang ({x} Zeichen). Kürzer ist leichter lesbar.', email: 'Möglicher Tippfehler in der E-Mail: {x}', phone: 'Die Telefonnummer wirkt zu kurz.', prof: 'Berufsbezeichnung ist leer. Sie ist die erste Zeile nach Ihrem Namen.' },
             fr: { title: 'Vérification rapide avant le PDF', sub: 'Ce ne sont que des suggestions, à vous de décider. Touchez un point pour aller au champ.', fix: 'Modifier', go: 'Télécharger le PDF quand même',
@@ -10196,11 +10196,118 @@ function saveCV() {
             if (k === 'prof') el.closest('.title-item').appendChild(box);
             else if (k === 'skill') { var c = document.getElementById('skills-container'); c.parentNode.insertBefore(box, c.nextSibling); }
             else el.parentNode.insertBefore(box, el.nextSibling);
+            oneriEkle(box, k, el);
         });
-        document.addEventListener('focusout', function () { setTimeout(function () { var a = document.activeElement; if (!a || !a.matches || !kindOf(a)) removeHelp(); }, 0); });
+        document.addEventListener('focusout', function () { setTimeout(function () { var a = document.activeElement; if (!a || !a.matches || (!kindOf(a) && !a.closest('.mcv-help'))) removeHelp(); }, 0); });
         ['save-pdf', 'preview-cv', 'share-cv', 'export-data'].forEach(function (id) {
             document.addEventListener('pointerdown', function (e) { if (e.target && e.target.closest && e.target.closest('#' + id)) removeHelp(); }, true);
         });
+
+        /* ---------- 1b) Mesleğe göre öneriler (yalnız TR/EN): mobilcv.net meslek sayfalarının verisinden ----------
+           Veri /oneri/tr.json ve /oneri/en.json (aynı sitede; dosya istenir, kullanıcı verisi gönderilmez).
+           Örnek cümlelerdeki sayılar "…" ile boş bırakılmıştır; kullanıcı kendi gerçek bilgisini yazar. */
+        var ONERI_YOL = '/oneri/';
+        var OT = {
+            tr: { baslik: 'Mesleğe göre öneriler', sec: 'Meslek seçin…', kNot: 'Dokunarak ekleyin. Yalnızca gerçekten bildiklerinizi seçin.', cNot: 'Dokunarak ekleyin, sonra … yerine kendi bilginizi yazın. Yalnızca gerçekten yaptıklarınızı ekleyin.', ornek: '{x} CV örneğini gör', eklendi: 'eklendi', dolu: 'Yetenek sınırına ulaşıldı.' },
+            en: { baslik: 'Suggestions for your job', sec: 'Choose a job…', kNot: 'Tap to add. Only pick skills you really have.', cNot: 'Tap to add, then replace … with your own details. Only add things you really did.', ornek: 'See the {x} CV example', eklendi: 'added', dolu: 'Skill limit reached.' }
+        };
+        var oneriVeri = {}, oneriYukleniyor = {}, seciliMeslek = {};
+        function ot(k) { var l = OT[lang()] ? lang() : 'en'; return OT[l][k]; }
+        function oneriYukle(l) {
+            if (oneriVeri[l]) return Promise.resolve(oneriVeri[l]);
+            if (!oneriYukleniyor[l]) oneriYukleniyor[l] = fetch(ONERI_YOL + l + '.json').then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (d) { oneriVeri[l] = d; return d; });
+            return oneriYukleniyor[l];
+        }
+        function nrm(t) { return (t || '').toLocaleLowerCase(lang() === 'tr' ? 'tr' : 'en').replace(/\s+/g, ' ').trim(); }
+        function meslekBul(d, metin) {
+            var m = nrm(metin); if (m.length < 3) return null;
+            for (var i = 0; i < d.length; i++) {
+                var parcalar = d[i].n.split(/\s*[\/(),]\s*/).map(nrm).filter(function (x) { return x.length >= 3; });
+                for (var j = 0; j < parcalar.length; j++) { if (m.indexOf(parcalar[j]) >= 0 || parcalar[j].indexOf(m) >= 0) return d[i]; }
+            }
+            return null;
+        }
+        function yazVeBildir(hedef, metin) {
+            hedef.textContent = metin; hedef.classList.remove('empty-field');
+            hedef.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        function bosluguSec(hedef) {
+            try {
+                var n = hedef.firstChild; if (!n || n.nodeType !== 3) return;
+                var i = n.data.indexOf('…'); if (i < 0) return;
+                hedef.focus(); var r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1);
+                var sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r);
+            } catch (e) {}
+        }
+        function yetenekEkle(ad) {
+            var kap = document.getElementById('skills-container'); if (!kap) return false;
+            var var_ = Array.prototype.some.call(kap.querySelectorAll('.skill-item'), function (s) { return nrm(txt(s)) === nrm(ad); });
+            if (var_) return true;
+            var bos = Array.prototype.filter.call(kap.querySelectorAll('.skill-item'), function (s) { return s.offsetParent !== null && !txt(s); })[0];
+            if (!bos) {
+                var sinir = (typeof MAX_SKILLS !== 'undefined') ? MAX_SKILLS : 10;
+                if (kap.children.length >= sinir) return false;
+                var btn = document.getElementById('add-skill-btn'); if (!btn) return false;
+                btn.click(); bos = kap.lastElementChild;
+            }
+            if (!bos) return false;
+            yazVeBildir(bos, ad); return true;
+        }
+        function engelle(n) { ['pointerdown', 'mousedown'].forEach(function (ev) { n.addEventListener(ev, function (e) { e.preventDefault(); }); }); }
+        function oneriEkle(box, k, el) {
+            var l = lang(); if (l !== 'tr' && l !== 'en') return;
+            if (k !== 'skill' && k !== 'desc' && k !== 'prof') return;
+            oneriYukle(l).then(function (d) {
+                if (!box.isConnected) return;
+                var bol = document.createElement('div'); bol.className = 'mcv-oneri';
+                var ust = document.createElement('div'); ust.className = 'mcv-oneri-ust';
+                var b = document.createElement('strong'); b.textContent = ot('baslik'); ust.appendChild(b);
+                var sec = document.createElement('select'); sec.setAttribute('aria-label', ot('baslik'));
+                var o0 = document.createElement('option'); o0.value = ''; o0.textContent = ot('sec'); sec.appendChild(o0);
+                d.forEach(function (m) { var o = document.createElement('option'); o.value = m.s; o.textContent = m.n; sec.appendChild(o); });
+                ust.appendChild(sec); bol.appendChild(ust);
+                var govde = document.createElement('div'); bol.appendChild(govde);
+                // ön seçim: kullanıcı daha önce seçtiyse o; yoksa meslek alanı ya da bu deneyimin unvanı
+                var on = seciliMeslek[l] && d.filter(function (m) { return m.s === seciliMeslek[l]; })[0];
+                if (!on && k === 'desc') { var it = el.closest('.experience-item'); on = it && meslekBul(d, txt(it.querySelector('.item-title'))); }
+                if (!on) on = meslekBul(d, txt(document.querySelector('.title-item .personal-info-value')));
+                if (k === 'prof' && !on) on = meslekBul(d, (el.textContent || ''));
+                function ciz(m) {
+                    govde.innerHTML = '';
+                    if (!m) return;
+                    if (k !== 'prof') {
+                        var not = document.createElement('div'); not.className = 'mcv-oneri-not'; not.textContent = ot(k === 'skill' ? 'kNot' : 'cNot'); govde.appendChild(not);
+                        var cipler = document.createElement('div'); cipler.className = 'mcv-cipler';
+                        (k === 'skill' ? m.k : m.c).forEach(function (metin) {
+                            var c = document.createElement('button'); c.type = 'button'; c.className = 'mcv-cip'; c.textContent = '+ ' + metin;
+                            engelle(c);
+                            c.addEventListener('click', function () {
+                                if (k === 'skill') {
+                                    if (yetenekEkle(metin)) { c.disabled = true; c.textContent = '✓ ' + metin; }
+                                    else { c.textContent = ot('dolu'); c.disabled = true; }
+                                } else {
+                                    var mevcut = txt(el);
+                                    yazVeBildir(el, mevcut ? mevcut.replace(/\s*$/, '') + ' ' + metin : metin);
+                                    c.disabled = true; c.textContent = '✓ ' + metin;
+                                    bosluguSec(el);
+                                }
+                            });
+                            cipler.appendChild(c);
+                        });
+                        govde.appendChild(cipler);
+                    }
+                    var a = document.createElement('a'); a.href = m.u; a.target = '_blank'; a.rel = 'noopener'; a.className = 'mcv-oneri-link';
+                    a.textContent = '📄 ' + ot('ornek').replace('{x}', m.n) + ' ↗'; engelle(a); govde.appendChild(a);
+                }
+                if (on) sec.value = on.s;
+                ciz(on);
+                sec.addEventListener('change', function () {
+                    var m = d.filter(function (x) { return x.s === sec.value; })[0];
+                    seciliMeslek[l] = m ? m.s : ''; ciz(m);
+                });
+                box.appendChild(bol);
+            }).catch(function () {});
+        }
 
         /* ---------- 2) PDF öncesi kontrol ---------- */
         var TYPO = { 'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmal.com': 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com', 'gmail.cm': 'gmail.com', 'gmail.om': 'gmail.com',
@@ -10239,6 +10346,7 @@ function saveCV() {
                     }
                     var desc = it.querySelector('.item-description');
                     if (title && desc && desc.offsetParent !== null && !txt(desc)) add(t('noDesc', name), desc);
+                    if (desc && txt(desc).indexOf('…') >= 0) add(t('blank', name || txt(desc).slice(0, 40)), desc);
                 });
                 for (var i = 1; i < starts.length; i++) { if (starts[i] > starts[i - 1]) { add(t('sort'), document.getElementById('experience-section')); break; } }
                 document.querySelectorAll('#education-container .education-date').forEach(function (dEl) {
@@ -10298,6 +10406,15 @@ function saveCV() {
         color: #1e3a8a; font: 400 13px/1.45 system-ui, sans-serif; font-style: normal; text-align: start; white-space: normal; width: 100%; max-width: calc(100vw - 40px); box-sizing: border-box; }
     .mcv-help span { flex: 1; }
     .mcv-help-x { flex: none; border: 0; background: transparent; color: #1e3a8a; font-size: 20px; line-height: 1; min-width: 32px; min-height: 32px; cursor: pointer; }
+    .mcv-oneri { flex-basis: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #bfdbfe; }
+    .mcv-help:has(.mcv-oneri) { flex-wrap: wrap; }
+    .mcv-oneri-ust { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+    .mcv-oneri-ust select { font-size: 14px; padding: 6px 8px; border: 1px solid #93c5fd; border-radius: 8px; background: #fff; color: #0f172a; max-width: 100%; min-height: 36px; }
+    .mcv-oneri-not { margin: 8px 0 6px; font-size: 12px; color: #334155; }
+    .mcv-cipler { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mcv-cip { background: #fff; color: #1e3a8a; border: 1px solid #93c5fd; border-radius: 999px; padding: 6px 12px; font-size: 13px; line-height: 1.3; min-height: 34px; text-align: start; white-space: normal; cursor: pointer; display: inline-block; font-weight: 500; }
+    .mcv-cip:disabled { background: #dcfce7; border-color: #86efac; color: #166534; cursor: default; }
+    .mcv-oneri-link { display: inline-block; margin-top: 8px; font-size: 13px; color: #1d4ed8; }
     .mcv-check-ov { position: fixed; inset: 0; z-index: 2147483001; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
     .mcv-check-box { background: #fff; color: #0f172a; width: 100%; max-width: 440px; max-height: 85vh; overflow: auto; border-radius: 16px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.3); font-family: system-ui, sans-serif; }
     .mcv-check-box h3 { margin: 0 0 6px; font-size: 18px; }
