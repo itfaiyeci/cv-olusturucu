@@ -8090,6 +8090,19 @@ if (socialMediaSection) {
                 
                 document.getElementById('preview-content').innerHTML = '';
                 document.getElementById('preview-content').appendChild(cvContent);
+                // Önizleme penceresinin rengi seçili temayla aynı olsun
+                try {
+                    var __cs = getComputedStyle(document.getElementById('cv-form'));
+                    var __ov = document.getElementById('preview-overlay');
+                    var __acc = (__cs.getPropertyValue('--cv-accent') || '').trim();
+                    var __bg = (__cs.getPropertyValue('--cv-sidebar-bg') || '').trim();
+                    if (__acc) {
+                        __ov.style.setProperty('--pv-accent', __acc);
+                        var __m = __acc.match(/^#([0-9a-f]{6})$/i);
+                        if (__m) { var __n = parseInt(__m[1], 16); __ov.style.setProperty('--pv-backdrop', 'rgba(' + Math.round(((__n >> 16) & 255) * 0.3) + ',' + Math.round(((__n >> 8) & 255) * 0.3) + ',' + Math.round((__n & 255) * 0.3) + ',0.92)'); }
+                    }
+                    if (__bg) __ov.style.setProperty('--pv-bg', __bg);
+                } catch (e) {}
                 document.getElementById('preview-overlay').style.display = 'flex';
             });
             
@@ -10088,6 +10101,18 @@ function saveCV() {
         });
     })();
     </script>
+    <style data-gorunum-181026>
+    /* Şablon başlığı görünmez (ekran okuyucu için kalır); şablon düğmeleri %30 büyük */
+    #template-label { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .controls .tpl-buttons .tpl-btn { font-size: 13px !important; min-height: 44px; }
+    /* Hakkımda metni iki yana yaslı (son satır sola) */
+    #about-text, .about-text { text-align: justify; text-justify: inter-word; }
+    /* Önizleme penceresi seçili renk temasına uysun */
+    .preview-container { background: var(--pv-bg, #fff); }
+    .preview-container .preview-header h2 { color: var(--pv-accent, inherit); }
+    .preview-container .close-preview { background: var(--pv-accent, #e74c3c); }
+    .preview-overlay { background: var(--pv-backdrop, rgba(0,0,0,0.9)); }
+    </style>
     <style data-buton-boyut>
     /* Kontrol düğmeleri telefonda okunaklı olsun: yazı 10px -> 15px, simge 1.5 kat. Uzun dillerde metin kutu içinde alt satıra sarılır. */
     .controls > button { font-size: 15px !important; line-height: 1.2; white-space: normal; overflow-wrap: normal; word-break: normal; hyphens: manual; min-height: 48px; }
