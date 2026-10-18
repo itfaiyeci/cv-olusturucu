@@ -10118,6 +10118,8 @@ function saveCV() {
     .controls > button { font-size: 15px !important; line-height: 1.2; white-space: normal; overflow-wrap: normal; word-break: normal; hyphens: manual; min-height: 48px; }
     .controls > button > span:first-child { font-size: 1.5em; line-height: 1; flex: none; }
     .controls > button > .button-text { min-width: 0; }
+    /* Bilgisayarda düğme yazıları 13px (15px düğmeleri gereksiz genişletiyordu) */
+    @media (min-width: 769px) { .controls > button { font-size: 13px !important; gap: 5px; padding-left: 8px; padding-right: 8px; } .controls > button > span:first-child { font-size: 1.25em; } }
     </style>
     <script data-buton-sigdir>
     // Kelimeler bölünmez; bir düğmede en uzun kelime sığmıyorsa yalnızca o düğmenin yazısı 15px'ten 11px'e kadar küçültülür.
@@ -10126,7 +10128,7 @@ function saveCV() {
             document.querySelectorAll('.controls > button').forEach(function (bt) {
                 bt.style.removeProperty('font-size');
                 var t = bt.querySelector('.button-text'); if (!t || bt.offsetParent === null) return;
-                var fs = 15;
+                var fs = Math.round(parseFloat(getComputedStyle(bt).fontSize)) || 15;
                 function over() { return t.scrollWidth > t.clientWidth + 1 || bt.scrollWidth > bt.clientWidth + 1; }
                 while (over() && fs > 11) { fs -= 1; bt.style.setProperty('font-size', fs + 'px', 'important'); }
             });
