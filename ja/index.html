@@ -10283,9 +10283,13 @@ function saveCV() {
             }
 
             var opened = null;
+            // Geri hareketi/tuşu paneli kapatsın, sayfadan çıkmasın (örnek CV penceresiyle aynı yöntem)
+            var gecmis = false;
+            window.addEventListener('popstate', function () { if (opened) { gecmis = false; close(false); } });
             function open(which) {
-                close();
+                close(false); // panel değişiyorsa geçmiş kaydı korunur
                 opened = which;
+                if (!gecmis) { try { history.pushState({ mcvPanel: 1 }, ''); gecmis = true; } catch (e) {} }
                 document.body.classList.add(which === 'tpl' ? 'mp-open-tpl' : 'mp-open-theme');
                 var panel = which === 'tpl' ? tp : th, chip = which === 'tpl' ? chipTpl : chipTh;
                 panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
@@ -10294,7 +10298,8 @@ function saveCV() {
                 panel.setAttribute('tabindex', '-1');
                 try { panel.focus({ preventScroll: true }); } catch (e) {}
             }
-            function close() {
+            function close(geriDe) {
+                if (geriDe !== false && gecmis) { gecmis = false; try { history.back(); } catch (e) {} }
                 if (!opened) return;
                 var chip = opened === 'tpl' ? chipTpl : chipTh;
                 var panel = opened === 'tpl' ? tp : th;
