@@ -15,7 +15,7 @@ permissions:
 jobs:
   islev:
     name: Islev testi (11 dil, PDF)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
@@ -31,7 +31,7 @@ jobs:
 
   icerik:
     name: Icerik ve dogruluk kontrolu (iki site)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
@@ -47,7 +47,7 @@ jobs:
   canli:
     name: Canli site erisilebilir mi
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: Kontrol
