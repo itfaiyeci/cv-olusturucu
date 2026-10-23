@@ -3165,6 +3165,79 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
         });
     };
     </script>
+    <style data-buton-kompakt>
+    /* Telefonda üst kontrol kartı sıkılaştırılır:
+       - Önizleme ve PDF İndir üstte gizlenir; alttaki sabit çubuk (sticky-action-bar) her zaman görünür olur ve aynı düğmeleri tetikler.
+       - Paylaş, Yedekle, Yedeği Yükle, Temizle tek satır: simge üstte, yazı altta.
+       - Şablon düğmeleri ve renk şeridi alçaltılır.
+       HTML ve JS değişmez; geri almak için bu blok silinir. */
+    @media (max-width: 768px) {
+        .controls { grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px; }
+        .controls > #preview-cv, .controls > #save-pdf { display: none !important; }
+        .controls > #share-cv   { order: 1; grid-column: span 1; }
+        .controls > #export-data{ order: 2; grid-column: span 1; }
+        .controls > #import-data{ order: 3; grid-column: span 1; }
+        .controls > #clear-all  { order: 4; grid-column: span 1; }
+        .controls > #share-cv, .controls > #export-data, .controls > #import-data, .controls > #clear-all {
+            flex-direction: column; gap: 2px; min-height: 50px; padding: 5px 2px;
+            font-size: 12px !important; font-weight: 600; line-height: 1.15; border-radius: 8px;
+        }
+        .controls > #share-cv > span:first-child, .controls > #export-data > span:first-child,
+        .controls > #import-data > span:first-child, .controls > #clear-all > span:first-child { font-size: 18px; }
+        .controls > #clear-all { border-width: 1px; }
+        /* Alt sabit çubuk her zaman görünür; altındaki içerik örtülmesin */
+        #sticky-action-bar { transform: translateY(0) !important; }
+        body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important; }
+    }
+    </style>
+    <style data-mobil-secici>
+    /* Telefonda şablon ve renk seçimi: kartta iki küçük seçici düğme, dokununca alttan panel açılır.
+       Paneldeki düğmeler sayfadaki asıl şablon/renk düğmeleridir (taşınmaz, kopyalanmaz);
+       bu yüzden kayıt, yedek ve paylaşım linki aynen çalışır. Masaüstünde hiçbir şey değişmez. */
+    .mp-row, .mp-backdrop, .mp-head { display: none; }
+    /* Renk düğmelerinin kapsayıcısı panel dışında görünmez olsun: düğmeler şeridin doğrudan parçası gibi davranır */
+    .mp-swatches { display: contents; }
+    @media (max-width: 768px) {
+        .mp-row { display: flex; gap: 8px; grid-column: 1 / -1; order: 0; }
+        .mp-chip { flex: 1 1 0; min-width: 0; min-height: 48px; padding: 6px 10px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
+            background: #fff; background-image: none; color: #1e293b; border: 1.5px solid #cbd5e1; border-radius: 10px; box-shadow: none; text-align: start; position: relative; padding-inline-end: 26px; }
+        .mp-chip:hover, .mp-chip:active { transform: none; filter: none; background: #f8fafc; box-shadow: none; }
+        .mp-chip::after { content: '▾'; position: absolute; inset-inline-end: 10px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
+        .mp-cap { font-size: 11px; font-weight: 600; color: #64748b; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mp-val { font-size: 14px; font-weight: 700; line-height: 1.25; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .mp-dot { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+        .mp-val > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+
+        /* Paneller kapalıyken gizli */
+        .controls > #template-picker, .controls > #theme-options { display: none; }
+
+        /* Açık panel: alttan gelen yarım sayfa */
+        body.mp-open-tpl .controls > #template-picker, body.mp-open-theme .controls > #theme-options {
+            display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 2; height: auto; margin: 0;
+            background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 30px rgba(15,23,42,.18); overflow: visible;
+            padding: 8px 14px calc(16px + env(safe-area-inset-bottom, 0px)); animation: mpUp .2s ease; }
+        @keyframes mpUp { from { transform: translateY(100%); } to { transform: none; } }
+        .mp-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 10px; }
+        .mp-head strong { font-size: 15px; color: #1e293b; }
+        .mp-close { flex: none; width: 40px; height: 40px; min-height: 40px; min-width: 0; padding: 0; line-height: 1; display: flex; align-items: center; justify-content: center; background: #f1f5f9; background-image: none; color: #334155; border: none; border-radius: 50%; font-size: 18px; box-shadow: none; }
+        #template-picker:focus, #theme-options:focus { outline: none; }
+        .mp-backdrop { position: fixed; inset: 0; z-index: 1; background: rgba(15,23,42,.25); }
+        /* Panel açıkken kart, alt çubuk dahil her şeyin üstüne çıkar */
+        body.mp-open-tpl .controls, body.mp-open-theme .controls { z-index: 10001; }
+        body.mp-open-tpl .mp-backdrop, body.mp-open-theme .mp-backdrop { display: block; }
+
+        /* Şablon paneli: 2x2, büyük dokunma alanı */
+        body.mp-open-tpl #template-picker .tpl-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; box-shadow: none; overflow: visible; background: none; }
+        body.mp-open-tpl #template-picker .tpl-btn { min-height: 52px; font-size: 14px !important; border: 1.5px solid #e2e8f0 !important; border-radius: 10px; white-space: normal; }
+        body.mp-open-tpl #template-picker .tpl-btn.active { border-color: #1e293b !important; }
+
+        /* Renk paneli: 4 büyük kare, adları altında */
+        body.mp-open-theme #theme-options .mp-swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding-bottom: 22px; }
+        body.mp-open-theme #theme-options .theme-swatch { height: 56px; border-radius: 12px; overflow: visible; }
+        body.mp-open-theme #theme-options .theme-swatch.active { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--dot-color); }
+        body.mp-open-theme #theme-options .theme-swatch::before { content: attr(title); position: absolute; top: 100%; left: -4px; right: -4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: #475569; line-height: 1.15; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+    </style>
 </head>
 <body>
     <!-- Skip to Main Content Link for Accessibility -->
@@ -3219,6 +3292,11 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
             
             <section aria-labelledby="controls-title" class="controls">
                 <h2 id="controls-title" class="sr-only">Comandi del CV</h2>
+                <div class="mp-backdrop"></div>
+                <div class="mp-row">
+                    <button type="button" class="mp-chip" id="mp-chip-tpl" aria-haspopup="dialog" aria-expanded="false" aria-controls="template-picker"><span class="mp-cap">Modello</span><span class="mp-val"><span>Moderno</span></span></button>
+                    <button type="button" class="mp-chip" id="mp-chip-theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-options"><span class="mp-cap">Tema colore</span><span class="mp-val"><span class="mp-dot" style="background:#3498db"></span><span>Blu classico</span></span></button>
+                </div>
                 <div class="template-picker" id="template-picker">
                     <span id="template-label">Şablon</span>
                     <div class="tpl-buttons" id="tpl-buttons" role="radiogroup" aria-labelledby="template-label">
@@ -3365,7 +3443,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                         <div class="social-media-item">
                                             <span class="social-icon linkedin">in</span>
                                             <div class="social-media-value editable" contenteditable="true" 
-                                                 data-placeholder="LinkedIn profil linki" 
+                                                 data-placeholder="LinkedIn kullanıcı adı veya linki" 
                                                  data-hint="LinkedIn profil URL'nizi ekleyin"
                                                  data-type="linkedin"></div>
                                         </div>
@@ -3374,7 +3452,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                         <div class="social-media-item">
                                             <span class="social-icon github">gh</span>
                                             <div class="social-media-value editable" contenteditable="true" 
-                                                 data-placeholder="GitHub profil linki" 
+                                                 data-placeholder="GitHub kullanıcı adı veya linki" 
                                                  data-hint="GitHub profil URL'nizi ekleyin"
                                                  data-type="github"></div>
                                         </div>
@@ -3383,7 +3461,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                                         <div class="social-media-item">
                                             <span class="social-icon twitter">x</span>
                                             <div class="social-media-value editable" contenteditable="true" 
-                                                 data-placeholder="Twitter/X profil linki" 
+                                                 data-placeholder="Twitter/X kullanıcı adı veya linki" 
                                                  data-hint="Twitter/X profil URL'nizi ekleyin"
                                                  data-type="twitter"></div>
                                         </div>
@@ -3871,9 +3949,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Geliştirmemize yardımcı olun!",
 	// SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Sosyal Medya",
-    "linkedinPlaceholder": "LinkedIn profil linki",
-    "githubPlaceholder": "GitHub profil linki", 
-    "twitterPlaceholder": "Twitter/X profil linki",
+    "linkedinPlaceholder": "LinkedIn kullanıcı adı veya linki",
+    "githubPlaceholder": "GitHub kullanıcı adı veya linki", 
+    "twitterPlaceholder": "Twitter/X kullanıcı adı veya linki",
     
     // Sosyal medya ipuçları
     "linkedinHint": "LinkedIn profil URL'nizi ekleyin",
@@ -4056,9 +4134,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Help us improve!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ  
     "socialMedia": "Social Media",
-    "linkedinPlaceholder": "LinkedIn profile link",
-    "githubPlaceholder": "GitHub profile link",
-    "twitterPlaceholder": "Twitter/X profile link",
+    "linkedinPlaceholder": "LinkedIn username or link",
+    "githubPlaceholder": "GitHub username or link",
+    "twitterPlaceholder": "Twitter/X username or link",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Add your LinkedIn profile URL",
@@ -4241,9 +4319,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Helfen Sie uns, uns zu verbessern!",
 	// SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Soziale Medien",
-    "linkedinPlaceholder": "LinkedIn Profil-Link",
-    "githubPlaceholder": "GitHub Profil-Link",
-    "twitterPlaceholder": "Twitter/X Profil-Link",
+    "linkedinPlaceholder": "LinkedIn-Benutzername oder Link",
+    "githubPlaceholder": "GitHub-Benutzername oder Link",
+    "twitterPlaceholder": "Twitter/X-Benutzername oder Link",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Fügen Sie Ihre LinkedIn-Profil-URL hinzu",
@@ -4425,9 +4503,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Aidez-nous à nous améliorer!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Médias Sociaux",
-    "linkedinPlaceholder": "Lien profil LinkedIn",
-    "githubPlaceholder": "Lien profil GitHub",
-    "twitterPlaceholder": "Lien profil Twitter/X",
+    "linkedinPlaceholder": "Identifiant ou lien LinkedIn",
+    "githubPlaceholder": "Identifiant ou lien GitHub",
+    "twitterPlaceholder": "Identifiant ou lien Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Ajoutez votre URL de profil LinkedIn",
@@ -4609,9 +4687,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "¡Ayúdenos a mejorar!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Redes Sociales",
-    "linkedinPlaceholder": "Enlace perfil LinkedIn",
-    "githubPlaceholder": "Enlace perfil GitHub",
-    "twitterPlaceholder": "Enlace perfil Twitter/X",
+    "linkedinPlaceholder": "Usuario o enlace de LinkedIn",
+    "githubPlaceholder": "Usuario o enlace de GitHub",
+    "twitterPlaceholder": "Usuario o enlace de Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Agregue su URL de perfil de LinkedIn",
@@ -4793,9 +4871,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Aiutaci a migliorare!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Social Media",
-    "linkedinPlaceholder": "Link profilo LinkedIn",
-    "githubPlaceholder": "Link profilo GitHub",
-    "twitterPlaceholder": "Link profilo Twitter/X",
+    "linkedinPlaceholder": "Nome utente o link LinkedIn",
+    "githubPlaceholder": "Nome utente o link GitHub",
+    "twitterPlaceholder": "Nome utente o link Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Aggiungi il tuo URL profilo LinkedIn",
@@ -4977,9 +5055,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Ajude-nos a melhorar!",
 	// SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Mídia Social",
-    "linkedinPlaceholder": "Link perfil LinkedIn",
-    "githubPlaceholder": "Link perfil GitHub",
-    "twitterPlaceholder": "Link perfil Twitter/X",
+    "linkedinPlaceholder": "Usuário ou link do LinkedIn",
+    "githubPlaceholder": "Usuário ou link do GitHub",
+    "twitterPlaceholder": "Usuário ou link do Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Adicione seu URL de perfil do LinkedIn",
@@ -5161,9 +5239,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "Помогите нам улучшиться!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "Социальные сети",
-    "linkedinPlaceholder": "Ссылка на профиль LinkedIn",
-    "githubPlaceholder": "Ссылка на профиль GitHub",
-    "twitterPlaceholder": "Ссылка на профиль Twitter/X",
+    "linkedinPlaceholder": "Логин или ссылка LinkedIn",
+    "githubPlaceholder": "Логин или ссылка GitHub",
+    "twitterPlaceholder": "Логин или ссылка Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "Добавьте URL вашего профиля LinkedIn",
@@ -5345,9 +5423,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "ساعدنا على التحسن!",
 	// SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "وسائل التواصل الاجتماعي",
-    "linkedinPlaceholder": "رابط ملف LinkedIn",
-    "githubPlaceholder": "رابط ملف GitHub",
-    "twitterPlaceholder": "رابط ملف Twitter/X",
+    "linkedinPlaceholder": "اسم المستخدم أو رابط LinkedIn",
+    "githubPlaceholder": "اسم المستخدم أو رابط GitHub",
+    "twitterPlaceholder": "اسم المستخدم أو رابط Twitter/X",
     
     // Sosyal medya ipuçları
     "linkedinHint": "أضف رابط ملفك الشخصي على LinkedIn",
@@ -5529,9 +5607,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
     "feedbackNote": "帮助我们改进!",
 	 // SOSYAL MEDYA ÇEVİRİLERİ
     "socialMedia": "社交媒体",
-    "linkedinPlaceholder": "LinkedIn 个人资料链接",
-    "githubPlaceholder": "GitHub 个人资料链接",
-    "twitterPlaceholder": "Twitter/X 个人资料链接",
+    "linkedinPlaceholder": "LinkedIn 用户名或链接",
+    "githubPlaceholder": "GitHub 用户名或链接",
+    "twitterPlaceholder": "Twitter/X 用户名或链接",
     
     // Sosyal medya ipuçları
     "linkedinHint": "添加您的 LinkedIn 个人资料网址",
@@ -5708,9 +5786,9 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "feedbackText": "ご意見・ご要望はこちらからお寄せください：",
                 "feedbackNote": "改善にご協力ください！",
                 "socialMedia": "SNS",
-                "linkedinPlaceholder": "LinkedInプロフィールのリンク",
-                "githubPlaceholder": "GitHubプロフィールのリンク",
-                "twitterPlaceholder": "X（旧Twitter）プロフィールのリンク",
+                "linkedinPlaceholder": "LinkedInのユーザー名またはリンク",
+                "githubPlaceholder": "GitHubのユーザー名またはリンク",
+                "twitterPlaceholder": "X（旧Twitter）のユーザー名またはリンク",
                 "linkedinHint": "LinkedInプロフィールのURLを追加",
                 "githubHint": "GitHubプロフィールのURLを追加",
                 "twitterHint": "X（旧Twitter）プロフィールのURLを追加",
@@ -5808,7 +5886,7 @@ class SocialMediaManager {
         const platformConfig = this.platforms[platform];
         if (!platformConfig) return;
         
-        const isValid = platformConfig.regex.test(value);
+        const isValid = platformConfig.regex.test(value) || !!this.toCanonical(platform, value);
         
         if (isValid) {
             input.classList.add('valid');
@@ -5831,9 +5909,12 @@ class SocialMediaManager {
         const platformConfig = this.platforms[platform];
         if (!platformConfig || !platformConfig.format) return;
         
-        const formattedUrl = platformConfig.format(value);
+        // Önce temiz profil linkine çevirmeyi dene; olmazsa eski biçimlendirme yalnızca link gibi görünen girdiye uygulanır
+        const canonical = this.toCanonical(platform, value);
+        const formattedUrl = canonical || (/\./.test(value) ? platformConfig.format(value) : value);
         if (input.textContent !== formattedUrl) {
             input.textContent = formattedUrl;
+            input.dispatchEvent(new Event('input', { bubbles: true })); // doğrulama ve otomatik kayıt güncellensin
             
             const range = document.createRange();
             const selection = window.getSelection();
@@ -5844,6 +5925,33 @@ class SocialMediaManager {
         }
     }
     
+    // Kullanıcı adını, "@kullanici"yı ya da uygulamadan kopyalanmış linki temiz profil linkine çevirir.
+    // Tanınmayan girdide null döner (o zaman eski davranış sürer).
+    toCanonical(platform, raw) {
+        var v = (raw || '').trim();
+        if (!v || /\s/.test(v)) return null;
+        var rules = {
+            linkedin: { host: /^([a-z]{2,3}\.)?linkedin\.com$/i, base: 'https://linkedin.com/in/', user: /^[A-Za-z0-9-]{3,100}$/, path: 'in' },
+            github:   { host: /^github\.com$/i, base: 'https://github.com/', user: /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/ },
+            twitter:  { host: /^(twitter|x)\.com$/i, base: 'https://x.com/', user: /^[A-Za-z0-9_]{1,15}$/ }
+        };
+        var r = rules[platform]; if (!r) return null;
+        v = v.replace(/^@/, '');
+        if (/[.\/]/.test(v)) {
+            var str = v.replace(/^https?:\/\//i, '').replace(/^(www|m|mobile)\./i, '').split(/[?#]/)[0];
+            var parts = str.split('/').filter(Boolean);
+            var host = (parts.shift() || '').toLowerCase();
+            if (!r.host.test(host)) return null;
+            var user;
+            if (r.path) { if ((parts[0] || '').toLowerCase() !== r.path) return null; user = parts[1]; }
+            else user = parts[0];
+            if (!user) return null;
+            try { user = decodeURIComponent(user); } catch (e) {}
+            return r.user.test(user) ? r.base + user : null;
+        }
+        return r.user.test(v) ? r.base + v : null;
+    }
+
     formatLinkedIn(url) {
         return this.ensureHttps(url.replace(/\/$/, ''));
     }
@@ -5871,6 +5979,7 @@ class SocialMediaManager {
             // SOSYAL MEDYA YÖNETİCİSİNİ BAŞLAT
     const socialMediaManager = new SocialMediaManager();
     socialMediaManager.init();
+    window.socialMediaManager = socialMediaManager; // sosyal medya öneri kutusu kullanır
 			 // 1. TARAYICI DİLİNİ ALGILAMA
     const SUPPORTED_LANGUAGES = ['tr', 'en', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'ar', 'zh', 'ja'];
 
@@ -10121,6 +10230,161 @@ function saveCV() {
     /* Bilgisayarda düğme yazıları 13px (15px düğmeleri gereksiz genişletiyordu) */
     @media (min-width: 769px) { .controls > button { font-size: 13px !important; gap: 5px; padding-left: 8px; padding-right: 8px; } .controls > button > span:first-child { font-size: 1.25em; } }
     </style>
+    <script data-mobil-secici>
+    (function () {
+        function init() {
+            var controls = document.querySelector('.controls');
+            var tp = document.getElementById('template-picker');
+            var th = document.getElementById('theme-options');
+            if (!controls || !tp || !th || th.querySelector('.mp-swatches')) return;
+
+            // Renk düğmelerini panel ızgarası için bir sarmalayıcıya al (aynı düğmeler)
+            var sw = document.createElement('div'); sw.className = 'mp-swatches';
+            while (th.firstChild) sw.appendChild(th.firstChild);
+            th.appendChild(sw);
+
+            function head(panel, key) {
+                var h = document.createElement('div'); h.className = 'mp-head';
+                h.innerHTML = '<strong></strong><button type="button" class="mp-close" aria-label="✕">✕</button>';
+                h.querySelector('button').addEventListener('click', close);
+                panel.insertBefore(h, panel.firstChild);
+                return h.querySelector('strong');
+            }
+            var tplTitle = head(tp), thTitle = head(th);
+
+            var row = controls.querySelector('.mp-row');
+            if (!row) {
+                row = document.createElement('div'); row.className = 'mp-row';
+                row.innerHTML =
+                    '<button type="button" class="mp-chip" id="mp-chip-tpl" aria-haspopup="dialog" aria-expanded="false" aria-controls="template-picker"><span class="mp-cap"></span><span class="mp-val"><span></span></span></button>' +
+                    '<button type="button" class="mp-chip" id="mp-chip-theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="theme-options"><span class="mp-cap"></span><span class="mp-val"><span class="mp-dot"></span><span></span></span></button>';
+                controls.insertBefore(row, tp);
+            }
+            var bd = controls.querySelector('.mp-backdrop');
+            if (!bd) { bd = document.createElement('div'); bd.className = 'mp-backdrop'; controls.insertBefore(bd, row); }
+            bd.addEventListener('click', close);
+
+            var chipTpl = row.querySelector('#mp-chip-tpl'), chipTh = row.querySelector('#mp-chip-theme');
+
+            function setText(el, v) { if (el && el.textContent !== v) el.textContent = v; }
+            function refresh() {
+                var tl = (document.getElementById('template-label') || {}).textContent || '';
+                var thl = th.getAttribute('aria-label') || '';
+                var at = tp.querySelector('.tpl-btn.active') || tp.querySelector('.tpl-btn');
+                var as = th.querySelector('.theme-swatch.active') || th.querySelector('.theme-swatch');
+                setText(chipTpl.querySelector('.mp-cap'), tl);
+                setText(chipTpl.querySelector('.mp-val span'), at ? at.textContent.trim() : '');
+                setText(chipTh.querySelector('.mp-cap'), thl);
+                setText(chipTh.querySelector('.mp-val span:last-child'), as ? (as.getAttribute('title') || '') : '');
+                var dot = chipTh.querySelector('.mp-dot'), c = as ? as.style.getPropertyValue('--dot-color') : '';
+                if (dot.style.background !== c) dot.style.background = c;
+                // Panel başlıkları izlenen alanın içinde: yalnızca değer farklıysa yaz (yoksa gözlemci döngüye girer)
+                setText(tplTitle, tl); setText(thTitle, thl);
+            }
+
+            var opened = null;
+            function open(which) {
+                close();
+                opened = which;
+                document.body.classList.add(which === 'tpl' ? 'mp-open-tpl' : 'mp-open-theme');
+                var panel = which === 'tpl' ? tp : th, chip = which === 'tpl' ? chipTpl : chipTh;
+                panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true');
+                chip.setAttribute('aria-expanded', 'true');
+                // Odak panelin kendisine (ekran okuyucu için); dokunmatikte seçili düğmede çerçeve çıkmaz
+                panel.setAttribute('tabindex', '-1');
+                try { panel.focus({ preventScroll: true }); } catch (e) {}
+            }
+            function close() {
+                if (!opened) return;
+                var chip = opened === 'tpl' ? chipTpl : chipTh;
+                var panel = opened === 'tpl' ? tp : th;
+                document.body.classList.remove('mp-open-tpl', 'mp-open-theme');
+                panel.removeAttribute('aria-modal');
+                // Asıl radiogroup rollerini geri ver
+                if (panel === th) th.setAttribute('role', 'radiogroup'); else tp.removeAttribute('role');
+                chip.setAttribute('aria-expanded', 'false');
+                opened = null;
+                try { chip.focus({ preventScroll: true }); } catch (e) {}
+            }
+            chipTpl.addEventListener('click', function () { open('tpl'); });
+            chipTh.addEventListener('click', function () { open('theme'); });
+            // Şablon seçince panel kapanır (sonuç hemen görünsün); renkte açık kalır, denemek kolay olsun
+            tp.addEventListener('click', function (e) { if (e.target.closest('.tpl-btn')) setTimeout(close, 120); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+            window.addEventListener('resize', function () { if (window.innerWidth > 768) close(); });
+
+            // Etkin seçim nereden değişirse değişsin (tıklama, yedek, paylaşım linki, dil) düğme yazısı güncellenir
+            var pending = false;
+            var mo = new MutationObserver(function () { if (pending) return; pending = true; requestAnimationFrame(function () { pending = false; refresh(); }); });
+            mo.observe(tp, { subtree: true, attributes: true, attributeFilter: ['class'], childList: true, characterData: true });
+            mo.observe(th, { subtree: true, attributes: true, attributeFilter: ['class', 'title', 'aria-label'] });
+            var sel = document.getElementById('language-select');
+            if (sel) sel.addEventListener('change', function () { setTimeout(refresh, 50); });
+            refresh();
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+    })();
+    </script>
+    <style data-sosyal-oneri>
+    .social-media-item { position: relative; }
+    /* İpucu metni gösterilirken kelimeler ortadan bölünmesin (gerçek linklerde eski kırma kuralı sürer) */
+    .social-media-value.empty-field { word-break: normal; overflow-wrap: anywhere; }
+    .social-suggest { position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; display: none; background: #fff;
+        border: 1px solid #3498db; border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 4px 15px rgba(0,0,0,.1); }
+    .social-suggest div { padding: 10px 12px; font-size: 13px; color: #2c3e50; cursor: pointer; overflow-wrap: anywhere; }
+    .social-suggest div:hover, .social-suggest div:active { background: #3498db; color: #fff; }
+    .pdf-mode .social-suggest { display: none !important; }
+    @media print { .social-suggest { display: none !important; } }
+    </style>
+    <script data-sosyal-oneri>
+    // E-postadaki gibi: kullanıcı adı ya da kopyalanmış link yazılınca altında temiz profil linki önerilir; dokununca yerleşir.
+    (function () {
+        function mgr() { return window.socialMediaManager; }
+        function boxFor(input) {
+            var item = input.closest('.social-media-item'); if (!item) return null;
+            var b = item.querySelector('.social-suggest');
+            if (!b) {
+                b = document.createElement('div'); b.className = 'social-suggest'; b.setAttribute('role', 'listbox');
+                item.appendChild(b);
+                // Dokunma sırasında alan odağını kaybetmesin
+                b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+                b.addEventListener('click', function () { accept(input); });
+            }
+            return b;
+        }
+        function hide(input) { var b = input && input.closest('.social-media-item') && input.closest('.social-media-item').querySelector('.social-suggest'); if (b) b.style.display = 'none'; }
+        function update(input) {
+            var m = mgr(); if (!m) return;
+            var b = boxFor(input); if (!b) return;
+            if (input.classList.contains('empty-field')) { b.style.display = 'none'; return; }
+            var v = input.textContent.trim(), c = m.toCanonical(input.getAttribute('data-type'), v);
+            if (!c || c === v) { b.style.display = 'none'; b.removeAttribute('data-value'); return; }
+            b.setAttribute('data-value', c);
+            b.innerHTML = '';
+            var row = document.createElement('div'); row.setAttribute('role', 'option');
+            row.textContent = c.replace(/^https:\/\//, '');
+            b.appendChild(row);
+            b.style.display = 'block';
+        }
+        function accept(input) {
+            var b = boxFor(input); var c = b && b.getAttribute('data-value'); if (!c) return;
+            input.textContent = c; input.classList.remove('empty-field');
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            b.style.display = 'none';
+            try { var r = document.createRange(); r.selectNodeContents(input); r.collapse(false); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); } catch (e) {}
+        }
+        function isSocial(t) { return t && t.classList && t.classList.contains('social-media-value'); }
+        document.addEventListener('input', function (e) { if (isSocial(e.target)) update(e.target); });
+        document.addEventListener('focusin', function (e) { if (isSocial(e.target)) update(e.target); });
+        document.addEventListener('focusout', function (e) { if (isSocial(e.target)) { var t = e.target; setTimeout(function () { hide(t); }, 150); } });
+        document.addEventListener('keydown', function (e) {
+            if (!isSocial(e.target)) return;
+            var b = e.target.closest('.social-media-item') && e.target.closest('.social-media-item').querySelector('.social-suggest');
+            if (e.key === 'Enter' && b && b.style.display === 'block') { e.preventDefault(); accept(e.target); }
+            else if (e.key === 'Escape') hide(e.target);
+        });
+    })();
+    </script>
     <script data-buton-sigdir>
     // Kelimeler bölünmez; bir düğmede en uzun kelime sığmıyorsa yalnızca o düğmenin yazısı 15px'ten 11px'e kadar küçültülür.
     (function () {
