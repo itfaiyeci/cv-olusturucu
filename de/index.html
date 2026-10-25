@@ -7839,7 +7839,11 @@ if (socialMediaSection) {
                         const keyEl = labelEl.querySelector('[data-key]') || labelEl;
                         label = keyEl.textContent.trim();
                     }
-                    push(label ? label + ': ' + valueEl.textContent.trim() : valueEl.textContent);
+                    // Arapca: Arapca etiket + Latin rakam ayni satirda jsPDF'te ters donuyor
+                    // (metin cikarinca "0000 000 555 :الهاتف" ya da hic cikmiyor) -> ayri satirlar
+                    const lgNow = (document.getElementById('language-select') || {}).value;
+                    if (label && lgNow === 'ar') { push(label); push(valueEl.textContent); }
+                    else push(label ? label + ': ' + valueEl.textContent.trim() : valueEl.textContent);
                 });
 
                 // Hakkımda
@@ -7956,19 +7960,22 @@ if (socialMediaSection) {
             // Sayfadaki görsel değişmez; PDF artık gerçekten seçilebilir/aranabilir/
             // ATS-taranabilir metin de içerir (taranmış belgelere OCR metin katmanı
             // eklemekle aynı teknik).
-            function addInvisibleTextLayer(doc, lines) {
+            function addInvisibleTextLayer(doc, lines, cjkFontB64) {
                 if (!lines || !lines.length) return;
 
                 const currentLang = document.getElementById('language-select').value;
 
-                // Çince (CJK) karakterlerini kapsayan bir font gömmek dosya
-                // boyutunu (birkaç MB) pratik olmayan seviyede büyütür. Bu
-                // dilde görünmez ATS metin katmanını GÜVENLE ATLIYORUZ -
-                // PDF'in GÖRÜNEN içeriği (html2canvas ile üretilir) bundan
-                // hiç etkilenmez, sadece ATS/arama motorlarının metni
-                // "okuma" imkanı bu dilde sınırlı kalır.
+                // Japonca/Çince: tam CJK fontu PDF'i birkaç MB büyütürdü. Bunun yerine
+                // çizimleri boşaltılmış "yalnızca ölçü" fontu (fonts/pdf-cjk, ~130 KB) gömülür:
+                // katman görünmez olduğu için çizim gerekmez, ATS metni okuyabilir.
+                // Font yüklenemediyse bozuk karakter basmaktansa katmanı atla.
                 if (currentLang === 'zh' || currentLang === 'ja') {
-                    return;
+                    if (!cjkFontB64) return;
+                    try {
+                        doc.addFileToVFS('MobilCVPdfCJK.ttf', cjkFontB64);
+                        doc.addFont('MobilCVPdfCJK.ttf', 'MobilCVPdfCJK', 'normal');
+                        doc.setFont('MobilCVPdfCJK');
+                    } catch (e) { console.error('PDF CJK font hatası:', e); return; }
                 }
 
                 // Türkçe/Latin Extended karakterlerin (ı, ş, ğ vb.) PDF'ten doğru
@@ -7976,7 +7983,7 @@ if (socialMediaSection) {
                 // Unicode fontu kullan (varsayılan font bu karakterleri desteklemiyor).
                 // Arapça için AYRI bir font kullanılır çünkü ana font (Latin/
                 // Yunanca/Kirilik) Arapça karakterleri içermez.
-                try {
+                if (currentLang !== 'zh' && currentLang !== 'ja') try {
                     if (currentLang === 'ar') {
                         if (!window.CV_PDF_FONT_ARABIC_BASE64) throw new Error('PDF fontu henuz yuklenmedi');
                         doc.addFileToVFS('NotoSansArabicSubset.ttf', window.CV_PDF_FONT_ARABIC_BASE64);
@@ -8380,12 +8387,14 @@ if (socialMediaSection) {
                             if (splitIdx === -1) break; // kalan tüm içerik bu sayfaya sığdı
                             startIndex = splitIdx;
                         }
-                    })().then(() => {
+                    })().then(async () => {
                         restoreDom();
                         // Görünmez metin katmanı: görsel aynı kalır, ama PDF artık
                         // seçilebilir/aranabilir/ATS-taranabilir gerçek metin de içeriyor.
                         // Üretilen tüm sayfalara otomatik olarak yayılır.
-                        addInvisibleTextLayer(doc, pdfTextLines);
+                        const lgPdf = document.getElementById('language-select').value;
+                        const cjkB64 = ((lgPdf === 'ja' || lgPdf === 'zh') && window.cvPdfCjkFont) ? await window.cvPdfCjkFont(lgPdf) : null;
+                        addInvisibleTextLayer(doc, pdfTextLines, cjkB64);
                         resolve(doc);
                     }).catch(error => {
                         restoreDom();
@@ -10734,6 +10743,29 @@ function saveCV() {
         });
     })();
     </script>
+    <script data-pdf-cjk>
+    // Japonca/Cince PDF metin katmani icin "yalnizca olcu" yazi tipi: her karakter icin bos glif, dogru
+    // karakter eslemesi ve genislik. Gorunur metni etkilemez; ATS'nin PDF'teki yaziyi okuyabilmesi icindir.
+    // Dosyalar: fonts/pdf-cjk/jp.ttf, zh.ttf (uretim: pdf_cjk_fontlari.py, SIL OFL 1.1).
+    (function () {
+        var cache = {};
+        window.cvPdfCjkFont = function (lang) {
+            var ad = lang === 'ja' ? 'jp' : (lang === 'zh' ? 'zh' : null);
+            if (!ad || !window.fetch) return Promise.resolve(null);
+            if (cache[ad]) return cache[ad];
+            var base = window.MOBILCV_PDF_FONT_BASE || '/';
+            cache[ad] = fetch(base + 'fonts/pdf-cjk/' + ad + '.ttf').then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.arrayBuffer();
+            }).then(function (buf) {
+                var u = new Uint8Array(buf), s = '', n = 0x8000;
+                for (var i = 0; i < u.length; i += n) s += String.fromCharCode.apply(null, u.subarray(i, i + n));
+                return btoa(s);
+            }).catch(function (e) { console.error('PDF CJK font yuklenemedi:', e); delete cache[ad]; return null; });
+            return cache[ad];
+        };
+    })();
+    </script>
     <script data-pdf-font-loader>
     // PDF fontlari sayfa acilisini yavaslatmasin diye ayri dosyada; ilk etkilesimde veya
     // sayfa yuklendikten birkac saniye sonra, yalnizca gereken dil icin yuklenir.
@@ -10745,7 +10777,7 @@ function saveCV() {
         function need() {
             var sel = document.getElementById('language-select');
             var l = sel ? sel.value : (window.MOBILCV_PAGE_LANG || 'tr');
-            if (l === 'zh' || l === 'ja') return;
+            if (l === 'zh' || l === 'ja') { if (window.cvPdfCjkFont) window.cvPdfCjkFont(l); return; }
             load(l === 'ar' ? '/pdf-font-arabic.js' : '/pdf-font-latin.js');
         }
         ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
@@ -11294,13 +11326,20 @@ function saveCV() {
     }
     async function rkAddText(doc, els) {
         var lg = rkLang();
-        if (lg === 'ja' || lg === 'zh') return;   // CJK font cok buyuk: ana sablonlardaki gibi atla
         var ar = lg === 'ar';
+        if (lg === 'ja' || lg === 'zh') {
+            // CJK: cizimsiz "yalnizca olcu" fontu (fonts/pdf-cjk); yuklenemezse katmani atla
+            var cjk = window.cvPdfCjkFont ? await window.cvPdfCjkFont(lg) : null;
+            if (!cjk) return;
+            try { doc.addFileToVFS('MobilCVPdfCJK.ttf', cjk); doc.addFont('MobilCVPdfCJK.ttf', 'MobilCVPdfCJK', 'normal'); doc.setFont('MobilCVPdfCJK'); }
+            catch (e) { return; }
+        } else {
         if (!(await rkFontReady(ar))) return;      // Font yoksa bozuk karakter basmaktansa katmani atla
         try {
             if (ar) { doc.addFileToVFS('NotoSansArabicSubset.ttf', window.CV_PDF_FONT_ARABIC_BASE64); doc.addFont('NotoSansArabicSubset.ttf', 'NotoSansArabicSubset', 'normal'); doc.setFont('NotoSansArabicSubset'); }
             else { doc.addFileToVFS('NotoSansSubset.ttf', window.CV_PDF_FONT_BASE64); doc.addFont('NotoSansSubset.ttf', 'NotoSansSubset', 'normal'); doc.setFont('NotoSansSubset'); }
         } catch (e) { return; }
+        }
         for (var i = 0; i < els.length; i++) {
             var lines = rkTextLines(els[i]); if (!lines.length) continue;
             doc.setPage(i + 1);
