@@ -7345,6 +7345,7 @@ function hideHintBubble(hintBubble) {
                 }
                 if (window.isJapaneseMode && window.isJapaneseMode()) {
                     let v = value.replace(/[^\d\/\.\-]/g, '').replace(/\./g, '/').substring(0, 15);
+                    if (!/\d/.test(v)) v = '';   // yalnizca '/-/' kaldiysa (ipucu metninden) alan bostur; PDF'e '/-/' basilmasin
                     if (input.textContent !== v) {
                         input.textContent = v;
                         const r = document.createRange(), sel = window.getSelection();
@@ -8203,6 +8204,8 @@ if (socialMediaSection) {
 
                         const clonedSectionDescriptions = clonedDoc.querySelectorAll('.section-description');
                         clonedSectionDescriptions.forEach(desc => { desc.style.display = 'none'; });
+                        // Yazarken yardim / oneri kutulari CV icerigi degildir; odak alanda kalsa bile PDF'e basilmasin
+                        clonedDoc.querySelectorAll('#cv-form .mcv-help, #cv-form .mcv-oneri, #cv-form .social-suggest').forEach(el => { el.style.display = 'none'; });
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
