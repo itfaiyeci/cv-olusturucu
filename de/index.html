@@ -3,6 +3,30 @@
 <head>
     <script>window.MOBILCV_PAGE_LANG='de';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
     <meta charset="UTF-8">
+    <script data-iab-aktar>
+    // Uygulama ici tarayicidan (Instagram/TikTok/Facebook) "Tarayicida ac" ile gelen CV: veri adresin # kismindadir,
+    // sunucuya gonderilmez. Otomatik kayit yuklenmeden once yerel depoya yazilir ve adres temizlenir.
+    (function () {
+        try {
+            var K = '#mcv-aktar=', h = location.hash;
+            window.addEventListener('hashchange', function () { if (location.hash.indexOf(K) === 0) location.reload(); });
+            if (h.indexOf(K) !== 0) return;
+            try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+            var s = h.slice(K.length).replace(/-/g, '+').replace(/_/g, '/');
+            while (s.length % 4) s += '=';
+            var b = atob(s), u = new Uint8Array(b.length);
+            for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+            var p = JSON.parse(new TextDecoder().decode(u));
+            if (!p || !p.d || typeof p.d !== 'object') return;
+            var M = {"tr":"Uygulamadan gelen CV yüklensin mi? Bu tarayıcıda kayıtlı CV'nin yerini alır.","en":"Load the CV from the app? It will replace the CV saved in this browser.","de":"Lebenslauf aus der App laden? Er ersetzt den in diesem Browser gespeicherten Lebenslauf.","fr":"Charger le CV venant de l'application ? Il remplacera le CV enregistré dans ce navigateur.","es":"¿Cargar el CV que viene de la aplicación? Sustituirá al CV guardado en este navegador.","it":"Caricare il CV proveniente dall'app? Sostituirà il CV salvato in questo browser.","pt":"Carregar o CV vindo da aplicação? Vai substituir o CV guardado neste navegador.","ru":"Загрузить резюме из приложения? Оно заменит резюме, сохранённое в этом браузере.","ar":"هل تريد تحميل السيرة الذاتية القادمة من التطبيق؟ ستحل محل السيرة المحفوظة في هذا المتصفح.","zh":"要载入来自应用的简历吗？它将替换此浏览器中保存的简历。","ja":"アプリから引き継いだ履歴書を読み込みますか？このブラウザに保存されている履歴書は置き換えられます。"};
+            var eski = null; try { eski = JSON.parse(localStorage.getItem('mobilcv_data') || 'null'); } catch (e) {}
+            var dolu = eski && /[0-9A-Za-z\u00C0-\uFFFF]{2,}/.test(JSON.stringify(eski.personalInfo || {}) + (eski.about || ''));
+            if (dolu && !window.confirm(M[p.d.language] || M[(window.MOBILCV_PAGE_LANG || 'en')] || M.en)) return;
+            localStorage.setItem('mobilcv_data', JSON.stringify(p.d));
+            if (p.l) localStorage.setItem('mobilcv_lang_chosen', '1');
+        } catch (e) {}
+    })();
+    </script>
     <script id="mcv-storage-shim">(function(){function mem(){var d={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}['localStorage','sessionStorage'].forEach(function(n){try{var st=window[n],t='__mcv_t';st.setItem(t,t);st.removeItem(t)}catch(e){try{Object.defineProperty(window,n,{value:mem(),configurable:true,writable:true})}catch(e2){}}})})();</script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
@@ -6424,6 +6448,7 @@ class SocialMediaManager {
 
             // Takvim seçici fonksiyonu
             function setupBirthDatePicker() {
+                if (window.__mcvDogumTakvimi) return; window.__mcvDogumTakvimi = true; // iki kez kurulunca her dugme iki kez calisiyordu
                 const datePickerModal = document.getElementById('date-picker-modal');
                 const datePickerButton = document.querySelector('.date-picker-button');
                 const datePickerClose = document.getElementById('date-picker-close');
@@ -6500,11 +6525,27 @@ class SocialMediaManager {
                 });
                 
                 // Yıl input değişikliği
+                // Yil yazilirken takvim hemen guncellenir; boylece klavye kapanirken (change) takvim yeniden
+                // cizilip dokunulan gun kaybolmaz. Secili gun varsa yeni yila tasinir.
+                function yilUygula(newYear) {
+                    if (newYear === currentDate.getFullYear()) return;
+                    currentDate.setFullYear(newYear);
+                    if (selectedDate) {
+                        const gun = Math.min(selectedDate.getDate(), new Date(newYear, selectedDate.getMonth() + 1, 0).getDate());
+                        selectedDate = new Date(newYear, selectedDate.getMonth(), gun);
+                    }
+                    renderCalendar();
+                }
+                yearInput.addEventListener('input', function() {
+                    const v = this.value.replace(/\D/g, '').slice(0, 4);
+                    if (v !== this.value) this.value = v;
+                    const newYear = parseInt(v);
+                    if (v.length === 4 && newYear >= 1900 && newYear <= 2100) yilUygula(newYear);
+                });
                 yearInput.addEventListener('change', function() {
                     const newYear = parseInt(this.value);
                     if (!isNaN(newYear) && newYear >= 1900 && newYear <= 2100) {
-                        currentDate.setFullYear(newYear);
-                        renderCalendar();
+                        yilUygula(newYear);
                     } else {
                         this.value = currentDate.getFullYear();
                     }
@@ -6535,6 +6576,7 @@ class SocialMediaManager {
                         const year = selectedDate.getFullYear();
                         birthDateInput.textContent = `${day}/${month}/${year}`;
                         birthDateInput.classList.remove('empty-field');
+                        birthDateInput.dispatchEvent(new Event('input', { bubbles: true })); // otomatik kayit
                     }
                     closeDatePicker();
                 });
@@ -6555,9 +6597,10 @@ class SocialMediaManager {
                             }
                         }
                     } else {
-                        // Eğer tarih yoksa, şu anki tarihi kullan
-                        selectedDate = new Date();
-                        currentDate = new Date();
+                        // Tarih yoksa hiçbir gün seçili gelmesin (önceden bugünün tarihi seçili geliyor ve
+                        // "Tamam"a basınca alana bugün yazılıyordu); takvim 25 yıl öncesinden açılır
+                        selectedDate = null;
+                        currentDate = new Date(new Date().getFullYear() - 25, 0, 1);
                     }
                     
                     datePickerModal.style.display = 'flex';
@@ -11489,6 +11532,100 @@ function saveCV() {
         if (r && !r.classList.contains('rec-x')) window.mcvTrack('recommend_click', { method: r.className.replace('rec-', '') });
     }, true);
     window.mcvTrackPdf = function () { window.mcvTrack('pdf_download', { cv_template: tpl(), cv_language: lang() }); };
+})();
+</script>
+
+<style data-iab-aktar>
+/* Pencere acikken cerez bandi dugmelerin ustune binmesin (banda pencere kapaninca yeniden cikar) */
+body:has(#date-picker-modal[style*="flex"]) #cookie-consent, body:has(.mcv-check-ov) #cookie-consent,
+body:has(.mcv-iab-ov) #cookie-consent, body.mcv-modal-acik #cookie-consent { display: none !important; }
+.mcv-iab-ov { position: fixed; inset: 0; z-index: 2147483600; background: rgba(15,23,42,.55); display: flex; align-items: flex-end; justify-content: center; padding: 12px; }
+.mcv-iab-box { background: #fff; color: #0f172a; border-radius: 16px; max-width: 520px; width: 100%; padding: 18px 18px 14px; box-shadow: 0 20px 50px rgba(0,0,0,.3); font: 400 15px/1.45 system-ui, sans-serif; max-height: 90vh; overflow: auto; }
+.mcv-iab-box h3 { margin: 0 0 8px; font-size: 17px; line-height: 1.3; }
+.mcv-iab-box p { margin: 0 0 10px; }
+.mcv-iab-box .mcv-iab-not { font-size: 13px; color: #475569; }
+.mcv-iab-box button { display: block; width: 100%; min-height: 46px; border-radius: 10px; border: 0; font: 600 15px system-ui, sans-serif; margin-top: 8px; cursor: pointer; }
+.mcv-iab-box .mcv-iab-ana { background: #2563eb; color: #fff; }
+.mcv-iab-box .mcv-iab-ikinci { background: #e2e8f0; color: #0f172a; }
+.mcv-iab-box .mcv-iab-hafif { background: transparent; color: #475569; font-weight: 500; min-height: 40px; }
+</style>
+<script data-iab-aktar>
+// Instagram, TikTok ve Facebook'un uygulama ici tarayicilari (ozellikle Android) PDF ve yedek dosyasi indirmeyi
+// sessizce engelliyor. Bu tarayicilarda indirme yerine "Tarayicida ac" penceresi gosterilir; CV verisi adresin
+// # kisminda tasinir (sunucuya gitmez) ve acilan tarayicida yuklenir.
+(function () {
+    var UA = navigator.userAgent || '';
+    var IAB = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|musical_ly|BytedanceWebview|TikTok|trill_|Snapchat|LinkedInApp|Line\//i.test(UA);
+    if (!IAB) return;
+    var ANDROID = /Android/i.test(UA), IOS = /iPhone|iPad|iPod/i.test(UA);
+    var S = {"tr":{"t":"PDF bu uygulamanın içinden inmeyebilir","a":"Instagram, TikTok ve Facebook'un kendi tarayıcıları dosya indirmeyi çoğu zaman engeller. CV'nizi telefonunuzun tarayıcısında (örneğin Chrome) açın; yazdıklarınız da taşınır ve PDF'i oradan indirebilirsiniz.","i":"Instagram, TikTok ve Facebook'un kendi tarayıcıları dosya indirmeyi çoğu zaman engeller. CV'nizi Safari'de açın; yazdıklarınız da taşınır ve PDF'i oradan indirebilirsiniz.","pv":"Bilgileriniz bağlantının içinde taşınır, sunucumuza gönderilmez.","ft":"Fotoğraf bağlantıya sığmadığı için taşınmaz; tarayıcıda yeniden ekleyin.","oa":"Tarayıcıda aç","oi":"Safari'de aç","cp":"Bağlantıyı kopyala","cd":"Kopyalandı. Tarayıcıyı açıp adres çubuğuna yapıştırın.","h":"Düğme çalışmazsa bağlantıyı kopyalayın, tarayıcıyı açıp adres çubuğuna yapıştırın.","ty":"Yine de burada dene","x":"Kapat","r":"Uygulamadan gelen CV yüklensin mi? Bu tarayıcıda kayıtlı CV'nin yerini alır."},"en":{"t":"Your PDF may not download inside this app","a":"The built-in browsers of Instagram, TikTok and Facebook often block file downloads. Open your CV in your phone's browser (for example Chrome): what you've written comes with it, and you can download the PDF there.","i":"The built-in browsers of Instagram, TikTok and Facebook often block file downloads. Open your CV in Safari: what you've written comes with it, and you can download the PDF there.","pv":"Your details travel inside the link; they are not sent to our server.","ft":"Your photo is too large to fit in the link, so add it again in the browser.","oa":"Open in browser","oi":"Open in Safari","cp":"Copy link","cd":"Copied. Open your browser and paste it into the address bar.","h":"If the button doesn't work, copy the link, open your browser and paste it into the address bar.","ty":"Try here anyway","x":"Close","r":"Load the CV from the app? It will replace the CV saved in this browser."},"de":{"t":"Das PDF lässt sich in dieser App möglicherweise nicht herunterladen","a":"Die integrierten Browser von Instagram, TikTok und Facebook blockieren Downloads oft. Öffnen Sie Ihren Lebenslauf im Browser Ihres Handys (zum Beispiel Chrome): Ihre Eingaben werden übernommen, und Sie können das PDF dort herunterladen.","i":"Die integrierten Browser von Instagram, TikTok und Facebook blockieren Downloads oft. Öffnen Sie Ihren Lebenslauf in Safari: Ihre Eingaben werden übernommen, und Sie können das PDF dort herunterladen.","pv":"Ihre Angaben werden im Link übertragen und nicht an unseren Server gesendet.","ft":"Ihr Foto ist zu groß für den Link; fügen Sie es im Browser erneut hinzu.","oa":"Im Browser öffnen","oi":"In Safari öffnen","cp":"Link kopieren","cd":"Kopiert. Öffnen Sie den Browser und fügen Sie den Link in die Adressleiste ein.","h":"Falls die Schaltfläche nicht funktioniert, kopieren Sie den Link, öffnen Sie den Browser und fügen Sie ihn in die Adressleiste ein.","ty":"Trotzdem hier versuchen","x":"Schließen","r":"Lebenslauf aus der App laden? Er ersetzt den in diesem Browser gespeicherten Lebenslauf."},"fr":{"t":"Le PDF risque de ne pas se télécharger dans cette application","a":"Les navigateurs intégrés d'Instagram, TikTok et Facebook bloquent souvent les téléchargements. Ouvrez votre CV dans le navigateur de votre téléphone (par exemple Chrome) : vos saisies sont conservées et vous pourrez y télécharger le PDF.","i":"Les navigateurs intégrés d'Instagram, TikTok et Facebook bloquent souvent les téléchargements. Ouvrez votre CV dans Safari : vos saisies sont conservées et vous pourrez y télécharger le PDF.","pv":"Vos informations voyagent dans le lien ; elles ne sont pas envoyées à notre serveur.","ft":"Votre photo est trop lourde pour le lien ; ajoutez-la de nouveau dans le navigateur.","oa":"Ouvrir dans le navigateur","oi":"Ouvrir dans Safari","cp":"Copier le lien","cd":"Copié. Ouvrez le navigateur et collez le lien dans la barre d'adresse.","h":"Si le bouton ne fonctionne pas, copiez le lien, ouvrez le navigateur et collez-le dans la barre d'adresse.","ty":"Essayer quand même ici","x":"Fermer","r":"Charger le CV venant de l'application ? Il remplacera le CV enregistré dans ce navigateur."},"es":{"t":"Es posible que el PDF no se descargue dentro de esta aplicación","a":"Los navegadores integrados de Instagram, TikTok y Facebook suelen bloquear las descargas. Abre tu CV en el navegador del móvil (por ejemplo, Chrome): lo que has escrito se conserva y podrás descargar el PDF allí.","i":"Los navegadores integrados de Instagram, TikTok y Facebook suelen bloquear las descargas. Abre tu CV en Safari: lo que has escrito se conserva y podrás descargar el PDF allí.","pv":"Tus datos viajan dentro del enlace; no se envían a nuestro servidor.","ft":"Tu foto es demasiado grande para el enlace; vuelve a añadirla en el navegador.","oa":"Abrir en el navegador","oi":"Abrir en Safari","cp":"Copiar enlace","cd":"Copiado. Abre el navegador y pégalo en la barra de direcciones.","h":"Si el botón no funciona, copia el enlace, abre el navegador y pégalo en la barra de direcciones.","ty":"Intentarlo aquí de todos modos","x":"Cerrar","r":"¿Cargar el CV que viene de la aplicación? Sustituirá al CV guardado en este navegador."},"it":{"t":"Il PDF potrebbe non scaricarsi all'interno di questa app","a":"I browser integrati di Instagram, TikTok e Facebook spesso bloccano i download. Apri il tuo CV nel browser del telefono (per esempio Chrome): quello che hai scritto viene trasferito e potrai scaricare il PDF da lì.","i":"I browser integrati di Instagram, TikTok e Facebook spesso bloccano i download. Apri il tuo CV in Safari: quello che hai scritto viene trasferito e potrai scaricare il PDF da lì.","pv":"I tuoi dati viaggiano all'interno del link; non vengono inviati al nostro server.","ft":"La tua foto è troppo grande per il link; aggiungila di nuovo nel browser.","oa":"Apri nel browser","oi":"Apri in Safari","cp":"Copia link","cd":"Copiato. Apri il browser e incollalo nella barra degli indirizzi.","h":"Se il pulsante non funziona, copia il link, apri il browser e incollalo nella barra degli indirizzi.","ty":"Prova comunque qui","x":"Chiudi","r":"Caricare il CV proveniente dall'app? Sostituirà il CV salvato in questo browser."},"pt":{"t":"O PDF pode não ser transferido nesta aplicação","a":"Os navegadores integrados do Instagram, TikTok e Facebook bloqueiam muitas vezes as transferências. Abra o seu CV no navegador do telemóvel (por exemplo, o Chrome): o que escreveu vai consigo e poderá transferir o PDF lá.","i":"Os navegadores integrados do Instagram, TikTok e Facebook bloqueiam muitas vezes as transferências. Abra o seu CV no Safari: o que escreveu vai consigo e poderá transferir o PDF lá.","pv":"Os seus dados seguem dentro da ligação; não são enviados para o nosso servidor.","ft":"A sua fotografia é demasiado grande para a ligação; volte a acrescentá-la no navegador.","oa":"Abrir no navegador","oi":"Abrir no Safari","cp":"Copiar ligação","cd":"Copiado. Abra o navegador e cole na barra de endereço.","h":"Se o botão não funcionar, copie a ligação, abra o navegador e cole-a na barra de endereço.","ty":"Tentar aqui mesmo assim","x":"Fechar","r":"Carregar o CV vindo da aplicação? Vai substituir o CV guardado neste navegador."},"ru":{"t":"PDF может не скачаться внутри этого приложения","a":"Встроенные браузеры Instagram, TikTok и Facebook часто блокируют загрузку файлов. Откройте резюме в браузере телефона (например, Chrome): введённые данные перенесутся, и вы сможете скачать PDF там.","i":"Встроенные браузеры Instagram, TikTok и Facebook часто блокируют загрузку файлов. Откройте резюме в Safari: введённые данные перенесутся, и вы сможете скачать PDF там.","pv":"Ваши данные передаются внутри ссылки и не отправляются на наш сервер.","ft":"Фото слишком большое для ссылки — добавьте его снова в браузере.","oa":"Открыть в браузере","oi":"Открыть в Safari","cp":"Скопировать ссылку","cd":"Скопировано. Откройте браузер и вставьте ссылку в адресную строку.","h":"Если кнопка не работает, скопируйте ссылку, откройте браузер и вставьте её в адресную строку.","ty":"Всё равно попробовать здесь","x":"Закрыть","r":"Загрузить резюме из приложения? Оно заменит резюме, сохранённое в этом браузере."},"ar":{"t":"قد لا يتم تنزيل ملف PDF داخل هذا التطبيق","a":"غالبًا ما تمنع المتصفحات المدمجة في إنستغرام وتيك توك وفيسبوك تنزيل الملفات. افتح سيرتك الذاتية في متصفح هاتفك (مثل Chrome): ستنتقل معها البيانات التي كتبتها، ويمكنك تنزيل ملف PDF من هناك.","i":"غالبًا ما تمنع المتصفحات المدمجة في إنستغرام وتيك توك وفيسبوك تنزيل الملفات. افتح سيرتك الذاتية في Safari: ستنتقل معها البيانات التي كتبتها، ويمكنك تنزيل ملف PDF من هناك.","pv":"تنتقل بياناتك داخل الرابط ولا تُرسل إلى خادمنا.","ft":"الصورة أكبر من أن تتسع في الرابط؛ أضفها مرة أخرى في المتصفح.","oa":"فتح في المتصفح","oi":"فتح في Safari","cp":"نسخ الرابط","cd":"تم النسخ. افتح المتصفح والصق الرابط في شريط العنوان.","h":"إذا لم يعمل الزر، انسخ الرابط ثم افتح المتصفح والصقه في شريط العنوان.","ty":"المحاولة هنا على أي حال","x":"إغلاق","r":"هل تريد تحميل السيرة الذاتية القادمة من التطبيق؟ ستحل محل السيرة المحفوظة في هذا المتصفح."},"zh":{"t":"在此应用内可能无法下载 PDF","a":"Instagram、TikTok 和 Facebook 的内置浏览器经常阻止文件下载。请在手机浏览器（例如 Chrome）中打开您的简历：您填写的内容会一并带过去，然后即可在那里下载 PDF。","i":"Instagram、TikTok 和 Facebook 的内置浏览器经常阻止文件下载。请在 Safari 中打开您的简历：您填写的内容会一并带过去，然后即可在那里下载 PDF。","pv":"您的信息包含在链接中传递，不会发送到我们的服务器。","ft":"照片太大，无法放入链接，请在浏览器中重新添加。","oa":"在浏览器中打开","oi":"在 Safari 中打开","cp":"复制链接","cd":"已复制。请打开浏览器，将链接粘贴到地址栏。","h":"如果按钮无效，请复制链接，然后打开浏览器并粘贴到地址栏。","ty":"仍在此处尝试","x":"关闭","r":"要载入来自应用的简历吗？它将替换此浏览器中保存的简历。"},"ja":{"t":"このアプリ内ではPDFをダウンロードできない場合があります","a":"Instagram・TikTok・Facebookの内蔵ブラウザは、ファイルのダウンロードをブロックすることがよくあります。スマホのブラウザ（Chromeなど）で履歴書を開いてください。入力した内容も引き継がれ、そこでPDFをダウンロードできます。","i":"Instagram・TikTok・Facebookの内蔵ブラウザは、ファイルのダウンロードをブロックすることがよくあります。Safariで履歴書を開いてください。入力した内容も引き継がれ、そこでPDFをダウンロードできます。","pv":"入力内容はリンクの中で受け渡され、MobilCVのサーバーには送信されません。","ft":"写真はリンクに入りきらないため引き継がれません。ブラウザでもう一度追加してください。","oa":"ブラウザで開く","oi":"Safariで開く","cp":"リンクをコピー","cd":"コピーしました。ブラウザを開き、アドレスバーに貼り付けてください。","h":"ボタンが動かない場合は、リンクをコピーしてブラウザを開き、アドレスバーに貼り付けてください。","ty":"このまま試す","x":"閉じる","r":"アプリから引き継いだ履歴書を読み込みますか？このブラウザに保存されている履歴書は置き換えられます。"}};
+    function dil() { var s = document.getElementById('language-select'); return (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; }
+    function t(k) { var d = S[dil()] || S.en; return d[k] || S.en[k]; }
+    function b64url(str) {
+        var u = new TextEncoder().encode(str), s = '', n = 0x8000;
+        for (var i = 0; i < u.length; i += n) s += String.fromCharCode.apply(null, u.subarray(i, i + n));
+        return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    function paket() {
+        var d = null; try { d = window.autoSaveManager ? window.autoSaveManager.collectData() : null; } catch (e) {}
+        var foto = false;
+        if (d && d.photo && String(d.photo).length > 150000) { d.photo = null; foto = true; }
+        var l = false; try { l = localStorage.getItem('mobilcv_lang_chosen') === '1'; } catch (e) {}
+        return { s: b64url(JSON.stringify({ v: 1, d: d, l: l })), foto: foto };
+    }
+    function kopyala(metin) {
+        try { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(metin).then(function () { return true; }, function () { return eski(); }); } catch (e) {}
+        return Promise.resolve(eski());
+        function eski() {
+            try { var ta = document.createElement('textarea'); ta.value = metin; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, metin.length); var ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; }
+        }
+    }
+    function kapat() { var o = document.querySelector('.mcv-iab-ov'); if (o) o.remove(); }
+    function goster(tekrar) {
+        kapat();
+        var p = paket();
+        var hedef = location.origin + location.pathname + '#mcv-aktar=' + p.s;
+        var ov = document.createElement('div'); ov.className = 'mcv-iab-ov'; ov.setAttribute('dir', dil() === 'ar' ? 'rtl' : 'ltr');
+        var box = document.createElement('div'); box.className = 'mcv-iab-box'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+        function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; box.appendChild(e); return e; }
+        el('h3', '', t('t'));
+        el('p', '', IOS ? t('i') : t('a'));
+        el('p', 'mcv-iab-not', t('pv'));
+        if (p.foto) el('p', 'mcv-iab-not', t('ft'));
+        var ac = el('button', 'mcv-iab-ana', IOS ? t('oi') : t('oa')); ac.type = 'button';
+        ac.addEventListener('click', function () {
+            if (ANDROID) location.href = 'intent://' + location.host + location.pathname + '#mcv-aktar=' + p.s + '#Intent;scheme=https;action=android.intent.action.VIEW;end';
+            else if (IOS) location.href = 'x-safari-' + hedef;
+            else window.open(hedef, '_blank');
+        });
+        var cp = el('button', 'mcv-iab-ikinci', t('cp')); cp.type = 'button';
+        var bilgi = el('p', 'mcv-iab-not', t('h'));
+        cp.addEventListener('click', function () { kopyala(hedef).then(function (ok) { if (ok) { cp.textContent = t('cd'); bilgi.style.display = 'none'; } }); });
+        if (tekrar) { var dn = el('button', 'mcv-iab-hafif', t('ty')); dn.type = 'button'; dn.addEventListener('click', function () { kapat(); tekrar(); }); }
+        var x = el('button', 'mcv-iab-hafif', t('x')); x.type = 'button'; x.addEventListener('click', kapat);
+        ov.appendChild(box); ov.addEventListener('click', function (e) { if (e.target === ov) kapat(); });
+        document.body.appendChild(ov);
+    }
+    window.mcvUygulamaIciPencere = goster;
+    window.addEventListener('load', function () {
+        // PDF (indir ve paylas yedegi) jsPDF save ile iner: uygulama icinde once pencereyi goster
+        try {
+            var API = window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API;
+            if (API && !API.__mcvIab) {
+                var asil = API.save; API.__mcvIab = true;
+                API.save = function () { var doc = this, args = arguments; goster(function () { if (typeof asil === 'function') asil.apply(doc, args); else { var bl = doc.output('blob'), a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = args[0] || 'CV.pdf'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000); } }); return doc; };
+            }
+        } catch (e) {}
+        // Yedek dosyasi (.json) indirme
+        try {
+            var m = window.autoSaveManager;
+            if (m && !m.__mcvIab) {
+                var asilY = m.exportToFile.bind(m); m.__mcvIab = true;
+                m.exportToFile = function () { goster(asilY); };
+            }
+        } catch (e) {}
+    });
 })();
 </script>
 </body>
