@@ -11669,17 +11669,23 @@ body.mcv-klavye #sticky-action-bar { display: none !important; }
     document.addEventListener('focusin', function (e) {
         if (!yaziAlani(e.target)) return;
         aktif = e.target;
-        document.body.classList.add('mcv-klavye');
         planla(350); setTimeout(gorunurYap, 800);
     });
     document.addEventListener('focusout', function () {
         setTimeout(function () {
-            if (!yaziAlani(document.activeElement)) { aktif = null; document.body.classList.remove('mcv-klavye'); }
+            if (!yaziAlani(document.activeElement)) { aktif = null; cubukDurumu(); }
         }, 120);
     });
+    // Alt cubuk yalnizca klavye GERCEKTEN acikken gizlenir (gorunur alan belirgin kuculduyse). Android'de geri tusuyla
+    // klavye kapaninca alan odakta kalabiliyor; bu yuzden odaga degil gorunur alan yuksekligine bakilir.
+    function cubukDurumu() {
+        var acik = !!(aktif && vv && (tamYukseklik - vv.height) > 150);
+        document.body.classList.toggle('mcv-klavye', acik);
+    }
     if (vv) vv.addEventListener('resize', function () {
         if (aktif) planla(120);
         else tamYukseklik = Math.max(tamYukseklik, vv.height);
+        cubukDurumu();
     });
     window.addEventListener('orientationchange', function () { setTimeout(function () { tamYukseklik = vv ? vv.height : window.innerHeight; }, 500); });
 })();
