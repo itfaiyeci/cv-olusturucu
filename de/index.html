@@ -24,6 +24,7 @@
             if (dolu && !window.confirm(M[p.d.language] || M[(window.MOBILCV_PAGE_LANG || 'en')] || M.en)) return;
             localStorage.setItem('mobilcv_data', JSON.stringify(p.d));
             if (p.l) localStorage.setItem('mobilcv_lang_chosen', '1');
+            if (p.k) { try { sessionStorage.setItem('mcv_kontrol_atla', '1'); } catch (e) {} } // uygulamada PDF oncesi kontrol gecildi
         } catch (e) {}
     })();
     </script>
@@ -10725,6 +10726,7 @@ function saveCV() {
             var btn = document.getElementById('save-pdf'); if (!btn) return;
             btn.addEventListener('click', function (e) {
                 if (bypass) { bypass = false; return; }
+                try { if (sessionStorage.getItem('mcv_kontrol_atla') === '1') { sessionStorage.removeItem('mcv_kontrol_atla'); return; } } catch (er) {}
                 var items; try { items = collect(); } catch (er) { return; }
                 if (!items.length) return;
                 e.stopImmediatePropagation(); e.preventDefault();
@@ -11566,12 +11568,12 @@ body:has(.mcv-iab-ov) #cookie-consent, body.mcv-modal-acik #cookie-consent { dis
         for (var i = 0; i < u.length; i += n) s += String.fromCharCode.apply(null, u.subarray(i, i + n));
         return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
-    function paket() {
+    function paket(pdfMi) {
         var d = null; try { d = window.autoSaveManager ? window.autoSaveManager.collectData() : null; } catch (e) {}
         var foto = false;
         if (d && d.photo && String(d.photo).length > 150000) { d.photo = null; foto = true; }
         var l = false; try { l = localStorage.getItem('mobilcv_lang_chosen') === '1'; } catch (e) {}
-        return { s: b64url(JSON.stringify({ v: 1, d: d, l: l })), foto: foto };
+        return { s: b64url(JSON.stringify({ v: 1, d: d, l: l, k: pdfMi ? 1 : 0 })), foto: foto };
     }
     function kopyala(metin) {
         try { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(metin).then(function () { return true; }, function () { return eski(); }); } catch (e) {}
@@ -11582,9 +11584,9 @@ body:has(.mcv-iab-ov) #cookie-consent, body.mcv-modal-acik #cookie-consent { dis
         }
     }
     function kapat() { var o = document.querySelector('.mcv-iab-ov'); if (o) o.remove(); }
-    function goster(tekrar) {
+    function goster(tekrar, pdfMi) {
         kapat();
-        var p = paket();
+        var p = paket(pdfMi);
         var hedef = location.origin + location.pathname + '#mcv-aktar=' + p.s;
         var ov = document.createElement('div'); ov.className = 'mcv-iab-ov'; ov.setAttribute('dir', dil() === 'ar' ? 'rtl' : 'ltr');
         var box = document.createElement('div'); box.className = 'mcv-iab-box'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
@@ -11614,7 +11616,7 @@ body:has(.mcv-iab-ov) #cookie-consent, body.mcv-modal-acik #cookie-consent { dis
             var API = window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API;
             if (API && !API.__mcvIab) {
                 var asil = API.save; API.__mcvIab = true;
-                API.save = function () { var doc = this, args = arguments; goster(function () { if (typeof asil === 'function') asil.apply(doc, args); else { var bl = doc.output('blob'), a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = args[0] || 'CV.pdf'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000); } }); return doc; };
+                API.save = function () { var doc = this, args = arguments; goster(function () { if (typeof asil === 'function') asil.apply(doc, args); else { var bl = doc.output('blob'), a = document.createElement('a'); a.href = URL.createObjectURL(bl); a.download = args[0] || 'CV.pdf'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000); } }, true); return doc; };
             }
         } catch (e) {}
         // Yedek dosyasi (.json) indirme
@@ -11626,6 +11628,60 @@ body:has(.mcv-iab-ov) #cookie-consent, body.mcv-modal-acik #cookie-consent { dis
             }
         } catch (e) {}
     });
+})();
+</script>
+
+<style data-klavye>
+/* Yazarken (klavye acikken) alttaki sabit PDF/Onizleme cubugu ekrani daraltmasin */
+body.mcv-klavye #sticky-action-bar { display: none !important; }
+</style>
+<script data-klavye>
+// Telefonda klavye acilinca yazilan alan klavyenin altinda kalmasin. Chrome'da gorunur alan (visualViewport) kuculur;
+// Instagram/Facebook gibi uygulama ici tarayicilarda cogu zaman kuculmez, o durumda klavye ekranin yarisi sayilir.
+// Alan ekranin ust kismina (ust ~%22) kaydirilir; zaten gorunur yerdeyse dokunulmaz.
+(function () {
+    var dokunmatik = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (!dokunmatik) return;
+    var vv = window.visualViewport;
+    var tamYukseklik = vv ? vv.height : window.innerHeight;
+    var aktif = null, zam = null;
+    function yaziAlani(t) {
+        if (!t || !t.tagName) return false;
+        if (t.closest && t.closest('.date-picker-modal, .mcv-iab-ov, .mcv-check-ov, #cookie-consent, .popup-overlay, .preview-overlay')) return false;
+        if (t.isContentEditable) return true;
+        if (t.tagName === 'TEXTAREA') return true;
+        return t.tagName === 'INPUT' && !/^(file|checkbox|radio|button|submit|range|color)$/i.test(t.type || '');
+    }
+    function gorunurYap() {
+        if (!aktif || !document.contains(aktif)) return;
+        var gH = vv ? vv.height : window.innerHeight;
+        var ust = vv ? vv.offsetTop : 0;
+        var kuculmedi = Math.abs(gH - tamYukseklik) < 80;          // klavye gorunur alani daraltmadi
+        var altSinir = kuculmedi ? tamYukseklik * 0.5 : gH - 24;     // klavyenin ust kenari (tahmini ya da gercek)
+        // Ic kaydirma alani (sag sutun) icinde de gorunur olsun
+        try { aktif.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) {}
+        var r = aktif.getBoundingClientRect();
+        var top = r.top - ust, bot = Math.min(r.bottom, r.top + 120) - ust;   // uzun alanlarda ilk satirlar yeter
+        var hedef = Math.round(Math.min(gH, tamYukseklik) * 0.22);
+        if (bot > altSinir || top < 56) window.scrollBy(0, top - hedef);
+    }
+    function planla(gecikme) { clearTimeout(zam); zam = setTimeout(gorunurYap, gecikme); }
+    document.addEventListener('focusin', function (e) {
+        if (!yaziAlani(e.target)) return;
+        aktif = e.target;
+        document.body.classList.add('mcv-klavye');
+        planla(350); setTimeout(gorunurYap, 800);
+    });
+    document.addEventListener('focusout', function () {
+        setTimeout(function () {
+            if (!yaziAlani(document.activeElement)) { aktif = null; document.body.classList.remove('mcv-klavye'); }
+        }, 120);
+    });
+    if (vv) vv.addEventListener('resize', function () {
+        if (aktif) planla(120);
+        else tamYukseklik = Math.max(tamYukseklik, vv.height);
+    });
+    window.addEventListener('orientationchange', function () { setTimeout(function () { tamYukseklik = vv ? vv.height : window.innerHeight; }, 500); });
 })();
 </script>
 </body>
