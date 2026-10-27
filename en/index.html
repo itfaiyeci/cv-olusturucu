@@ -3702,7 +3702,7 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                         <span id="date-picker-month">Ocak</span>
                         <div class="year-selector">
                             <button class="year-scroll-btn" id="year-scroll-down">▼</button>
-                            <input type="text" class="year-input" id="year-input" value="2023" maxlength="4">
+                            <input type="text" class="year-input" id="year-input" value="2023" maxlength="4" inputmode="numeric" enterkeyhint="done">
                             <button class="year-scroll-btn" id="year-scroll-up">▲</button>
                         </div>
                     </div>
@@ -6466,6 +6466,7 @@ class SocialMediaManager {
                 
                 let currentDate = new Date();
                 let selectedDate = null;
+                const mcvDokunmatik = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
                 
                 // Takvim butonuna tıklama
                 datePickerButton.addEventListener('click', function(e) {
@@ -6541,7 +6542,10 @@ class SocialMediaManager {
                     const v = this.value.replace(/\D/g, '').slice(0, 4);
                     if (v !== this.value) this.value = v;
                     const newYear = parseInt(v);
-                    if (v.length === 4 && newYear >= 1900 && newYear <= 2100) yilUygula(newYear);
+                    if (v.length === 4 && newYear >= 1900 && newYear <= 2100) {
+                        yilUygula(newYear);
+                        if (mcvDokunmatik) this.blur(); // yil tamam: klavye kapansin, gunler gorunsun
+                    }
                 });
                 yearInput.addEventListener('change', function() {
                     const newYear = parseInt(this.value);
@@ -6554,6 +6558,7 @@ class SocialMediaManager {
                 
                 // Yıl input klavye kontrolleri
                 yearInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') { e.preventDefault(); this.blur(); return; }
                     if (e.key === 'ArrowUp') {
                         e.preventDefault();
                         const currentYear = parseInt(this.value);
@@ -6606,6 +6611,8 @@ class SocialMediaManager {
                     
                     datePickerModal.style.display = 'flex';
                     renderCalendar();
+                    // Telefonda takvim acilirken klavye de acilip gunleri kapatiyordu: alan odaktan cikarilir
+                    if (mcvDokunmatik) { const odakBirak = function () { try { const a = document.activeElement; if (a && a !== document.body && !datePickerModal.contains(a)) a.blur(); const sec = window.getSelection && window.getSelection(); if (sec && sec.anchorNode && birthDateInput.contains(sec.anchorNode)) sec.removeAllRanges(); } catch (er) {} }; odakBirak(); setTimeout(odakBirak, 0); setTimeout(odakBirak, 120); }
                 }
                 
                 // Takvimi kapat
@@ -7381,7 +7388,7 @@ function hideHintBubble(hintBubble) {
                         if (input.textContent !== __v) {
                             input.textContent = __v;
                             const r = document.createRange(), sel = window.getSelection();
-                            r.selectNodeContents(input); r.collapse(false); sel.removeAllRanges(); sel.addRange(r);
+                            r.selectNodeContents(input); r.collapse(false); if (document.activeElement === input) { sel.removeAllRanges(); sel.addRange(r); } // odaktan cikan alana imleci geri koymak odagi geri cekiyordu
                         }
                         input.classList.remove('invalid'); input.classList.remove('empty-field');
                         return;
@@ -7393,7 +7400,7 @@ function hideHintBubble(hintBubble) {
                     if (input.textContent !== v) {
                         input.textContent = v;
                         const r = document.createRange(), sel = window.getSelection();
-                        r.selectNodeContents(input); r.collapse(false); sel.removeAllRanges(); sel.addRange(r);
+                        r.selectNodeContents(input); r.collapse(false); if (document.activeElement === input) { sel.removeAllRanges(); sel.addRange(r); } // odaktan cikan alana imleci geri koymak odagi geri cekiyordu
                     }
                     input.classList.toggle('invalid', v !== '' && !/^\d{4}(\/\d{1,2})?(-(\d{4}(\/\d{1,2})?)?)?$/.test(v));
                     if (v) input.classList.remove('empty-field'); else input.classList.add('empty-field');
@@ -7496,7 +7503,7 @@ function hideHintBubble(hintBubble) {
                     if (input.textContent !== f) {
                         input.textContent = f;
                         const r = document.createRange(), sel = window.getSelection();
-                        r.selectNodeContents(input); r.collapse(false); sel.removeAllRanges(); sel.addRange(r);
+                        r.selectNodeContents(input); r.collapse(false); if (document.activeElement === input) { sel.removeAllRanges(); sel.addRange(r); } // odaktan cikan alana imleci geri koymak odagi geri cekiyordu
                     }
                     if (f) input.classList.remove('empty-field'); else input.classList.add('empty-field');
                     return;
