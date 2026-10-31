@@ -7,6 +7,7 @@ Kontroller:
   - Japonca: bos referans telefonu PDF'e ornek numara olarak gitmiyor (gecmis hata)
   - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
   - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
+  - Yedegi Yukle: yedekte bos olan alan formdaki eski metni siliyor
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
@@ -132,6 +133,23 @@ with sync_playwright() as pw:
         check("İlana göre kontrol", r["durum"] == "tamam" and "SAP" in eksik and "SGK" in eksik and "Excel" not in eksik and not errs, f"{eksik[:8]}")
     except Exception as ex:
         check("CV'lerim / ilan kontrolü", False, str(ex)[:200])
+    ctx.close()
+    # 2d) Yedegi Yukle: yedekte bos olan alan formdaki eski degeri silmeli (gecmis hata)
+    ctx, pg, errs = new_page(b, False)
+    try:
+        import tempfile
+        pg.goto(BASE, wait_until="load", timeout=60000); time.sleep(1.2)
+        pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE); time.sleep(0.5)
+        yedek = dict(SAMPLE); yedek["about"] = ""; yedek["personalInfo"] = dict(SAMPLE["personalInfo"], fullname="Yedek Kişi")
+        f = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8"); json.dump(yedek, f, ensure_ascii=False); f.close()
+        with pg.expect_navigation(timeout=15000):
+            pg.set_input_files("#import-data-input", f.name)
+        pg.wait_for_load_state("load"); time.sleep(1.5)
+        d = pg.evaluate("autoSaveManager.collectData()")
+        ok = d["personalInfo"].get("fullname") == "Yedek Kişi" and not (d.get("about") or "").strip() and not errs
+        check("Yedeği Yükle: boş alan eski metni silir", ok, f"ad={d['personalInfo'].get('fullname')}, hakkımda={d.get('about')!r}, hata={errs[:2]}")
+    except Exception as ex:
+        check("Yedeği Yükle", False, str(ex)[:200])
     ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)

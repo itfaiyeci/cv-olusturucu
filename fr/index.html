@@ -9017,7 +9017,7 @@ class AutoSaveManager {
             reader.onload = (e) => {
                 try {
                     const data = JSON.parse(e.target.result);
-                    this.applyData(data);
+                    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Geçersiz veri');
                     // Geri yüklenen veriyi localStorage'a da yaz
                     localStorage.setItem(this.storageKey, JSON.stringify(data));
                     resolve(data);
@@ -9672,7 +9672,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const translation = translations[currentLang] || {};
 
         window.autoSaveManager.importFromFile(file)
-            .then(() => {
+            .then((data) => {
+                // Bos alanlar onceki CV'den kalmasin: sayfa yedekle temiz yuklenir, mesaj sonra gosterilir
+                if (window.mcvVeriyleYenile) { window.mcvVeriyleYenile(data, '@importSuccess'); return; }
                 alert(translation.importSuccess || 'Yedek başarıyla yüklendi!');
             })
             .catch(() => {
@@ -11238,6 +11240,18 @@ function saveCV() {
     window.addEventListener('popstate', function () { if (ov) { gecmis = false; kapat(false); } });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov) kapat(); });
 
+    // Veriyi kaydedip sayfayi yeniden yukler: form bos acilip veri temiz yuklenir (applyData yalnizca
+    // dolu alanlari yazdigi icin ustune yazmak onceki CV'nin metinlerini birakirdi). Bu sefer cikista
+    // otomatik kayit ve "kaydetmediniz" uyarisi calismaz; mesaj yuklemeden sonra gosterilir.
+    window.mcvVeriyleYenile = function (data, mesaj) {
+        var m = asm();
+        localStorage.setItem((m && m.storageKey) || 'mobilcv_data', JSON.stringify(data));
+        if (data && data.language) { try { localStorage.setItem('mobilcv_lang_chosen', '1'); } catch (e) {} }
+        try { if (mesaj) sessionStorage.setItem('mcv_bildirim', mesaj); } catch (e) {}
+        if (m) { if (m.saveTimeout) clearTimeout(m.saveTimeout); m.saveAllData = function () {}; }
+        window.addEventListener('beforeunload', function (e) { e.stopImmediatePropagation(); }, true);
+        location.reload();
+    };
     function bildir(m) {
         var d = document.createElement('div');
         d.className = 'mcv-toast'; d.setAttribute('role', 'status'); d.textContent = m;
@@ -11322,20 +11336,13 @@ function saveCV() {
         var hv = hedef.veri;
         akt.veri = veri(); akt.tarih = Date.now();
         hedef.veri = null; hedef.tarih = Date.now(); o.aktif = id;
-        try { yaz(o); localStorage.setItem(m.storageKey, JSON.stringify(hv)); }
+        try { yaz(o); window.mcvVeriyleYenile(hv, '@opened'); }
         catch (er) {
             // geri al: hicbir sey kaybolmasin
             hedef.veri = hv; akt.veri = null; o.aktif = akt.id;
             try { yaz(o); } catch (e2) {}
             hata(t('full')); return;
         }
-        try { sessionStorage.setItem('mcv_cv_acildi', '1'); } catch (e) {}
-        // Yeniden yukle: form bos acilip secilen CV'yi temiz yukler. Bu sefer cikista
-        // otomatik kayit ve "kaydetmediniz" uyarisi calismasin (yeni veri ezilmesin).
-        if (m.saveTimeout) clearTimeout(m.saveTimeout);
-        m.saveAllData = function () {};
-        window.addEventListener('beforeunload', function (e) { e.stopImmediatePropagation(); }, true);
-        location.reload();
     }
     function cvSil(id) {
         var o = durum(); if (id === o.aktif) return;
@@ -11344,7 +11351,14 @@ function saveCV() {
         try { yaz(o); } catch (er) { hata(t('full')); return; }
         yenidenCiz();
     }
-    try { if (sessionStorage.getItem('mcv_cv_acildi')) { sessionStorage.removeItem('mcv_cv_acildi'); setTimeout(function () { bildir(t('opened')); }, 600); } } catch (e) {}
+    // "@anahtar" bicimindeki mesaj yuklemeden sonra o anki dilde cevrilir (yedek dili degistirmis olabilir)
+    function bildirimMetni(bm) {
+        if (bm.charAt(0) !== '@') return bm;
+        var k = bm.slice(1), tr = null;
+        try { tr = (typeof translations !== 'undefined') ? (translations[lang()] || translations.en || {}) : null; } catch (e) {}
+        return (tr && tr[k]) || t(k) || '';
+    }
+    try { var bm = sessionStorage.getItem('mcv_bildirim'); if (bm) { sessionStorage.removeItem('mcv_bildirim'); setTimeout(function () { var x = bildirimMetni(bm); if (x) bildir(x); }, 900); } } catch (e) {}
     bCv.addEventListener('click', function () { cvlerimAc(bCv); });
 
     // ================= ILANA GORE KONTROL =================
