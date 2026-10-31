@@ -8,6 +8,7 @@ Kontroller:
   - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
   - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
   - Yedegi Yukle: yedekte bos olan alan formdaki eski metni siliyor
+  - Word (.docx): gecerli dosya, icerik ve A4/Letter sayfa boyutu
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
@@ -151,6 +152,21 @@ with sync_playwright() as pw:
     except Exception as ex:
         check("Yedeği Yükle", False, str(ex)[:200])
     ctx.close()
+    # 2e) Word (.docx) ciktisi: gecerli ZIP, icerik ve A4/Letter sayfa boyutu
+    import io, zipfile, re as _re
+    for kagit, gen in (("a4", "11906"), ("letter", "12240")):
+        ctx, pg, errs = new_page(b, False)
+        try:
+            pg.goto(BASE, wait_until="load", timeout=60000); time.sleep(1.2)
+            pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE); time.sleep(0.5)
+            pg.evaluate("p => applyCvPaper(p, false)", kagit)
+            z = zipfile.ZipFile(io.BytesIO(bytes(pg.evaluate("() => Array.from(mcvDocx())"))))
+            belge = z.read("word/document.xml").decode("utf-8")
+            ok = z.testzip() is None and "Test Kişi" in belge and "Örnek Şirket" in belge and f'w:w="{gen}"' in belge and not errs
+            check(f"Word (.docx) {kagit}", ok, f"{len(z.namelist())} parça, hata={errs[:2]}")
+        except Exception as ex:
+            check(f"Word (.docx) {kagit}", False, str(ex)[:200])
+        ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)
     try:
