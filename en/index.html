@@ -3061,6 +3061,76 @@ body.mcv-modal-acik { overflow: hidden; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { grid-column: 1 / -1 !important; }
 #cv-form.tpl-top.pdf-mode .cv-layout:not(:has(#avatar[src^="data:"])) .personal-info-item.title-item { margin-bottom: 4mm !important; }
 
+/* === SABLON: ABD TARZI (Resume) — klasik tek sutun govdesi uzerine; fotografsiz ve dogum tarihsiz,
+   ad ortada, iletisim tek satirda, siyah-beyaz bolum basliklari. Form'da tpl-classic de vardir. === */
+#cv-form.tpl-resume .left-column { display: block !important; background: #fff !important; padding: 10mm 14mm 4mm !important; border-bottom: 1.5px solid #1e293b !important; text-align: center; }
+#cv-form.tpl-resume .personal-header,
+#cv-form.tpl-resume .personal-info-item[data-field="birth-date"] { display: none !important; }
+#cv-form.tpl-resume .personal-info { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: center; align-items: baseline; column-gap: 7mm; row-gap: 2px; }
+#cv-form.tpl-resume .personal-info-item.name-item,
+#cv-form.tpl-resume .personal-info-item.title-item,
+#cv-form.tpl-resume .personal-info-item[data-field="social-media"] { flex: 0 0 100%; }
+#cv-form.tpl-resume .personal-info-item.name-item .personal-info-value { font-size: 27px !important; text-align: center !important; color: #0f172a !important; letter-spacing: .3px; margin: 0 0 2px !important; }
+#cv-form.tpl-resume .personal-info-item.title-item .personal-info-value { font-size: 14px !important; font-style: normal !important; text-align: center !important; color: #334155 !important; margin: 0 0 6px !important; }
+#cv-form.tpl-resume .personal-info-item:not(.name-item):not(.title-item):not([data-field="social-media"]):not(.hidden-in-pdf):not(.jp-only) { flex: 0 1 auto; justify-content: center !important; }
+#cv-form.tpl-resume .personal-info-item:not(.name-item):not(.title-item) .personal-info-label { min-width: 0 !important; color: #64748b; }
+#cv-form.tpl-resume.pdf-mode .personal-info-item:not(.name-item):not(.title-item) .personal-info-label { display: none !important; }
+#cv-form.tpl-resume .personal-info-item:not(.name-item):not(.title-item) .personal-info-value { text-align: center !important; color: #1e293b !important; }
+#cv-form.tpl-resume .personal-info-item[data-field="social-media"]:not(.hidden-in-pdf) { justify-content: center !important; margin: 2px 0 0 !important; }
+#cv-form.tpl-resume.pdf-mode .personal-info-item[data-field="social-media"] > .personal-info-label { display: none !important; }
+#cv-form.tpl-resume .personal-info-item[data-field="social-media"] .social-media-container { justify-content: center; }
+#cv-form.tpl-resume .right-column { padding: 5mm 14mm 6mm !important; }
+#cv-form.tpl-resume .right-column .section-title { font-size: 13px !important; text-transform: uppercase; letter-spacing: 1.2px; color: #0f172a !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 3px !important; margin-bottom: 7px !important; }
+#cv-form.tpl-resume .right-column .languages-section .section-title { border-bottom: 1px solid #1e293b !important; }
+#cv-form.tpl-resume .right-column .section { margin-bottom: 11px !important; }
+/* Sag sutun alanlarinin yazi ozellikleri satir ici stille sabitlenir (yapistirilan bicim temizligi);
+   sablonlar bunlari --mcv-* degiskenleriyle degistirir */
+#cv-form.tpl-resume .right-column .editable { --mcv-renk: #1e293b; }
+#cv-form.tpl-resume .item-title,
+#cv-form.tpl-resume .education-institution,
+#cv-form.tpl-resume .reference-name { --mcv-kalin: 700; --mcv-renk: #0f172a; }
+#cv-form.tpl-resume .experience-company { --mcv-italik: italic; --mcv-renk: #334155; }
+#cv-form.tpl-resume .experience-item { border-bottom: 0 !important; margin-bottom: 6px !important; padding-bottom: 2px !important; }
+#cv-form.tpl-resume .skill-item { background: transparent !important; border: 0 !important; padding: 0 !important; margin: 0 16px 0 0 !important; min-width: 0 !important; width: auto !important; }
+#cv-form.tpl-resume.pdf-mode .social-media-item .social-media-value { border: 0 !important; }
+#cv-form.tpl-resume .reference-item { border-left: 0 !important; padding-left: 0 !important; }
+
+/* === SABLON: KOMPAKT — klasik tek sutun, daha kucuk yazi ve dar bosluklar (uzun CV tek sayfaya yakin) === */
+#cv-form.tpl-compact .left-column { padding: 6mm 11mm 3.5mm !important; column-gap: 5mm !important; }
+#cv-form.tpl-compact #avatarBox { width: 24mm !important; height: 29mm !important; min-width: 24mm !important; min-height: 29mm !important; max-width: 24mm !important; max-height: 29mm !important; }
+#cv-form.tpl-compact .personal-info-item.name-item .personal-info-value { font-size: 22px !important; line-height: 1.2 !important; margin: 0 0 1px !important; }
+#cv-form.tpl-compact .personal-info-item.title-item .personal-info-value { font-size: 12.5px !important; margin: 0 0 3px !important; }
+#cv-form.tpl-compact .personal-info-item:not(.name-item):not(.title-item) .personal-info-label,
+#cv-form.tpl-compact .personal-info-item:not(.name-item):not(.title-item) .personal-info-value { font-size: 11px !important; line-height: 1.3 !important; }
+#cv-form.tpl-compact .right-column { padding: 4mm 11mm 5mm !important; }
+#cv-form.tpl-compact .right-column .section { margin-bottom: 7px !important; }
+#cv-form.tpl-compact .right-column .section-title { font-size: 13px !important; padding-bottom: 2px !important; margin-bottom: 5px !important; }
+#cv-form.tpl-compact .right-column .editable { --mcv-fs: 11px; --mcv-lh: 1.32; font-size: 11px !important; line-height: 1.32 !important; margin: 0 !important; padding: 1px 2px !important; }
+#cv-form.tpl-compact .experience-item,
+#cv-form.tpl-compact .education-item,
+#cv-form.tpl-compact .reference-item { margin-bottom: 4px !important; padding-bottom: 3px !important; }
+#cv-form.tpl-compact .right-column .languages-section { margin-top: 6px !important; }
+#cv-form.tpl-compact .skill-item { padding: 1px 6px !important; }
+/* Arapcada harf araligi harflerin birlesmesini bozar */
+[lang="ar"] #cv-form.tpl-resume .right-column .section-title { letter-spacing: 0 !important; }
+/* Etiketsiz tek basina "B" anlasilmaz: ehliyet satirinda etiket kalir */
+#cv-form.tpl-resume.pdf-mode .personal-info-item[data-field="driving-license"]:not(.name-item):not(.title-item) .personal-info-label { display: inline !important; }
+
+/* 6 sablon dugmesi: bilgisayarda 3x2, dar ekranda 2x3 */
+.tpl-buttons { display: grid !important; grid-template-columns: repeat(3, 1fr); flex-shrink: 0; }
+.tpl-buttons .tpl-btn { border-left: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0; }
+.tpl-buttons .tpl-btn:nth-child(3n+1) { border-left: none; }
+.tpl-buttons .tpl-btn:nth-child(-n+3) { border-top: none; }
+@media (max-width: 480px) {
+  .tpl-buttons { grid-template-columns: 1fr 1fr; }
+  .tpl-buttons .tpl-btn:nth-child(n) { border-left: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0; }
+  .tpl-buttons .tpl-btn:nth-child(odd) { border-left: none; }
+  .tpl-buttons .tpl-btn:nth-child(-n+2) { border-top: none; }
+}
+#tpl-note { margin: 4px 0 0; }
+body.mp-open-tpl #tpl-note[hidden] { display: block !important; visibility: hidden; }
+
+
 /* has-secicisini desteklemeyen eski tarayicilar icin yedek: ayni kurallar JS'in ekledigi siniflarla (fb-*).
    Siniflar yalnizca tarayici bu seciciyi desteklemiyorsa eklenir; ozgulluk :not(#fb_) ile ayni tutuldu. */
 .pdf-mode #avatarBox.fb-nophoto:not(#fb_) {
@@ -3387,12 +3457,17 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                         <button type="button" class="tpl-btn active" data-tpl="" aria-checked="true" role="radio" id="tpl-btn-modern">Modern</button>
                         <button type="button" class="tpl-btn" data-tpl="tpl-classic" aria-checked="false" role="radio" id="tpl-btn-classic">Klasik</button>
                         <button type="button" class="tpl-btn" data-tpl="tpl-top" aria-checked="false" role="radio" id="tpl-btn-top">Standart</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-resume" aria-checked="false" role="radio" id="tpl-btn-resume">US Resume</button>
+                        <button type="button" class="tpl-btn" data-tpl="tpl-compact" aria-checked="false" role="radio" id="tpl-btn-compact">Compact</button>
                         <button type="button" class="tpl-btn" data-tpl="tpl-rirekisho" aria-checked="false" role="radio" id="tpl-btn-rirekisho">Rirekisho (履歴書)</button>
                     </div>
+                    <p class="paper-note" id="tpl-note" hidden></p>
                     <select id="template-select" hidden aria-hidden="true" tabindex="-1">
                         <option value="" id="tpl-opt-modern">Modern</option>
                         <option value="tpl-classic" id="tpl-opt-classic">Classic (single column)</option>
                         <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
+                        <option value="tpl-resume" id="tpl-opt-resume">US style (no photo)</option>
+                        <option value="tpl-compact" id="tpl-opt-compact">Compact (dense layout)</option>
                         <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Japanese résumé (履歴書)</option>
                     </select>
                     <div class="paper-picker" id="paper-picker">
@@ -7949,6 +8024,7 @@ if (socialMediaSection) {
                 document.querySelectorAll('#cv-form .personal-info-item').forEach(item => {
                     if (item.classList.contains('hidden-in-pdf')) return;
                     if (item.closest('.jp-only') || item.classList.contains('jp-only')) return;
+                    if (item.getAttribute('data-field') === 'birth-date' && window.currentCvTemplate === 'tpl-resume') return;
                     const valueEl = item.querySelector('.personal-info-value');
                     if (!valueEl || valueEl.classList.contains('empty-field')) return;
                     // Etiket gorunuyorsa "Telefon: 0555..." seklinde yaz (ad/unvan etiketleri gizli)
@@ -8748,12 +8824,12 @@ class PasteHandler {
         // Sağ sütun için font ayarları
         if (element.closest('.right-column')) {
             const styles = {
-                'font-size': dynamicFontSize,
-                'line-height': '1.4',
+                'font-size': isMobileFocused ? dynamicFontSize : 'var(--mcv-fs, 12px)',
+                'line-height': 'var(--mcv-lh, 1.4)',
                 'font-family': "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                'color': '#555',
-                'font-weight': 'normal',
-                'font-style': 'normal',
+                'color': 'var(--mcv-renk, #555)',
+                'font-weight': 'var(--mcv-kalin, normal)',
+                'font-style': 'var(--mcv-italik, normal)',
                 'text-decoration': 'none'
             };
             
@@ -8766,7 +8842,7 @@ class PasteHandler {
             // iç içe elementler ayrı odaklanamaz, 12px'te sabit kalmalı)
             element.querySelectorAll('*').forEach(child => {
                 Object.keys(styles).forEach(property => {
-                    const val = property === 'font-size' ? '12px' : styles[property];
+                    const val = property === 'font-size' ? 'var(--mcv-fs, 12px)' : styles[property];
                     child.style.setProperty(property, val, 'important');
                 });
             });
@@ -10983,17 +11059,17 @@ function saveCV() {
 /* === SABLON SECICI (Modern / Klasik) === */
 (function () {
     var L = {
-        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)', 'Üst başlık (fotoğraf solda)'],
-        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)', 'Header (photo on the left)'],
-        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)', 'Kopfbereich (Foto links)'],
-        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)', 'En-tête (photo à gauche)'],
-        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)', 'Encabezado (foto a la izquierda)'],
-        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)', 'Intestazione (foto a sinistra)'],
-        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)', 'Cabeçalho (foto à esquerda)'],
-        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)', 'Шапка (фото слева)'],
-        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)', 'ترويسة (الصورة على الجانب)'],
-        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）', '页眉式（照片在左）'],
-        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書', 'ヘッダー型（写真は左）']
+        tr: ['Şablon', 'Modern', 'Klasik (tek sütun)', 'Japon tipi özgeçmiş (履歴書)', 'Üst başlık (fotoğraf solda)', 'ABD tarzı (fotoğrafsız)', 'Kompakt (sık yerleşim)'],
+        en: ['Template', 'Modern', 'Classic (single column)', 'Japanese résumé (履歴書)', 'Header (photo on the left)', 'US style (no photo)', 'Compact (dense layout)'],
+        de: ['Vorlage', 'Modern', 'Klassisch (einspaltig)', 'Japanischer Lebenslauf (履歴書)', 'Kopfbereich (Foto links)', 'US-Stil (ohne Foto)', 'Kompakt (dichtes Layout)'],
+        fr: ['Modèle', 'Moderne', 'Classique (une colonne)', 'CV japonais (履歴書)', 'En-tête (photo à gauche)', 'Style américain (sans photo)', 'Compact (mise en page serrée)'],
+        es: ['Plantilla', 'Moderna', 'Clásica (una columna)', 'Currículum japonés (履歴書)', 'Encabezado (foto a la izquierda)', 'Estilo EE. UU. (sin foto)', 'Compacta (diseño denso)'],
+        it: ['Modello', 'Moderno', 'Classico (una colonna)', 'CV giapponese (履歴書)', 'Intestazione (foto a sinistra)', 'Stile USA (senza foto)', 'Compatto (layout denso)'],
+        pt: ['Modelo', 'Moderno', 'Clássico (uma coluna)', 'Currículo japonês (履歴書)', 'Cabeçalho (foto à esquerda)', 'Estilo EUA (sem foto)', 'Compacto (layout denso)'],
+        ru: ['Шаблон', 'Современный', 'Классический (в одну колонку)', 'Японское резюме (履歴書)', 'Шапка (фото слева)', 'Американский стиль (без фото)', 'Компактный (плотная вёрстка)'],
+        ar: ['القالب', 'عصري', 'كلاسيكي (عمود واحد)', 'سيرة ذاتية يابانية (履歴書)', 'ترويسة (الصورة على الجانب)', 'النمط الأمريكي (بدون صورة)', 'مدمج (تخطيط كثيف)'],
+        zh: ['模板', '现代', '经典（单栏）', '日式履历书（履歴書）', '页眉式（照片在左）', '美式（无照片）', '紧凑（密集排版）'],
+        ja: ['テンプレート', 'モダン', 'クラシック（1カラム）', '履歴書', 'ヘッダー型（写真は左）', '米国式（写真なし）', 'コンパクト（詰めたレイアウト）']
     };
     var form = document.getElementById('cv-form');
     var select = document.getElementById('template-select');
@@ -11010,26 +11086,30 @@ function saveCV() {
         document.getElementById('tpl-opt-classic').textContent = t[2];
         document.getElementById('tpl-opt-rirekisho').textContent = t[3];
         document.getElementById('tpl-opt-top').textContent = t[4];
+        document.getElementById('tpl-opt-resume').textContent = t[5];
+        document.getElementById('tpl-opt-compact').textContent = t[6];
+        document.getElementById('tpl-note').textContent = NOT[currentLang()] || NOT.en;
         var b = B[currentLang()] || B.en;
-        ['modern', 'classic', 'top', 'rirekisho'].forEach(function (k, i) {
+        ['modern', 'classic', 'top', 'rirekisho', 'resume', 'compact'].forEach(function (k, i) {
             var el = document.getElementById('tpl-btn-' + k);
             if (el) { el.textContent = b[i]; el.title = b[i]; }
         });
     }
     // Dugme etiketleri: Modern, Klasik, Standart, Rirekisho
     var B = {
-        tr: ['Modern', 'Klasik', 'Standart', 'Rirekisho (履歴書)'],
-        en: ['Modern', 'Classic', 'Standard', 'Rirekisho (履歴書)'],
-        de: ['Modern', 'Klassisch', 'Standard', 'Rirekisho (履歴書)'],
-        fr: ['Moderne', 'Classique', 'Standard', 'Rirekisho (履歴書)'],
-        es: ['Moderna', 'Clásica', 'Estándar', 'Rirekisho (履歴書)'],
-        it: ['Moderno', 'Classico', 'Standard', 'Rirekisho (履歴書)'],
-        pt: ['Moderno', 'Clássico', 'Padrão', 'Rirekisho (履歴書)'],
-        ru: ['Современный', 'Классический', 'Стандартный', 'Rirekisho (履歴書)'],
-        ar: ['عصري', 'كلاسيكي', 'قياسي', 'Rirekisho (履歴書)'],
-        zh: ['现代', '经典', '标准', 'Rirekisho (履歴書)'],
-        ja: ['モダン', 'クラシック', 'スタンダード', '履歴書']
+        tr: ['Modern', 'Klasik', 'Standart', 'Rirekisho (履歴書)', 'ABD (Resume)', 'Kompakt'],
+        en: ['Modern', 'Classic', 'Standard', 'Rirekisho (履歴書)', 'US Resume', 'Compact'],
+        de: ['Modern', 'Klassisch', 'Standard', 'Rirekisho (履歴書)', 'US-Lebenslauf', 'Kompakt'],
+        fr: ['Moderne', 'Classique', 'Standard', 'Rirekisho (履歴書)', 'CV américain', 'Compact'],
+        es: ['Moderna', 'Clásica', 'Estándar', 'Rirekisho (履歴書)', 'Currículum EE. UU.', 'Compacta'],
+        it: ['Moderno', 'Classico', 'Standard', 'Rirekisho (履歴書)', 'CV americano', 'Compatto'],
+        pt: ['Moderno', 'Clássico', 'Padrão', 'Rirekisho (履歴書)', 'Currículo EUA', 'Compacto'],
+        ru: ['Современный', 'Классический', 'Стандартный', 'Rirekisho (履歴書)', 'Резюме США', 'Компактный'],
+        ar: ['عصري', 'كلاسيكي', 'قياسي', 'Rirekisho (履歴書)', 'أمريكي', 'مدمج'],
+        zh: ['现代', '经典', '标准', 'Rirekisho (履歴書)', '美式简历', '紧凑'],
+        ja: ['モダン', 'クラシック', 'スタンダード', '履歴書', '米国式', 'コンパクト']
     };
+    var NOT = {"tr": "Bu şablonda fotoğraf ve doğum tarihi gösterilmez (ABD'de beklenmez). Bilgileriniz silinmez; diğer şablonlarda yeniden görünür.", "en": "This template leaves out the photo and date of birth (not expected in the US). Your details are kept and reappear in other templates.", "de": "Diese Vorlage lässt Foto und Geburtsdatum weg (in den USA nicht üblich). Ihre Angaben bleiben erhalten und erscheinen in anderen Vorlagen wieder.", "fr": "Ce modèle n’affiche ni la photo ni la date de naissance (non attendues aux États-Unis). Vos informations sont conservées et réapparaissent dans les autres modèles.", "es": "Esta plantilla omite la foto y la fecha de nacimiento (no se esperan en EE. UU.). Tus datos se conservan y vuelven a aparecer en otras plantillas.", "it": "Questo modello omette foto e data di nascita (non previste negli USA). I tuoi dati restano salvati e ricompaiono negli altri modelli.", "pt": "Este modelo omite a foto e a data de nascimento (não esperadas nos EUA). Seus dados são mantidos e voltam a aparecer nos outros modelos.", "ru": "В этом шаблоне нет фото и даты рождения (в США их не указывают). Ваши данные сохраняются и снова видны в других шаблонах.", "ar": "يُخفي هذا القالب الصورة وتاريخ الميلاد (غير متوقعين في الولايات المتحدة). تبقى بياناتك محفوظة وتظهر في القوالب الأخرى.", "zh": "此模板不显示照片和出生日期（美国通常不要求）。您的信息会保留，切换到其他模板后会重新显示。", "ja": "このテンプレートでは写真と生年月日を表示しません（米国では一般的に記載しません）。入力内容は保持され、他のテンプレートでは再び表示されます。"};
     function syncButtons(name) {
         var all = document.querySelectorAll('#tpl-buttons .tpl-btn');
         for (var i = 0; i < all.length; i++) {
@@ -11040,15 +11120,18 @@ function saveCV() {
     }
 
     function applyTemplate(name) {
-        name = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top') ? name : '';
+        name = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top' || name === 'tpl-resume' || name === 'tpl-compact') ? name : '';
         // Rirekisho: duzenleyicide klasik yerlesim kullanilir, PDF ayri bir form olarak uretilir
-        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top');
+        var classicLayout = (name === 'tpl-classic' || name === 'tpl-rirekisho' || name === 'tpl-top' || name === 'tpl-resume' || name === 'tpl-compact');
         var lang = document.getElementById('languages-section');
         var left = form.querySelector('.left-column');
         var right = form.querySelector('.right-column');
         form.classList.toggle('tpl-classic', classicLayout);
         form.classList.toggle('tpl-rirekisho', name === 'tpl-rirekisho');
         form.classList.toggle('tpl-top', name === 'tpl-top');
+        form.classList.toggle('tpl-resume', name === 'tpl-resume');
+        form.classList.toggle('tpl-compact', name === 'tpl-compact');
+        var tn = document.getElementById('tpl-note'); if (tn) tn.hidden = name !== 'tpl-resume';
         // Diller bolumu: klasikte govdenin sonuna, modernde kenar cubuguna
         if (lang && left && right) {
             if (classicLayout) { if (lang.parentNode !== right) right.appendChild(lang); }
@@ -11604,7 +11687,9 @@ function saveCV() {
         var p = d.personalInfo || {}, b = [];
         if (p.fullname) b.push(par(run(p.fullname), { stil: 'Title' }));
         if (p.profession) b.push(par(run(p.profession, { renk: '475569', sz: 24 }), { sonra: 80 }));
-        var ilet = ['phone', 'email', 'address', 'birth-date', 'driving-license'].filter(function (k) { return p[k] && String(p[k]).trim(); })
+        // ABD tarzi sablonda dogum tarihi CV'de gosterilmez; Word'e de yazilmaz
+        var dtYok = window.currentCvTemplate === 'tpl-resume';
+        var ilet = ['phone', 'email', 'address', 'birth-date', 'driving-license'].filter(function (k) { return p[k] && String(p[k]).trim() && !(dtYok && k === 'birth-date'); })
             .map(function (k) { return run(etiket(k) + ': ', { b: true, sz: 19 }) + run(p[k], { sz: 19 }); });
         if (ilet.length) b.push(par(ilet.join(run('   ·   ', { renk: '94A3B8', sz: 19 })), { sonra: 40 }));
         var sm = d.socialMedia || {}, smk = Object.keys(sm).filter(function (k) { return sm[k]; });

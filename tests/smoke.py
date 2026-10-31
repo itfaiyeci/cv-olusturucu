@@ -3,7 +3,8 @@
 Kullanim: python3 tests/smoke.py http://localhost:8000/
 Kontroller:
   - 11 dil x (telefon, bilgisayar): sayfa aciliyor, JavaScript hatasi yok, dil dogru, sablon secici var
-  - TR / EN / AR / JA: 4 sablonun her biriyle ornek CV doldurulup PDF gercekten uretiliyor
+  - TR / EN / AR / JA: 6 sablonun her biriyle ornek CV doldurulup PDF gercekten uretiliyor
+  - ABD tarzi sablon: dogum tarihi PDF metninde ve Word dosyasinda yok
   - Japonca: bos referans telefonu PDF'e ornek numara olarak gitmiyor (gecmis hata)
   - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
   - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
@@ -16,7 +17,7 @@ from playwright.sync_api import sync_playwright
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000/").rstrip("/") + "/"
 LANGS = ["", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"]
-TEMPLATES = ["", "tpl-classic", "tpl-top", "tpl-rirekisho"]
+TEMPLATES = ["", "tpl-classic", "tpl-top", "tpl-rirekisho", "tpl-resume", "tpl-compact"]
 SAMPLE = {
     "personalInfo": {"fullname": "Test Kişi", "profession": "Test Uzmanı", "phone": "5321234567",
                      "email": "test@example.com", "address": "İstanbul"},
@@ -189,6 +190,22 @@ with sync_playwright() as pw:
         except Exception as ex:
             check(f"Ön yazı {lang or 'tr'} {kagit}", False, str(ex)[:200])
         ctx.close()
+    # 2g) ABD tarzi sablon: fotograf/dogum tarihi gizli; PDF metin katmaninda ve Word'de de yok
+    ctx, pg, errs = new_page(b, False)
+    try:
+        pg.goto(BASE, wait_until="load", timeout=60000); time.sleep(1.2)
+        d = dict(SAMPLE); d["personalInfo"] = dict(SAMPLE["personalInfo"], **{"birth-date": "01.01.1990"})
+        pg.evaluate("d => autoSaveManager.applyData(d)", d); time.sleep(0.5)
+        pg.click("#tpl-btn-resume"); time.sleep(0.5)
+        res = pg.evaluate("""() => generateCvPdf().then(d => ({pages: d.getNumberOfPages()}))""")
+        belge = zipfile.ZipFile(io.BytesIO(bytes(pg.evaluate("() => Array.from(mcvDocx())")))).read("word/document.xml").decode("utf-8")
+        not_ = pg.evaluate("!document.getElementById('tpl-note').hidden")
+        n_btn = pg.evaluate("document.querySelectorAll('#tpl-buttons .tpl-btn').length")
+        ok = res["pages"] >= 1 and "1990" not in belge and not_ and n_btn == 6 and not errs
+        check("ABD tarzı şablon: doğum tarihi yok", ok, f"{res['pages']} sayfa, word'de 1990={'1990' in belge}, not={not_}, düğme={n_btn}, hata={errs[:2]}")
+    except Exception as ex:
+        check("ABD tarzı şablon", False, str(ex)[:200])
+    ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)
     try:
