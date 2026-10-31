@@ -11524,7 +11524,7 @@ function saveCV() {
         }
         // Arapca belgede yalnizca Arapca harfli parcalar "sagdan sola" isaretlenir. Hepsi isaretlenirse
         // Word Latin harfli ad, e-posta ve sirket adlarini ters yazar ("Ayse" -> "esyA").
-        // Iki Latin/rakam parcasi arasindaki (ya da Latin metnin basindaki/sonundaki) bosluk ve isaretler Latin parcada kalir.
+        // Iki Latin/rakam parcasi arasindaki bosluk ve isaretler Latin parcada, digerleri Arapca parcada kalir.
         var AR = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/, GUCLU = /[\p{L}\p{N}]/u;
         o.run = function (metin, op) {
             op = op || {}; metin = String(metin == null ? '' : metin);
@@ -11534,8 +11534,13 @@ function saveCV() {
                 var o1 = null, s1 = null, j;
                 for (j = i - 1; j >= 0; j--) if (sinif[j] !== 'n' && sinif[j] !== 'N') { o1 = sinif[j]; break; }
                 for (j = i + 1; j < ch.length; j++) if (sinif[j] !== 'n') { s1 = sinif[j]; break; }
-                var on = o1 || s1, son = s1 || o1; // metnin basi/sonu: tek komsuya bakilir
-                sinif[i] = (on === 'l' && son === 'l') ? 'N' : 'A';
+                sinif[i] = (o1 === 'l' && s1 === 'l') ? 'N' : 'A';
+            }
+            // Hic Arapca harf olmayan parcada (sirket adi gibi) Latin kelimeye bosluksuz bitisik isaret Latin parcada kalir
+            // ("Örnek A.Ş." sonundaki nokta). Arapca cumle icindeki "... Excel." noktasi ise cumlenin sonu oldugu icin Arapca parcada kalir.
+            if (!AR.test(metin)) for (i = 0; i < ch.length; i++) if (sinif[i] === 'l') {
+                for (j = i + 1; j < ch.length && sinif[j] === 'A' && !/\s/.test(ch[j]) && !/[\u00B7\u2022\u2014\u2013|،؛؟]/.test(ch[j]); j++) sinif[j] = 'N';
+                for (j = i - 1; j >= 0 && sinif[j] === 'A' && !/\s/.test(ch[j]) && !/[\u00B7\u2022\u2014\u2013|،؛؟]/.test(ch[j]); j--) sinif[j] = 'N';
             }
             var out = '', bas = 0;
             function sag(k) { return k === 'a' || k === 'A'; }
