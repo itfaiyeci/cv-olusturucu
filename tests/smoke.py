@@ -9,6 +9,7 @@ Kontroller:
   - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
   - Yedegi Yukle: yedekte bos olan alan formdaki eski metni siliyor
   - Word (.docx): gecerli dosya, icerik ve A4/Letter sayfa boyutu
+  - On yazi: CV'den taslak, Word ve PDF (A4/Letter)
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
@@ -166,6 +167,27 @@ with sync_playwright() as pw:
             check(f"Word (.docx) {kagit}", ok, f"{len(z.namelist())} parça, hata={errs[:2]}")
         except Exception as ex:
             check(f"Word (.docx) {kagit}", False, str(ex)[:200])
+        ctx.close()
+    # 2f) On yazi: CV'den taslak, Word ve PDF
+    for lang, kagit in (("", "a4"), ("en", "letter")):
+        ctx, pg, errs = new_page(b, False)
+        try:
+            pg.goto(BASE + (lang + "/" if lang else ""), wait_until="load", timeout=60000); time.sleep(1.2)
+            pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE); time.sleep(0.5)
+            pg.evaluate("p => applyCvPaper(p, false)", kagit)
+            pg.click("#mcv-onyazi-btn"); time.sleep(0.3)
+            pg.fill("#mcv-oy-sirket", "Deneme Holding"); pg.fill("#mcv-oy-pozisyon", "Analist")
+            pg.click("#mcv-oy-taslak"); time.sleep(0.6)
+            metin = pg.input_value("#mcv-oy-metin")
+            z = zipfile.ZipFile(io.BytesIO(bytes(pg.evaluate("() => Array.from(mcvOnYazi.docx())"))))
+            belge = z.read("word/document.xml").decode("utf-8")
+            res = pg.evaluate("() => mcvOnYazi.pdf().then(d => ({pages: d.getNumberOfPages(), w: d.internal.pageSize.getWidth(), size: d.output('arraybuffer').byteLength}))")
+            gen = 215.9 if kagit == "letter" else 210.0
+            ok = ("Deneme Holding" in metin and "Örnek Şirket" in metin and "Test Kişi" in belge and "Deneme Holding" in belge
+                  and abs(res["w"] - gen) < 0.5 and res["pages"] == 1 and res["size"] > 10000 and not errs)
+            check(f"Ön yazı {lang or 'tr'} {kagit}", ok, f"PDF {res['w']:.1f} mm, {res['pages']} sayfa, {res['size'] // 1024} KB, hata={errs[:2]}")
+        except Exception as ex:
+            check(f"Ön yazı {lang or 'tr'} {kagit}", False, str(ex)[:200])
         ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)
