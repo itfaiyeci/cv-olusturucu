@@ -11179,6 +11179,12 @@ function saveCV() {
         var v = btn.getAttribute('data-tpl') || '';
         try { localStorage.setItem(CH, '1'); } catch (er) {}
         applyTemplate(v);
+        if (v === 'tpl-resume' && e.isTrusted && window.innerWidth <= 768) {
+            var tst = document.createElement('div'); tst.className = 'mcv-toast'; tst.setAttribute('role', 'status');
+            tst.textContent = NOT[currentLang()] || NOT.en; document.body.appendChild(tst);
+            setTimeout(function () { tst.classList.add('cik'); }, 5000);
+            setTimeout(function () { tst.parentNode && tst.parentNode.removeChild(tst); }, 5500);
+        }
         if (e.isTrusted && window.mcvTrack) window.mcvTrack('template_select', { cv_template: v || 'modern', cv_language: currentLang() });
     });
     // Her dilde ilk acilista Modern; kullanici kendisi sablon secmediyse kayitli sablon da Modern'e doner
