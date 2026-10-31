@@ -5,6 +5,7 @@ Kontroller:
   - 11 dil x (telefon, bilgisayar): sayfa aciliyor, JavaScript hatasi yok, dil dogru, sablon secici var
   - TR / EN / AR / JA: 4 sablonun her biriyle ornek CV doldurulup PDF gercekten uretiliyor
   - Japonca: bos referans telefonu PDF'e ornek numara olarak gitmiyor (gecmis hata)
+  - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
@@ -92,6 +93,27 @@ with sync_playwright() as pw:
                     size: d.output('arraybuffer').byteLength}))""")
                 ok = res["pages"] >= 1 and res["size"] > 10000 and not errs
                 check(name, ok, f"{res['pages']} sayfa, {res['size'] // 1024} KB, hata={errs[:2]}")
+            except Exception as ex:
+                check(name, False, str(ex)[:200])
+            ctx.close()
+    # 2b) US Letter kagit secenegi: PDF 215.9 x 279.4 mm, metin katmani var
+    for lang in ("", "en"):
+        for tpl in ("", "tpl-classic"):
+            ctx, pg, errs = new_page(b, False)
+            name = f"PDF Letter {lang or 'tr'} / {tpl or 'modern'}"
+            try:
+                pg.goto(BASE + (lang + "/" if lang else ""), wait_until="load", timeout=60000)
+                time.sleep(1.2)
+                pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE)
+                time.sleep(0.5)
+                pg.evaluate("t => window.applyCvTemplate && window.applyCvTemplate(t)", tpl)
+                pg.click("#paper-btn-letter")
+                time.sleep(0.6)
+                res = pg.evaluate("""() => generateCvPdf().then(d => ({pages: d.getNumberOfPages(),
+                    w: d.internal.pageSize.getWidth(), h: d.internal.pageSize.getHeight(),
+                    size: d.output('arraybuffer').byteLength}))""")
+                ok = abs(res["w"] - 215.9) < 0.5 and abs(res["h"] - 279.4) < 0.5 and res["size"] > 10000 and not errs
+                check(name, ok, f"{res['w']:.1f}x{res['h']:.1f} mm, {res['pages']} sayfa, {res['size'] // 1024} KB, hata={errs[:2]}")
             except Exception as ex:
                 check(name, False, str(ex)[:200])
             ctx.close()

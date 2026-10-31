@@ -2906,6 +2906,19 @@ img {
 .tpl-btn:hover { background: #f1f5f9; }
 .tpl-btn.active { background: #1e293b; color: #fff; }
 .tpl-btn:focus-visible { outline: 2px solid #1e293b; outline-offset: -3px; }
+/* === KAGIT BOYUTU: A4 (varsayilan) / US Letter === */
+.paper-picker { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 0; font-size: 13px; color: #475569; }
+.paper-picker[hidden] { display: none !important; }
+#paper-label { font-weight: 600; white-space: nowrap; }
+.paper-buttons { display: inline-flex; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 0 1px #cbd5e1; background: #fff; }
+.controls .paper-btn, .paper-btn { flex: 0 0 auto; width: auto; min-width: 0; margin: 0; padding: 6px 14px; border: none; border-left: 1px solid #e2e8f0; border-radius: 0; background: transparent; background-image: none; color: #334155; font-size: 13px; font-weight: 600; line-height: 1.2; min-height: 36px; cursor: pointer; box-shadow: none; transform: none; }
+.controls .paper-btn:first-child, .paper-btn:first-child { border-left: none; }
+.controls .paper-btn.active, .paper-btn.active { background: #1e293b; color: #fff; }
+.paper-btn:focus { outline: none; }
+.paper-btn:focus-visible { outline: 2px solid #1e293b; outline-offset: -3px; }
+.paper-note { flex: 1 1 100%; margin: 2px 0 0; text-align: center; font-size: 12px; line-height: 1.4; color: #64748b; }
+.paper-note[hidden] { display: none; }
+#cv-form.paper-letter { width: 215.9mm; min-height: 279.4mm; height: 279.4mm; }
 @media (max-width: 480px) {
   .tpl-buttons { flex-wrap: wrap; }
   .tpl-btn { flex: 1 1 50%; border-top: 1px solid #e2e8f0; font-size: 13px; }
@@ -3336,6 +3349,14 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                         <option value="tpl-top" id="tpl-opt-top">Üst başlık (fotoğraf solda)</option>
                         <option value="tpl-rirekisho" id="tpl-opt-rirekisho">Japanese résumé (履歴書)</option>
                     </select>
+                    <div class="paper-picker" id="paper-picker">
+                        <span id="paper-label">Kağıt boyutu</span>
+                        <div class="paper-buttons" id="paper-buttons" role="radiogroup" aria-labelledby="paper-label">
+                            <button type="button" class="paper-btn active" data-paper="a4" role="radio" aria-checked="true" id="paper-btn-a4">A4</button>
+                            <button type="button" class="paper-btn" data-paper="letter" role="radio" aria-checked="false" id="paper-btn-letter">US Letter</button>
+                        </div>
+                        <p class="paper-note" id="paper-note" hidden></p>
+                    </div>
                 </div>
                 <div class="theme-dots" id="theme-options" role="radiogroup" aria-label="Colour Theme">
                     <button type="button" class="theme-swatch active" data-theme="" aria-pressed="true" title="Classic Blue" data-key-title="themeClassic" style="--dot-color:#3498db;"></button>
@@ -8053,8 +8074,8 @@ if (socialMediaSection) {
                 }
 
                 const marginX = 10;
-                const maxWidth = 190; // 210mm sayfa - 2x10mm kenar boşluğu
-                const pageBottom = 290;
+                const maxWidth = doc.internal.pageSize.getWidth() - 20; // sayfa genişliği - 2x10mm kenar boşluğu
+                const pageBottom = doc.internal.pageSize.getHeight() - 7;
                 const totalPages = doc.internal.getNumberOfPages();
                 let currentPage = 1;
                 doc.setPage(currentPage);
@@ -8247,8 +8268,8 @@ if (socialMediaSection) {
                     useCORS: true,
                     logging: false,
                     backgroundColor: '#ffffff',
-                    width: 794, // 210mm in pixels
-                    height: 1123, // 297mm in pixels
+                    width: window.currentCvPaper === 'letter' ? 816 : 794, // A4 210mm / Letter 8.5in (px)
+                    height: window.currentCvPaper === 'letter' ? 1056 : 1123, // A4 297mm / Letter 11in (px)
                     onclone: function(clonedDoc) {
                         const clonedButtons = clonedDoc.querySelectorAll('.buttons-inline, .add-btn, .remove-btn, #delAvatar, #avatarPanControls');
                         clonedButtons.forEach(button => { button.style.display = 'none'; });
@@ -8313,7 +8334,7 @@ if (socialMediaSection) {
                         return;
                     }
                     const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF('p', 'mm', 'a4');
+                    const doc = new jsPDF('p', 'mm', window.currentCvPaper === 'letter' ? 'letter' : 'a4');
 
                     const originalButtons = document.querySelectorAll('.buttons-inline, .add-btn, .remove-btn, #delAvatar, #avatarPanControls');
                     const originalDisplay = [];
@@ -8425,7 +8446,7 @@ if (socialMediaSection) {
                             const canvas = await captureCvForm(cvForm);
                             if (pageIndex > 0) doc.addPage();
                             const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                            doc.addImage(imgData, 'JPEG', 0, 0, 210, 297, '', 'FAST');
+                            doc.addImage(imgData, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), '', 'FAST');
 
                             hiddenOverflow.forEach(el => {
                                 el.style.display = el.dataset.__pdfPagOverflow || '';
@@ -8911,6 +8932,7 @@ class AutoSaveManager {
             language: document.getElementById('language-select')?.value || 'tr',
             theme: window.currentCvTheme || '',
             template: window.currentCvTemplate || '',
+            paper: window.currentCvPaper || 'a4',
             rirekisho: window.rkState || null
         };
     }
@@ -9016,6 +9038,11 @@ class AutoSaveManager {
             if (!Array.isArray(window.rkState.licenses)) window.rkState.licenses = [];
         }
         setTimeout(function () { if (window.rkRedraw) window.rkRedraw(); }, 700);
+
+        // Kagit boyutu (A4 / Letter)
+
+        if ((data.paper === 'a4' || data.paper === 'letter') && window.applyCvPaper) window.applyCvPaper(data.paper, true);
+
 
         // Sablon (Modern / Klasik)
         if (window.applyCvTemplate) {
@@ -11043,6 +11070,84 @@ function saveCV() {
 })();
 </script>
 <script>
+/* === KAGIT BOYUTU (A4 / US Letter) === */
+(function () {
+    var T = {
+        tr: ['Kağıt boyutu', "ABD ve Kanada'da kullanılan kağıt boyutu. Bu ülkelerde CV'ye genellikle fotoğraf ve doğum tarihi eklenmez."],
+        en: ['Paper size', 'Paper size used in the US and Canada. CVs there usually leave out the photo and date of birth.'],
+        de: ['Papierformat', 'In den USA und Kanada übliches Papierformat. Ein Lebenslauf enthält dort meist weder Foto noch Geburtsdatum.'],
+        fr: ['Format du papier', 'Format de papier utilisé aux États-Unis et au Canada. Le CV n’y comporte généralement ni photo ni date de naissance.'],
+        es: ['Tamaño del papel', 'Tamaño de papel que se usa en Estados Unidos y Canadá. Allí el currículum no suele incluir foto ni fecha de nacimiento.'],
+        it: ['Formato carta', 'Formato carta usato negli Stati Uniti e in Canada. Lì il curriculum di solito non include foto né data di nascita.'],
+        pt: ['Tamanho do papel', 'Tamanho de papel usado nos Estados Unidos e no Canadá. Nesses países, o currículo normalmente não inclui fotografia nem data de nascimento.'],
+        ru: ['Формат бумаги', 'Формат бумаги, принятый в США и Канаде. Там в резюме обычно не указывают фото и дату рождения.'],
+        ar: ['مقاس الورق', 'مقاس الورق المستخدم في الولايات المتحدة وكندا. في هذين البلدين لا تتضمن السيرة الذاتية عادةً صورة شخصية أو تاريخ الميلاد.'],
+        zh: ['纸张尺寸', '美国和加拿大使用的纸张尺寸。这两个国家的简历通常不附照片，也不写出生日期。'],
+        ja: ['用紙サイズ', '米国とカナダで使われる用紙サイズです。両国の履歴書（レジュメ）には通常、写真や生年月日を記載しません。']
+    };
+    var form = document.getElementById('cv-form');
+    var box = document.getElementById('paper-picker');
+    if (!form || !box) return;
+    var K = 'mobilcv_paper';
+    function lang() {
+        var s = document.getElementById('language-select');
+        return (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr';
+    }
+    function localize() {
+        var t = T[lang()] || T.en;
+        document.getElementById('paper-label').textContent = t[0];
+        document.getElementById('paper-note').textContent = t[1];
+    }
+    function apply(p, kaydet) {
+        p = p === 'letter' ? 'letter' : 'a4';
+        form.classList.toggle('paper-letter', p === 'letter');
+        box.querySelectorAll('.paper-btn').forEach(function (b) {
+            var on = b.getAttribute('data-paper') === p;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-checked', on ? 'true' : 'false');
+        });
+        document.getElementById('paper-note').hidden = p !== 'letter';
+        var degisti = (window.currentCvPaper || 'a4') !== p;
+        window.currentCvPaper = p;
+        if (kaydet) { try { localStorage.setItem(K, p); } catch (e) {} }
+        if (degisti && kaydet && window.autoSaveManager && window.autoSaveManager.debouncedSave) {
+            window.autoSaveManager.debouncedSave();
+        }
+    }
+    window.applyCvPaper = apply;
+    box.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('.paper-btn');
+        if (b) apply(b.getAttribute('data-paper'), true);
+    });
+    // Varsayilan: tarayici dili ABD/Kanada bolgesi VE saat dilimi Amerika ise Letter; aksi halde A4
+    function bolgeVarsayilani() {
+        try {
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+            if (!/^(America|US|Canada)\//.test(tz)) return 'a4';
+            var dl = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+            for (var i = 0; i < dl.length; i++) if (/-(US|CA)$/i.test(dl[i] || '')) return 'letter';
+        } catch (e) {}
+        return 'a4';
+    }
+    // Rirekisho Japon formu her zaman A4: secici gizlenir
+    function sablonaGore() { box.hidden = (window.currentCvTemplate === 'tpl-rirekisho'); }
+    new MutationObserver(sablonaGore).observe(form, { attributes: true, attributeFilter: ['class'] });
+    var ls = document.getElementById('language-select');
+    if (ls) ls.addEventListener('change', function () { setTimeout(localize, 0); });
+    localize();
+    // Oncelik: kayitli CV'deki secim > kullanicinin onceki secimi > bolge varsayilani
+    var ilk = null;
+    try {
+        var key = (window.autoSaveManager && window.autoSaveManager.storageKey) || 'mobilcv_data';
+        var saved = JSON.parse(localStorage.getItem(key) || 'null');
+        if (saved && (saved.paper === 'a4' || saved.paper === 'letter')) ilk = saved.paper;
+        if (!ilk) ilk = localStorage.getItem(K);
+    } catch (e) {}
+    apply(ilk || bolgeVarsayilani(), false);
+    sablonaGore();
+})();
+</script>
+<script>
 /* === RIREKISHO (履歴書): duzenleyici = PDF (ayni form) === */
 (function () {
     var FIRST = 22, MINLIC = 6;
@@ -11540,7 +11645,7 @@ function saveCV() {
         var r = t.closest('.rec-box a, .rec-box button');
         if (r && !r.classList.contains('rec-x')) window.mcvTrack('recommend_click', { method: r.className.replace('rec-', '') });
     }, true);
-    window.mcvTrackPdf = function () { window.mcvTrack('pdf_download', { cv_template: tpl(), cv_language: lang() }); };
+    window.mcvTrackPdf = function () { window.mcvTrack('pdf_download', { cv_template: tpl(), cv_language: lang(), cv_paper: window.currentCvPaper || 'a4' }); };
 })();
 </script>
 
