@@ -5,6 +5,7 @@ Kontroller:
   - 11 dil x (telefon, bilgisayar): sayfa aciliyor, JavaScript hatasi yok, dil dogru, sablon secici var
   - TR / EN / AR / JA: 6 sablonun her biriyle ornek CV doldurulup PDF gercekten uretiliyor
   - ABD tarzi sablon: dogum tarihi PDF metninde ve Word dosyasinda yok
+  - Yazi boyutu: hicbir sablonda govde 10 pt altinda degil
   - Japonca: bos referans telefonu PDF'e ornek numara olarak gitmiyor (gecmis hata)
   - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
   - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
@@ -205,6 +206,25 @@ with sync_playwright() as pw:
         check("ABD tarzı şablon: doğum tarihi yok", ok, f"{res['pages']} sayfa, word'de 1990={'1990' in belge}, not={not_}, düğme={n_btn}, hata={errs[:2]}")
     except Exception as ex:
         check("ABD tarzı şablon", False, str(ex)[:200])
+    ctx.close()
+    # 2h) Yazi boyutu: hicbir sablonda PDF govde yazisi 10 pt (13,33 px) altina inmesin (kurucu karari 31.10)
+    ctx, pg, errs = new_page(b, False)
+    try:
+        pg.goto(BASE, wait_until="load", timeout=60000); time.sleep(1.2)
+        pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE); time.sleep(0.5)
+        kucuk = []
+        for t in ("", "tpl-classic", "tpl-top", "tpl-resume", "tpl-compact"):
+            pg.evaluate("t => applyCvTemplate(t)", t); time.sleep(0.3)
+            # PDF dugmesine basinca odak alandan cikar; olcum de odaksiz yapilir
+            pg.evaluate("() => document.activeElement && document.activeElement.blur()"); time.sleep(0.2)
+            r = pg.evaluate("""() => { const f = document.getElementById('cv-form'); f.classList.add('pdf-mode');
+                const o = {}; ['.item-description', '.item-title', '.experience-company', '.skill-item', '.education-institution',
+                  '.personal-info-item[data-field=phone] .personal-info-value'].forEach(s => { const e = f.querySelector(s); if (e) o[s] = parseFloat(getComputedStyle(e).fontSize); });
+                f.classList.remove('pdf-mode'); return o; }""")
+            kucuk += [f"{t or 'modern'} {k} {v}px" for k, v in r.items() if v < 13.3]
+        check("Yazı boyutu: gövde en az 10 pt (5 şablon)", not kucuk and not errs, f"küçük={kucuk[:4]}, hata={errs[:2]}")
+    except Exception as ex:
+        check("Yazı boyutu", False, str(ex)[:200])
     ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)

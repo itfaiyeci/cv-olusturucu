@@ -3088,7 +3088,7 @@ body.mcv-modal-acik { overflow: hidden; }
 #cv-form.tpl-resume.pdf-mode .personal-info-item[data-field="social-media"] > .personal-info-label { display: none !important; }
 #cv-form.tpl-resume .personal-info-item[data-field="social-media"] .social-media-container { justify-content: center; }
 #cv-form.tpl-resume .right-column { padding: 5mm 14mm 6mm !important; }
-#cv-form.tpl-resume .right-column .section-title { font-size: 13px !important; text-transform: uppercase; letter-spacing: 1.2px; color: #0f172a !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 3px !important; margin-bottom: 7px !important; }
+#cv-form.tpl-resume .right-column .section-title { font-size: 14px !important; text-transform: uppercase; letter-spacing: 1.2px; color: #0f172a !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 3px !important; margin-bottom: 7px !important; }
 #cv-form.tpl-resume .right-column .languages-section .section-title { border-bottom: 1px solid #1e293b !important; }
 #cv-form.tpl-resume .right-column .section { margin-bottom: 11px !important; }
 /* Sag sutun alanlarinin yazi ozellikleri satir ici stille sabitlenir (yapistirilan bicim temizligi);
@@ -3107,13 +3107,13 @@ body.mcv-modal-acik { overflow: hidden; }
 #cv-form.tpl-compact .left-column { padding: 6mm 11mm 3.5mm !important; column-gap: 5mm !important; }
 #cv-form.tpl-compact #avatarBox { width: 24mm !important; height: 29mm !important; min-width: 24mm !important; min-height: 29mm !important; max-width: 24mm !important; max-height: 29mm !important; }
 #cv-form.tpl-compact .personal-info-item.name-item .personal-info-value { font-size: 22px !important; line-height: 1.2 !important; margin: 0 0 1px !important; }
-#cv-form.tpl-compact .personal-info-item.title-item .personal-info-value { font-size: 12.5px !important; margin: 0 0 3px !important; }
+#cv-form.tpl-compact .personal-info-item.title-item .personal-info-value { font-size: 13.333px !important; margin: 0 0 3px !important; }
 #cv-form.tpl-compact .personal-info-item:not(.name-item):not(.title-item) .personal-info-label,
-#cv-form.tpl-compact .personal-info-item:not(.name-item):not(.title-item) .personal-info-value { font-size: 11px !important; line-height: 1.3 !important; }
+#cv-form.tpl-compact .personal-info-item:not(.name-item):not(.title-item) .personal-info-value { font-size: 13.333px !important; line-height: 1.25 !important; }
 #cv-form.tpl-compact .right-column { padding: 4mm 11mm 5mm !important; }
 #cv-form.tpl-compact .right-column .section { margin-bottom: 7px !important; }
-#cv-form.tpl-compact .right-column .section-title { font-size: 13px !important; padding-bottom: 2px !important; margin-bottom: 5px !important; }
-#cv-form.tpl-compact .right-column .editable { --mcv-fs: 11px; --mcv-lh: 1.32; font-size: 11px !important; line-height: 1.32 !important; margin: 0 !important; padding: 1px 2px !important; }
+#cv-form.tpl-compact .right-column .section-title { font-size: 15px !important; padding-bottom: 2px !important; margin-bottom: 5px !important; }
+#cv-form.tpl-compact .right-column .editable { --mcv-lh: 1.25; line-height: 1.25 !important; margin: 0 !important; padding: 1px 2px !important; }
 #cv-form.tpl-compact .experience-item,
 #cv-form.tpl-compact .education-item,
 #cv-form.tpl-compact .reference-item { margin-bottom: 4px !important; padding-bottom: 3px !important; }
@@ -3126,6 +3126,17 @@ body.mcv-modal-acik { overflow: hidden; }
 [lang="ar"] #cv-form.tpl-resume .personal-info-item.name-item .personal-info-value { letter-spacing: 0 !important; }
 /* Tum sablonlar: tarih alanindaki harf araligi "حتى الآن" gibi Arapca kelimelerin harflerini koparir */
 [lang="ar"] .date-input { letter-spacing: 0; }
+
+/* === YAZI BOYUTU (kurucu karari 31.10): CV govde yazisi 10 pt. PDF'te 1 px = 0,75 pt -> 13,333 px.
+   Satir araligi 1,4 -> 1,3: buyuyen yazi sayfa sayisini artirmasin. Odaktaki alana dokunulmaz
+   (telefonda yazarken 16 px kalir; iOS yakinlastirmasin). Hicbir sablon 9 pt (12 px) altina inmez. === */
+#cv-form { --mcv-fs: 13.333px; --mcv-lh: 1.3; }
+#cv-form .right-column .editable:not(:focus) { font-size: var(--mcv-fs) !important; line-height: var(--mcv-lh) !important; }
+#cv-form .personal-info-item:not(.name-item):not(.title-item) .personal-info-value:not(:focus),
+#cv-form .personal-info-item:not(.name-item):not(.title-item) .personal-info-label,
+#cv-form .language-name:not(:focus), #cv-form .language-level:not(:focus),
+#cv-form .social-media-value:not(:focus) { font-size: 13.333px !important; line-height: 1.3 !important; }
+#cv-form .section-title { font-size: 16px !important; }
 
 /* 6 sablon dugmesi: bilgisayarda 3x2, dar ekranda 2x3 */
 .tpl-buttons { display: grid !important; grid-template-columns: repeat(3, 1fr); flex-shrink: 0; }
