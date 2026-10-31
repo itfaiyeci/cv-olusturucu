@@ -11518,10 +11518,31 @@ function saveCV() {
         var o = { L: L, rtl: rtl, W: W, H: H, M: M, genislik: W - 2 * M,
             dil: { tr: 'tr-TR', en: 'en-US', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', it: 'it-IT', pt: 'pt-BR', ru: 'ru-RU', ar: 'ar-SA', zh: 'zh-CN', ja: 'ja-JP' }[L] || 'en-US',
             dogu: L === 'ja' ? 'Yu Gothic' : (L === 'zh' ? 'Microsoft YaHei' : 'Calibri') };
-        o.run = function (metin, op) {
-            op = op || {};
-            var p = '<w:rPr>' + (op.b ? '<w:b/>' : '') + (op.i ? '<w:i/>' : '') + (op.renk ? '<w:color w:val="' + op.renk + '"/>' : '') + (op.sz ? '<w:sz w:val="' + op.sz + '"/><w:szCs w:val="' + op.sz + '"/>' : '') + (rtl ? '<w:rtl/>' : '') + '</w:rPr>';
+        function tekRun(metin, op, sag) {
+            var p = '<w:rPr>' + (op.b ? '<w:b/><w:bCs/>' : '') + (op.i ? '<w:i/><w:iCs/>' : '') + (op.renk ? '<w:color w:val="' + op.renk + '"/>' : '') + (op.sz ? '<w:sz w:val="' + op.sz + '"/><w:szCs w:val="' + op.sz + '"/>' : '') + (sag ? '<w:rtl/>' : '') + '</w:rPr>';
             return '<w:r>' + p + '<w:t xml:space="preserve">' + x(metin) + '</w:t></w:r>';
+        }
+        // Arapca belgede yalnizca Arapca harfli parcalar "sagdan sola" isaretlenir. Hepsi isaretlenirse
+        // Word Latin harfli ad, e-posta ve sirket adlarini ters yazar ("Ayse" -> "esyA").
+        // Iki Latin/rakam parcasi arasindaki (ya da Latin metnin basindaki/sonundaki) bosluk ve isaretler Latin parcada kalir.
+        var AR = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/, GUCLU = /[\p{L}\p{N}]/u;
+        o.run = function (metin, op) {
+            op = op || {}; metin = String(metin == null ? '' : metin);
+            if (!rtl) return tekRun(metin, op, false);
+            var ch = Array.from(metin), sinif = ch.map(function (c) { return AR.test(c) ? 'a' : (GUCLU.test(c) ? 'l' : 'n'); });
+            for (var i = 0; i < ch.length; i++) if (sinif[i] === 'n') {
+                var o1 = null, s1 = null, j;
+                for (j = i - 1; j >= 0; j--) if (sinif[j] !== 'n' && sinif[j] !== 'N') { o1 = sinif[j]; break; }
+                for (j = i + 1; j < ch.length; j++) if (sinif[j] !== 'n') { s1 = sinif[j]; break; }
+                var on = o1 || s1, son = s1 || o1; // metnin basi/sonu: tek komsuya bakilir
+                sinif[i] = (on === 'l' && son === 'l') ? 'N' : 'A';
+            }
+            var out = '', bas = 0;
+            function sag(k) { return k === 'a' || k === 'A'; }
+            for (i = 1; i <= ch.length; i++) if (i === ch.length || sag(sinif[i]) !== sag(sinif[bas])) {
+                out += tekRun(ch.slice(bas, i).join(''), op, sag(sinif[bas])); bas = i;
+            }
+            return out || tekRun('', op, true);
         };
         // pPr ogeleri sema sirasinda: pStyle, tabs, bidi, spacing, ind, jc
         o.par = function (icerik, op) {
