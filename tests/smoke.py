@@ -6,6 +6,7 @@ Kontroller:
   - TR / EN / AR / JA: 4 sablonun her biriyle ornek CV doldurulup PDF gercekten uretiliyor
   - Japonca: bos referans telefonu PDF'e ornek numara olarak gitmiyor (gecmis hata)
   - US Letter: kagit secenegiyle PDF 215.9 x 279.4 mm uretiliyor
+  - CV'lerim kopya olusturuyor; Ilana gore kontrol SAP/SGK gibi eksikleri buluyor
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
@@ -117,6 +118,21 @@ with sync_playwright() as pw:
             except Exception as ex:
                 check(name, False, str(ex)[:200])
             ctx.close()
+    # 2c) CV'lerim (kopya) ve Ilana gore kontrol
+    ctx, pg, errs = new_page(b, False)
+    try:
+        pg.goto(BASE, wait_until="load", timeout=60000); time.sleep(1.2)
+        pg.evaluate("d => autoSaveManager.applyData(d)", SAMPLE); time.sleep(0.5)
+        pg.click("#mcv-cvlerim-btn"); time.sleep(0.3); pg.click("#mcv-kopyala"); time.sleep(0.3)
+        n = pg.evaluate("JSON.parse(localStorage.getItem('mobilcv_surumler')||'{\"liste\":[]}').liste.length")
+        check("CV'lerim: kopya oluşturma", n == 2 and not errs, f"{n} CV, hata={errs[:2]}")
+        r = pg.evaluate("""() => mcvIlanAnaliz('Muhasebe uzmanı aranıyor. SAP ve Excel bilen, SGK ve bordro işlemlerine hakim, ' +
+            'e-fatura süreçlerini bilen, raporlama yetkinliği yüksek, İngilizce bilen adaylar tercih edilecektir. SAP bilgisi tercih sebebidir.')""")
+        eksik = [x["asil"] for x in r.get("eksik", [])]
+        check("İlana göre kontrol", r["durum"] == "tamam" and "SAP" in eksik and "SGK" in eksik and "Excel" not in eksik and not errs, f"{eksik[:8]}")
+    except Exception as ex:
+        check("CV'lerim / ilan kontrolü", False, str(ex)[:200])
+    ctx.close()
     # 3) Gecmis hata: Japoncada ornek referans telefonu
     ctx, pg, errs = new_page(b, False)
     try:

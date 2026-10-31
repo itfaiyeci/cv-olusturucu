@@ -2919,6 +2919,42 @@ img {
 .paper-note { flex: 1 1 100%; margin: 2px 0 0; text-align: center; font-size: 12px; line-height: 1.4; color: #64748b; }
 .paper-note[hidden] { display: none; }
 #cv-form.paper-letter { width: 215.9mm; min-height: 279.4mm; height: 279.4mm; }
+/* Telefon sablon paneli: Letter notu acilip kapaninca panel yuksekligi degismesin (kapatma dugmesi kaymasin) */
+body.mp-open-tpl #paper-note[hidden] { display: block !important; visibility: hidden; }
+/* === CV'LERIM ve ILANA GORE KONTROL === */
+.mcv-araclar { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.controls .mcv-araclar > button { min-height: 44px; font-size: 14px !important; gap: 6px; white-space: normal; line-height: 1.2; }
+@media (max-width: 768px) { .mcv-araclar { order: 5; gap: 8px; } .controls .mcv-araclar > button { font-size: 13px !important; min-height: 44px; padding: 6px 6px; } }
+body.mcv-modal-acik { overflow: hidden; }
+.mcv-modal { position: fixed; inset: 0; z-index: 10050; background: rgba(15,23,42,.45); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.mcv-modal-kutu { background: #fff; color: #1e293b; border-radius: 14px; width: 100%; max-width: 540px; max-height: calc(100vh - 32px); overflow: auto; box-shadow: 0 20px 50px rgba(15,23,42,.3); padding: 14px 16px 20px; box-sizing: border-box; outline: none; }
+@media (max-width: 768px) { .mcv-modal { padding: 0; align-items: stretch; } .mcv-modal-kutu { max-width: none; max-height: none; height: 100%; border-radius: 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); } }
+.mcv-modal-bas { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.mcv-modal-bas strong { font-size: 17px; }
+.mcv-modal button { font-size: 14px; min-height: 42px; border-radius: 10px; box-shadow: none; transform: none; filter: none; background-image: none; }
+.mcv-modal .mcv-modal-kapat { flex: none; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; background: #f1f5f9; color: #334155; border: none; font-size: 16px; }
+.mcv-modal .mcv-birincil { width: 100%; margin: 6px 0 10px; background: #1e293b; color: #fff; border: none; }
+.mcv-modal .mcv-ikincil { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; padding: 6px 12px; }
+.mcv-modal .mcv-tehlike { background: #fff; color: #b91c1c; border: 1px solid #fecaca; padding: 6px 12px; }
+.mcv-bilgi { font-size: 14px; line-height: 1.45; color: #475569; margin: 4px 0 10px; }
+.mcv-not { font-size: 12.5px; line-height: 1.45; color: #64748b; margin: 14px 0 0; }
+.mcv-liste { list-style: none; margin: 0; padding: 0; }
+.mcv-cv-satir { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #e2e8f0; }
+.mcv-cv-satir .mcv-ad { flex: 1 1 180px; min-width: 0; font-size: 16px; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; color: #1e293b; background: #fff; }
+.mcv-cv-satir.aktif .mcv-ad { border-color: #1e293b; }
+.mcv-tarih { font-size: 12px; color: #64748b; }
+.mcv-rozet { font-size: 12px; font-weight: 600; color: #fff; background: #1e293b; border-radius: 999px; padding: 4px 10px; }
+.mcv-hata { color: #b91c1c; font-size: 14px; margin: 8px 0 0; }
+#mcv-ilan-metin { width: 100%; box-sizing: border-box; min-height: 150px; font-size: 16px; line-height: 1.4; padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px; resize: vertical; color: #1e293b; background: #fff; font-family: inherit; }
+.mcv-alt { font-size: 15px; margin: 10px 0 6px; color: #1e293b; }
+.mcv-cipler { display: flex; flex-wrap: wrap; gap: 6px; }
+.mcv-cip { display: inline-block; padding: 5px 11px; border-radius: 999px; background: #fef3c7; color: #78350f; font-size: 14px; line-height: 1.3; }
+.mcv-cip small { color: #92400e; }
+.mcv-uyari { background: #fff7ed; color: #9a3412; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.mcv-tamam { background: #ecfdf5; color: #065f46; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.mcv-toast { position: fixed; left: 50%; bottom: calc(90px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 10060; max-width: calc(100% - 32px); background: #1e293b; color: #fff; font-size: 14px; line-height: 1.4; padding: 10px 16px; border-radius: 10px; box-shadow: 0 8px 24px rgba(15,23,42,.3); transition: opacity .4s ease; }
+.mcv-toast.cik { opacity: 0; }
+@media print { .mcv-araclar, .mcv-modal, .mcv-toast { display: none !important; } }
 @media (max-width: 480px) {
   .tpl-buttons { flex-wrap: wrap; }
   .tpl-btn { flex: 1 1 50%; border-top: 1px solid #e2e8f0; font-size: 13px; }
@@ -8153,6 +8189,9 @@ if (socialMediaSection) {
                     window.showRirekishoPreview();
                     return;
                 }
+                // Bos alanlar klondan ONCE isaretlenir; yoksa onizlemede bos etiketler (Dogum Tarihi, Ehliyet) gorunur
+                hideEmptyFieldsForPDF();
+                hasFallbackSync();
                 const cvContent = document.getElementById('cv-form').cloneNode(true);
                 
                 // Butonları gizle
@@ -8174,10 +8213,6 @@ if (socialMediaSection) {
                     editable.style.background = 'transparent';
                     editable.classList.remove('invalid');
                 });
-                
-                // Boş alanları gizle
-                hideEmptyFieldsForPDF();
-                hasFallbackSync();
                 cvContent.classList.add('pdf-mode');
                 
                 // Zorunlu alan yıldızlarını gizle
@@ -11147,6 +11182,288 @@ function saveCV() {
     sablonaGore();
 })();
 </script>
+<script>
+/* === CV'LERIM (cihazda birden fazla CV) ve ILANA GORE KONTROL ===
+   Her sey bu tarayicida kalir; ilan metni ve CV icerigi hicbir yere gonderilmez. */
+(function () {
+    var S = {"tr": {"cvs": "CV'lerim", "cvsInfo": "CV'leriniz yalnızca bu cihazda, bu tarayıcıda saklanır. Her başvuru için ayrı bir kopya hazırlayabilirsiniz.", "copy": "Bu CV'nin kopyasını oluştur", "open": "Aç", "active": "Şu an açık", "dele": "Sil", "delQ": "Bu CV bu cihazdan silinecek. Emin misiniz?", "copied": "Kopya oluşturuldu. Şu an kopyayı düzenliyorsunuz.", "opened": "CV açıldı.", "limit": "En fazla 5 CV saklanabilir. Yeni kopya için birini silin.", "full": "Cihazda yer kalmadı. Fotoğraflı CV'ler daha çok yer kaplar; birini silip tekrar deneyin.", "name": "CV adı", "untitled": "Adsız CV", "close": "Kapat", "job": "İlana göre kontrol", "jobInfo": "İş ilanının metnini yapıştırın. İlanda geçip CV'nizde bulunmayan kelimeleri gösterelim. Metin cihazınızdan dışarı gönderilmez.", "jobPh": "İlan metnini buraya yapıştırın", "run": "Kontrol et", "missing": "İlanda geçiyor, CV'nizde yok", "found": "CV'nizde de geçen kelimeler: {n}", "none": "İlandaki önemli kelimelerin hepsi CV'nizde geçiyor.", "short": "Lütfen ilanın tamamını yapıştırın; metin çok kısa.", "note": "Bu bir puan değil, basit bir kelime karşılaştırmasıdır. Yalnızca gerçekten sahip olduğunuz bilgi ve becerileri ekleyin.", "cjk": "Bu kontrol şimdilik Japonca ve Çince metinlerde çalışmıyor."}, "en": {"cvs": "My CVs", "cvsInfo": "Your CVs are stored only on this device, in this browser. You can keep a separate copy for each application.", "copy": "Make a copy of this CV", "open": "Open", "active": "Open now", "dele": "Delete", "delQ": "This CV will be deleted from this device. Are you sure?", "copied": "Copy created. You are now editing the copy.", "opened": "CV opened.", "limit": "You can keep up to 5 CVs. Delete one to make a new copy.", "full": "There is no storage space left on this device. CVs with photos take more space; delete one and try again.", "name": "CV name", "untitled": "Untitled CV", "close": "Close", "job": "Check against a job ad", "jobInfo": "Paste the text of a job ad. We'll show the words that appear in the ad but not in your CV. The text never leaves your device.", "jobPh": "Paste the job ad here", "run": "Check", "missing": "In the ad, not in your CV", "found": "Words that also appear in your CV: {n}", "none": "All the key words in the ad already appear in your CV.", "short": "Please paste the whole ad; the text is too short.", "note": "This is not a score, just a simple word comparison. Only add knowledge and skills you really have.", "cjk": "This check does not work with Japanese or Chinese text yet."}, "de": {"cvs": "Meine Lebensläufe", "cvsInfo": "Ihre Lebensläufe werden nur auf diesem Gerät in diesem Browser gespeichert. Sie können für jede Bewerbung eine eigene Kopie anlegen.", "copy": "Kopie dieses Lebenslaufs anlegen", "open": "Öffnen", "active": "Gerade geöffnet", "dele": "Löschen", "delQ": "Dieser Lebenslauf wird von diesem Gerät gelöscht. Sind Sie sicher?", "copied": "Kopie angelegt. Sie bearbeiten jetzt die Kopie.", "opened": "Lebenslauf geöffnet.", "limit": "Es können höchstens 5 Lebensläufe gespeichert werden. Löschen Sie einen, um eine neue Kopie anzulegen.", "full": "Auf dem Gerät ist kein Speicherplatz mehr frei. Lebensläufe mit Foto brauchen mehr Platz; löschen Sie einen und versuchen Sie es erneut.", "name": "Name des Lebenslaufs", "untitled": "Unbenannter Lebenslauf", "close": "Schließen", "job": "Mit Stellenanzeige abgleichen", "jobInfo": "Fügen Sie den Text einer Stellenanzeige ein. Wir zeigen die Wörter, die in der Anzeige vorkommen, aber nicht in Ihrem Lebenslauf. Der Text verlässt Ihr Gerät nicht.", "jobPh": "Stellenanzeige hier einfügen", "run": "Abgleichen", "missing": "In der Anzeige, nicht im Lebenslauf", "found": "Wörter, die auch in Ihrem Lebenslauf vorkommen: {n}", "none": "Alle wichtigen Wörter der Anzeige kommen bereits in Ihrem Lebenslauf vor.", "short": "Bitte fügen Sie die ganze Anzeige ein; der Text ist zu kurz.", "note": "Das ist keine Bewertung, sondern ein einfacher Wortvergleich. Ergänzen Sie nur Kenntnisse und Fähigkeiten, die Sie wirklich haben.", "cjk": "Dieser Abgleich funktioniert noch nicht mit japanischem oder chinesischem Text."}, "fr": {"cvs": "Mes CV", "cvsInfo": "Vos CV sont enregistrés uniquement sur cet appareil, dans ce navigateur. Vous pouvez garder une copie distincte pour chaque candidature.", "copy": "Faire une copie de ce CV", "open": "Ouvrir", "active": "Ouvert", "dele": "Supprimer", "delQ": "Ce CV sera supprimé de cet appareil. Êtes-vous sûr ?", "copied": "Copie créée. Vous modifiez maintenant la copie.", "opened": "CV ouvert.", "limit": "Vous pouvez garder 5 CV au maximum. Supprimez-en un pour faire une nouvelle copie.", "full": "Il n’y a plus d’espace de stockage sur cet appareil. Les CV avec photo prennent plus de place ; supprimez-en un et réessayez.", "name": "Nom du CV", "untitled": "CV sans nom", "close": "Fermer", "job": "Comparer avec une offre", "jobInfo": "Collez le texte d’une offre d’emploi. Nous affichons les mots présents dans l’offre mais absents de votre CV. Le texte ne quitte pas votre appareil.", "jobPh": "Collez l’offre ici", "run": "Comparer", "missing": "Dans l’offre, pas dans votre CV", "found": "Mots également présents dans votre CV : {n}", "none": "Tous les mots importants de l’offre figurent déjà dans votre CV.", "short": "Veuillez coller l’offre en entier ; le texte est trop court.", "note": "Ce n’est pas une note, juste une simple comparaison de mots. N’ajoutez que des connaissances et compétences que vous avez réellement.", "cjk": "Cette comparaison ne fonctionne pas encore avec un texte japonais ou chinois."}, "es": {"cvs": "Mis CV", "cvsInfo": "Tus CV se guardan solo en este dispositivo, en este navegador. Puedes tener una copia distinta para cada solicitud.", "copy": "Hacer una copia de este CV", "open": "Abrir", "active": "Abierto ahora", "dele": "Eliminar", "delQ": "Este CV se eliminará de este dispositivo. ¿Seguro?", "copied": "Copia creada. Ahora estás editando la copia.", "opened": "CV abierto.", "limit": "Puedes guardar hasta 5 CV. Elimina uno para hacer una copia nueva.", "full": "No queda espacio en este dispositivo. Los CV con foto ocupan más; elimina uno y vuelve a intentarlo.", "name": "Nombre del CV", "untitled": "CV sin nombre", "close": "Cerrar", "job": "Comparar con una oferta", "jobInfo": "Pega el texto de una oferta de empleo. Te mostramos las palabras que aparecen en la oferta pero no en tu CV. El texto no sale de tu dispositivo.", "jobPh": "Pega aquí la oferta", "run": "Comparar", "missing": "En la oferta, no en tu CV", "found": "Palabras que también aparecen en tu CV: {n}", "none": "Todas las palabras importantes de la oferta ya aparecen en tu CV.", "short": "Pega la oferta completa; el texto es demasiado corto.", "note": "No es una puntuación, solo una comparación sencilla de palabras. Añade únicamente conocimientos y habilidades que realmente tengas.", "cjk": "Esta comparación todavía no funciona con texto en japonés o chino."}, "it": {"cvs": "I miei CV", "cvsInfo": "I tuoi CV sono salvati solo su questo dispositivo, in questo browser. Puoi tenere una copia diversa per ogni candidatura.", "copy": "Crea una copia di questo CV", "open": "Apri", "active": "Aperto ora", "dele": "Elimina", "delQ": "Questo CV verrà eliminato da questo dispositivo. Sei sicuro?", "copied": "Copia creata. Ora stai modificando la copia.", "opened": "CV aperto.", "limit": "Puoi salvare al massimo 5 CV. Eliminane uno per creare una nuova copia.", "full": "Non c'è più spazio su questo dispositivo. I CV con foto occupano più spazio; eliminane uno e riprova.", "name": "Nome del CV", "untitled": "CV senza nome", "close": "Chiudi", "job": "Confronta con un annuncio", "jobInfo": "Incolla il testo di un annuncio di lavoro. Ti mostriamo le parole presenti nell'annuncio ma non nel tuo CV. Il testo non lascia il tuo dispositivo.", "jobPh": "Incolla qui l'annuncio", "run": "Confronta", "missing": "Nell'annuncio, non nel tuo CV", "found": "Parole presenti anche nel tuo CV: {n}", "none": "Tutte le parole importanti dell'annuncio sono già nel tuo CV.", "short": "Incolla l'annuncio completo; il testo è troppo breve.", "note": "Non è un punteggio, ma un semplice confronto di parole. Aggiungi solo conoscenze e competenze che hai davvero.", "cjk": "Questo confronto non funziona ancora con testi in giapponese o cinese."}, "pt": {"cvs": "Meus currículos", "cvsInfo": "Seus currículos ficam guardados apenas neste dispositivo, neste navegador. Você pode manter uma cópia diferente para cada candidatura.", "copy": "Fazer uma cópia deste currículo", "open": "Abrir", "active": "Aberto agora", "dele": "Excluir", "delQ": "Este currículo será excluído deste dispositivo. Tem certeza?", "copied": "Cópia criada. Agora você está editando a cópia.", "opened": "Currículo aberto.", "limit": "É possível guardar até 5 currículos. Exclua um para fazer uma nova cópia.", "full": "Não há mais espaço neste dispositivo. Currículos com foto ocupam mais espaço; exclua um e tente novamente.", "name": "Nome do currículo", "untitled": "Currículo sem nome", "close": "Fechar", "job": "Comparar com uma vaga", "jobInfo": "Cole o texto de um anúncio de vaga. Mostramos as palavras que aparecem no anúncio, mas não no seu currículo. O texto não sai do seu dispositivo.", "jobPh": "Cole o anúncio aqui", "run": "Comparar", "missing": "No anúncio, não no seu currículo", "found": "Palavras que também aparecem no seu currículo: {n}", "none": "Todas as palavras importantes do anúncio já aparecem no seu currículo.", "short": "Cole o anúncio completo; o texto é curto demais.", "note": "Isto não é uma nota, apenas uma comparação simples de palavras. Acrescente só conhecimentos e habilidades que você realmente tem.", "cjk": "Esta comparação ainda não funciona com textos em japonês ou chinês."}, "ru": {"cvs": "Мои резюме", "cvsInfo": "Ваши резюме хранятся только на этом устройстве, в этом браузере. Для каждого отклика можно держать отдельную копию.", "copy": "Создать копию этого резюме", "open": "Открыть", "active": "Открыто сейчас", "dele": "Удалить", "delQ": "Это резюме будет удалено с этого устройства. Продолжить?", "copied": "Копия создана. Сейчас вы редактируете копию.", "opened": "Резюме открыто.", "limit": "Можно хранить не более 5 резюме. Удалите одно, чтобы создать новую копию.", "full": "На устройстве не осталось места. Резюме с фото занимают больше места; удалите одно и попробуйте снова.", "name": "Название резюме", "untitled": "Резюме без названия", "close": "Закрыть", "job": "Сверить с вакансией", "jobInfo": "Вставьте текст вакансии. Мы покажем слова, которые есть в вакансии, но отсутствуют в вашем резюме. Текст не покидает ваше устройство.", "jobPh": "Вставьте текст вакансии сюда", "run": "Сверить", "missing": "Есть в вакансии, нет в резюме", "found": "Слова, которые есть и в вашем резюме: {n}", "none": "Все важные слова из вакансии уже есть в вашем резюме.", "short": "Вставьте вакансию целиком: текст слишком короткий.", "note": "Это не оценка, а простое сравнение слов. Добавляйте только те знания и навыки, которые у вас действительно есть.", "cjk": "Пока эта проверка не работает с японским и китайским текстом."}, "ar": {"cvs": "سيري الذاتية", "cvsInfo": "تُحفظ سيرك الذاتية على هذا الجهاز فقط، في هذا المتصفح. يمكنك الاحتفاظ بنسخة مختلفة لكل طلب توظيف.", "copy": "إنشاء نسخة من هذه السيرة الذاتية", "open": "فتح", "active": "مفتوحة الآن", "dele": "حذف", "delQ": "ستُحذف هذه السيرة الذاتية من هذا الجهاز. هل أنت متأكد؟", "copied": "تم إنشاء النسخة. أنت الآن تعدّل النسخة.", "opened": "تم فتح السيرة الذاتية.", "limit": "يمكن حفظ 5 سير ذاتية كحد أقصى. احذف واحدة لإنشاء نسخة جديدة.", "full": "لم تعد هناك مساحة على هذا الجهاز. السير الذاتية التي تحتوي على صورة تشغل مساحة أكبر؛ احذف واحدة وحاول مرة أخرى.", "name": "اسم السيرة الذاتية", "untitled": "سيرة ذاتية بلا اسم", "close": "إغلاق", "job": "مقارنة مع إعلان وظيفة", "jobInfo": "الصق نص إعلان الوظيفة. سنعرض الكلمات الموجودة في الإعلان وغير الموجودة في سيرتك الذاتية. لا يغادر النص جهازك.", "jobPh": "الصق نص الإعلان هنا", "run": "قارن", "missing": "في الإعلان، وليست في سيرتك الذاتية", "found": "كلمات موجودة أيضًا في سيرتك الذاتية: {n}", "none": "كل الكلمات المهمة في الإعلان موجودة بالفعل في سيرتك الذاتية.", "short": "يرجى لصق الإعلان كاملًا؛ النص قصير جدًا.", "note": "هذه ليست درجة تقييم، بل مقارنة بسيطة بين الكلمات. أضف فقط المعارف والمهارات التي تمتلكها فعلًا.", "cjk": "هذه المقارنة لا تعمل بعد مع النصوص اليابانية أو الصينية."}, "zh": {"cvs": "我的简历", "cvsInfo": "您的简历只保存在这台设备的这个浏览器中。您可以为每次求职保存一份单独的副本。", "copy": "复制这份简历", "open": "打开", "active": "当前打开", "dele": "删除", "delQ": "这份简历将从这台设备上删除。确定吗？", "copied": "已创建副本，您现在正在编辑副本。", "opened": "已打开简历。", "limit": "最多可保存 5 份简历。请先删除一份再创建新副本。", "full": "设备存储空间已满。带照片的简历占用空间更多；请删除一份后重试。", "name": "简历名称", "untitled": "未命名简历", "close": "关闭", "job": "对照招聘启事检查", "jobInfo": "粘贴招聘启事的文字，我们会列出启事中出现、但您的简历中没有的词。文字不会离开您的设备。", "jobPh": "在此粘贴招聘启事", "run": "检查", "missing": "启事中有、简历中没有", "found": "简历中也出现的词：{n}", "none": "启事中的重要词语都已出现在您的简历中。", "short": "请粘贴完整的招聘启事，文字太短。", "note": "这不是评分，只是简单的词语对比。请只添加您真正具备的知识和技能。", "cjk": "此检查暂时不支持日文和中文文本。"}, "ja": {"cvs": "保存した履歴書", "cvsInfo": "履歴書はこの端末のこのブラウザにのみ保存されます。応募先ごとに別のコピーを用意できます。", "copy": "この履歴書をコピー", "open": "開く", "active": "表示中", "dele": "削除", "delQ": "この履歴書をこの端末から削除します。よろしいですか？", "copied": "コピーを作成しました。現在はコピーを編集しています。", "opened": "履歴書を開きました。", "limit": "保存できる履歴書は最大5件です。新しいコピーを作るには1件削除してください。", "full": "端末の空き容量がありません。写真付きの履歴書は容量が大きくなります。1件削除してからもう一度お試しください。", "name": "履歴書の名前", "untitled": "名前のない履歴書", "close": "閉じる", "job": "求人票と照合", "jobInfo": "求人票の文章を貼り付けてください。求人票にあって履歴書にない語を表示します。文章が端末の外に送られることはありません。", "jobPh": "求人票の文章をここに貼り付け", "run": "照合する", "missing": "求人票にあり、履歴書にない語", "found": "履歴書にもある語：{n}", "none": "求人票の重要な語はすべて履歴書に含まれています。", "short": "求人票の全文を貼り付けてください。文章が短すぎます。", "note": "これは採点ではなく、単純な語の比較です。実際に持っている知識やスキルだけを追加してください。", "cjk": "この照合は、日本語・中国語の文章にはまだ対応していません。"}};
+    var STOP = {"tr": "ve ile için bir bu şu o olan olarak en az çok daha gibi da de ki mi mı mu mü veya ya yada ise her tüm şekilde konusunda konularında alanında alanda sahip tercihen tercih tercihli edilecek edilir edilen aranan aranıyor arıyoruz nitelikler nitelikleri nitelik genel iş işi işin tanımı tanım pozisyon pozisyonu pozisyonda pozisyonunda firmamız firmamızın şirketimiz şirketimizin bünyesinde bünyemizde çalışacak çalışmak çalışma çalışabilecek arkadaş arkadaşlar arkadaşı adaylar aday adayların yıl yıllık yılı deneyimli deneyim deneyimi tecrübe tecrübeli tecrübesi mezun mezunu iyi düzeyde düzeyinde seviyede bilgisi bilgi bilen bilgili kullanabilen yapabilen olmak olmayan bulunan bulunmayan yapmak sağlamak takip etmek etme yapılması uygun başvuru başvurular ilan ilanı ilgili gerekli yeterli güçlü yüksek yönelik hakkında kadar sonra önce üzere dahil göre tarafından olacak olup olması ederek eden şehir tam zamanlı hafta içi saat saatleri maaş ücret sigorta yemek servis olanak imkanı imkânı fırsatı ortamında ortamı dair ilişkin itibaren ayrıca sürekli yeni mevcut farklı çeşitli belirli lütfen kişi kişiler kişilerin biz bizim sizin siz sen ne nasıl neden çünkü ancak fakat ama hem hiç hep kendi kendini biri bazı birçok diğer aynı ilk son yer yerde üniversite bölüm işlem süreç yetkinlik sebebi yetkinli yatkın hakim hâkim sorumlu sorumluluk görev görevi alacak alınacak katılacak başvurabilir istekli motivasyonu dinamik", "en": "the and for with you your our ours will are is be been being of to in on at as an or we us this that these those from by have has had who what when where which about all any can could may might must should shall would able ability strong excellent good great proven experience experienced years year plus preferred required requirement requirements responsibilities responsibility role roles position job jobs team teams company work working candidate candidates apply application including include includes etc other such well new more most within across per also both into using use used based related level knowledge skills skill degree equivalent minimum least ideal ideally opportunity opportunities benefits salary full time part day days week help ensure provide looking join please their they them its it not but if than then there here so up out over under between through while each every some how why one two three hiring seeking senior junior responsible duties duty candidate looking", "de": "und der die das den dem des ein eine einen einem einer eines mit für von zu zur zum im in auf an als oder wir sie ihr ihre ihren uns unser unsere ist sind sein werden wird bei aus nach über unter auch sowie bzw durch nicht kein keine sehr gute guten gutes gern gerne idealerweise erfahrung erfahrungen jahre jahren kenntnisse aufgaben profil stelle team unternehmen bieten suchen ab", "fr": "le la les un une des du de et ou à au aux en dans sur pour par avec sans nous vous votre vos notre nos est sont être sera ce cette ces qui que dont plus très bon bonne expérience ans poste profil équipe entreprise missions mission compétences connaissances", "es": "el la los las un una unos unas de del y o en con para por al sin nosotros tu tus su sus nuestro nuestra es son ser será que como más muy buen buena experiencia años puesto perfil equipo empresa funciones requisitos conocimientos", "it": "il lo la i gli le un uno una di del della dei delle e o in con per da su al alla nel nella tra fra noi tuo tua tuoi suo sua nostro nostra è sono essere sarà che come più molto buon buona esperienza anni posizione profilo team azienda requisiti conoscenza conoscenze", "pt": "o a os as um uma uns umas de do da dos das e ou em no na nos nas com para por ao à sem nós você seu sua seus suas nosso nossa é são ser será que como mais muito bom boa experiência anos vaga cargo perfil equipe empresa requisitos conhecimento conhecimentos", "ru": "и в во на с со для по к о об от до из за у не что как это мы вы ваш ваша наш наша наши их его ее её быть будет является а или но также при более опыт опыта лет работы работа компания команда требования обязанности условия знание знания", "ar": "و في من على إلى الى عن مع أو او أن ان هذا هذه ذلك التي الذي الذين كل لدى لديك نحن انت أنت هو هي كان يكون سوف قد ما لا عند بعد قبل خبرة سنوات الوظيفة الشركة فريق المتطلبات"};
+    var ctr = document.querySelector('.controls');
+    if (!ctr) return;
+    function lang() { var s = document.getElementById('language-select'); return (s && s.value) || window.MOBILCV_PAGE_LANG || 'tr'; }
+    function t(k) { var d = S[lang()] || S.en; return d[k] != null ? d[k] : S.en[k]; }
+    function asm() { return window.autoSaveManager; }
+    function iz(ad, p) { if (window.mcvTrack) window.mcvTrack(ad, p || { cv_language: lang() }); }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    // --- Arac satiri (kontrol kartinin altinda) ---
+    var row = document.createElement('div');
+    row.className = 'mcv-araclar';
+    row.innerHTML = '<button type="button" class="btn-secondary" id="mcv-cvlerim-btn"><span aria-hidden="true">📑</span><span class="button-text"></span></button>' +
+        '<button type="button" class="btn-secondary" id="mcv-ilan-btn"><span aria-hidden="true">🔍</span><span class="button-text"></span></button>';
+    ctr.insertBefore(row, document.getElementById('import-data-input'));
+    var bCv = row.querySelector('#mcv-cvlerim-btn'), bIlan = row.querySelector('#mcv-ilan-btn');
+    function etiketler() {
+        var o = oku(), n = o ? o.liste.length : 1;
+        bCv.querySelector('.button-text').textContent = t('cvs') + (n > 1 ? ' (' + n + ')' : '');
+        bIlan.querySelector('.button-text').textContent = t('job');
+    }
+
+    // --- Pencere (telefonda tam ekran, bilgisayarda ortada) ---
+    var ov = null, gecmis = false, donus = null;
+    function kapat(geriDe) {
+        if (!ov) return;
+        if (geriDe !== false && gecmis) { gecmis = false; try { history.back(); } catch (e) {} }
+        ov.parentNode && ov.parentNode.removeChild(ov); ov = null;
+        document.body.classList.remove('mcv-modal-acik');
+        if (donus) { try { donus.focus({ preventScroll: true }); } catch (e) {} }
+    }
+    function pencere(id, baslik, govdeHtml, kaynak) {
+        kapat(false);
+        donus = kaynak || null;
+        ov = document.createElement('div');
+        ov.className = 'mcv-modal'; ov.id = id;
+        ov.innerHTML = '<div class="mcv-modal-kutu" role="dialog" aria-modal="true" aria-labelledby="' + id + '-bas" tabindex="-1">' +
+            '<div class="mcv-modal-bas"><strong id="' + id + '-bas">' + esc(baslik) + '</strong>' +
+            '<button type="button" class="mcv-modal-kapat" aria-label="' + esc(t('close')) + '">✕</button></div>' +
+            '<div class="mcv-modal-govde">' + govdeHtml + '</div></div>';
+        document.body.appendChild(ov);
+        document.body.classList.add('mcv-modal-acik');
+        ov.addEventListener('click', function (e) { if (e.target === ov) kapat(); });
+        ov.querySelector('.mcv-modal-kapat').addEventListener('click', function () { kapat(); });
+        if (!gecmis) { try { history.pushState({ mcvModal: 1 }, ''); gecmis = true; } catch (e) {} }
+        try { ov.querySelector('.mcv-modal-kutu').focus({ preventScroll: true }); } catch (e) {}
+        return ov;
+    }
+    window.addEventListener('popstate', function () { if (ov) { gecmis = false; kapat(false); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov) kapat(); });
+
+    function bildir(m) {
+        var d = document.createElement('div');
+        d.className = 'mcv-toast'; d.setAttribute('role', 'status'); d.textContent = m;
+        document.body.appendChild(d);
+        setTimeout(function () { d.classList.add('cik'); }, 2600);
+        setTimeout(function () { d.parentNode && d.parentNode.removeChild(d); }, 3100);
+    }
+
+    // ================= CV'LERIM =================
+    var K = 'mobilcv_surumler', MAX = 5;
+    function oku() {
+        try { var o = JSON.parse(localStorage.getItem(K) || 'null'); if (o && Array.isArray(o.liste) && o.liste.length) return o; } catch (e) {}
+        return null;
+    }
+    function yaz(o) { localStorage.setItem(K, JSON.stringify(o)); }
+    function veri() { var m = asm(); return m && m.collectData ? m.collectData() : {}; }
+    function otoAd(d) {
+        var p = (d && d.personalInfo) || {};
+        var a = [p.fullname, p.profession].filter(function (x) { return x && String(x).trim(); }).join(' – ');
+        return a || t('untitled');
+    }
+    function durum() { return oku() || { aktif: 'c1', sayac: 1, liste: [{ id: 'c1', ad: '', elle: false, tarih: Date.now(), veri: null }] }; }
+    function bul(o, id) { for (var i = 0; i < o.liste.length; i++) if (o.liste[i].id === id) return o.liste[i]; return null; }
+    function gorunenAd(o, e) { return e.elle && e.ad ? e.ad : otoAd(e.id === o.aktif ? veri() : e.veri); }
+    function tarih(ts) { try { return new Date(ts).toLocaleDateString(lang()); } catch (e) { return ''; } }
+
+    function cvlerimCiz() {
+        var o = durum();
+        var h = '<p class="mcv-bilgi">' + esc(t('cvsInfo')) + '</p>' +
+            '<button type="button" class="mcv-birincil" id="mcv-kopyala">' + esc(t('copy')) + '</button><ul class="mcv-liste">';
+        o.liste.forEach(function (e) {
+            var aktif = e.id === o.aktif;
+            h += '<li class="mcv-cv-satir' + (aktif ? ' aktif' : '') + '" data-id="' + esc(e.id) + '">' +
+                '<input type="text" class="mcv-ad" maxlength="60" aria-label="' + esc(t('name')) + '" value="' + esc(gorunenAd(o, e)) + '">' +
+                '<span class="mcv-tarih">' + esc(tarih(e.tarih)) + '</span>' +
+                (aktif ? '<span class="mcv-rozet">' + esc(t('active')) + '</span>'
+                       : '<button type="button" class="mcv-ikincil mcv-ac">' + esc(t('open')) + '</button>' +
+                         '<button type="button" class="mcv-tehlike mcv-sil">' + esc(t('dele')) + '</button>') +
+                '</li>';
+        });
+        h += '</ul><p class="mcv-hata" role="alert" hidden></p>';
+        return h;
+    }
+    function hata(m) { var e = ov && ov.querySelector('.mcv-hata'); if (e) { e.textContent = m; e.hidden = false; } }
+    function cvlerimAc(kaynak) {
+        var p = pencere('mcv-cvlerim', t('cvs'), cvlerimCiz(), kaynak);
+        baglaCvlerim(p);
+    }
+    function yenidenCiz() { if (!ov || ov.id !== 'mcv-cvlerim') return; ov.querySelector('.mcv-modal-govde').innerHTML = cvlerimCiz(); baglaCvlerim(ov); etiketler(); }
+    function baglaCvlerim(p) {
+        p.querySelector('#mcv-kopyala').addEventListener('click', kopyala);
+        [].forEach.call(p.querySelectorAll('.mcv-cv-satir'), function (li) {
+            var id = li.getAttribute('data-id');
+            li.querySelector('.mcv-ad').addEventListener('change', function () { adDegis(id, this.value); });
+            var ac = li.querySelector('.mcv-ac'); if (ac) ac.addEventListener('click', function () { cvAc(id); });
+            var sil = li.querySelector('.mcv-sil'); if (sil) sil.addEventListener('click', function () { cvSil(id); });
+        });
+    }
+    function adDegis(id, ad) {
+        var o = durum(), e = bul(o, id); if (!e) return;
+        ad = String(ad || '').trim().slice(0, 60);
+        e.ad = ad; e.elle = !!ad;
+        try { yaz(o); } catch (er) { hata(t('full')); }
+    }
+    function kopyala() {
+        var o = durum();
+        if (o.liste.length >= MAX) { hata(t('limit')); return; }
+        var akt = bul(o, o.aktif), d = veri();
+        if (!akt.elle) { akt.ad = otoAd(d); akt.elle = true; }
+        akt.veri = d; akt.tarih = Date.now();
+        o.sayac = (o.sayac || o.liste.length) + 1;
+        var yeni = { id: 'c' + o.sayac, ad: akt.ad + ' (' + (o.liste.length + 1) + ')', elle: true, tarih: Date.now(), veri: null };
+        o.liste.push(yeni); o.aktif = yeni.id;
+        try { yaz(o); } catch (er) { hata(t('full')); return; }
+        iz('cv_kopya');
+        yenidenCiz();
+        bildir(t('copied'));
+    }
+    function cvAc(id) {
+        var o = durum(), akt = bul(o, o.aktif), hedef = bul(o, id), m = asm();
+        if (!hedef || !hedef.veri || !m) return;
+        var hv = hedef.veri;
+        akt.veri = veri(); akt.tarih = Date.now();
+        hedef.veri = null; hedef.tarih = Date.now(); o.aktif = id;
+        try { yaz(o); localStorage.setItem(m.storageKey, JSON.stringify(hv)); }
+        catch (er) {
+            // geri al: hicbir sey kaybolmasin
+            hedef.veri = hv; akt.veri = null; o.aktif = akt.id;
+            try { yaz(o); } catch (e2) {}
+            hata(t('full')); return;
+        }
+        try { sessionStorage.setItem('mcv_cv_acildi', '1'); } catch (e) {}
+        // Yeniden yukle: form bos acilip secilen CV'yi temiz yukler. Bu sefer cikista
+        // otomatik kayit ve "kaydetmediniz" uyarisi calismasin (yeni veri ezilmesin).
+        if (m.saveTimeout) clearTimeout(m.saveTimeout);
+        m.saveAllData = function () {};
+        window.addEventListener('beforeunload', function (e) { e.stopImmediatePropagation(); }, true);
+        location.reload();
+    }
+    function cvSil(id) {
+        var o = durum(); if (id === o.aktif) return;
+        if (!confirm(t('delQ'))) return;
+        o.liste = o.liste.filter(function (e) { return e.id !== id; });
+        try { yaz(o); } catch (er) { hata(t('full')); return; }
+        yenidenCiz();
+    }
+    try { if (sessionStorage.getItem('mcv_cv_acildi')) { sessionStorage.removeItem('mcv_cv_acildi'); setTimeout(function () { bildir(t('opened')); }, 600); } } catch (e) {}
+    bCv.addEventListener('click', function () { cvlerimAc(bCv); });
+
+    // ================= ILANA GORE KONTROL =================
+    var sonIlan = '';
+    var DUR = {};
+    function durSet(l) {
+        if (DUR[l]) return DUR[l];
+        var s = {}, uzun = [];
+        ['tr', 'en', l].forEach(function (k) { (STOP[k] || '').split(' ').forEach(function (w) { if (w && !s[w]) { s[w] = 1; if (w.length >= 5) uzun.push(w); } }); });
+        // Ekli bicimler de elensin: "deneyimine", "bolumlerinden" (kok + en fazla 8 harf ek)
+        s.__mi = function (w) {
+            if (s[w] === 1) return true;
+            for (var i = 0; i < uzun.length; i++) if (w.indexOf(uzun[i]) === 0 && w.length - uzun[i].length <= 8) return true;
+            return false;
+        };
+        return (DUR[l] = s);
+    }
+    // Turkce fiil/yuklem bicimleri beceri degildir: "hazirlayabilen", "edilecektir", "sebebidir"
+    var TR_FIIL = /(abilen|ebilen|abilecek|ebilecek|mektedir|maktadır|ecektir|acaktır|ecek|acak|ilir|ılır|unur|ünür|dir|dır|tir|tır|dur|dür|tur|tür|mesi|ması|yan|yen)$/;
+    function kucuk(s, tr) { try { return s.toLocaleLowerCase(tr ? 'tr' : 'en'); } catch (e) { return s.toLowerCase(); } }
+    var KELIME = /[\p{L}\p{N}](?:[\p{L}\p{N}+#.'’\-]*[\p{L}\p{N}+#])?/gu;
+    function kelimeler(metin, tr) {
+        var out = [];
+        (metin.match(KELIME) || []).forEach(function (o) {
+            var asil = o.split(/['’]/)[0].replace(/[.\-]+$/, '');
+            if (!asil) return;
+            out.push({ asil: asil, w: kucuk(asil, tr) });
+        });
+        return out;
+    }
+    function kok(w) { return w.length >= 6 ? w.slice(0, Math.max(5, w.length - 3)) : w; }
+    function cvMetni() {
+        var d = veri(), parca = [];
+        (function gez(x, k) {
+            if (k === 'photo' || k === 'language' || k === 'theme' || k === 'template' || k === 'paper') return;
+            if (typeof x === 'string') parca.push(x);
+            else if (Array.isArray(x)) x.forEach(function (y) { gez(y); });
+            else if (x && typeof x === 'object') Object.keys(x).forEach(function (kk) { gez(x[kk], kk); });
+        })(d);
+        return parca.join(' \n ');
+    }
+    function analiz(ilan) {
+        var harf = (ilan.match(/\p{L}/gu) || []).length;
+        var cjk = (ilan.match(/[぀-ヿ㐀-鿿]/g) || []).length;
+        if (harf && cjk / harf > 0.2) return { durum: 'cjk' };
+        var tr = lang() === 'tr' || /[ğışĞİŞ]/.test(ilan);
+        var dur = durSet(lang());
+        var ik = kelimeler(ilan, tr);
+        if (ik.length < 15) return { durum: 'kisa' };
+        var sayac = {}, sira = [];
+        ik.forEach(function (k) {
+            var w = k.w;
+            if (/^\d+([.,]\d+)?$/.test(w)) return;
+            var kisaltma = /^[A-ZÇĞİÖŞÜ]{2,}$/.test(k.asil);
+            if (w.length < 3 && !kisaltma) return;
+            if (dur.__mi(w)) return;
+            if (tr && !kisaltma && w.length >= 7 && TR_FIIL.test(w)) return;
+            if (!sayac[w]) { sayac[w] = { w: w, asil: k.asil, n: 0, k: kisaltma || /\p{Lu}/u.test(k.asil.slice(1)) || /[+#.\-\d]/.test(k.asil) }; sira.push(sayac[w]); }
+            sayac[w].n++;
+        });
+        var cvSet = {}, cvList = [];
+        kelimeler(cvMetni(), tr).forEach(function (k) { if (!cvSet[k.w]) { cvSet[k.w] = 1; cvList.push(k.w); } });
+        function varMi(w) {
+            if (cvSet[w]) return true;
+            var kw = kok(w);
+            for (var i = 0; i < cvList.length; i++) {
+                var c = cvList[i];
+                if (Math.abs(c.length - w.length) > 4) continue;
+                if (c.indexOf(kw) === 0 || w.indexOf(kok(c)) === 0) {
+                    if (kw.length >= 5 || c === w) return true;
+                }
+            }
+            return false;
+        }
+        var eksik = [], bulunan = 0;
+        sira.forEach(function (x) { if (varMi(x.w)) bulunan++; else eksik.push(x); });
+        // Once tekrar eden ve arac/kisaltma gibi gorunen terimler (SAP, SGK, e-fatura), sonra kisa kelimeler (genelde kok bicimi)
+        function puan(x) { return x.n * 2 + (x.k ? 3 : 0) + (/^\p{Lu}/u.test(x.asil) ? 1 : 0); }
+        eksik.sort(function (a, b) { return (puan(b) - puan(a)) || (a.w.length - b.w.length); });
+        return { durum: 'tamam', eksik: eksik.slice(0, 15), bulunan: bulunan };
+    }
+    function sonucHtml(r) {
+        if (r.durum === 'cjk') return '<p class="mcv-uyari">' + esc(t('cjk')) + '</p>';
+        if (r.durum === 'kisa') return '<p class="mcv-uyari">' + esc(t('short')) + '</p>';
+        var h = '';
+        if (r.eksik.length) {
+            h += '<h3 class="mcv-alt">' + esc(t('missing')) + '</h3><div class="mcv-cipler">';
+            r.eksik.forEach(function (x) { h += '<span class="mcv-cip">' + esc(x.asil) + (x.n > 1 ? ' <small>×' + x.n + '</small>' : '') + '</span>'; });
+            h += '</div>';
+        } else h += '<p class="mcv-tamam">' + esc(t('none')) + '</p>';
+        h += '<p class="mcv-bilgi">' + esc(t('found').replace('{n}', r.bulunan)) + '</p>';
+        return h;
+    }
+    function ilanAc(kaynak) {
+        var p = pencere('mcv-ilan', t('job'),
+            '<p class="mcv-bilgi">' + esc(t('jobInfo')) + '</p>' +
+            '<textarea id="mcv-ilan-metin" rows="8" placeholder="' + esc(t('jobPh')) + '" aria-label="' + esc(t('jobPh')) + '">' + esc(sonIlan) + '</textarea>' +
+            '<button type="button" class="mcv-birincil" id="mcv-ilan-calistir">' + esc(t('run')) + '</button>' +
+            '<div id="mcv-ilan-sonuc" aria-live="polite"></div>' +
+            '<p class="mcv-not">' + esc(t('note')) + '</p>', kaynak);
+        var ta = p.querySelector('#mcv-ilan-metin');
+        p.querySelector('#mcv-ilan-calistir').addEventListener('click', function () {
+            sonIlan = ta.value;
+            try { ta.blur(); } catch (e) {}
+            var r = analiz(sonIlan);
+            p.querySelector('#mcv-ilan-sonuc').innerHTML = sonucHtml(r);
+            iz('ilan_kontrol');
+            try { p.querySelector('#mcv-ilan-sonuc').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+        });
+    }
+    bIlan.addEventListener('click', function () { ilanAc(bIlan); });
+    window.mcvIlanAnaliz = analiz; // otomatik test icin
+
+    var ls = document.getElementById('language-select');
+    if (ls) ls.addEventListener('change', function () { setTimeout(function () { etiketler(); if (ov) kapat(); }, 0); });
+    etiketler();
+})();
+</script>
+
 <script>
 /* === RIREKISHO (履歴書): duzenleyici = PDF (ayni form) === */
 (function () {
