@@ -28,6 +28,7 @@ jobs:
           python -m http.server 8000 >/dev/null 2>&1 &
           sleep 2
           python tests/smoke.py http://localhost:8000/
+          python tests/guvenlik_test.py http://localhost:8000/
 
   icerik:
     name: Icerik ve dogruluk kontrolu (iki site)
@@ -67,3 +68,20 @@ jobs:
               if not ok: bad.append(u)
           sys.exit(1 if bad else 0)
           PY
+
+  guvenlik:
+    name: Guvenlik kontrolu (izinsiz dis kod, CSP, SRI)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - run: python3 tests/guvenlik_kontrol.py statik
+
+  butunluk:
+    name: Yayindaki site depoyla birebir ayni mi
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - run: python3 tests/guvenlik_kontrol.py canli

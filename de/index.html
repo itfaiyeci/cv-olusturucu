@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <script>window.mcvGuvenliFoto=function(s){return typeof s==='string'&&s.length<8e6&&/^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+\/=\s]+$/.test(s)};</script>
     <script>window.MOBILCV_PAGE_LANG='de';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; frame-src 'none'; worker-src 'self' blob:; manifest-src 'self'">
     <script data-iab-aktar>
     // Uygulama ici tarayicidan (Instagram/TikTok/Facebook) "Tarayicida ac" ile gelen CV: veri adresin # kismindadir,
     // sunucuya gonderilmez. Otomatik kayit yuklenmeden once yerel depoya yazilir ve adres temizlenir.
@@ -6321,6 +6323,7 @@ class SocialMediaManager {
                         };
                         img.onerror = () => {
                             // Tarayıcı görseli hiç açamazsa (örn. desteklenmeyen format), ham veriyi kullan
+                            if (!window.mcvGuvenliFoto(rawDataUrl)) return;
                             window.avatarOriginalImg = null;
                             document.getElementById("avatar").src = rawDataUrl;
                             document.getElementById("avatar").style.display = "block";
@@ -6370,6 +6373,7 @@ class SocialMediaManager {
                 const swatches = document.querySelectorAll('.theme-swatch');
 
                 function applyTheme(themeClass) {
+                    if (['theme-mono', 'theme-emerald', 'theme-executive'].indexOf(themeClass) < 0) themeClass = '';
                     cvForm.classList.remove('theme-mono', 'theme-emerald', 'theme-executive');
                     if (themeClass) cvForm.classList.add(themeClass);
 
@@ -9732,6 +9736,8 @@ class AutoSaveManager {
     }
 
     setPhotoData(photoData) {
+        // Guvenlik: yalnizca cihazda olusmus gomulu resim (dis adres, SVG ve diger turler reddedilir)
+        if (photoData && !window.mcvGuvenliFoto(photoData)) { console.warn('Fotoğraf verisi reddedildi'); return; }
         if (photoData) {
             const avatar = document.getElementById('avatar');
             const avatarText = document.getElementById('avatarText');
@@ -12432,7 +12438,7 @@ function saveCV() {
     var __errN = 0;
     window.mcvReportError = function (kind, msg, src) {
         if (__errN >= 3) return; __errN++;
-        var m = String(msg || '').replace(/\s+/g, ' ').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[e-posta]').replace(/\d{6,}/g, '[sayi]').slice(0, 100);
+        var m = String(msg || '').replace(/\s+/g, ' ').replace(/(["'‘’“”]).*?\1/g, '"…"').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[e-posta]').replace(/\d{6,}/g, '[sayi]').slice(0, 100);
         window.mcvTrack('js_error', { err_kind: kind, err_msg: m, err_src: String(src || '').split('/').pop().slice(0, 60), cv_language: lang(), cv_template: tpl() });
     };
     window.addEventListener('error', function (e) {
