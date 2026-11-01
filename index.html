@@ -3301,7 +3301,22 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
         #cookie-consent .cc-accept { background: #2563eb; color: #fff; }
         #cookie-consent .cc-reject { background: #fff; color: #2563eb; }
         @media print { #cookie-consent { display: none !important; } }
-    </style>
+    
+/* Karsilama penceresi (01.11.2026): sade, 14 pt yazi */
+#warning-popup { background: rgba(15, 23, 42, 0.55); padding: 16px; box-sizing: border-box; }
+#warning-popup .popup-content { max-width: 440px; width: 100%; box-sizing: border-box; border-radius: 16px; padding: 28px 24px 24px; text-align: center; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.3); max-height: calc(100vh - 32px); overflow-y: auto; }
+#warning-popup .mcv-kr-ikon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: #e8f0fe; color: #2563eb; display: flex; align-items: center; justify-content: center; }
+#warning-popup h2 { font-size: 16pt; line-height: 1.3; font-weight: 700; color: #0f172a; margin: 0 0 12px; }
+#warning-popup .popup-body { padding: 0; color: #1e293b; }
+#warning-popup .popup-body p { font-size: 14pt; line-height: 1.5; margin: 0 0 12px; }
+#warning-popup .popup-body p.mcv-kr-not { color: #475569; margin-bottom: 0; }
+#warning-popup .popup-footer { padding: 20px 0 0; border-top: 0; }
+#warning-popup .popup-btn { width: 100%; background: #2563eb; border-radius: 10px; padding: 14px 20px; font-size: 14pt; font-weight: 600; transition: background 0.2s; }
+#warning-popup .popup-btn:hover, #warning-popup .popup-btn:focus-visible { background: #1d4ed8; transform: none; }
+#warning-popup .popup-btn:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+/* Karsilama acikken cerez bandi beklesin (ust uste binmesin); kapaninca gorunur */
+body.mcv-kr-acik #cookie-consent { display: none !important; }
+</style>
     <script>
     /* Japonca mod: dil Japonca ya da sablon rirekisho ise tarih/telefon Japon bicimiyle girilir */
     window.isJapaneseMode = function () {
@@ -3423,22 +3438,20 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
 
     <!-- POPUP UYARI -->
     <div class="popup-overlay" id="warning-popup">
-        <div class="popup-content">
-            <div class="popup-header">
-                <!--<div class="popup-icon">⚠️</div>-->
-                <!--<h3 data-key="warningTitle">ÖNEMLİ UYARI</h3>-->
-            </div>
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="mcv-kr-baslik">
+            <div class="mcv-kr-ikon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+            <h2 id="mcv-kr-baslik" data-key="warningTitle">Başlamadan önce</h2>
             <div class="popup-body">
-                <p data-key="warningLine1">Bilgileriniz yalnızca bu tarayıcıda saklanır, sunucuya gönderilmez.</p>
-                <!--<p data-key="warningLine2">CV'nizi tamamladıktan sonra <strong>"PDF İndir"</strong> butonuna tıklayarak CV'nizi kaydedin.</p>
-                <p data-key="warningLine3">Sayfayı kapatmadan önce mutlaka PDF olarak indirin, aksi takdirde tüm bilgileriniz silinecektir.</p>-->
+                <p data-key="warningLine1">CV bilgileriniz sunucumuza gönderilmez, yalnızca bu tarayıcıda saklanır.</p>
+                <p class="mcv-kr-not" data-key="warningLine2">Bu yüzden CV'niz başka bir cihazda görünmez; tarayıcı verilerini silerseniz de kaybolur. İşiniz bitince PDF olarak indirin ya da “Yedekle” ile saklayın.</p>
             </div>
             <div class="popup-footer">
-                <button id="understand-btn" class="popup-btn" data-key="understandButton">Anladım, Devam Et</button>
+                <button id="understand-btn" class="popup-btn" data-key="understandButton">Anladım, devam et</button>
             </div>
         </div>
     </div>
     
+    <script>(function(){var p=document.getElementById('warning-popup');if(!p)return;function s(){document.body.classList.toggle('mcv-kr-acik',p.style.display==='flex')}s();new MutationObserver(s).observe(p,{attributes:true,attributeFilter:['style']});})();</script>
     <div class="page-wrapper">
         <header class="header" role="banner">
             <h1>Ücretsiz CV Hazırla – Üye Olmadan</h1>  
@@ -4129,10 +4142,12 @@ html[lang="ja"] #cv-form, html[lang="ja"] #cv-form *, html[lang="ja"] #preview-c
                 "previewDescription": "ESC tuşuna basarak veya dışarı tıklayarak kapatabilirsiniz",
 				// Uyarı popup metinleri
        // "warningTitle": "ÖNEMLİ",
-        "warningLine1": "Bilgileriniz yalnızca bu tarayıcıda saklanır, sunucuya gönderilmez.",
+        "warningTitle": "Başlamadan önce",
+        "warningLine1": "CV bilgileriniz sunucumuza gönderilmez, yalnızca bu tarayıcıda saklanır.",
+        "warningLine2": "Bu yüzden CV'niz başka bir cihazda görünmez; tarayıcı verilerini silerseniz de kaybolur. İşiniz bitince PDF olarak indirin ya da “Yedekle” ile saklayın.",
         //"warningLine2": "CV'nizi tamamladıktan sonra \"PDF İndir\" butonuna tıklayarak CV'nizi kaydedin.",
         //"warningLine3": "Sayfayı kapatmadan önce mutlaka PDF olarak indirin, aksi takdirde tüm bilgileriniz silinecektir.",
-        "understandButton": "Anladım, Devam Et ",
+        "understandButton": "Anladım, devam et",
 		"feedbackText": "Görüş ve önerileriniz için bize ulaşın:",
     "feedbackNote": "Geliştirmemize yardımcı olun!",
 	// SOSYAL MEDYA ÇEVİRİLERİ
