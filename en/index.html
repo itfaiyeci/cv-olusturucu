@@ -48,7 +48,7 @@
     <meta property="og:url" content="https://www.mobilcv.com/en/">
     <meta property="og:title" content="Free CV Maker – No Sign-Up, Download as PDF | MobilCV">
     <meta property="og:description" content="Create a professional CV for free on your phone – no sign-up, no ads. Your CV details stay in your browser. Download your CV as a PDF.">
-    <meta property="og:image" content="https://www.mobilcv.com/images/og-image.jpg">
+    <meta property="og:image" content="https://www.mobilcv.com/images/og-image-en.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="MobilCV">
@@ -59,7 +59,7 @@
     <meta name="twitter:url" content="https://www.mobilcv.com/en/">
     <meta name="twitter:title" content="Free CV Maker – No Sign-Up, Download as PDF | MobilCV">
     <meta name="twitter:description" content="Create a professional CV for free on your phone – no sign-up, no ads. Your CV details stay in your browser. Download your CV as a PDF.">
-    <meta name="twitter:image" content="https://www.mobilcv.com/images/og-image.jpg">
+    <meta name="twitter:image" content="https://www.mobilcv.com/images/og-image-en.jpg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.mobilcv.com/en/">
@@ -2084,6 +2084,10 @@
     text-align: right !important;
     direction: ltr; /* E-posta ve telefon için soldan sağa yön */
 }
+
+/* MCV_TEL_SATIR (08.11): telefon numarası bölünmez; sığmazsa etiketin altına tek parça iner */
+.personal-info-item[data-field="phone"] { flex-wrap: wrap; }
+.personal-info-item[data-field="phone"] .personal-info-value { white-space: nowrap; }
 
 /* Arapça gibi RTL diller için destek - TÜM metin alanlarını kapsar.
    Sadece METİN AKIŞ YÖNÜNÜ (dir/text-align) değiştirir; sayfa
