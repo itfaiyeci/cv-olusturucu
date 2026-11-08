@@ -7686,6 +7686,11 @@ function hideHintBubble(hintBubble) {
                     input.classList.add('empty-field');
                     return;
                 }
+                // MCV_JA_81 (08.11, kurucu kararı): yalnız Japonca CV'de +81 (Japonya) numarası yerel biçime çevrilir: +81 90… → 090… (yazarken değil, alandan çıkınca)
+                if (window.isJapaneseMode && window.isJapaneseMode() && document.activeElement !== input && /^\s*\+\s*81/.test(value)) {
+                    const __r = value.replace(/[^\d]/g, '').slice(2);
+                    value = (__r.charAt(0) === '0' ? '' : '0') + __r;
+                }
                 // MCV_JA_ARTI (08.11): '+' ile başlayan (ülke kodlu) numara Japon biçimine sokulmaz; aşağıdaki uluslararası yola gider
                 if (window.isJapaneseMode && window.isJapaneseMode() && !/^\s*\+/.test(value)) {
                     let d = value.replace(/[^\d]/g, '').substring(0, 11);
