@@ -7686,7 +7686,8 @@ function hideHintBubble(hintBubble) {
                     input.classList.add('empty-field');
                     return;
                 }
-                if (window.isJapaneseMode && window.isJapaneseMode()) {
+                // MCV_JA_ARTI (08.11): '+' ile başlayan (ülke kodlu) numara Japon biçimine sokulmaz; aşağıdaki uluslararası yola gider
+                if (window.isJapaneseMode && window.isJapaneseMode() && !/^\s*\+/.test(value)) {
                     let d = value.replace(/[^\d]/g, '').substring(0, 11);
                     let f = d;
                     if (d.length === 11) f = d.substring(0, 3) + '-' + d.substring(3, 7) + '-' + d.substring(7);
