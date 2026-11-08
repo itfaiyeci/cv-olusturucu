@@ -28,7 +28,7 @@ SAMPLE = {
     "skills": ["Excel", "İletişim"],
     "languages": [{"name": "Türkçe", "level": "Ana dil"}],
 }
-INIT = "try{localStorage.setItem('popupShown','true');localStorage.setItem('mobilcv_consent','denied')}catch(e){}"
+INIT = "try{localStorage.setItem('popupShown','true');localStorage.setItem('mcvKarsilama1','true');localStorage.setItem('mobilcv_consent','denied')}catch(e){}"
 fails, rows = [], []
 
 

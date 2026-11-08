@@ -6164,7 +6164,7 @@ class SocialMediaManager {
     const understandBtn = document.getElementById('understand-btn');
 	
 	// Daha önce gösterilmiş mi kontrol et
-    const popupShown = localStorage.getItem('popupShown');
+    const popupShown = localStorage.getItem('mcvKarsilama1');
     if (popupShown === 'true') {
         console.log('Popup daha önce gösterilmiş, atlanıyor...');
     } else {
@@ -6188,14 +6188,14 @@ class SocialMediaManager {
     understandBtn.addEventListener('click', function() {
         console.log('Anladım butonuna tıklandı');
         popup.style.display = 'none';
-        localStorage.setItem('popupShown', 'true');
+        localStorage.setItem('mcvKarsilama1', 'true');
     });
 
            // ESC tuşu ile kapatma
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && popup.style.display === 'flex') {
             popup.style.display = 'none';
-            localStorage.setItem('popupShown', 'true');
+            localStorage.setItem('mcvKarsilama1', 'true');
         }
     });
 
@@ -6203,7 +6203,7 @@ class SocialMediaManager {
     popup.addEventListener('click', function(e) {
         if (e.target === this) {
             this.style.display = 'none';
-            localStorage.setItem('popupShown', 'true');
+            localStorage.setItem('mcvKarsilama1', 'true');
         }
     });
 
@@ -6215,11 +6215,20 @@ class SocialMediaManager {
         });
     }
 
-            // Sayfadan ayrılırken uyarı göster
+            // MCV_CIKIS_UYARI (08.11): Sayfadan ayrılırken uyarı yalnız bu ziyarette CV'de değişiklik yapıldıysa
+            // ve ondan sonra PDF, Word ya da yedek alınmadıysa çıkar. Boş formda ve yalnız bakan ziyaretçide çıkmaz.
+            // (Veri zaten tarayıcıya otomatik kaydediliyor; uyarı yalnızca dosya almayı hatırlatır.)
+    var __mcvDegisti = false;
+    document.addEventListener('input', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#cv-form')) __mcvDegisti = true;
+    }, true);
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#save-pdf, #export-data, #mcv-docx-btn')) __mcvDegisti = false;
+    }, true);
     window.addEventListener('beforeunload', function(e) {
-        if (!localStorage.getItem('pdfDownloaded')) {
+        if (__mcvDegisti) {
             e.preventDefault();
-            e.returnValue = 'CV\'nizi kaydetmediniz! Sayfadan ayrılmak istediğinizden emin misiniz?';
+            e.returnValue = '';
         }
     });
           

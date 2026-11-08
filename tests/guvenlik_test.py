@@ -8,7 +8,7 @@ import base64, io, json, os, sys, time
 from playwright.sync_api import sync_playwright
 
 BASE = sys.argv[1].rstrip("/") + "/"
-INIT = "try{localStorage.setItem('popupShown','true');localStorage.setItem('mobilcv_consent','denied')}catch(e){}"
+INIT = "try{localStorage.setItem('popupShown','true');localStorage.setItem('mcvKarsilama1','true');localStorage.setItem('mobilcv_consent','denied')}catch(e){}"
 DILLER = ["", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"]
 sonuc = []
 def kontrol(ad, ok, ayr=""): sonuc.append((ad, ok)); print(("✅" if ok else "❌"), ad, "|", ayr, flush=True)
@@ -28,7 +28,7 @@ with sync_playwright() as pw:
     DATA_JPG = "data:image/jpeg;base64," + base64.b64encode(JPG).decode()
     def baglam(izin=False, ga=False):
         ctx = br.new_context(viewport={"width": 1280, "height": 900}, accept_downloads=True)
-        ctx.add_init_script((INIT if not izin else "try{localStorage.setItem('popupShown','true');localStorage.setItem('mobilcv_consent','granted')}catch(e){}") + CSP_DINLE)
+        ctx.add_init_script((INIT if not izin else "try{localStorage.setItem('popupShown','true');localStorage.setItem('mcvKarsilama1','true');localStorage.setItem('mobilcv_consent','granted')}catch(e){}") + CSP_DINLE)
         dis = []
         def yol(r):
             u = r.request.url
