@@ -7579,6 +7579,15 @@ function hideHintBubble(hintBubble) {
             }
             
             function validateDateInput(input) {
+                // MCV_ZEN (08.11): tam genişlik rakam/işaretler (Japon/Çin klavyesi: ２０１９／０４) normal karaktere çevrilir; silinmez
+                {
+                    const __z = (s => s.replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g, ' '))(input.textContent).replace(/[ー―‐−〜～~]/g, (window.isJapaneseMode && window.isJapaneseMode()) ? '-' : '$&');
+                    if (__z !== input.textContent) {
+                        input.textContent = __z;
+                        const r = document.createRange(), sel = window.getSelection();
+                        r.selectNodeContents(input); r.collapse(false); if (document.activeElement === input) { sel.removeAllRanges(); sel.addRange(r); }
+                    }
+                }
                 let value = input.textContent.trim();
                 // Devam eden is: "2019 - Halen" / "2019 - Present" (Japonca haric; orada "2019/04-" kullanilir)
                 const __dph = (input.getAttribute('data-placeholder') || '').trim();
@@ -7596,6 +7605,9 @@ function hideHintBubble(hintBubble) {
                     }
                 }
                 if (window.isJapaneseMode && window.isJapaneseMode()) {
+                    // MCV_JA_TARIH (08.11): 「2019年4月～現在」 gibi yazım sitenin istediği 「2019/4-」 biçimine çevrilir (devam ediyorsa bitiş boş)
+                    value = value.replace(/(\d{4})\s*年\s*(\d{1,2})\s*月?/g, '$1/$2').replace(/(\d{4})\s*年\s*$/, '$1/')
+                                 .replace(/年|月|現在|至今|在職中|在学中/g, '');
                     let v = value.replace(/[^\d\/\.\-]/g, '').replace(/\./g, '/').substring(0, 15);
                     if (!/\d/.test(v)) v = '';   // yalnizca '/-/' kaldiysa (ipucu metninden) alan bostur; PDF'e '/-/' basilmasin
                     if (input.textContent !== v) {
@@ -7686,6 +7698,15 @@ function hideHintBubble(hintBubble) {
             }
             
             function validatePhoneInput(input) {
+                // MCV_ZEN (08.11): tam genişlik rakam/işaretler (Japon/Çin klavyesi: ２０１９／０４) normal karaktere çevrilir; silinmez
+                {
+                    const __z = (s => s.replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g, ' '))(input.textContent);
+                    if (__z !== input.textContent) {
+                        input.textContent = __z;
+                        const r = document.createRange(), sel = window.getSelection();
+                        r.selectNodeContents(input); r.collapse(false); if (document.activeElement === input) { sel.removeAllRanges(); sel.addRange(r); }
+                    }
+                }
                 let value = input.textContent.trim();
                 // MCV_PLACEHOLDER_GUARD: yer tutucu (ornek numara) gercek veri gibi bicimlendirilmesin
                 const __ph = (input.getAttribute('data-placeholder') || '').trim();
