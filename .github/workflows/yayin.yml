@@ -1,0 +1,39 @@
+name: Yayin (guvenlik kapisi)
+# 17.11 tersine muhendislik: canli siteye yalnizca guvenlik kontrolunden (CSP degismemis, izinsiz dis kod/adres yok,
+# SRI ozetleri dogru) GECEN kod cikar. Kontrol kalirsa yayin yapilmaz, site eski haliyle kalir ve GitHub e-posta atar.
+# ETKIN OLMASI ICIN: Settings > Pages > Build and deployment > Source = "GitHub Actions" (kurucu yapar).
+# O ayar yapilana kadar yalnizca elle calisir; ayardan sonra push tetikleyicisi acilir.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  kapi:
+    name: Guvenlik kapisi
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Statik guvenlik kontrolu
+        run: python3 tests/guvenlik_kontrol.py statik
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+  yayin:
+    name: Yayinla
+    needs: kapi
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.dagit.outputs.page_url }}
+    steps:
+      - id: dagit
+        uses: actions/deploy-pages@v4
