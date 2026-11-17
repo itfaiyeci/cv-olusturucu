@@ -1,0 +1,43 @@
+name: IndexNow bildirimi
+
+# 17.11: yeni surum yayinlaninca degisen sayfalar Bing'e (IndexNow) hemen bildirilir. Yayin bitmeden gonderilmez.
+on:
+  push:
+    branches: [main]
+    paths: ['**.html', 'sitemap*.xml']
+  workflow_dispatch:
+    inputs:
+      tum:
+        description: 'Site haritasindaki tum adresleri gonder (ilk kurulum)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  bildir:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: GitHub Pages yayininin bitmesini bekle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 40); do
+            s=$(gh run list -R ${{ github.repository }} -w 'pages build and deployment' -c ${{ github.sha }} -L 1 --json status,conclusion -q '.[0].status+" "+.[0].conclusion')
+            echo "$i: $s"
+            case "$s" in "completed success") exit 0;; completed*) echo "Yayin basarisiz, bildirim yok"; exit 1;; esac
+            sleep 30
+          done
+          echo "Yayin 20 dakikada bitmedi"; exit 1
+      - name: Anahtar dosyasi yayinda mi
+        run: |
+          k=$(ls | grep -E '^[0-9a-f]{32}\.txt$')
+          curl -fsS "https://www.mobilcv.com/$k" | grep -qx "${k%.txt}" && echo "anahtar yayinda"
+      - name: Degisen sayfalari bildir
+        run: python3 .github/indexnow.py https://www.mobilcv.com/ ${{ github.event.before || 'HEAD~1' }} ${{ github.sha }} ${{ inputs.tum && '--tum' || '' }}
