@@ -4,7 +4,7 @@
     <script>window.mcvGuvenliFoto=function(s){return typeof s==='string'&&s.length<8e6&&/^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+\/=\s]+$/.test(s)};</script>
     <script>window.MOBILCV_PAGE_LANG='de';(function(){var m=location.search.match(/[?&]lang=(en|de|fr|es|it|pt|ru|ar|zh|ja)\b/);if(m&&window.MOBILCV_PAGE_LANG==='tr'){location.replace('/'+m[1]+'/');}})();</script>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; frame-src 'none'; worker-src 'self' blob:; manifest-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://mobilcv.net https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'; frame-src 'none'; worker-src 'self' blob:; manifest-src 'self'">
     <script data-iab-aktar>
     // Uygulama ici tarayicidan (Instagram/TikTok/Facebook) "Tarayicida ac" ile gelen CV: veri adresin # kismindadir,
     // sunucuya gonderilmez. Otomatik kayit yuklenmeden once yerel depoya yazilir ve adres temizlenir.
@@ -33,6 +33,12 @@
     <script id="mcv-storage-shim">(function(){function mem(){var d={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}}['localStorage','sessionStorage'].forEach(function(n){try{var st=window[n],t='__mcv_t';st.setItem(t,t);st.removeItem(t)}catch(e){try{Object.defineProperty(window,n,{value:mem(),configurable:true,writable:true})}catch(e2){}}})})();</script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewport-meta">
+    <script>/* MCV_IOS_ZOOM (17.11): iPhone/iPad Safari, 16px'ten küçük alana dokununca sayfayı büyütüp bırakıyordu.
+       Yalnız iOS'ta maximum-scale=1: iOS kullanıcının iki parmakla yakınlaştırmasını yine de engellemez; Android'e dokunulmaz. */
+    window.mcvIOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    window.mcvVp = function (masaustu) { var m = document.getElementById('viewport-meta'); if (!m) return;
+        m.setAttribute('content', masaustu ? 'width=1024' : 'width=device-width, initial-scale=1.0' + (window.mcvIOS ? ', maximum-scale=1.0' : '')); };
+    window.mcvVp(false);</script>
     <!-- Not: Varsayılan MOBİL-KOLAY görünüm. Masaüstü görünümü artık aşağıdaki
          script ile eklenen bir düğmeyle isteğe bağlı olarak açılabiliyor. -->
     
@@ -2058,21 +2064,19 @@
     color: white !important;
 }
 
-/* Mobil cihazlar için e-posta öneri ayarları */
+/* Mobil cihazlar için e-posta öneri ayarları (MCV_EPOSTA_CIP, 17.11):
+   Eskiden ekranın altına sabit (position: fixed) liste açılıyordu; iPhone'da klavye açıkken sayfayı kaydırıyordu.
+   Artık alanın hemen altında tek satır, yana kaydırılabilir kısa düğmeler (@gmail.com …). */
+.personal-info-item[data-field="email"] { position: relative; }
 @media (max-width: 768px) {
     .email-suggestions {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 10px;
-        right: 10px;
-        max-height: 200px;
-        z-index: 10000;
+        position: absolute; top: 100%; bottom: auto; left: 0; right: 0;
+        max-height: none; overflow-x: auto; overflow-y: hidden; white-space: nowrap; text-align: left;
+        border: 1px solid #3498db; border-radius: 8px; padding: 4px; z-index: 1000; -webkit-overflow-scrolling: touch;
     }
-    
     .email-suggestions div {
-        padding: 12px 15px;
-        font-size: 14px;
+        display: inline-block; padding: 8px 12px; margin: 0 4px 0 0; font-size: 14px;
+        border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc;
     }
 }
 
@@ -6560,7 +6564,7 @@ class SocialMediaManager {
                     
                     domains.forEach(domain => {
                         const suggestion = document.createElement('div');
-                        suggestion.textContent = value + '@' + domain;
+                        suggestion.textContent = (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) ? '@' + domain : value + '@' + domain; suggestion.title = value + '@' + domain;
                         suggestion.addEventListener('click', function() {
                             emailInput.textContent = value + '@' + domain;
                             emailInput.classList.remove('empty-field');
@@ -10217,7 +10221,7 @@ function saveCV() {
         }
         btn.addEventListener('click', function () {
             isDesktop = !isDesktop;
-            meta.setAttribute('content', isDesktop ? 'width=1024' : 'width=device-width, initial-scale=1.0');
+            if (window.mcvVp) window.mcvVp(isDesktop); else meta.setAttribute('content', isDesktop ? 'width=1024' : 'width=device-width, initial-scale=1.0');
             label();
         });
         label();
@@ -10844,7 +10848,7 @@ function saveCV() {
             var ic = document.createElement('div'); ic.className = 'mcv-ornek-ic';
             var bilgi = document.createElement('p'); bilgi.textContent = ot('bilgi'); ic.appendChild(bilgi);
             var img = document.createElement('img'); img.alt = ot('ornekBas').replace('{x}', m.n); img.src = m.u.replace(/\.html$/, '.png'); img.loading = 'eager'; ic.appendChild(img);
-            var tam = document.createElement('a'); tam.href = m.u; tam.target = '_blank'; tam.rel = 'noopener'; tam.textContent = ot('tam'); ic.appendChild(tam);
+            var tam = document.createElement('a'); tam.href = m.u; tam.target = '_blank'; tam.rel = 'noopener'; tam.textContent = ot('tam'); tam.hidden = true; img.addEventListener('error', function () { img.remove(); tam.hidden = false; }); ic.appendChild(tam); /* MCV_ORNEK_TEK (17.11): örnek tek sayfada; dış bağlantı yalnız görsel yüklenemezse */
             ov.appendChild(ic);
             document.body.appendChild(ov); document.documentElement.style.overflow = 'hidden';
             try { history.pushState({ mcvOrnek: 1 }, ''); ornekGecmis = true; } catch (e) {}

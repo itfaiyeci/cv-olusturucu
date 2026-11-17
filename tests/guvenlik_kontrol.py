@@ -12,7 +12,7 @@ SAYFALAR = [(l + "/" if l else "") + "index.html" for l in DILLER]
 CSP = ("default-src 'self'; "
        "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com; "
        "style-src 'self' 'unsafe-inline'; "
-       "img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com; "
+       "img-src 'self' data: blob: https://mobilcv.net https://*.google-analytics.com https://*.googletagmanager.com; "
        "font-src 'self' data:; "
        "connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; "
        "form-action 'self' https://formspree.io; "
