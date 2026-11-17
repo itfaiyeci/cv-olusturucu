@@ -1,9 +1,10 @@
 name: Yayin (guvenlik kapisi)
 # 17.11 tersine muhendislik: canli siteye yalnizca guvenlik kontrolunden (CSP degismemis, izinsiz dis kod/adres yok,
 # SRI ozetleri dogru) GECEN kod cikar. Kontrol kalirsa yayin yapilmaz, site eski haliyle kalir ve GitHub e-posta atar.
-# ETKIN OLMASI ICIN: Settings > Pages > Build and deployment > Source = "GitHub Actions" (kurucu yapar).
-# O ayar yapilana kadar yalnizca elle calisir; ayardan sonra push tetikleyicisi acilir.
+# 17.11: Pages kaynagi "GitHub Actions" (kurucu ayarladi); main'e her push bu kapidan gecerek yayinlanir.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:

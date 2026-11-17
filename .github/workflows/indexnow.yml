@@ -29,7 +29,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           for i in $(seq 1 40); do
-            s=$(gh run list -R ${{ github.repository }} -c ${{ github.sha }} -L 20 --json name,status,conclusion -q '[.[]|select(.name=="pages build and deployment")][0]|.status+" "+.conclusion')
+            s=$(gh run list -R ${{ github.repository }} -c ${{ github.sha }} -L 20 --json name,status,conclusion -q '[.[]|select(.name=="pages build and deployment" or .name=="Yayin (guvenlik kapisi)")][0]|.status+" "+.conclusion')
             echo "$i: $s"
             case "$s" in "completed success") exit 0;; completed*) echo "Yayin basarisiz, bildirim yok"; exit 1;; esac
             sleep 30
