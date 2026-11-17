@@ -49,15 +49,20 @@ if not adresler or deneme:
 
 host = re.sub(r"^https?://", "", site).rstrip("/")
 govde = json.dumps({"host": host, "key": anahtar, "keyLocation": f"{site}{anahtar}.txt", "urlList": adresler[:10000]}).encode()
-istek = urllib.request.Request("https://api.indexnow.org/indexnow", data=govde,
-                               headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
-try:
-    with urllib.request.urlopen(istek, timeout=30) as r:
-        kod = r.status
-except urllib.error.HTTPError as e:
-    kod = e.code
-except Exception as e:
-    print(f"Uyari: IndexNow'a ulasilamadi: {e}"); sys.exit(0)
+def gonder():
+    istek = urllib.request.Request("https://api.indexnow.org/indexnow", data=govde,
+                                   headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
+    try:
+        with urllib.request.urlopen(istek, timeout=30) as r:
+            return r.status
+    except urllib.error.HTTPError as e:
+        return e.code
+    except Exception as e:
+        print(f"Uyari: IndexNow'a ulasilamadi: {e}"); sys.exit(0)
+
+kod = gonder()
+if kod == 403:  # 17.11: yeni anahtar ilk denemede 403 verdi, 2 dk sonra 200 -> bir kez bekleyip yeniden dene
+    import time; print("403: anahtar dogrulamasi gecikmis olabilir, 120 sn sonra yeniden deneniyor"); time.sleep(120); kod = gonder()
 print(f"IndexNow yaniti: {kod}")
 if kod in (400, 403, 422):
     sys.exit(1)
