@@ -30,6 +30,26 @@ jobs:
           python tests/smoke.py http://localhost:8000/
           python tests/guvenlik_test.py http://localhost:8000/
 
+  islev-safari:
+    # 17.11: ChatGPT'den gelenlerin yarisi iPhone; PDF'lerin en cogu iPhone Safari'den. Ayni test Safari altyapisiyla (WebKit),
+    # telefon testleri iPhone kimligiyle. Gercek iPhone'a ozgu davranislari (klavye, dokununca buyume) yakalamaz.
+    name: Islev testi - Safari altyapisi (WebKit)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install playwright && python -m playwright install --with-deps webkit
+      - name: Testleri calistir (WebKit)
+        env:
+          MCV_TARAYICI: webkit
+        run: |
+          python -m http.server 8000 >/dev/null 2>&1 &
+          sleep 2
+          python tests/smoke.py http://localhost:8000/
+
   icerik:
     name: Icerik ve dogruluk kontrolu (iki site)
     runs-on: ubuntu-24.04

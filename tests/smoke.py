@@ -12,11 +12,15 @@ Kontroller:
   - Yedegi Yukle: yedekte bos olan alan formdaki eski metni siliyor
   - Word (.docx): gecerli dosya, icerik ve A4/Letter sayfa boyutu
   - On yazi: CV'den taslak, Word ve PDF (A4/Letter)
+Tarayici: MCV_TARAYICI=chromium (varsayilan) ya da webkit (Safari altyapisi; telefon testleri iPhone kimligiyle, 17.11).
 Hata varsa cikis kodu 1. Ozet GITHUB_STEP_SUMMARY'ye yazilir."""
 import json, os, sys, time
 from playwright.sync_api import sync_playwright
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000/").rstrip("/") + "/"
+TARAYICI = os.environ.get("MCV_TARAYICI", "chromium")
+IPHONE_UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 "
+             "(KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1")
 LANGS = ["", "en", "de", "fr", "es", "it", "pt", "ru", "ar", "zh", "ja"]
 TEMPLATES = ["", "tpl-classic", "tpl-top", "tpl-rirekisho", "tpl-resume", "tpl-compact"]
 SAMPLE = {
@@ -49,7 +53,8 @@ def block_tracking(route):
 
 def new_page(browser, mobile):
     vp = {"width": 390, "height": 844} if mobile else {"width": 1280, "height": 900}
-    ctx = browser.new_context(viewport=vp, is_mobile=mobile, has_touch=mobile)
+    ek = {"user_agent": IPHONE_UA} if (mobile and TARAYICI == "webkit") else {}
+    ctx = browser.new_context(viewport=vp, is_mobile=mobile, has_touch=mobile, **ek)
     ctx.add_init_script(INIT)
     ctx.route("**/*", block_tracking)
     pg = ctx.new_page()
@@ -65,7 +70,7 @@ def check(name, ok, detail=""):
 
 
 with sync_playwright() as pw:
-    b = pw.chromium.launch()
+    b = getattr(pw, TARAYICI).launch()
     # 1) Sayfalar
     for lang in LANGS:
         for mobile in (False, True):
@@ -239,7 +244,7 @@ with sync_playwright() as pw:
     ctx.close()
     b.close()
 
-summary = ["## MobilCV işlev testi", "", f"Toplam {len(rows)} kontrol, **{len(fails)} hata**", "",
+summary = [f"## MobilCV işlev testi ({'Safari altyapısı – WebKit' if TARAYICI == 'webkit' else 'Chrome altyapısı – Chromium'})", "", f"Toplam {len(rows)} kontrol, **{len(fails)} hata**", "",
            "| | Kontrol | Ayrıntı |", "|---|---|---|"] + [f"| {a} | {n} | {d} |" for a, n, d in rows]
 text = "\n".join(summary)
 print(text)
