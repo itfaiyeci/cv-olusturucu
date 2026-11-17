@@ -12520,13 +12520,23 @@ function saveCV() {
         var m = String(msg || '').replace(/\s+/g, ' ').replace(/(["'‘’“”]).*?\1/g, '"…"').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[e-posta]').replace(/\d{6,}/g, '[sayi]').slice(0, 100);
         window.mcvTrack('js_error', { err_kind: kind, err_msg: m, err_src: String(src || '').split('/').pop().slice(0, 60), cv_language: lang(), cv_template: tpl() });
     };
+    // MCV_HATA_FILTRE (17.11): yalnız kendi dosyalarımızdan çıkan hatalar sayılır.
+    // Tarayıcı eklentisi, Google Çeviri, uygulama içi tarayıcı gibi dış kaynaklı hatalar bildirilmez.
+    function bizden(u) {
+        u = String(u || '');
+        if (!/^https?:\/\//i.test(u)) return false;
+        try { return new URL(u).origin === location.origin; } catch (x) { return false; }
+    }
     window.addEventListener('error', function (e) {
         var t = e && e.target;
-        if (t && t !== window && (t.src || t.href)) { if (t.tagName === 'SCRIPT' || t.tagName === 'LINK') window.mcvReportError('resource', 'load failed', t.src || t.href); return; }
+        if (t && t !== window && (t.src || t.href)) { if ((t.tagName === 'SCRIPT' || t.tagName === 'LINK') && bizden(t.src || t.href)) window.mcvReportError('resource', 'load failed', t.src || t.href); return; }
+        if (!bizden(e && e.filename)) return;
         window.mcvReportError('js', e && e.message, (e && e.filename || '') + ':' + (e && e.lineno || ''));
     }, true);
     window.addEventListener('unhandledrejection', function (e) {
-        var r = e && e.reason; window.mcvReportError('promise', (r && r.message) || r, '');
+        var r = e && e.reason, st = String((r && r.stack) || '');
+        if (/(chrome|moz|safari-web)-extension:\/\//.test(st)) return;
+        window.mcvReportError('promise', (r && r.message) || r, '');
     });
     document.addEventListener('change', function (e) {
         if (!e.isTrusted) return;
