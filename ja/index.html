@@ -11820,6 +11820,9 @@ function saveCV() {
         acildi: 'Taslak açıldı. Köşeli parantezli yerleri kendi bilginizle değiştirin.',
         pdfQ: 'CV\'nizde doldurulmamış yerler var:\n{x}\n\nYine de indirilsin mi?',
         esas: 'Beceriler ve örnekler: {x}',
+        resmiO: 'Unvan: O*NET 31.0 veritabanı (ABD Çalışma Bakanlığı, USDOL/ETA), CC BY 4.0 lisansıyla. O*NET® USDOL/ETA’nın tescilli markasıdır.',
+        resmiN: 'Unvan: ONS SOC 2020 kodlama dizini. Open Government Licence v3.0 kapsamında kamu sektörü bilgisi içerir.',
+        resmiR: 'Unvan: France Travail ROME meslek kodları listesi.',
         hata: 'Meslek listesi yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.',
         nokta: '… (sayı / bilgi)',
         taslakAd: ' – taslak',
@@ -11853,6 +11856,8 @@ function saveCV() {
         acildi: 'Draft opened. Replace the parts in square brackets with your own details.',
         pdfQ: 'Your CV still has parts to fill in:\n{x}\n\nDownload anyway?',
         esas: 'Skills and examples: {x}',
+        resmiO: 'Job title includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. O*NET® is a trademark of USDOL/ETA.',
+        resmiN: 'Job title from the ONS SOC 2020 coding index. Contains public sector information licensed under the Open Government Licence v3.0.',
         hata: 'The job list could not be loaded. Check your internet connection and try again.',
         nokta: '… (number / detail)',
         taslakAd: ' – draft',
@@ -11919,6 +11924,7 @@ function saveCV() {
         acildi: 'Brouillon ouvert. Remplacez les passages entre crochets par vos propres informations.',
         pdfQ: 'Votre CV contient encore des éléments à compléter :\n{x}\n\nTélécharger quand même ?',
         esas: 'Compétences et exemples : {x}',
+        resmiR: 'Intitulé issu du ROME 4.0 (France Travail, octobre 2026), sous Licence Ouverte.',
         hata: 'La liste des métiers n’a pas pu être chargée. Vérifiez votre connexion et réessayez.',
         nokta: '… (chiffre / information)',
         taslakAd: ' – brouillon',
@@ -12268,6 +12274,13 @@ function saveCV() {
             return d.filter(function (m) { return puan[m.s] != null; }).sort(function (a, b) { return puan[a.s] - puan[b.s]; })
                 .slice(0, 8).map(function (m) { m.__p = puan[m.s]; m.__tt = !!tt[m.s]; return m; });
         }
+        // resmi unvanlar (r: O*NET, ONS, ROME): yalniz birebir yazilinca; kok/onek taramasina girmez
+        // (uzun resmi unvanlarin niteleyici kelimeleri "paper", "petrol" alakasiz aramalari cekiyordu)
+        d.forEach(function (m) {
+            if (!m.r) return;
+            if (!m.__rn) { m.__rn = {}; Object.keys(m.r).forEach(function (x) { m.__rn[katla(x).replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim()] = 1; }); }
+            if (m.__rn[tx]) ekle(m, -20, true);
+        });
         d.forEach(function (m) {
             mParca(m).forEach(function (p, pi) {
                 // parantez/egik cizgi sonrasi tek genel kelime ("(Yapılandırmacı) Elemanı" -> "elemani") eslesme sayilmaz
@@ -12361,29 +12374,31 @@ function saveCV() {
         h += '<p class="mcv-hata mcv-meslek-hata" role="alert" hidden></p>';
         h += '<button type="button" class="mcv-birincil mcv-meslek-basla">' + esc(MT.basla) + '</button>';
         if (m.resmi) h += '<p class="mcv-not mcv-meslek-kaynak">' + esc(MT.kaynak) + '</p>';
+        if (m.__rk && MT['resmi' + m.__rk]) h += '<p class="mcv-not mcv-meslek-unvan-kaynak">' + esc(MT['resmi' + m.__rk]) + '</p>';
         return h + '</div>';
     }
     // Yazilan, zengin meslegin es anlamlisiyla birebir ayniysa ("overlokçu") unvan o ad olur; beceri ve ornekler
     // zengin meslekten gelir (kurucu onayi 20.11; ilanlarda ve ATS aramalarinda adayin kullandigi unvan aranir).
     function esAd(m, metin) {
-        if (!m || m.resmi || m.genel || !m.e || !m.e.length) return m;
+        if (!m || m.resmi || m.genel || ((!m.e || !m.e.length) && !m.r)) return m;
         function n(x) { return katla(x).replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim(); }
-        var tx = n(metin), es = m.e.filter(function (x) { return n(x) === tx; })[0], ad;
+        var tx = n(metin), es = (m.e || []).filter(function (x) { return n(x) === tx; })[0], ad, rk = null;
+        if (!es && m.r) { es = Object.keys(m.r).filter(function (x) { return n(x) === tx; })[0]; if (es) rk = m.r[es]; }
         if (!es && tx === n(m.t || m.n)) return m;   // yazilan zaten unvanin kendisi (aksansiz/kesmesiz yazim dahil)
         if (!es && /^(zh|ja)$/.test(mDil())) {
-            var tz = tx.replace(/ /g, ''), son = [m.t || m.n].concat(m.e).filter(function (x) { var y = n(x).replace(/ /g, ''); return y.length >= 2 && tz.length > y.length && tz.length - y.length <= 4 && tz.slice(-y.length) === y; })[0];
+            var tz = tx.replace(/ /g, ''), son = [m.t || m.n].concat(m.e || []).filter(function (x) { var y = n(x).replace(/ /g, ''); return y.length >= 2 && tz.length > y.length && tz.length - y.length <= 4 && tz.slice(-y.length) === y; })[0];
             if (son) { es = son; ad = String(metin).replace(/\s+/g, '').trim(); }
         }
         // EN: kisaltilmis yazim ("admin assistant" -> Administrative Assistant): unvan yazildigi gibi
         if (!es && mDil() !== 'tr') {
             var tw = tx.split(' ');
-            var yakin = m.e.filter(function (x) { var xw = n(x).split(' '); return xw.length === tw.length && tw.some(function (w, i) { return xw[i] === w; }) && tw.every(function (w, i) { return xw[i] === w || (w.length >= 4 && xw[i].indexOf(w) === 0); }); })[0];
+            var yakin = (m.e || []).filter(function (x) { var xw = n(x).split(' '); return xw.length === tw.length && tw.some(function (w, i) { return xw[i] === w; }) && tw.every(function (w, i) { return xw[i] === w || (w.length >= 4 && xw[i].indexOf(w) === 0); }); })[0];
             // EN: her kelime buyuk harfle; DE/FR: yalniz ilk harf, gerisi yazildigi gibi
             if (yakin) { es = yakin; ad = mDil() === 'en' ? tw.map(buyukBas).join(' ') : buyukBas(String(metin).trim()); }
         }
         if (!es) return m;
         ad = ad || (es !== es.toLowerCase() ? es : es.split(' ').map(buyukBas).join(' '));
-        var v = Object.create(m); v.n = ad; v.t = ad; v.__asil = m.n;
+        var v = Object.create(m); v.n = ad; v.t = ad; v.__asil = m.n; v.__rk = rk;
         var t0 = m.t || m.n, eski = kucuk(t0, true) + '.';
         if (m.a && (m.a.indexOf(t0 + ' ') === 0 || m.a.indexOf(t0 + '，') === 0 || m.a.indexOf(t0 + 'として') === 0)) v.a = ad + m.a.slice(t0.length);
         else if (m.a && m.a.slice(-eski.length) === eski) v.a = m.a.slice(0, -eski.length) + kucuk(es, mDil() === 'tr') + '.';
