@@ -2954,6 +2954,10 @@ body.mcv-modal-acik { overflow: hidden; }
 .mcv-modal .mcv-modal-kapat { flex: none; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; background: #f1f5f9; color: #334155; border: none; font-size: 16px; }
 .mcv-modal .mcv-birincil { width: 100%; margin: 6px 0 10px; background: #1e293b; color: #fff; border: none; }
 .mcv-modal .mcv-ikincil { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; padding: 6px 12px; }
+.mcv-dil-kopya { margin: 0 0 12px; font-size: 14px; }
+.mcv-dil-kopya label { display: block; margin-bottom: 4px; font-weight: 600; }
+.mcv-dil-kopya-satir { display: flex; gap: 8px; }
+.mcv-dil-kopya-satir select { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; background: #fff; color: #1e293b; }
 .mcv-modal .mcv-tehlike { background: #fff; color: #b91c1c; border: 1px solid #fecaca; padding: 6px 12px; }
 .mcv-bilgi { font-size: 14px; line-height: 1.45; color: #475569; margin: 4px 0 10px; }
 .mcv-not { font-size: 12.5px; line-height: 1.45; color: #64748b; margin: 14px 0 0; }
@@ -6231,14 +6235,26 @@ class SocialMediaManager {
             // ve ondan sonra PDF, Word ya da yedek alınmadıysa çıkar. Boş formda ve yalnız bakan ziyaretçide çıkmaz.
             // (Veri zaten tarayıcıya otomatik kaydediliyor; uyarı yalnızca dosya almayı hatırlatır.)
     var __mcvDegisti = false;
+    window.mcvCikisUyariKapat = function () { __mcvDegisti = false; };
     document.addEventListener('input', function (e) {
-        if (e.target && e.target.closest && e.target.closest('#cv-form')) __mcvDegisti = true;
+        if (e.target && e.target.closest && e.target.closest('#cv-form') && !e.target.closest('#mcv-ilan-metin, #mcv-ilan-sonuc')) __mcvDegisti = true;
     }, true);
     document.addEventListener('click', function (e) {
         if (e.target && e.target.closest && e.target.closest('#save-pdf, #export-data, #mcv-docx-btn')) __mcvDegisti = false;
     }, true);
+    function __mcvAnlik() {
+        try { var m = window.autoSaveManager; if (!m || !m.collectData) return null; var d = m.collectData(); delete d.timestamp; return JSON.stringify(d); } catch (x) { return null; }
+    }
+    var __mcvIlk = null;
+    window.mcvCikisDurum = function () { return { degisti: __mcvDegisti, anlik: __mcvIlk !== null, ayni: __mcvIlk !== null && __mcvAnlik() === __mcvIlk }; };
+    window.addEventListener('load', function () { setTimeout(function () { __mcvIlk = __mcvAnlik(); }, 1500); }); // kayitli CV yuklenirken giden input olaylari degisiklik sayilmaz
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#save-pdf, #export-data, #mcv-docx-btn')) setTimeout(function () { __mcvIlk = __mcvAnlik(); }, 0);
+    }, true);
     window.addEventListener('beforeunload', function(e) {
         if (__mcvDegisti) {
+            var simdi = __mcvAnlik();
+            if (__mcvIlk !== null && simdi !== null && simdi === __mcvIlk) return; // CV ayni: uyari yok
             e.preventDefault();
             e.returnValue = '';
         }
@@ -8512,7 +8528,7 @@ if (socialMediaSection) {
                         const clonedSectionDescriptions = clonedDoc.querySelectorAll('.section-description');
                         clonedSectionDescriptions.forEach(desc => { desc.style.display = 'none'; });
                         // Yazarken yardim / oneri kutulari CV icerigi degildir; odak alanda kalsa bile PDF'e basilmasin
-                        clonedDoc.querySelectorAll('#cv-form .mcv-help, #cv-form .mcv-oneri, #cv-form .social-suggest').forEach(el => { el.style.display = 'none'; });
+                        clonedDoc.querySelectorAll('#cv-form .mcv-help, #cv-form .mcv-oneri, #cv-form .social-suggest, #cv-form .mcv-taslak-balon').forEach(el => { el.style.display = 'none'; });
 
                         const clonedCV = clonedDoc.getElementById('cv-form');
                         if (clonedCV) clonedCV.classList.add('pdf-mode');
@@ -8704,6 +8720,12 @@ if (socialMediaSection) {
                         // Üretilen tüm sayfalara otomatik olarak yayılır.
                         const lgPdf = document.getElementById('language-select').value;
                         const cjkB64 = ((lgPdf === 'ja' || lgPdf === 'zh') && window.cvPdfCjkFont) ? await window.cvPdfCjkFont(lgPdf) : null;
+                        if (lgPdf !== 'ja' && lgPdf !== 'zh') await new Promise(function (res) {
+                            var key = lgPdf === 'ar' ? 'CV_PDF_FONT_ARABIC_BASE64' : 'CV_PDF_FONT_BASE64';
+                            if (window[key]) { res(); return; }
+                            try { window.dispatchEvent(new Event('keydown')); } catch (e) {}
+                            var n = 0; (function w() { if (window[key] || ++n > 100) res(); else setTimeout(w, 100); })();
+                        });
                         addInvisibleTextLayer(doc, pdfTextLines, cjkB64);
                         resolve(doc);
                     }).catch(error => {
@@ -10796,13 +10818,32 @@ function saveCV() {
         }
         function nrm(t) { return (t || '').toLocaleLowerCase(lang() === 'tr' ? 'tr' : 'en').replace(/\s+/g, ' ').trim(); }
         function meslekBul(d, metin) {
-            var m = nrm(metin); if (m.length < 3) return null;
-            for (var i = 0; i < d.length; i++) {
-                var parcalar = d[i].n.split(/\s*[\/(),]\s*/).map(nrm).filter(function (x) { return x.length >= 3; });
-                for (var j = 0; j < parcalar.length; j++) { if (m.indexOf(parcalar[j]) >= 0 || parcalar[j].indexOf(m) >= 0) return d[i]; }
+            // 20.11: en iyi eslesme (ilk bulunan degil); meslek adi kelime basinda gecmeli ("muhasebe" -> Muhasebeci, "Ebe" degil);
+            // Turkce harfsiz yazim ("hemsire"); yazilan metin adin basiysa ("muhase"); kok eslesmesi ("kaynak ustasi" -> Kaynakci)
+            function katla(t) {
+                return nrm(t).replace(/[çğıöşüâî]/g, function (c) { return { 'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u', 'â': 'a', 'î': 'i' }[c]; })
+                    .replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
             }
-            return null;
+            var m = katla(metin); if (m.length < 3) return null;
+            var en = null, enP = 1e12;
+            function aday(o, p) { if (p < enP) { en = o; enP = p; } }
+            d.forEach(function (o) {
+                o.n.split(/\s*[\/(),]\s*/).map(katla).filter(function (x) { return x.length >= 3; }).forEach(function (p) {
+                    var i = -1;
+                    while ((i = m.indexOf(p, i + 1)) >= 0) { if (i === 0 || m.charAt(i - 1) === ' ') { aday(o, i * 100 - p.length); break; } }
+                    if (m.length >= 4 && (p.indexOf(m) === 0 || p.indexOf(' ' + m) >= 0)) aday(o, 50000 + p.length);
+                    if (m.length <= 40) p.split(' ').forEach(function (pw, sira) {
+                        m.split(' ').forEach(function (w) {
+                            if (w.length < 4) return;
+                            var n = Math.min(5, w.length);
+                            if (pw.length >= n && pw.slice(0, n) === w.slice(0, n)) aday(o, 100000 - n * 100 + sira * 50 + p.length);
+                        });
+                    });
+                });
+            });
+            return en;
         }
+        window.mcvEskiMeslekBul = meslekBul; // otomatik test icin
         function yazVeBildir(hedef, metin) {
             hedef.textContent = metin; hedef.classList.remove('empty-field');
             hedef.dispatchEvent(new Event('input', { bubbles: true }));
@@ -10899,10 +10940,12 @@ function saveCV() {
                         });
                         govde.appendChild(cipler);
                     }
+                    if (m.u) {
                     var a = document.createElement('a'); a.href = m.u; a.target = '_blank'; a.rel = 'noopener'; a.className = 'mcv-oneri-link';
                     a.textContent = '📄 ' + ot('ornek').replace('{x}', m.n); engelle(a);
                     a.addEventListener('click', function (e) { e.preventDefault(); ornekAc(m); });
                     govde.appendChild(a);
+                    }
                 }
                 if (on) sec.value = on.s;
                 ciz(on);
@@ -11403,7 +11446,7 @@ function saveCV() {
 /* === CV'LERIM (cihazda birden fazla CV) ve ILANA GORE KONTROL ===
    Her sey bu tarayicida kalir; ilan metni ve CV icerigi hicbir yere gonderilmez. */
 (function () {
-    var S = {"tr": {"cvs": "CV'lerim", "cvsInfo": "CV'leriniz yalnızca bu cihazda, bu tarayıcıda saklanır. Her başvuru için ayrı bir kopya hazırlayabilirsiniz.", "copy": "Bu CV'nin kopyasını oluştur", "open": "Aç", "active": "Şu an açık", "dele": "Sil", "delQ": "Bu CV bu cihazdan silinecek. Emin misiniz?", "copied": "Kopya oluşturuldu. Şu an kopyayı düzenliyorsunuz.", "opened": "CV açıldı.", "limit": "En fazla 5 CV saklanabilir. Yeni kopya için birini silin.", "full": "Cihazda yer kalmadı. Fotoğraflı CV'ler daha çok yer kaplar; birini silip tekrar deneyin.", "name": "CV adı", "untitled": "Adsız CV", "close": "Kapat", "job": "İlana göre kontrol", "jobInfo": "İş ilanının metnini yapıştırın. İlanda geçip CV'nizde bulunmayan kelimeleri gösterelim. Metin cihazınızdan dışarı gönderilmez.", "jobPh": "İlan metnini buraya yapıştırın", "run": "Kontrol et", "missing": "İlanda geçiyor, CV'nizde yok", "found": "CV'nizde de geçen kelimeler: {n}", "none": "İlandaki önemli kelimelerin hepsi CV'nizde geçiyor.", "short": "Lütfen ilanın tamamını yapıştırın; metin çok kısa.", "note": "Bu bir puan değil, basit bir kelime karşılaştırmasıdır. Yalnızca gerçekten sahip olduğunuz bilgi ve becerileri ekleyin.", "cjk": "Bu kontrol şimdilik Japonca ve Çince metinlerde çalışmıyor.", "docxTitle": "CV'yi Word dosyası olarak indir (tek sütun, fotoğrafsız)", "docx": "Word (.docx)", "cl": "Ön yazı", "clTitle": "Ön yazı (motivasyon mektubu)", "clInfo": "Ad ve iletişim bilgileriniz CV'nizden alınır. Taslak yalnızca bir başlangıçtır; kendi cümlelerinizle düzenleyin. Metin cihazınızda kalır.", "clCompany": "Şirket / kurum", "clPosition": "Pozisyon", "clGreeting": "Hitap", "clBody": "Metin", "clClosing": "Kapanış", "clDraft": "CV'mden taslak oluştur", "clDraftQ": "Mevcut metin taslakla değiştirilecek. Devam edilsin mi?", "clPdf": "PDF indir", "clDocx": "Word indir", "clDefGreeting": "Sayın İşe Alım Yetkilisi,", "clDefClosing": "Saygılarımla,", "dA": "{sirket} bünyesindeki {pozisyon} pozisyonu için başvurmak istiyorum.", "dB": "{pozisyon} pozisyonu için başvurmak istiyorum.", "dC": "{sirket} bünyesinde uygun bir pozisyon için başvurmak istiyorum.", "dD": "Kurumunuzda uygun bir pozisyon için başvurmak istiyorum.", "d2": "{firma} bünyesinde {unvan} olarak deneyim kazandım.", "d3": "Öne çıkan becerilerim: {yetenekler}.", "d4": "Ekibinize nasıl katkı sağlayabileceğimi bir görüşmede anlatmaktan memnuniyet duyarım. Zaman ayırdığınız için teşekkür ederim.", "clEmpty": "Önce metni yazın ya da taslak oluşturun.", "dPre": ""}, "en": {"cvs": "My CVs", "cvsInfo": "Your CVs are stored only on this device, in this browser. You can keep a separate copy for each application.", "copy": "Make a copy of this CV", "open": "Open", "active": "Open now", "dele": "Delete", "delQ": "This CV will be deleted from this device. Are you sure?", "copied": "Copy created. You are now editing the copy.", "opened": "CV opened.", "limit": "You can keep up to 5 CVs. Delete one to make a new copy.", "full": "There is no storage space left on this device. CVs with photos take more space; delete one and try again.", "name": "CV name", "untitled": "Untitled CV", "close": "Close", "job": "Check against a job ad", "jobInfo": "Paste the text of a job ad. We'll show the words that appear in the ad but not in your CV. The text never leaves your device.", "jobPh": "Paste the job ad here", "run": "Check", "missing": "In the ad, not in your CV", "found": "Words that also appear in your CV: {n}", "none": "All the key words in the ad already appear in your CV.", "short": "Please paste the whole ad; the text is too short.", "note": "This is not a score, just a simple word comparison. Only add knowledge and skills you really have.", "cjk": "This check does not work with Japanese or Chinese text yet.", "docxTitle": "Download the CV as a Word file (single column, no photo)", "docx": "Word (.docx)", "cl": "Cover letter", "clTitle": "Cover letter", "clInfo": "Your name and contact details are taken from your CV. The draft is only a starting point; rewrite it in your own words. The text stays on your device.", "clCompany": "Company / organisation", "clPosition": "Position", "clGreeting": "Greeting", "clBody": "Letter", "clClosing": "Closing", "clDraft": "Create a draft from my CV", "clDraftQ": "The current text will be replaced with the draft. Continue?", "clPdf": "Download PDF", "clDocx": "Download Word", "clDefGreeting": "Dear Hiring Manager,", "clDefClosing": "Kind regards,", "dA": "I am writing to apply for the {pozisyon} position at {sirket}.", "dB": "I am writing to apply for the {pozisyon} position.", "dC": "I am writing to apply for a suitable position at {sirket}.", "dD": "I am writing to apply for a suitable position in your organisation.", "d2": "I bring experience from my role as {unvan} at {firma}.", "d3": "My key skills include {yetenekler}.", "d4": "I would welcome the opportunity to discuss how I could contribute to your team. Thank you for your time and consideration.", "clEmpty": "Write the letter or create a draft first.", "dPre": ""}, "de": {"cvs": "Meine Lebensläufe", "cvsInfo": "Ihre Lebensläufe werden nur auf diesem Gerät in diesem Browser gespeichert. Sie können für jede Bewerbung eine eigene Kopie anlegen.", "copy": "Kopie dieses Lebenslaufs anlegen", "open": "Öffnen", "active": "Gerade geöffnet", "dele": "Löschen", "delQ": "Dieser Lebenslauf wird von diesem Gerät gelöscht. Sind Sie sicher?", "copied": "Kopie angelegt. Sie bearbeiten jetzt die Kopie.", "opened": "Lebenslauf geöffnet.", "limit": "Es können höchstens 5 Lebensläufe gespeichert werden. Löschen Sie einen, um eine neue Kopie anzulegen.", "full": "Auf dem Gerät ist kein Speicherplatz mehr frei. Lebensläufe mit Foto brauchen mehr Platz; löschen Sie einen und versuchen Sie es erneut.", "name": "Name des Lebenslaufs", "untitled": "Unbenannter Lebenslauf", "close": "Schließen", "job": "Mit Stellenanzeige abgleichen", "jobInfo": "Fügen Sie den Text einer Stellenanzeige ein. Wir zeigen die Wörter, die in der Anzeige vorkommen, aber nicht in Ihrem Lebenslauf. Der Text verlässt Ihr Gerät nicht.", "jobPh": "Stellenanzeige hier einfügen", "run": "Abgleichen", "missing": "In der Anzeige, nicht im Lebenslauf", "found": "Wörter, die auch in Ihrem Lebenslauf vorkommen: {n}", "none": "Alle wichtigen Wörter der Anzeige kommen bereits in Ihrem Lebenslauf vor.", "short": "Bitte fügen Sie die ganze Anzeige ein; der Text ist zu kurz.", "note": "Das ist keine Bewertung, sondern ein einfacher Wortvergleich. Ergänzen Sie nur Kenntnisse und Fähigkeiten, die Sie wirklich haben.", "cjk": "Dieser Abgleich funktioniert noch nicht mit japanischem oder chinesischem Text.", "docxTitle": "Lebenslauf als Word-Datei herunterladen (einspaltig, ohne Foto)", "docx": "Word (.docx)", "cl": "Anschreiben", "clTitle": "Anschreiben", "clInfo": "Name und Kontaktdaten werden aus Ihrem Lebenslauf übernommen. Der Entwurf ist nur ein Ausgangspunkt; formulieren Sie ihn in eigenen Worten. Der Text bleibt auf Ihrem Gerät.", "clCompany": "Unternehmen / Organisation", "clPosition": "Stelle", "clGreeting": "Anrede", "clBody": "Text", "clClosing": "Grußformel", "clDraft": "Entwurf aus meinem Lebenslauf erstellen", "clDraftQ": "Der aktuelle Text wird durch den Entwurf ersetzt. Fortfahren?", "clPdf": "PDF herunterladen", "clDocx": "Word herunterladen", "clDefGreeting": "Sehr geehrte Damen und Herren,", "clDefClosing": "Mit freundlichen Grüßen", "dA": "hiermit bewerbe ich mich um die Stelle als {pozisyon} bei {sirket}.", "dB": "hiermit bewerbe ich mich um die Stelle als {pozisyon}.", "dC": "hiermit bewerbe ich mich um eine passende Stelle bei {sirket}.", "dD": "hiermit bewerbe ich mich um eine passende Stelle in Ihrem Unternehmen.", "d2": "Berufserfahrung habe ich als {unvan} bei {firma} gesammelt.", "d3": "Zu meinen wichtigsten Kenntnissen gehören: {yetenekler}.", "d4": "Über die Gelegenheit, mich in einem persönlichen Gespräch vorzustellen, freue ich mich sehr. Vielen Dank für Ihre Zeit.", "clEmpty": "Schreiben Sie zuerst den Text oder erstellen Sie einen Entwurf.", "dPre": ""}, "fr": {"cvs": "Mes CV", "cvsInfo": "Vos CV sont enregistrés uniquement sur cet appareil, dans ce navigateur. Vous pouvez garder une copie distincte pour chaque candidature.", "copy": "Faire une copie de ce CV", "open": "Ouvrir", "active": "Ouvert", "dele": "Supprimer", "delQ": "Ce CV sera supprimé de cet appareil. Êtes-vous sûr ?", "copied": "Copie créée. Vous modifiez maintenant la copie.", "opened": "CV ouvert.", "limit": "Vous pouvez garder 5 CV au maximum. Supprimez-en un pour faire une nouvelle copie.", "full": "Il n’y a plus d’espace de stockage sur cet appareil. Les CV avec photo prennent plus de place ; supprimez-en un et réessayez.", "name": "Nom du CV", "untitled": "CV sans nom", "close": "Fermer", "job": "Comparer avec une offre", "jobInfo": "Collez le texte d’une offre d’emploi. Nous affichons les mots présents dans l’offre mais absents de votre CV. Le texte ne quitte pas votre appareil.", "jobPh": "Collez l’offre ici", "run": "Comparer", "missing": "Dans l’offre, pas dans votre CV", "found": "Mots également présents dans votre CV : {n}", "none": "Tous les mots importants de l’offre figurent déjà dans votre CV.", "short": "Veuillez coller l’offre en entier ; le texte est trop court.", "note": "Ce n’est pas une note, juste une simple comparaison de mots. N’ajoutez que des connaissances et compétences que vous avez réellement.", "cjk": "Cette comparaison ne fonctionne pas encore avec un texte japonais ou chinois.", "docxTitle": "Télécharger le CV au format Word (une colonne, sans photo)", "docx": "Word (.docx)", "cl": "Lettre de motivation", "clTitle": "Lettre de motivation", "clInfo": "Votre nom et vos coordonnées sont repris de votre CV. Le brouillon n’est qu’un point de départ ; reformulez-le avec vos propres mots. Le texte reste sur votre appareil.", "clCompany": "Entreprise / organisation", "clPosition": "Poste", "clGreeting": "Formule d’appel", "clBody": "Texte", "clClosing": "Formule de politesse", "clDraft": "Créer un brouillon à partir de mon CV", "clDraftQ": "Le texte actuel sera remplacé par le brouillon. Continuer ?", "clPdf": "Télécharger le PDF", "clDocx": "Télécharger le Word", "clDefGreeting": "Madame, Monsieur,", "clDefClosing": "Veuillez agréer, Madame, Monsieur, l’expression de mes salutations distinguées.", "dA": "Je souhaite vous présenter ma candidature au poste de {pozisyon} au sein de {sirket}.", "dB": "Je souhaite vous présenter ma candidature au poste de {pozisyon}.", "dC": "Je souhaite vous présenter ma candidature à un poste adapté au sein de {sirket}.", "dD": "Je souhaite vous présenter ma candidature à un poste adapté au sein de votre organisation.", "d2": "J’ai acquis de l’expérience en tant que {unvan} chez {firma}.", "d3": "Mes principales compétences sont : {yetenekler}.", "d4": "Un entretien me permettrait de vous exposer comment je pourrais contribuer à votre équipe. Je vous remercie de votre attention.", "clEmpty": "Rédigez d’abord la lettre ou créez un brouillon.", "dPre": ""}, "es": {"cvs": "Mis CV", "cvsInfo": "Tus CV se guardan solo en este dispositivo, en este navegador. Puedes tener una copia distinta para cada solicitud.", "copy": "Hacer una copia de este CV", "open": "Abrir", "active": "Abierto ahora", "dele": "Eliminar", "delQ": "Este CV se eliminará de este dispositivo. ¿Seguro?", "copied": "Copia creada. Ahora estás editando la copia.", "opened": "CV abierto.", "limit": "Puedes guardar hasta 5 CV. Elimina uno para hacer una copia nueva.", "full": "No queda espacio en este dispositivo. Los CV con foto ocupan más; elimina uno y vuelve a intentarlo.", "name": "Nombre del CV", "untitled": "CV sin nombre", "close": "Cerrar", "job": "Comparar con una oferta", "jobInfo": "Pega el texto de una oferta de empleo. Te mostramos las palabras que aparecen en la oferta pero no en tu CV. El texto no sale de tu dispositivo.", "jobPh": "Pega aquí la oferta", "run": "Comparar", "missing": "En la oferta, no en tu CV", "found": "Palabras que también aparecen en tu CV: {n}", "none": "Todas las palabras importantes de la oferta ya aparecen en tu CV.", "short": "Pega la oferta completa; el texto es demasiado corto.", "note": "No es una puntuación, solo una comparación sencilla de palabras. Añade únicamente conocimientos y habilidades que realmente tengas.", "cjk": "Esta comparación todavía no funciona con texto en japonés o chino.", "docxTitle": "Descargar el CV como archivo de Word (una columna, sin foto)", "docx": "Word (.docx)", "cl": "Carta de presentación", "clTitle": "Carta de presentación", "clInfo": "Tu nombre y tus datos de contacto se toman de tu CV. El borrador es solo un punto de partida; reescríbelo con tus propias palabras. El texto se queda en tu dispositivo.", "clCompany": "Empresa / organización", "clPosition": "Puesto", "clGreeting": "Saludo", "clBody": "Texto", "clClosing": "Despedida", "clDraft": "Crear un borrador con mi CV", "clDraftQ": "El texto actual se sustituirá por el borrador. ¿Continuar?", "clPdf": "Descargar PDF", "clDocx": "Descargar Word", "clDefGreeting": "Estimado/a responsable de selección:", "clDefClosing": "Atentamente,", "dA": "Me dirijo a ustedes para presentar mi candidatura al puesto de {pozisyon} en {sirket}.", "dB": "Me dirijo a ustedes para presentar mi candidatura al puesto de {pozisyon}.", "dC": "Me dirijo a ustedes para presentar mi candidatura a un puesto adecuado en {sirket}.", "dD": "Me dirijo a ustedes para presentar mi candidatura a un puesto adecuado en su organización.", "d2": "He adquirido experiencia como {unvan} en {firma}.", "d3": "Entre mis principales habilidades se encuentran: {yetenekler}.", "d4": "Me encantaría explicarles en una entrevista cómo podría contribuir a su equipo. Gracias por su tiempo y consideración.", "clEmpty": "Escribe primero la carta o crea un borrador.", "dPre": ""}, "it": {"cvs": "I miei CV", "cvsInfo": "I tuoi CV sono salvati solo su questo dispositivo, in questo browser. Puoi tenere una copia diversa per ogni candidatura.", "copy": "Crea una copia di questo CV", "open": "Apri", "active": "Aperto ora", "dele": "Elimina", "delQ": "Questo CV verrà eliminato da questo dispositivo. Sei sicuro?", "copied": "Copia creata. Ora stai modificando la copia.", "opened": "CV aperto.", "limit": "Puoi salvare al massimo 5 CV. Eliminane uno per creare una nuova copia.", "full": "Non c'è più spazio su questo dispositivo. I CV con foto occupano più spazio; eliminane uno e riprova.", "name": "Nome del CV", "untitled": "CV senza nome", "close": "Chiudi", "job": "Confronta con un annuncio", "jobInfo": "Incolla il testo di un annuncio di lavoro. Ti mostriamo le parole presenti nell'annuncio ma non nel tuo CV. Il testo non lascia il tuo dispositivo.", "jobPh": "Incolla qui l'annuncio", "run": "Confronta", "missing": "Nell'annuncio, non nel tuo CV", "found": "Parole presenti anche nel tuo CV: {n}", "none": "Tutte le parole importanti dell'annuncio sono già nel tuo CV.", "short": "Incolla l'annuncio completo; il testo è troppo breve.", "note": "Non è un punteggio, ma un semplice confronto di parole. Aggiungi solo conoscenze e competenze che hai davvero.", "cjk": "Questo confronto non funziona ancora con testi in giapponese o cinese.", "docxTitle": "Scarica il CV come file Word (una colonna, senza foto)", "docx": "Word (.docx)", "cl": "Lettera di presentazione", "clTitle": "Lettera di presentazione", "clInfo": "Nome e recapiti vengono presi dal tuo CV. La bozza è solo un punto di partenza; riscrivila con parole tue. Il testo resta sul tuo dispositivo.", "clCompany": "Azienda / organizzazione", "clPosition": "Posizione", "clGreeting": "Saluto iniziale", "clBody": "Testo", "clClosing": "Chiusura", "clDraft": "Crea una bozza dal mio CV", "clDraftQ": "Il testo attuale verrà sostituito dalla bozza. Continuare?", "clPdf": "Scarica PDF", "clDocx": "Scarica Word", "clDefGreeting": "Gentile Responsabile della selezione,", "clDefClosing": "Cordiali saluti,", "dA": "Le scrivo per candidarmi alla posizione di {pozisyon} presso {sirket}.", "dB": "Le scrivo per candidarmi alla posizione di {pozisyon}.", "dC": "Le scrivo per candidarmi a una posizione adatta presso {sirket}.", "dD": "Le scrivo per candidarmi a una posizione adatta presso la Sua organizzazione.", "d2": "Ho maturato esperienza come {unvan} presso {firma}.", "d3": "Tra le mie competenze principali: {yetenekler}.", "d4": "Mi farebbe piacere illustrarLe in un colloquio come potrei contribuire al Suo team. La ringrazio per l’attenzione.", "clEmpty": "Scrivi prima la lettera o crea una bozza.", "dPre": ""}, "pt": {"cvs": "Os meus currículos", "cvsInfo": "Os seus currículos ficam guardados apenas neste dispositivo, neste navegador. Pode manter uma cópia diferente para cada candidatura.", "copy": "Fazer uma cópia deste currículo", "open": "Abrir", "active": "Aberto agora", "dele": "Eliminar", "delQ": "Este currículo será eliminado deste dispositivo. Tem a certeza?", "copied": "Cópia criada. Está agora a editar a cópia.", "opened": "Currículo aberto.", "limit": "Pode guardar até 5 currículos. Elimine um para fazer uma nova cópia.", "full": "Não há mais espaço neste dispositivo. Os currículos com fotografia ocupam mais espaço; elimine um e tente novamente.", "name": "Nome do currículo", "untitled": "Currículo sem nome", "close": "Fechar", "job": "Comparar com um anúncio", "jobInfo": "Cole o texto de um anúncio de emprego. Mostramos as palavras que aparecem no anúncio mas não no seu currículo. O texto não sai do seu dispositivo.", "jobPh": "Cole o anúncio aqui", "run": "Comparar", "missing": "No anúncio, mas não no seu currículo", "found": "Palavras que também aparecem no seu currículo: {n}", "none": "Todas as palavras importantes do anúncio já aparecem no seu currículo.", "short": "Cole o anúncio completo; o texto é demasiado curto.", "note": "Isto não é uma pontuação, apenas uma comparação simples de palavras. Acrescente apenas conhecimentos e competências que tem realmente.", "cjk": "Esta comparação ainda não funciona com textos em japonês ou chinês.", "docxTitle": "Transferir o currículo como ficheiro Word (uma coluna, sem fotografia)", "docx": "Word (.docx)", "cl": "Carta de apresentação", "clTitle": "Carta de apresentação", "clInfo": "O seu nome e os seus contactos vêm do seu currículo. O rascunho é apenas um ponto de partida; reescreva-o com as suas próprias palavras. O texto fica no seu dispositivo.", "clCompany": "Empresa / organização", "clPosition": "Cargo", "clGreeting": "Saudação", "clBody": "Texto", "clClosing": "Despedida", "clDraft": "Criar rascunho a partir do meu currículo", "clDraftQ": "O texto atual será substituído pelo rascunho. Continuar?", "clPdf": "Transferir PDF", "clDocx": "Transferir Word", "clDefGreeting": "Exmo.(a) Senhor(a),", "clDefClosing": "Com os melhores cumprimentos,", "dA": "Venho por este meio candidatar-me à vaga de {pozisyon} na empresa {sirket}.", "dB": "Venho por este meio candidatar-me à vaga de {pozisyon}.", "dC": "Venho por este meio candidatar-me a uma vaga adequada na empresa {sirket}.", "dD": "Venho por este meio candidatar-me a uma vaga adequada na vossa organização.", "d2": "Adquiri experiência como {unvan} na empresa {firma}.", "d3": "Entre as minhas principais competências estão: {yetenekler}.", "d4": "Terei todo o gosto em explicar, numa entrevista, como posso contribuir para a vossa equipa. Agradeço a vossa atenção.", "clEmpty": "Escreva a carta ou crie um rascunho primeiro.", "dPre": ""}, "ru": {"cvs": "Мои резюме", "cvsInfo": "Ваши резюме хранятся только на этом устройстве, в этом браузере. Для каждого отклика можно держать отдельную копию.", "copy": "Создать копию этого резюме", "open": "Открыть", "active": "Открыто сейчас", "dele": "Удалить", "delQ": "Это резюме будет удалено с этого устройства. Продолжить?", "copied": "Копия создана. Сейчас вы редактируете копию.", "opened": "Резюме открыто.", "limit": "Можно хранить не более 5 резюме. Удалите одно, чтобы создать новую копию.", "full": "На устройстве не осталось места. Резюме с фото занимают больше места; удалите одно и попробуйте снова.", "name": "Название резюме", "untitled": "Резюме без названия", "close": "Закрыть", "job": "Сверить с вакансией", "jobInfo": "Вставьте текст вакансии. Мы покажем слова, которые есть в вакансии, но отсутствуют в вашем резюме. Текст не покидает ваше устройство.", "jobPh": "Вставьте текст вакансии сюда", "run": "Сверить", "missing": "Есть в вакансии, нет в резюме", "found": "Слова, которые есть и в вашем резюме: {n}", "none": "Все важные слова из вакансии уже есть в вашем резюме.", "short": "Вставьте вакансию целиком: текст слишком короткий.", "note": "Это не оценка, а простое сравнение слов. Добавляйте только те знания и навыки, которые у вас действительно есть.", "cjk": "Пока эта проверка не работает с японским и китайским текстом.", "docxTitle": "Скачать резюме в формате Word (одна колонка, без фото)", "docx": "Word (.docx)", "cl": "Сопроводительное письмо", "clTitle": "Сопроводительное письмо", "clInfo": "Имя и контакты берутся из вашего резюме. Черновик — лишь отправная точка; перепишите его своими словами. Текст остаётся на вашем устройстве.", "clCompany": "Компания / организация", "clPosition": "Должность", "clGreeting": "Обращение", "clBody": "Текст", "clClosing": "Заключение", "clDraft": "Создать черновик из резюме", "clDraftQ": "Текущий текст будет заменён черновиком. Продолжить?", "clPdf": "Скачать PDF", "clDocx": "Скачать Word", "clDefGreeting": "Здравствуйте!", "clDefClosing": "С уважением,", "dA": "Прошу рассмотреть мою кандидатуру на должность «{pozisyon}» в компании {sirket}.", "dB": "Прошу рассмотреть мою кандидатуру на должность «{pozisyon}».", "dC": "Прошу рассмотреть мою кандидатуру на подходящую должность в компании {sirket}.", "dD": "Прошу рассмотреть мою кандидатуру на подходящую должность в вашей организации.", "d2": "Последнее место работы: {firma}, должность «{unvan}».", "d3": "Мои ключевые навыки: {yetenekler}.", "d4": "Предлагаю обсудить на собеседовании, как мой опыт может быть полезен вашей команде. Спасибо за уделённое время.", "clEmpty": "Сначала напишите текст или создайте черновик.", "dPre": ""}, "ar": {"cvs": "سيري الذاتية", "cvsInfo": "تُحفظ سيرك الذاتية على هذا الجهاز فقط، في هذا المتصفح. يمكنك الاحتفاظ بنسخة مختلفة لكل طلب توظيف.", "copy": "إنشاء نسخة من هذه السيرة الذاتية", "open": "فتح", "active": "مفتوحة الآن", "dele": "حذف", "delQ": "ستُحذف هذه السيرة الذاتية من هذا الجهاز. هل أنت متأكد؟", "copied": "تم إنشاء النسخة. أنت الآن تعدّل النسخة.", "opened": "تم فتح السيرة الذاتية.", "limit": "يمكن حفظ 5 سير ذاتية كحد أقصى. احذف واحدة لإنشاء نسخة جديدة.", "full": "لم تعد هناك مساحة على هذا الجهاز. السير الذاتية التي تحتوي على صورة تشغل مساحة أكبر؛ احذف واحدة وحاول مرة أخرى.", "name": "اسم السيرة الذاتية", "untitled": "سيرة ذاتية بلا اسم", "close": "إغلاق", "job": "مقارنة مع إعلان وظيفة", "jobInfo": "الصق نص إعلان الوظيفة. سنعرض الكلمات الموجودة في الإعلان وغير الموجودة في سيرتك الذاتية. لا يغادر النص جهازك.", "jobPh": "الصق نص الإعلان هنا", "run": "قارن", "missing": "في الإعلان، وليست في سيرتك الذاتية", "found": "كلمات موجودة أيضًا في سيرتك الذاتية: {n}", "none": "كل الكلمات المهمة في الإعلان موجودة بالفعل في سيرتك الذاتية.", "short": "يرجى لصق الإعلان كاملًا؛ النص قصير جدًا.", "note": "هذه ليست درجة تقييم، بل مقارنة بسيطة بين الكلمات. أضف فقط المعارف والمهارات التي تمتلكها فعلًا.", "cjk": "هذه المقارنة لا تعمل بعد مع النصوص اليابانية أو الصينية.", "docxTitle": "تنزيل السيرة الذاتية كملف Word (عمود واحد، بدون صورة)", "docx": "Word (.docx)", "cl": "خطاب التقديم", "clTitle": "خطاب التقديم", "clInfo": "يُؤخذ اسمك وبيانات الاتصال من سيرتك الذاتية. المسودة مجرد بداية؛ أعد صياغتها بكلماتك. يبقى النص على جهازك.", "clCompany": "الشركة / الجهة", "clPosition": "الوظيفة", "clGreeting": "التحية", "clBody": "النص", "clClosing": "الختام", "clDraft": "إنشاء مسودة من سيرتي الذاتية", "clDraftQ": "سيُستبدل النص الحالي بالمسودة. هل تريد المتابعة؟", "clPdf": "تنزيل PDF", "clDocx": "تنزيل Word", "clDefGreeting": "السادة مسؤولي التوظيف المحترمين،", "clDefClosing": "مع خالص التحية،", "dA": "أتقدم بطلب لشغل وظيفة {pozisyon} في {sirket}.", "dB": "أتقدم بطلب لشغل وظيفة {pozisyon}.", "dC": "أتقدم بطلب لشغل وظيفة مناسبة في {sirket}.", "dD": "أتقدم بطلب لشغل وظيفة مناسبة في مؤسستكم.", "d2": "اكتسبت خبرة بوظيفة {unvan} في {firma}.", "d3": "من أبرز مهاراتي: {yetenekler}.", "d4": "يسعدني أن أوضح في مقابلة كيف يمكنني الإسهام في فريقكم. شكرًا لوقتكم واهتمامكم.", "clEmpty": "اكتب الخطاب أولًا أو أنشئ مسودة.", "dPre": ""}, "zh": {"cvs": "我的简历", "cvsInfo": "您的简历只保存在这台设备的这个浏览器中。您可以为每次求职保存一份单独的副本。", "copy": "复制这份简历", "open": "打开", "active": "当前打开", "dele": "删除", "delQ": "这份简历将从这台设备上删除。确定吗？", "copied": "已创建副本，您现在正在编辑副本。", "opened": "已打开简历。", "limit": "最多可保存 5 份简历。请先删除一份再创建新副本。", "full": "设备存储空间已满。带照片的简历占用空间更多；请删除一份后重试。", "name": "简历名称", "untitled": "未命名简历", "close": "关闭", "job": "对照招聘启事检查", "jobInfo": "粘贴招聘启事的文字，我们会列出启事中出现、但您的简历中没有的词。文字不会离开您的设备。", "jobPh": "在此粘贴招聘启事", "run": "检查", "missing": "启事中有、简历中没有", "found": "简历中也出现的词：{n}", "none": "启事中的重要词语都已出现在您的简历中。", "short": "请粘贴完整的招聘启事，文字太短。", "note": "这不是评分，只是简单的词语对比。请只添加您真正具备的知识和技能。", "cjk": "此检查暂时不支持日文和中文文本。", "docxTitle": "将简历下载为 Word 文件（单栏，无照片）", "docx": "Word (.docx)", "cl": "求职信", "clTitle": "求职信", "clInfo": "姓名和联系方式取自您的简历。草稿只是起点，请用自己的话改写。文字保存在您的设备上。", "clCompany": "公司 / 机构", "clPosition": "职位", "clGreeting": "称呼", "clBody": "正文", "clClosing": "结尾敬语", "clDraft": "根据我的简历生成草稿", "clDraftQ": "当前文字将被草稿替换。是否继续？", "clPdf": "下载 PDF", "clDocx": "下载 Word", "clDefGreeting": "尊敬的招聘负责人：", "clDefClosing": "此致\n敬礼！", "dA": "我希望应聘{sirket}的{pozisyon}职位。", "dB": "我希望应聘{pozisyon}职位。", "dC": "我希望应聘{sirket}的合适职位。", "dD": "我希望应聘贵单位的合适职位。", "d2": "我在{firma}担任{unvan}期间积累了相关经验。", "d3": "我的主要技能包括：{yetenekler}。", "d4": "期待有机会在面试中进一步介绍我能为团队带来的贡献。感谢您抽出宝贵时间。", "clEmpty": "请先填写正文或生成草稿。", "dPre": ""}, "ja": {"cvs": "保存した履歴書", "cvsInfo": "履歴書はこの端末のこのブラウザにのみ保存されます。応募先ごとに別のコピーを用意できます。", "copy": "この履歴書をコピー", "open": "開く", "active": "表示中", "dele": "削除", "delQ": "この履歴書をこの端末から削除します。よろしいですか？", "copied": "コピーを作成しました。現在はコピーを編集しています。", "opened": "履歴書を開きました。", "limit": "保存できる履歴書は最大5件です。新しいコピーを作るには1件削除してください。", "full": "端末の空き容量がありません。写真付きの履歴書は容量が大きくなります。1件削除してからもう一度お試しください。", "name": "履歴書の名前", "untitled": "名前のない履歴書", "close": "閉じる", "job": "求人票と照合", "jobInfo": "求人票の文章を貼り付けてください。求人票にあって履歴書にない語を表示します。文章が端末の外に送られることはありません。", "jobPh": "求人票の文章をここに貼り付け", "run": "照合する", "missing": "求人票にあり、履歴書にない語", "found": "履歴書にもある語：{n}", "none": "求人票の重要な語はすべて履歴書に含まれています。", "short": "求人票の全文を貼り付けてください。文章が短すぎます。", "note": "これは採点ではなく、単純な語の比較です。実際に持っている知識やスキルだけを追加してください。", "cjk": "この照合は、日本語・中国語の文章にはまだ対応していません。", "docxTitle": "履歴書を Word ファイルとしてダウンロード（1 カラム、写真なし）", "docx": "Word (.docx)", "cl": "カバーレター", "clTitle": "カバーレター（添え状）", "clInfo": "氏名と連絡先は履歴書から自動で入ります。下書きはあくまで出発点です。ご自身の言葉で書き直してください。文章は端末内に保存されます。", "clCompany": "会社名・団体名", "clPosition": "応募職種", "clGreeting": "宛名・書き出し", "clBody": "本文", "clClosing": "結び", "clDraft": "履歴書から下書きを作成", "clDraftQ": "現在の本文が下書きに置き換わります。続けますか？", "clPdf": "PDF をダウンロード", "clDocx": "Word をダウンロード", "clDefGreeting": "採用ご担当者様", "clDefClosing": "敬具", "dA": "{sirket}の{pozisyon}の求人に応募いたします。", "dB": "{pozisyon}の求人に応募いたします。", "dC": "{sirket}の求人に応募いたします。", "dD": "貴社の求人に応募いたします。", "d2": "{firma}にて{unvan}として経験を積んでまいりました。", "d3": "主なスキルは{yetenekler}です。", "d4": "貴社に貢献できる点について、面接の機会にご説明できれば幸いです。ご検討のほど、よろしくお願い申し上げます。", "clEmpty": "本文を入力するか、下書きを作成してください。", "dPre": "拝啓　時下ますますご清栄のこととお慶び申し上げます。"}};
+    var S = {"tr": {"cvs": "CV'lerim", "cvsInfo": "CV'leriniz yalnızca bu cihazda, bu tarayıcıda saklanır. Her başvuru için ayrı bir kopya hazırlayabilirsiniz.", "copy": "Bu CV'nin kopyasını oluştur", "open": "Aç", "active": "Şu an açık", "dele": "Sil", "delQ": "Bu CV bu cihazdan silinecek. Emin misiniz?", "copied": "Kopya oluşturuldu. Şu an kopyayı düzenliyorsunuz.", "opened": "CV açıldı.", "limit": "En fazla 5 CV saklanabilir. Yeni kopya için birini silin.", "full": "Cihazda yer kalmadı. Fotoğraflı CV'ler daha çok yer kaplar; birini silip tekrar deneyin.", "name": "CV adı", "untitled": "Adsız CV", "close": "Kapat", "job": "Mesleğe göre CV", "jobInfo": "Mesleğinizi yazın; o mesleğin örnek CV'sini ve becerilerini gösterelim, isterseniz hazır bir başlangıçla yeni CV açın. Yazdıklarınız cihazınızdan dışarı gönderilmez.", "jobPh": "Mesleğinizi yazın (ör. Kaynakçı)", "run": "Göster", "missing": "İlanda geçiyor, CV'nizde yok", "found": "CV'nizde de geçen kelimeler: {n}", "none": "İlandaki önemli kelimelerin hepsi CV'nizde geçiyor.", "short": "Lütfen ilanın tamamını yapıştırın; metin çok kısa.", "note": "Örnekler yalnızca başlangıçtır. Yalnızca gerçekten sahip olduğunuz bilgi ve becerileri ekleyin.", "cjk": "Bu kontrol şimdilik Japonca ve Çince metinlerde çalışmıyor.", "docxTitle": "CV'yi Word dosyası olarak indir (tek sütun, fotoğrafsız)", "docx": "Word (.docx)", "cl": "Ön yazı", "clTitle": "Ön yazı (motivasyon mektubu)", "clInfo": "Ad ve iletişim bilgileriniz CV'nizden alınır. Taslak yalnızca bir başlangıçtır; kendi cümlelerinizle düzenleyin. Metin cihazınızda kalır.", "clCompany": "Şirket / kurum", "clPosition": "Pozisyon", "clGreeting": "Hitap", "clBody": "Metin", "clClosing": "Kapanış", "clDraft": "CV'mden taslak oluştur", "clDraftQ": "Mevcut metin taslakla değiştirilecek. Devam edilsin mi?", "clPdf": "PDF indir", "clDocx": "Word indir", "clDefGreeting": "Sayın İşe Alım Yetkilisi,", "clDefClosing": "Saygılarımla,", "dA": "{sirket} bünyesindeki {pozisyon} pozisyonu için başvurmak istiyorum.", "dB": "{pozisyon} pozisyonu için başvurmak istiyorum.", "dC": "{sirket} bünyesinde uygun bir pozisyon için başvurmak istiyorum.", "dD": "Kurumunuzda uygun bir pozisyon için başvurmak istiyorum.", "d2": "{firma} bünyesinde {unvan} olarak deneyim kazandım.", "d3": "Öne çıkan becerilerim: {yetenekler}.", "d4": "Ekibinize nasıl katkı sağlayabileceğimi bir görüşmede anlatmaktan memnuniyet duyarım. Zaman ayırdığınız için teşekkür ederim.", "clEmpty": "Önce metni yazın ya da taslak oluşturun.", "dPre": ""}, "en": {"cvs": "My CVs", "cvsInfo": "Your CVs are stored only on this device, in this browser. You can keep a separate copy for each application.", "copy": "Make a copy of this CV", "open": "Open", "active": "Open now", "dele": "Delete", "delQ": "This CV will be deleted from this device. Are you sure?", "copied": "Copy created. You are now editing the copy.", "opened": "CV opened.", "limit": "You can keep up to 5 CVs. Delete one to make a new copy.", "full": "There is no storage space left on this device. CVs with photos take more space; delete one and try again.", "name": "CV name", "untitled": "Untitled CV", "close": "Close", "job": "CV by job title", "jobInfo": "Type your job title; we'll show an example CV and the usual skills for that job, and you can open a new CV with a ready-made start. What you type never leaves your device.", "jobPh": "Type your job title (e.g. Welder)", "run": "Show", "missing": "In the ad, not in your CV", "found": "Words that also appear in your CV: {n}", "none": "All the key words in the ad already appear in your CV.", "short": "Please paste the whole ad; the text is too short.", "note": "Examples are only a starting point. Only add knowledge and skills you really have.", "cjk": "This check does not work with Japanese or Chinese text yet.", "docxTitle": "Download the CV as a Word file (single column, no photo)", "docx": "Word (.docx)", "cl": "Cover letter", "clTitle": "Cover letter", "clInfo": "Your name and contact details are taken from your CV. The draft is only a starting point; rewrite it in your own words. The text stays on your device.", "clCompany": "Company / organisation", "clPosition": "Position", "clGreeting": "Greeting", "clBody": "Letter", "clClosing": "Closing", "clDraft": "Create a draft from my CV", "clDraftQ": "The current text will be replaced with the draft. Continue?", "clPdf": "Download PDF", "clDocx": "Download Word", "clDefGreeting": "Dear Hiring Manager,", "clDefClosing": "Kind regards,", "dA": "I am writing to apply for the {pozisyon} position at {sirket}.", "dB": "I am writing to apply for the {pozisyon} position.", "dC": "I am writing to apply for a suitable position at {sirket}.", "dD": "I am writing to apply for a suitable position in your organisation.", "d2": "I bring experience from my role as {unvan} at {firma}.", "d3": "My key skills include {yetenekler}.", "d4": "I would welcome the opportunity to discuss how I could contribute to your team. Thank you for your time and consideration.", "clEmpty": "Write the letter or create a draft first.", "dPre": ""}, "de": {"cvs": "Meine Lebensläufe", "cvsInfo": "Ihre Lebensläufe werden nur auf diesem Gerät in diesem Browser gespeichert. Sie können für jede Bewerbung eine eigene Kopie anlegen.", "copy": "Kopie dieses Lebenslaufs anlegen", "open": "Öffnen", "active": "Gerade geöffnet", "dele": "Löschen", "delQ": "Dieser Lebenslauf wird von diesem Gerät gelöscht. Sind Sie sicher?", "copied": "Kopie angelegt. Sie bearbeiten jetzt die Kopie.", "opened": "Lebenslauf geöffnet.", "limit": "Es können höchstens 5 Lebensläufe gespeichert werden. Löschen Sie einen, um eine neue Kopie anzulegen.", "full": "Auf dem Gerät ist kein Speicherplatz mehr frei. Lebensläufe mit Foto brauchen mehr Platz; löschen Sie einen und versuchen Sie es erneut.", "name": "Name des Lebenslaufs", "untitled": "Unbenannter Lebenslauf", "close": "Schließen", "job": "Lebenslauf nach Beruf", "jobInfo": "Geben Sie Ihren Beruf ein; wir zeigen einen Beispiel-Lebenslauf und typische Kenntnisse, und Sie können einen neuen Lebenslauf mit fertigem Einstieg öffnen. Ihre Eingabe verlässt Ihr Gerät nicht.", "jobPh": "Geben Sie Ihren Beruf ein (z. B. Koch)", "run": "Anzeigen", "missing": "In der Anzeige, nicht im Lebenslauf", "found": "Wörter, die auch in Ihrem Lebenslauf vorkommen: {n}", "none": "Alle wichtigen Wörter der Anzeige kommen bereits in Ihrem Lebenslauf vor.", "short": "Bitte fügen Sie die ganze Anzeige ein; der Text ist zu kurz.", "note": "Beispiele sind nur ein Einstieg. Tragen Sie nur Kenntnisse und Fähigkeiten ein, die Sie wirklich haben.", "cjk": "Dieser Abgleich funktioniert noch nicht mit japanischem oder chinesischem Text.", "docxTitle": "Lebenslauf als Word-Datei herunterladen (einspaltig, ohne Foto)", "docx": "Word (.docx)", "cl": "Anschreiben", "clTitle": "Anschreiben", "clInfo": "Name und Kontaktdaten werden aus Ihrem Lebenslauf übernommen. Der Entwurf ist nur ein Ausgangspunkt; formulieren Sie ihn in eigenen Worten. Der Text bleibt auf Ihrem Gerät.", "clCompany": "Unternehmen / Organisation", "clPosition": "Stelle", "clGreeting": "Anrede", "clBody": "Text", "clClosing": "Grußformel", "clDraft": "Entwurf aus meinem Lebenslauf erstellen", "clDraftQ": "Der aktuelle Text wird durch den Entwurf ersetzt. Fortfahren?", "clPdf": "PDF herunterladen", "clDocx": "Word herunterladen", "clDefGreeting": "Sehr geehrte Damen und Herren,", "clDefClosing": "Mit freundlichen Grüßen", "dA": "hiermit bewerbe ich mich um die Stelle als {pozisyon} bei {sirket}.", "dB": "hiermit bewerbe ich mich um die Stelle als {pozisyon}.", "dC": "hiermit bewerbe ich mich um eine passende Stelle bei {sirket}.", "dD": "hiermit bewerbe ich mich um eine passende Stelle in Ihrem Unternehmen.", "d2": "Berufserfahrung habe ich als {unvan} bei {firma} gesammelt.", "d3": "Zu meinen wichtigsten Kenntnissen gehören: {yetenekler}.", "d4": "Über die Gelegenheit, mich in einem persönlichen Gespräch vorzustellen, freue ich mich sehr. Vielen Dank für Ihre Zeit.", "clEmpty": "Schreiben Sie zuerst den Text oder erstellen Sie einen Entwurf.", "dPre": ""}, "fr": {"cvs": "Mes CV", "cvsInfo": "Vos CV sont enregistrés uniquement sur cet appareil, dans ce navigateur. Vous pouvez garder une copie distincte pour chaque candidature.", "copy": "Faire une copie de ce CV", "open": "Ouvrir", "active": "Ouvert", "dele": "Supprimer", "delQ": "Ce CV sera supprimé de cet appareil. Êtes-vous sûr ?", "copied": "Copie créée. Vous modifiez maintenant la copie.", "opened": "CV ouvert.", "limit": "Vous pouvez garder 5 CV au maximum. Supprimez-en un pour faire une nouvelle copie.", "full": "Il n’y a plus d’espace de stockage sur cet appareil. Les CV avec photo prennent plus de place ; supprimez-en un et réessayez.", "name": "Nom du CV", "untitled": "CV sans nom", "close": "Fermer", "job": "CV par métier", "jobInfo": "Saisissez votre métier : nous affichons un exemple de CV et les compétences habituelles, et vous pouvez ouvrir un nouveau CV avec un point de départ prêt. Ce que vous saisissez ne quitte pas votre appareil.", "jobPh": "Saisissez votre métier (ex. Cuisinier)", "run": "Afficher", "missing": "Dans l’offre, pas dans votre CV", "found": "Mots également présents dans votre CV : {n}", "none": "Tous les mots importants de l’offre figurent déjà dans votre CV.", "short": "Veuillez coller l’offre en entier ; le texte est trop court.", "note": "Les exemples ne sont qu’un point de départ. N’ajoutez que des connaissances et compétences que vous avez réellement.", "cjk": "Cette comparaison ne fonctionne pas encore avec un texte japonais ou chinois.", "docxTitle": "Télécharger le CV au format Word (une colonne, sans photo)", "docx": "Word (.docx)", "cl": "Lettre de motivation", "clTitle": "Lettre de motivation", "clInfo": "Votre nom et vos coordonnées sont repris de votre CV. Le brouillon n’est qu’un point de départ ; reformulez-le avec vos propres mots. Le texte reste sur votre appareil.", "clCompany": "Entreprise / organisation", "clPosition": "Poste", "clGreeting": "Formule d’appel", "clBody": "Texte", "clClosing": "Formule de politesse", "clDraft": "Créer un brouillon à partir de mon CV", "clDraftQ": "Le texte actuel sera remplacé par le brouillon. Continuer ?", "clPdf": "Télécharger le PDF", "clDocx": "Télécharger le Word", "clDefGreeting": "Madame, Monsieur,", "clDefClosing": "Veuillez agréer, Madame, Monsieur, l’expression de mes salutations distinguées.", "dA": "Je souhaite vous présenter ma candidature au poste de {pozisyon} au sein de {sirket}.", "dB": "Je souhaite vous présenter ma candidature au poste de {pozisyon}.", "dC": "Je souhaite vous présenter ma candidature à un poste adapté au sein de {sirket}.", "dD": "Je souhaite vous présenter ma candidature à un poste adapté au sein de votre organisation.", "d2": "J’ai acquis de l’expérience en tant que {unvan} chez {firma}.", "d3": "Mes principales compétences sont : {yetenekler}.", "d4": "Un entretien me permettrait de vous exposer comment je pourrais contribuer à votre équipe. Je vous remercie de votre attention.", "clEmpty": "Rédigez d’abord la lettre ou créez un brouillon.", "dPre": ""}, "es": {"cvs": "Mis CV", "cvsInfo": "Tus CV se guardan solo en este dispositivo, en este navegador. Puedes tener una copia distinta para cada solicitud.", "copy": "Hacer una copia de este CV", "open": "Abrir", "active": "Abierto ahora", "dele": "Eliminar", "delQ": "Este CV se eliminará de este dispositivo. ¿Seguro?", "copied": "Copia creada. Ahora estás editando la copia.", "opened": "CV abierto.", "limit": "Puedes guardar hasta 5 CV. Elimina uno para hacer una copia nueva.", "full": "No queda espacio en este dispositivo. Los CV con foto ocupan más; elimina uno y vuelve a intentarlo.", "name": "Nombre del CV", "untitled": "CV sin nombre", "close": "Cerrar", "job": "CV por profesión", "jobInfo": "Escribe tu profesión: te mostramos un CV de ejemplo y las habilidades habituales, y puedes abrir un CV nuevo con un punto de partida. Lo que escribes no sale de tu dispositivo.", "jobPh": "Escribe tu profesión (p. ej. Cocinero)", "run": "Mostrar", "missing": "En la oferta, no en tu CV", "found": "Palabras que también aparecen en tu CV: {n}", "none": "Todas las palabras importantes de la oferta ya aparecen en tu CV.", "short": "Pega la oferta completa; el texto es demasiado corto.", "note": "Los ejemplos son solo un punto de partida. Añade únicamente conocimientos y habilidades que realmente tengas.", "cjk": "Esta comparación todavía no funciona con texto en japonés o chino.", "docxTitle": "Descargar el CV como archivo de Word (una columna, sin foto)", "docx": "Word (.docx)", "cl": "Carta de presentación", "clTitle": "Carta de presentación", "clInfo": "Tu nombre y tus datos de contacto se toman de tu CV. El borrador es solo un punto de partida; reescríbelo con tus propias palabras. El texto se queda en tu dispositivo.", "clCompany": "Empresa / organización", "clPosition": "Puesto", "clGreeting": "Saludo", "clBody": "Texto", "clClosing": "Despedida", "clDraft": "Crear un borrador con mi CV", "clDraftQ": "El texto actual se sustituirá por el borrador. ¿Continuar?", "clPdf": "Descargar PDF", "clDocx": "Descargar Word", "clDefGreeting": "Estimado/a responsable de selección:", "clDefClosing": "Atentamente,", "dA": "Me dirijo a ustedes para presentar mi candidatura al puesto de {pozisyon} en {sirket}.", "dB": "Me dirijo a ustedes para presentar mi candidatura al puesto de {pozisyon}.", "dC": "Me dirijo a ustedes para presentar mi candidatura a un puesto adecuado en {sirket}.", "dD": "Me dirijo a ustedes para presentar mi candidatura a un puesto adecuado en su organización.", "d2": "He adquirido experiencia como {unvan} en {firma}.", "d3": "Entre mis principales habilidades se encuentran: {yetenekler}.", "d4": "Me encantaría explicarles en una entrevista cómo podría contribuir a su equipo. Gracias por su tiempo y consideración.", "clEmpty": "Escribe primero la carta o crea un borrador.", "dPre": ""}, "it": {"cvs": "I miei CV", "cvsInfo": "I tuoi CV sono salvati solo su questo dispositivo, in questo browser. Puoi tenere una copia diversa per ogni candidatura.", "copy": "Crea una copia di questo CV", "open": "Apri", "active": "Aperto ora", "dele": "Elimina", "delQ": "Questo CV verrà eliminato da questo dispositivo. Sei sicuro?", "copied": "Copia creata. Ora stai modificando la copia.", "opened": "CV aperto.", "limit": "Puoi salvare al massimo 5 CV. Eliminane uno per creare una nuova copia.", "full": "Non c'è più spazio su questo dispositivo. I CV con foto occupano più spazio; eliminane uno e riprova.", "name": "Nome del CV", "untitled": "CV senza nome", "close": "Chiudi", "job": "CV per professione", "jobInfo": "Scrivi la tua professione: ti mostriamo le competenze più comuni e puoi aprire un nuovo CV con un punto di partenza già pronto. Quello che scrivi non lascia il tuo dispositivo.", "jobPh": "Scrivi la tua professione (es. Cuoco)", "run": "Mostra", "missing": "Nell'annuncio, non nel tuo CV", "found": "Parole presenti anche nel tuo CV: {n}", "none": "Tutte le parole importanti dell'annuncio sono già nel tuo CV.", "short": "Incolla l'annuncio completo; il testo è troppo breve.", "note": "Gli esempi sono solo un punto di partenza. Aggiungi solo conoscenze e competenze che hai davvero.", "cjk": "Questo confronto non funziona ancora con testi in giapponese o cinese.", "docxTitle": "Scarica il CV come file Word (una colonna, senza foto)", "docx": "Word (.docx)", "cl": "Lettera di presentazione", "clTitle": "Lettera di presentazione", "clInfo": "Nome e recapiti vengono presi dal tuo CV. La bozza è solo un punto di partenza; riscrivila con parole tue. Il testo resta sul tuo dispositivo.", "clCompany": "Azienda / organizzazione", "clPosition": "Posizione", "clGreeting": "Saluto iniziale", "clBody": "Testo", "clClosing": "Chiusura", "clDraft": "Crea una bozza dal mio CV", "clDraftQ": "Il testo attuale verrà sostituito dalla bozza. Continuare?", "clPdf": "Scarica PDF", "clDocx": "Scarica Word", "clDefGreeting": "Gentile Responsabile della selezione,", "clDefClosing": "Cordiali saluti,", "dA": "Le scrivo per candidarmi alla posizione di {pozisyon} presso {sirket}.", "dB": "Le scrivo per candidarmi alla posizione di {pozisyon}.", "dC": "Le scrivo per candidarmi a una posizione adatta presso {sirket}.", "dD": "Le scrivo per candidarmi a una posizione adatta presso la Sua organizzazione.", "d2": "Ho maturato esperienza come {unvan} presso {firma}.", "d3": "Tra le mie competenze principali: {yetenekler}.", "d4": "Mi farebbe piacere illustrarLe in un colloquio come potrei contribuire al Suo team. La ringrazio per l’attenzione.", "clEmpty": "Scrivi prima la lettera o crea una bozza.", "dPre": ""}, "pt": {"cvs": "Os meus currículos", "cvsInfo": "Os seus currículos ficam guardados apenas neste dispositivo, neste navegador. Pode manter uma cópia diferente para cada candidatura.", "copy": "Fazer uma cópia deste currículo", "open": "Abrir", "active": "Aberto agora", "dele": "Eliminar", "delQ": "Este currículo será eliminado deste dispositivo. Tem a certeza?", "copied": "Cópia criada. Está agora a editar a cópia.", "opened": "Currículo aberto.", "limit": "Pode guardar até 5 currículos. Elimine um para fazer uma nova cópia.", "full": "Não há mais espaço neste dispositivo. Os currículos com fotografia ocupam mais espaço; elimine um e tente novamente.", "name": "Nome do currículo", "untitled": "Currículo sem nome", "close": "Fechar", "job": "Currículo por profissão", "jobInfo": "Escreva a sua profissão: mostramos as competências mais comuns e pode abrir um novo currículo com um ponto de partida pronto. O que escreve não sai do seu dispositivo.", "jobPh": "Escreva a sua profissão (ex.: Cozinheiro)", "run": "Mostrar", "missing": "No anúncio, mas não no seu currículo", "found": "Palavras que também aparecem no seu currículo: {n}", "none": "Todas as palavras importantes do anúncio já aparecem no seu currículo.", "short": "Cole o anúncio completo; o texto é demasiado curto.", "note": "Os exemplos são apenas um ponto de partida. Acrescente apenas conhecimentos e competências que tem realmente.", "cjk": "Esta comparação ainda não funciona com textos em japonês ou chinês.", "docxTitle": "Transferir o currículo como ficheiro Word (uma coluna, sem fotografia)", "docx": "Word (.docx)", "cl": "Carta de apresentação", "clTitle": "Carta de apresentação", "clInfo": "O seu nome e os seus contactos vêm do seu currículo. O rascunho é apenas um ponto de partida; reescreva-o com as suas próprias palavras. O texto fica no seu dispositivo.", "clCompany": "Empresa / organização", "clPosition": "Cargo", "clGreeting": "Saudação", "clBody": "Texto", "clClosing": "Despedida", "clDraft": "Criar rascunho a partir do meu currículo", "clDraftQ": "O texto atual será substituído pelo rascunho. Continuar?", "clPdf": "Transferir PDF", "clDocx": "Transferir Word", "clDefGreeting": "Exmo.(a) Senhor(a),", "clDefClosing": "Com os melhores cumprimentos,", "dA": "Venho por este meio candidatar-me à vaga de {pozisyon} na empresa {sirket}.", "dB": "Venho por este meio candidatar-me à vaga de {pozisyon}.", "dC": "Venho por este meio candidatar-me a uma vaga adequada na empresa {sirket}.", "dD": "Venho por este meio candidatar-me a uma vaga adequada na vossa organização.", "d2": "Adquiri experiência como {unvan} na empresa {firma}.", "d3": "Entre as minhas principais competências estão: {yetenekler}.", "d4": "Terei todo o gosto em explicar, numa entrevista, como posso contribuir para a vossa equipa. Agradeço a vossa atenção.", "clEmpty": "Escreva a carta ou crie um rascunho primeiro.", "dPre": ""}, "ru": {"cvs": "Мои резюме", "cvsInfo": "Ваши резюме хранятся только на этом устройстве, в этом браузере. Для каждого отклика можно держать отдельную копию.", "copy": "Создать копию этого резюме", "open": "Открыть", "active": "Открыто сейчас", "dele": "Удалить", "delQ": "Это резюме будет удалено с этого устройства. Продолжить?", "copied": "Копия создана. Сейчас вы редактируете копию.", "opened": "Резюме открыто.", "limit": "Можно хранить не более 5 резюме. Удалите одно, чтобы создать новую копию.", "full": "На устройстве не осталось места. Резюме с фото занимают больше места; удалите одно и попробуйте снова.", "name": "Название резюме", "untitled": "Резюме без названия", "close": "Закрыть", "job": "Резюме по профессии", "jobInfo": "Введите профессию: мы покажем пример резюме и типичные навыки, и вы сможете открыть новое резюме с готовым началом. Введённый текст не покидает ваше устройство.", "jobPh": "Введите профессию (например, Повар)", "run": "Показать", "missing": "Есть в вакансии, нет в резюме", "found": "Слова, которые есть и в вашем резюме: {n}", "none": "Все важные слова из вакансии уже есть в вашем резюме.", "short": "Вставьте вакансию целиком: текст слишком короткий.", "note": "Примеры — только начало. Добавляйте только те знания и навыки, которые у вас действительно есть.", "cjk": "Пока эта проверка не работает с японским и китайским текстом.", "docxTitle": "Скачать резюме в формате Word (одна колонка, без фото)", "docx": "Word (.docx)", "cl": "Сопроводительное письмо", "clTitle": "Сопроводительное письмо", "clInfo": "Имя и контакты берутся из вашего резюме. Черновик — лишь отправная точка; перепишите его своими словами. Текст остаётся на вашем устройстве.", "clCompany": "Компания / организация", "clPosition": "Должность", "clGreeting": "Обращение", "clBody": "Текст", "clClosing": "Заключение", "clDraft": "Создать черновик из резюме", "clDraftQ": "Текущий текст будет заменён черновиком. Продолжить?", "clPdf": "Скачать PDF", "clDocx": "Скачать Word", "clDefGreeting": "Здравствуйте!", "clDefClosing": "С уважением,", "dA": "Прошу рассмотреть мою кандидатуру на должность «{pozisyon}» в компании {sirket}.", "dB": "Прошу рассмотреть мою кандидатуру на должность «{pozisyon}».", "dC": "Прошу рассмотреть мою кандидатуру на подходящую должность в компании {sirket}.", "dD": "Прошу рассмотреть мою кандидатуру на подходящую должность в вашей организации.", "d2": "Последнее место работы: {firma}, должность «{unvan}».", "d3": "Мои ключевые навыки: {yetenekler}.", "d4": "Предлагаю обсудить на собеседовании, как мой опыт может быть полезен вашей команде. Спасибо за уделённое время.", "clEmpty": "Сначала напишите текст или создайте черновик.", "dPre": ""}, "ar": {"cvs": "سيري الذاتية", "cvsInfo": "تُحفظ سيرك الذاتية على هذا الجهاز فقط، في هذا المتصفح. يمكنك الاحتفاظ بنسخة مختلفة لكل طلب توظيف.", "copy": "إنشاء نسخة من هذه السيرة الذاتية", "open": "فتح", "active": "مفتوحة الآن", "dele": "حذف", "delQ": "ستُحذف هذه السيرة الذاتية من هذا الجهاز. هل أنت متأكد؟", "copied": "تم إنشاء النسخة. أنت الآن تعدّل النسخة.", "opened": "تم فتح السيرة الذاتية.", "limit": "يمكن حفظ 5 سير ذاتية كحد أقصى. احذف واحدة لإنشاء نسخة جديدة.", "full": "لم تعد هناك مساحة على هذا الجهاز. السير الذاتية التي تحتوي على صورة تشغل مساحة أكبر؛ احذف واحدة وحاول مرة أخرى.", "name": "اسم السيرة الذاتية", "untitled": "سيرة ذاتية بلا اسم", "close": "إغلاق", "job": "سيرة ذاتية حسب المهنة", "jobInfo": "اكتب مهنتك: نعرض لك المهارات الأكثر شيوعًا، ويمكنك فتح سيرة ذاتية جديدة ببداية جاهزة. ما تكتبه لا يغادر جهازك.", "jobPh": "اكتب مهنتك (مثلًا: طباخ)", "run": "عرض", "missing": "في الإعلان، وليست في سيرتك الذاتية", "found": "كلمات موجودة أيضًا في سيرتك الذاتية: {n}", "none": "كل الكلمات المهمة في الإعلان موجودة بالفعل في سيرتك الذاتية.", "short": "يرجى لصق الإعلان كاملًا؛ النص قصير جدًا.", "note": "الأمثلة مجرد بداية. أضف فقط المعارف والمهارات التي تمتلكها فعلًا.", "cjk": "هذه المقارنة لا تعمل بعد مع النصوص اليابانية أو الصينية.", "docxTitle": "تنزيل السيرة الذاتية كملف Word (عمود واحد، بدون صورة)", "docx": "Word (.docx)", "cl": "خطاب التقديم", "clTitle": "خطاب التقديم", "clInfo": "يُؤخذ اسمك وبيانات الاتصال من سيرتك الذاتية. المسودة مجرد بداية؛ أعد صياغتها بكلماتك. يبقى النص على جهازك.", "clCompany": "الشركة / الجهة", "clPosition": "الوظيفة", "clGreeting": "التحية", "clBody": "النص", "clClosing": "الختام", "clDraft": "إنشاء مسودة من سيرتي الذاتية", "clDraftQ": "سيُستبدل النص الحالي بالمسودة. هل تريد المتابعة؟", "clPdf": "تنزيل PDF", "clDocx": "تنزيل Word", "clDefGreeting": "السادة مسؤولي التوظيف المحترمين،", "clDefClosing": "مع خالص التحية،", "dA": "أتقدم بطلب لشغل وظيفة {pozisyon} في {sirket}.", "dB": "أتقدم بطلب لشغل وظيفة {pozisyon}.", "dC": "أتقدم بطلب لشغل وظيفة مناسبة في {sirket}.", "dD": "أتقدم بطلب لشغل وظيفة مناسبة في مؤسستكم.", "d2": "اكتسبت خبرة بوظيفة {unvan} في {firma}.", "d3": "من أبرز مهاراتي: {yetenekler}.", "d4": "يسعدني أن أوضح في مقابلة كيف يمكنني الإسهام في فريقكم. شكرًا لوقتكم واهتمامكم.", "clEmpty": "اكتب الخطاب أولًا أو أنشئ مسودة.", "dPre": ""}, "zh": {"cvs": "我的简历", "cvsInfo": "您的简历只保存在这台设备的这个浏览器中。您可以为每次求职保存一份单独的副本。", "copy": "复制这份简历", "open": "打开", "active": "当前打开", "dele": "删除", "delQ": "这份简历将从这台设备上删除。确定吗？", "copied": "已创建副本，您现在正在编辑副本。", "opened": "已打开简历。", "limit": "最多可保存 5 份简历。请先删除一份再创建新副本。", "full": "设备存储空间已满。带照片的简历占用空间更多；请删除一份后重试。", "name": "简历名称", "untitled": "未命名简历", "close": "关闭", "job": "按职业生成简历", "jobInfo": "输入您的职业：我们会列出该职业常见的技能，您可以用现成的起点打开一份新简历。输入的内容不会离开您的设备。", "jobPh": "输入您的职业（如：厨师）", "run": "显示", "missing": "启事中有、简历中没有", "found": "简历中也出现的词：{n}", "none": "启事中的重要词语都已出现在您的简历中。", "short": "请粘贴完整的招聘启事，文字太短。", "note": "示例只是起点。请只添加您真正具备的知识和技能。", "cjk": "此检查暂时不支持日文和中文文本。", "docxTitle": "将简历下载为 Word 文件（单栏，无照片）", "docx": "Word (.docx)", "cl": "求职信", "clTitle": "求职信", "clInfo": "姓名和联系方式取自您的简历。草稿只是起点，请用自己的话改写。文字保存在您的设备上。", "clCompany": "公司 / 机构", "clPosition": "职位", "clGreeting": "称呼", "clBody": "正文", "clClosing": "结尾敬语", "clDraft": "根据我的简历生成草稿", "clDraftQ": "当前文字将被草稿替换。是否继续？", "clPdf": "下载 PDF", "clDocx": "下载 Word", "clDefGreeting": "尊敬的招聘负责人：", "clDefClosing": "此致\n敬礼！", "dA": "我希望应聘{sirket}的{pozisyon}职位。", "dB": "我希望应聘{pozisyon}职位。", "dC": "我希望应聘{sirket}的合适职位。", "dD": "我希望应聘贵单位的合适职位。", "d2": "我在{firma}担任{unvan}期间积累了相关经验。", "d3": "我的主要技能包括：{yetenekler}。", "d4": "期待有机会在面试中进一步介绍我能为团队带来的贡献。感谢您抽出宝贵时间。", "clEmpty": "请先填写正文或生成草稿。", "dPre": ""}, "ja": {"cvs": "保存した履歴書", "cvsInfo": "履歴書はこの端末のこのブラウザにのみ保存されます。応募先ごとに別のコピーを用意できます。", "copy": "この履歴書をコピー", "open": "開く", "active": "表示中", "dele": "削除", "delQ": "この履歴書をこの端末から削除します。よろしいですか？", "copied": "コピーを作成しました。現在はコピーを編集しています。", "opened": "履歴書を開きました。", "limit": "保存できる履歴書は最大5件です。新しいコピーを作るには1件削除してください。", "full": "端末の空き容量がありません。写真付きの履歴書は容量が大きくなります。1件削除してからもう一度お試しください。", "name": "履歴書の名前", "untitled": "名前のない履歴書", "close": "閉じる", "job": "職種から履歴書", "jobInfo": "職種を入力すると、その職種でよく使われるスキルを表示し、下書き入りの新しい履歴書を開けます。入力した内容が端末の外に送られることはありません。", "jobPh": "職種を入力（例：介護職員）", "run": "表示する", "missing": "求人票にあり、履歴書にない語", "found": "履歴書にもある語：{n}", "none": "求人票の重要な語はすべて履歴書に含まれています。", "short": "求人票の全文を貼り付けてください。文章が短すぎます。", "note": "例文は書き出しにすぎません。実際に持っている知識やスキルだけを書いてください。", "cjk": "この照合は、日本語・中国語の文章にはまだ対応していません。", "docxTitle": "履歴書を Word ファイルとしてダウンロード（1 カラム、写真なし）", "docx": "Word (.docx)", "cl": "カバーレター", "clTitle": "カバーレター（添え状）", "clInfo": "氏名と連絡先は履歴書から自動で入ります。下書きはあくまで出発点です。ご自身の言葉で書き直してください。文章は端末内に保存されます。", "clCompany": "会社名・団体名", "clPosition": "応募職種", "clGreeting": "宛名・書き出し", "clBody": "本文", "clClosing": "結び", "clDraft": "履歴書から下書きを作成", "clDraftQ": "現在の本文が下書きに置き換わります。続けますか？", "clPdf": "PDF をダウンロード", "clDocx": "Word をダウンロード", "clDefGreeting": "採用ご担当者様", "clDefClosing": "敬具", "dA": "{sirket}の{pozisyon}の求人に応募いたします。", "dB": "{pozisyon}の求人に応募いたします。", "dC": "{sirket}の求人に応募いたします。", "dD": "貴社の求人に応募いたします。", "d2": "{firma}にて{unvan}として経験を積んでまいりました。", "d3": "主なスキルは{yetenekler}です。", "d4": "貴社に貢献できる点について、面接の機会にご説明できれば幸いです。ご検討のほど、よろしくお願い申し上げます。", "clEmpty": "本文を入力するか、下書きを作成してください。", "dPre": "拝啓　時下ますますご清栄のこととお慶び申し上げます。"}};
     var STOP = {"tr": "ve ile için bir bu şu o olan olarak en az çok daha gibi da de ki mi mı mu mü veya ya yada ise her tüm şekilde konusunda konularında alanında alanda sahip tercihen tercih tercihli edilecek edilir edilen aranan aranıyor arıyoruz nitelikler nitelikleri nitelik genel iş işi işin tanımı tanım pozisyon pozisyonu pozisyonda pozisyonunda firmamız firmamızın şirketimiz şirketimizin bünyesinde bünyemizde çalışacak çalışmak çalışma çalışabilecek arkadaş arkadaşlar arkadaşı adaylar aday adayların yıl yıllık yılı deneyimli deneyim deneyimi tecrübe tecrübeli tecrübesi mezun mezunu iyi düzeyde düzeyinde seviyede bilgisi bilgi bilen bilgili kullanabilen yapabilen olmak olmayan bulunan bulunmayan yapmak sağlamak takip etmek etme yapılması uygun başvuru başvurular ilan ilanı ilgili gerekli yeterli güçlü yüksek yönelik hakkında kadar sonra önce üzere dahil göre tarafından olacak olup olması ederek eden şehir tam zamanlı hafta içi saat saatleri maaş ücret sigorta yemek servis olanak imkanı imkânı fırsatı ortamında ortamı dair ilişkin itibaren ayrıca sürekli yeni mevcut farklı çeşitli belirli lütfen kişi kişiler kişilerin biz bizim sizin siz sen ne nasıl neden çünkü ancak fakat ama hem hiç hep kendi kendini biri bazı birçok diğer aynı ilk son yer yerde üniversite bölüm işlem süreç yetkinlik sebebi yetkinli yatkın hakim hâkim sorumlu sorumluluk görev görevi alacak alınacak katılacak başvurabilir istekli motivasyonu dinamik", "en": "the and for with you your our ours will are is be been being of to in on at as an or we us this that these those from by have has had who what when where which about all any can could may might must should shall would able ability strong excellent good great proven experience experienced years year plus preferred required requirement requirements responsibilities responsibility role roles position job jobs team teams company work working candidate candidates apply application including include includes etc other such well new more most within across per also both into using use used based related level knowledge skills skill degree equivalent minimum least ideal ideally opportunity opportunities benefits salary full time part day days week help ensure provide looking join please their they them its it not but if than then there here so up out over under between through while each every some how why one two three hiring seeking senior junior responsible duties duty candidate looking", "de": "und der die das den dem des ein eine einen einem einer eines mit für von zu zur zum im in auf an als oder wir sie ihr ihre ihren uns unser unsere ist sind sein werden wird bei aus nach über unter auch sowie bzw durch nicht kein keine sehr gute guten gutes gern gerne idealerweise erfahrung erfahrungen jahre jahren kenntnisse aufgaben profil stelle team unternehmen bieten suchen ab", "fr": "le la les un une des du de et ou à au aux en dans sur pour par avec sans nous vous votre vos notre nos est sont être sera ce cette ces qui que dont plus très bon bonne expérience ans poste profil équipe entreprise missions mission compétences connaissances", "es": "el la los las un una unos unas de del y o en con para por al sin nosotros tu tus su sus nuestro nuestra es son ser será que como más muy buen buena experiencia años puesto perfil equipo empresa funciones requisitos conocimientos", "it": "il lo la i gli le un uno una di del della dei delle e o in con per da su al alla nel nella tra fra noi tuo tua tuoi suo sua nostro nostra è sono essere sarà che come più molto buon buona esperienza anni posizione profilo team azienda requisiti conoscenza conoscenze", "pt": "o a os as um uma uns umas de do da dos das e ou em no na nos nas com para por ao à sem nós você seu sua seus suas nosso nossa é são ser será que como mais muito bom boa experiência anos vaga cargo perfil equipe empresa requisitos conhecimento conhecimentos", "ru": "и в во на с со для по к о об от до из за у не что как это мы вы ваш ваша наш наша наши их его ее её быть будет является а или но также при более опыт опыта лет работы работа компания команда требования обязанности условия знание знания", "ar": "و في من على إلى الى عن مع أو او أن ان هذا هذه ذلك التي الذي الذين كل لدى لديك نحن انت أنت هو هي كان يكون سوف قد ما لا عند بعد قبل خبرة سنوات الوظيفة الشركة فريق المتطلبات"};
     var ctr = document.querySelector('.controls');
     if (!ctr) return;
@@ -11445,6 +11488,7 @@ function saveCV() {
         donus = kaynak || null;
         ov = document.createElement('div');
         ov.className = 'mcv-modal'; ov.id = id;
+        if (lang() === 'ar') ov.setAttribute('dir', 'rtl'); // Arapca: pencere sagdan sola
         ov.innerHTML = '<div class="mcv-modal-kutu" role="dialog" aria-modal="true" aria-labelledby="' + id + '-bas" tabindex="-1">' +
             '<div class="mcv-modal-bas"><strong id="' + id + '-bas">' + esc(baslik) + '</strong>' +
             '<button type="button" class="mcv-modal-kapat" aria-label="' + esc(t('close')) + '">✕</button></div>' +
@@ -11469,6 +11513,7 @@ function saveCV() {
         if (data && data.language) { try { localStorage.setItem('mobilcv_lang_chosen', '1'); } catch (e) {} }
         try { if (mesaj) sessionStorage.setItem('mcv_bildirim', mesaj); } catch (e) {}
         if (m) { if (m.saveTimeout) clearTimeout(m.saveTimeout); m.saveAllData = function () {}; }
+        if (window.mcvCikisUyariKapat) window.mcvCikisUyariKapat();
         window.addEventListener('beforeunload', function (e) { e.stopImmediatePropagation(); }, true);
         location.reload();
     };
@@ -11501,7 +11546,7 @@ function saveCV() {
     function cvlerimCiz() {
         var o = durum();
         var h = '<p class="mcv-bilgi">' + esc(t('cvsInfo')) + '</p>' +
-            '<button type="button" class="mcv-birincil" id="mcv-kopyala">' + esc(t('copy')) + '</button><ul class="mcv-liste">';
+            '<button type="button" class="mcv-birincil" id="mcv-kopyala">' + esc(t('copy')) + '</button>' + mcvDilKopyaHtml() + '<ul class="mcv-liste">';
         o.liste.forEach(function (e) {
             var aktif = e.id === o.aktif;
             h += '<li class="mcv-cv-satir' + (aktif ? ' aktif' : '') + '" data-id="' + esc(e.id) + '">' +
@@ -11523,6 +11568,7 @@ function saveCV() {
     function yenidenCiz() { if (!ov || ov.id !== 'mcv-cvlerim') return; ov.querySelector('.mcv-modal-govde').innerHTML = cvlerimCiz(); baglaCvlerim(ov); etiketler(); }
     function baglaCvlerim(p) {
         p.querySelector('#mcv-kopyala').addEventListener('click', kopyala);
+        var dk = p.querySelector('#mcv-dil-kopya-btn'); if (dk) dk.addEventListener('click', dilKopyala);
         [].forEach.call(p.querySelectorAll('.mcv-cv-satir'), function (li) {
             var id = li.getAttribute('data-id');
             li.querySelector('.mcv-ad').addEventListener('change', function () { adDegis(id, this.value); });
@@ -11535,6 +11581,46 @@ function saveCV() {
         ad = String(ad || '').trim().slice(0, 60);
         e.ad = ad; e.elle = !!ad;
         try { yaz(o); } catch (er) { hata(t('full')); }
+    }
+    var DK = {
+        tr: ['Başka bir dilde kopya oluştur', 'Oluştur', 'Kopya {d} dilinde açıldı. Bölüm başlıkları değişti; metinleri bu dilde kendiniz yazın. Otomatik çeviri yapılmaz.'],
+        en: ['Make a copy in another language', 'Create', 'The copy is now in {d}. Section headings have changed; rewrite your text in this language yourself. Nothing is translated automatically.'],
+        de: ['Kopie in einer anderen Sprache erstellen', 'Erstellen', 'Die Kopie ist jetzt auf {d}. Die Überschriften wurden angepasst; schreiben Sie Ihre Texte selbst in dieser Sprache. Es wird nichts automatisch übersetzt.'],
+        fr: ['Créer une copie dans une autre langue', 'Créer', 'La copie est maintenant en {d}. Les titres des rubriques ont changé ; réécrivez vous-même vos textes dans cette langue. Rien n’est traduit automatiquement.'],
+        es: ['Crear una copia en otro idioma', 'Crear', 'La copia ya está en {d}. Los títulos de las secciones han cambiado; reescribe tú mismo los textos en este idioma. No se traduce nada automáticamente.'],
+        it: ['Crea una copia in un’altra lingua', 'Crea', 'La copia ora è in {d}. I titoli delle sezioni sono cambiati; riscrivi tu i testi in questa lingua. Nulla viene tradotto automaticamente.'],
+        pt: ['Criar uma cópia em outro idioma', 'Criar', 'A cópia está agora em {d}. Os títulos mudaram; reescreva os textos neste idioma. Nada é traduzido automaticamente.'],
+        ru: ['Создать копию на другом языке', 'Создать', 'Копия теперь на языке: {d}. Заголовки разделов изменились; перепишите тексты на этом языке сами. Автоматического перевода нет.'],
+        ar: ['إنشاء نسخة بلغة أخرى', 'إنشاء', 'النسخة الآن باللغة: {d}. تغيّرت عناوين الأقسام؛ أعد كتابة نصوصك بهذه اللغة بنفسك. لا تتم أي ترجمة تلقائية.'],
+        zh: ['创建其他语言的副本', '创建', '副本已切换为{d}。各部分标题已更改；请自行用该语言重写内容。系统不会自动翻译。'],
+        ja: ['別の言語でコピーを作成', '作成', 'コピーを{d}に切り替えました。見出しは変更されました。本文はご自身でこの言語に書き直してください。自動翻訳はしません。']
+    };
+    function dk(i) { var d = DK[lang()] || DK.en; return d[i]; }
+    function mcvDilKopyaHtml() {
+        var sel = document.getElementById('language-select'); if (!sel) return '';
+        var h = '<div class="mcv-dil-kopya"><label for="mcv-dil-kopya-sec">' + esc(dk(0)) + '</label><div class="mcv-dil-kopya-satir"><select id="mcv-dil-kopya-sec">';
+        [].forEach.call(sel.options, function (op) { if (op.value && op.value !== sel.value) h += '<option value="' + esc(op.value) + '">' + esc(op.textContent.trim()) + '</option>'; });
+        return h + '</select><button type="button" class="mcv-ikincil" id="mcv-dil-kopya-btn">' + esc(dk(1)) + '</button></div></div>';
+    }
+    function dilKopyala() {
+        var sel = document.getElementById('language-select'), hs = ov && ov.querySelector('#mcv-dil-kopya-sec');
+        if (!sel || !hs || !hs.value) return;
+        var once = durum().aktif;
+        kopyala();
+        if (durum().aktif === once) return; // kopya olmadi (or. 5 CV siniri); hata mesaji kopyala() icinde
+        var hedef = hs.value, ad = '';
+        [].forEach.call(sel.options, function (op) { if (op.value === hedef) ad = op.textContent.trim(); });
+        if (/^(fr|es|it|pt)$/.test(hedef)) ad = ad.charAt(0).toLowerCase() + ad.slice(1); // "en français", "en español"
+        sel.value = hedef; sel.dispatchEvent(new Event('change', { bubbles: true }));
+        iz('cv_dil_kopya', { cv_language: hedef });
+        kapat();
+        [].forEach.call(document.querySelectorAll('.mcv-toast'), function (x) { x.parentNode && x.parentNode.removeChild(x); }); // kopyala()'nin kisa bildirimi yerine tek, uzun bildirim
+        var d = document.createElement('div');
+        d.className = 'mcv-toast'; d.setAttribute('role', 'status'); d.textContent = dk(2).replace('{d}', ad);
+        if (hedef === 'ar') d.setAttribute('dir', 'rtl');
+        document.body.appendChild(d);
+        setTimeout(function () { d.classList.add('cik'); }, 7000);
+        setTimeout(function () { d.parentNode && d.parentNode.removeChild(d); }, 7500);
     }
     function kopyala() {
         var o = durum();
@@ -11682,15 +11768,866 @@ function saveCV() {
             '<div id="mcv-ilan-sonuc" aria-live="polite"></div>' +
             '<p class="mcv-not">' + esc(t('note')) + '</p>', kaynak);
         var ta = p.querySelector('#mcv-ilan-metin');
+        if (MESLEK_DIL[lang()]) {
+            if (lang() === 'ar') p.querySelector('.mcv-modal-kutu').setAttribute('dir', 'rtl');
+            ta.rows = 2;
+            ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); p.querySelector('#mcv-ilan-calistir').click(); } });
+        }
         p.querySelector('#mcv-ilan-calistir').addEventListener('click', function () {
             sonIlan = ta.value;
             try { ta.blur(); } catch (e) {}
+            if (MESLEK_DIL[lang()]) {
+                p.querySelector('#mcv-ilan-sonuc').innerHTML = '';
+                meslekGoster(p, { durum: 'meslek' }, sonIlan);
+                iz('meslek_ara');
+                return;
+            }
             var r = analiz(sonIlan);
             p.querySelector('#mcv-ilan-sonuc').innerHTML = sonucHtml(r);
             iz('ilan_kontrol');
             try { p.querySelector('#mcv-ilan-sonuc').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
         });
     }
+    /* === MESLEK TASLAK (deneme) === */
+    // Yalniz Turkce. Veri: oneri/tr.json (k: beceriler, c: ornek cumleler, t: unvan, a: ozet kalibi, b: sik istenenler).
+    // Hazir deneyim uydurmaz: firma, yil ve ornek cumleler koseli parantezle isaretli gelir; PDF/Word'de uyarilir.
+    var MTD = {};
+    MTD.tr = {
+        bas: '{x} için hazır başlangıç',
+        bilgi: 'Yeni bir CV açılır. Meslek unvanı ve seçtiğiniz beceriler hazır gelir; örnek özet ve örnek deneyim cümlesi köşeli parantezle işaretlidir, kendi bilginizle değiştirin. Şu anki CV\'niz silinmez, CV\'lerim\'de kalır.',
+        kisa: 'İlan metnini yapıştırırsanız ilanda geçip CV\'nizde olmayan kelimeleri de gösteririz.',
+        bos: 'Mesleğinizi yazın (ör. Kaynakçı).',
+        uzun: 'Mesleğinizi kısaca yazın (ör. Kaynakçı, Garson, Muhasebeci).',
+        baska: 'Başka bir meslek mi?',
+        benzer: 'Benzer meslekler:',
+        benzerZengin: 'Hazır becerileri olan benzer meslek:',
+        kaynak: 'Meslek adı: İŞKUR Türk Meslekler Sözlüğü.',
+        genelBas: '{x} için başlangıç',
+        genelBilgi: 'Yeni bir CV açılır. Unvanınız hazır gelir; örnek özet ve deneyim satırı köşeli parantezle işaretlidir, kendi bilginizle doldurun. Becerilerinizi sonra Yetenekler bölümüne ekleyebilirsiniz. Şu anki CV\'niz silinmez, CV\'lerim\'de kalır.',
+        genelCumle: 'Yaptığınız işleri ve elde ettiğiniz sonuçları kısa cümlelerle yazın.',
+        kBas: 'Sahip olduğunuz becerileri işaretleyin',
+        iBas: 'İlanda geçen, CV\'nizde olmayan (sahipseniz işaretleyin)',
+        bBas: 'Bu meslekte işverenlerin sık baktığı (varsa CV\'nize ekleyin)',
+        basla: 'Bu taslakla yeni CV aç',
+        ornekGor: 'Örnek CV\'yi gör',
+        ornekGizle: 'Örneği gizle',
+        ornekAlt: '{x} örnek CV',
+        ornekYok: 'Örnek görsel açılamadı. ',
+        ornekSayfa: 'Örnek sayfasını aç',
+        cok: 'En fazla 10 beceri eklenebilir; ilk 10 tanesi eklenecek.',
+        firma: '[Firma adı, şehir]',
+        ornek: '[Örnek – kendinize göre değiştirin] ',
+        acildi: 'Taslak açıldı. Köşeli parantezli yerleri kendi bilginizle değiştirin.',
+        pdfQ: 'CV\'nizde doldurulmamış yerler var:\n{x}\n\nYine de indirilsin mi?',
+        esas: 'Beceriler ve örnekler: {x}',
+        hata: 'Meslek listesi yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.',
+        nokta: '… (sayı / bilgi)',
+        taslakAd: ' – taslak',
+        balon1: '✏️ Taslaktan eklendi: [ ] ve … yerlerini düzenleyin.',
+        balon2: '✏️ Taslaktan eklendi, kendinize göre düzenleyin.',
+        balon3: '✏️ … yerine kendi bilginizi yazın.'
+    };
+    // English (20.11): UK/US CV norms - the draft adds no photo, age, date of birth or marital status.
+    MTD.en = {
+        bas: 'Ready-made start for {x}',
+        bilgi: 'A new CV opens with the job title and the skills you tick. The example summary and example experience line are marked in square brackets; replace them with your own details. Your current CV is not deleted; it stays in My CVs.',
+        bos: 'Type your job title (e.g. Welder).',
+        uzun: 'Type just your job title (e.g. Welder, Waiter, Accountant).',
+        baska: 'A different job?',
+        benzer: 'Similar jobs:',
+        benzerZengin: 'Similar job with ready-made skills:',
+        genelBas: 'Start for {x}',
+        genelBilgi: 'A new CV opens with your job title. The example summary and experience line are marked in square brackets; fill them in with your own details. You can add your skills later in the Skills section. Your current CV is not deleted; it stays in My CVs.',
+        genelCumle: 'Describe what you did and what you achieved in short sentences.',
+        kBas: 'Tick the skills you have',
+        bBas: 'What employers in this job often look for (add it if you have it)',
+        basla: 'Open a new CV with this start',
+        ornekGor: 'See example CV',
+        ornekGizle: 'Hide example',
+        ornekAlt: '{x} example CV',
+        ornekYok: 'The example image could not be loaded. ',
+        ornekSayfa: 'Open the example page',
+        cok: 'Up to 10 skills can be added; the first 10 will be used.',
+        firma: '[Company name, city]',
+        ornek: '[Example – replace with your own] ',
+        acildi: 'Draft opened. Replace the parts in square brackets with your own details.',
+        pdfQ: 'Your CV still has parts to fill in:\n{x}\n\nDownload anyway?',
+        esas: 'Skills and examples: {x}',
+        hata: 'The job list could not be loaded. Check your internet connection and try again.',
+        nokta: '… (number / detail)',
+        taslakAd: ' – draft',
+        balon1: '✏️ Added from the draft: edit the [ ] and … parts.',
+        balon2: '✏️ Added from the draft: make it your own.',
+        balon3: '✏️ Replace … with your own details.'
+    };
+    // Deutsch (20.11): AGG - Foto, Geburtsdatum, Familienstand sind freiwillig; der Entwurf fügt nichts davon hinzu.
+    MTD.de = {
+        bas: 'Fertiger Einstieg für {x}',
+        bilgi: 'Ein neuer Lebenslauf wird geöffnet: Berufsbezeichnung und die angekreuzten Kenntnisse sind schon eingetragen. Beispiel-Profil und Beispiel-Erfahrung stehen in eckigen Klammern; ersetzen Sie sie durch Ihre eigenen Angaben. Foto, Geburtsdatum und Familienstand sind freiwillig (AGG). Ihr aktueller Lebenslauf bleibt unter „Meine Lebensläufe“ erhalten.',
+        bos: 'Geben Sie Ihren Beruf ein (z. B. Koch).',
+        uzun: 'Geben Sie nur Ihren Beruf ein (z. B. Koch, Verkäuferin, Lagerist).',
+        baska: 'Ein anderer Beruf?',
+        benzer: 'Ähnliche Berufe:',
+        benzerZengin: 'Ähnlicher Beruf mit fertigen Kenntnissen:',
+        genelBas: 'Einstieg für {x}',
+        genelBilgi: 'Ein neuer Lebenslauf wird mit Ihrer Berufsbezeichnung geöffnet. Beispiel-Profil und Beispiel-Erfahrung stehen in eckigen Klammern; ergänzen Sie Ihre eigenen Angaben. Kenntnisse können Sie später im Bereich Kenntnisse eintragen. Ihr aktueller Lebenslauf bleibt unter „Meine Lebensläufe“ erhalten.',
+        genelCumle: 'Beschreiben Sie Ihre Aufgaben und Ergebnisse in kurzen Stichpunkten.',
+        kBas: 'Kreuzen Sie Ihre Kenntnisse an',
+        bBas: 'Darauf achten Arbeitgeber in diesem Beruf oft (ergänzen Sie es, wenn vorhanden)',
+        basla: 'Neuen Lebenslauf mit diesem Einstieg öffnen',
+        ornekGor: 'Beispiel-Lebenslauf ansehen',
+        ornekGizle: 'Beispiel ausblenden',
+        ornekAlt: 'Beispiel-Lebenslauf {x}',
+        ornekYok: 'Das Beispielbild konnte nicht geladen werden. ',
+        ornekSayfa: 'Beispielseite öffnen',
+        cok: 'Es können höchstens 10 Kenntnisse übernommen werden; die ersten 10 werden eingetragen.',
+        firma: '[Firma, Ort]',
+        ornek: '[Beispiel – durch eigene Angaben ersetzen] ',
+        acildi: 'Entwurf geöffnet. Ersetzen Sie die Stellen in eckigen Klammern durch Ihre eigenen Angaben.',
+        pdfQ: 'In Ihrem Lebenslauf sind noch Stellen auszufüllen:\n{x}\n\nTrotzdem herunterladen?',
+        esas: 'Kenntnisse und Beispiele: {x}',
+        hata: 'Die Berufsliste konnte nicht geladen werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+        nokta: '… (Zahl / Angabe)',
+        taslakAd: ' – Entwurf',
+        balon1: '✏️ Aus dem Entwurf: Stellen mit [ ] und … anpassen.',
+        balon2: '✏️ Aus dem Entwurf: an Ihre Angaben anpassen.',
+        balon3: '✏️ Ersetzen Sie … durch Ihre eigenen Angaben.'
+    };
+    // Français (20.11) : Code du travail L1132-1 et L1221-6 – photo, âge, situation familiale facultatifs ; le brouillon n'ajoute rien de cela.
+    MTD.fr = {
+        bas: 'Point de départ pour {x}',
+        bilgi: 'Un nouveau CV s’ouvre avec l’intitulé du poste et les compétences cochées. Le profil et l’expérience d’exemple sont entre crochets : remplacez-les par vos propres informations. La photo, l’âge et la situation familiale sont facultatifs ; un employeur ne peut demander que des informations liées au poste. Votre CV actuel reste dans « Mes CV ».',
+        bos: 'Saisissez votre métier (ex. Cuisinier).',
+        uzun: 'Saisissez seulement votre métier (ex. Cuisinier, Vendeuse, Cariste).',
+        baska: 'Un autre métier ?',
+        benzer: 'Métiers proches :',
+        benzerZengin: 'Métier proche avec compétences prêtes :',
+        genelBas: 'Départ pour {x}',
+        genelBilgi: 'Un nouveau CV s’ouvre avec votre intitulé de poste. Le profil et l’expérience d’exemple sont entre crochets : complétez-les avec vos propres informations. Vous pourrez ajouter vos compétences plus tard dans la rubrique Compétences. Votre CV actuel reste dans « Mes CV ».',
+        genelCumle: 'Décrivez vos missions et vos résultats en phrases courtes.',
+        kBas: 'Cochez les compétences que vous avez',
+        bBas: 'Ce que les employeurs regardent souvent pour ce métier (ajoutez-le si vous l’avez)',
+        basla: 'Ouvrir un nouveau CV avec ce départ',
+        ornekGor: 'Voir l’exemple de CV',
+        ornekGizle: 'Masquer l’exemple',
+        ornekAlt: 'Exemple de CV {x}',
+        ornekYok: 'L’image d’exemple n’a pas pu être chargée. ',
+        ornekSayfa: 'Ouvrir la page d’exemple',
+        cok: 'Au maximum 10 compétences peuvent être ajoutées ; les 10 premières seront reprises.',
+        firma: '[Entreprise, ville]',
+        ornek: '[Exemple – à remplacer par vos informations] ',
+        acildi: 'Brouillon ouvert. Remplacez les passages entre crochets par vos propres informations.',
+        pdfQ: 'Votre CV contient encore des éléments à compléter :\n{x}\n\nTélécharger quand même ?',
+        esas: 'Compétences et exemples : {x}',
+        hata: 'La liste des métiers n’a pas pu être chargée. Vérifiez votre connexion et réessayez.',
+        nokta: '… (chiffre / information)',
+        taslakAd: ' – brouillon',
+        balon1: '✏️ Ajouté depuis le brouillon : modifiez les [ ] et les ….',
+        balon2: '✏️ Ajouté depuis le brouillon : adaptez-le à votre parcours.',
+        balon3: '✏️ Remplacez … par vos propres informations.'
+    };
+    // Español (20.11): Ley 15/2022 de igualdad de trato – foto, edad y estado civil son opcionales; el borrador no los añade.
+    MTD.es = {
+        bas: 'Punto de partida para {x}',
+        bilgi: 'Se abre un CV nuevo con el puesto y las habilidades que marques. El perfil y la experiencia de ejemplo van entre corchetes: sustitúyelos por tus datos. La foto, la edad y el estado civil son opcionales. Tu CV actual sigue en «Mis CV».',
+        bos: 'Escribe tu profesión (p. ej. Cocinero).',
+        uzun: 'Escribe solo tu profesión (p. ej. Cocinero, Dependienta, Mozo de almacén).',
+        baska: '¿Otra profesión?',
+        benzer: 'Profesiones parecidas:',
+        benzerZengin: 'Profesión parecida con habilidades listas:',
+        genelBas: 'Inicio para {x}',
+        genelBilgi: 'Se abre un CV nuevo con tu puesto. El perfil y la experiencia de ejemplo van entre corchetes: complétalos con tus datos. Podrás añadir tus habilidades después en la sección Habilidades. Tu CV actual sigue en «Mis CV».',
+        genelCumle: 'Describe tus tareas y resultados en frases cortas.',
+        kBas: 'Marca las habilidades que tienes',
+        bBas: 'Lo que suelen mirar las empresas en esta profesión (añádelo si lo tienes)',
+        basla: 'Abrir un CV nuevo con este inicio',
+        ornekGor: 'Ver CV de ejemplo',
+        ornekGizle: 'Ocultar ejemplo',
+        ornekAlt: 'CV de ejemplo de {x}',
+        ornekYok: 'No se pudo cargar la imagen de ejemplo. ',
+        ornekSayfa: 'Abrir la página de ejemplo',
+        cok: 'Se pueden añadir como máximo 10 habilidades; se usarán las 10 primeras.',
+        firma: '[Empresa, ciudad]',
+        ornek: '[Ejemplo – sustitúyelo por tus datos] ',
+        acildi: 'Borrador abierto. Sustituye lo que está entre corchetes por tus datos.',
+        pdfQ: 'Tu CV todavía tiene partes por completar:\n{x}\n\n¿Descargar de todos modos?',
+        esas: 'Habilidades y ejemplos: {x}',
+        hata: 'No se pudo cargar la lista de profesiones. Comprueba tu conexión e inténtalo de nuevo.',
+        nokta: '… (cifra / dato)',
+        taslakAd: ' – borrador',
+        balon1: '✏️ Añadido desde el borrador: edita los [ ] y los ….',
+        balon2: '✏️ Añadido desde el borrador: adáptalo a tu experiencia.',
+        balon3: '✏️ Sustituye … por tus propios datos.'
+    };
+    // Русский (20.11): ст. 64 ТК РФ – фото, возраст и семейное положение указывать не обязательно; черновик их не добавляет.
+    MTD.ru = {
+        bas: 'Готовое начало для профессии «{x}»',
+        bilgi: 'Откроется новое резюме с названием должности и отмеченными навыками. Пример описания и пример опыта даны в квадратных скобках — замените их своими данными. Фото, возраст и семейное положение указывать не обязательно. Текущее резюме останется в «Мои резюме».',
+        bos: 'Введите вашу профессию (например, Повар).',
+        uzun: 'Введите только профессию (например, Повар, Продавец, Кладовщик).',
+        baska: 'Другая профессия?',
+        benzer: 'Похожие профессии:',
+        benzerZengin: 'Похожая профессия с готовыми навыками:',
+        genelBas: 'Начало для профессии «{x}»',
+        genelBilgi: 'Откроется новое резюме с вашей должностью. Пример описания и опыта даны в квадратных скобках — дополните их своими данными. Навыки можно добавить позже в разделе «Навыки». Текущее резюме останется в «Мои резюме».',
+        genelCumle: 'Кратко опишите обязанности и результаты.',
+        kBas: 'Отметьте навыки, которые у вас есть',
+        bBas: 'На что работодатели часто смотрят в этой профессии (добавьте, если есть)',
+        basla: 'Открыть новое резюме с этим началом',
+        ornekGor: 'Посмотреть пример резюме',
+        ornekGizle: 'Скрыть пример',
+        ornekAlt: 'Пример резюме: {x}',
+        ornekYok: 'Не удалось загрузить пример. ',
+        ornekSayfa: 'Открыть страницу примера',
+        cok: 'Можно добавить не больше 10 навыков; будут использованы первые 10.',
+        firma: '[Компания, город]',
+        ornek: '[Пример — замените своими данными] ',
+        acildi: 'Черновик открыт. Замените текст в квадратных скобках своими данными.',
+        pdfQ: 'В резюме ещё есть незаполненные места:\n{x}\n\nВсё равно скачать?',
+        esas: 'Навыки и примеры: {x}',
+        hata: 'Не удалось загрузить список профессий. Проверьте подключение и попробуйте ещё раз.',
+        nokta: '… (число / сведения)',
+        taslakAd: ' — черновик',
+        balon1: '✏️ Добавлено из черновика: исправьте [ ] и ….',
+        balon2: '✏️ Добавлено из черновика: измените под себя.',
+        balon3: '✏️ Замените … своими данными.'
+    };
+    // Italiano (20.11): art. 8 Statuto dei lavoratori, art. 10 D.Lgs. 276/2003, art. 27 D.Lgs. 198/2006 –
+    // foto, età e stato civile sono facoltativi; la bozza non li aggiunge.
+    MTD.it = {
+        bas: 'Punto di partenza per {x}',
+        bilgi: 'Si apre un nuovo CV con la professione e le competenze che selezioni. Il profilo e l’esperienza di esempio sono tra parentesi quadre: sostituiscili con i tuoi dati. Foto, età e stato civile sono facoltativi; il datore di lavoro può chiedere solo informazioni rilevanti per il lavoro. La formula «autorizzo il trattamento dei dati personali» non è obbligatoria (art. 111-bis Codice privacy): aggiungila solo se l’annuncio la chiede. Il tuo CV attuale resta in «I miei CV».',
+        bos: 'Scrivi la tua professione (es. Cuoco).',
+        uzun: 'Scrivi solo la tua professione (es. Cuoco, Commessa, Magazziniere).',
+        baska: 'Un’altra professione?',
+        benzer: 'Professioni simili:',
+        benzerZengin: 'Professione simile con competenze pronte:',
+        genelBas: 'Inizio per {x}',
+        genelBilgi: 'Si apre un nuovo CV con la tua professione. Il profilo e l’esperienza di esempio sono tra parentesi quadre: completali con i tuoi dati. Potrai aggiungere le competenze dopo, nella sezione Competenze. Il tuo CV attuale resta in «I miei CV».',
+        genelCumle: 'Descrivi le tue mansioni e i risultati in frasi brevi.',
+        kBas: 'Seleziona le competenze che hai',
+        bBas: 'Cosa guardano spesso i datori di lavoro per questa professione (aggiungilo se ce l’hai)',
+        basla: 'Apri un nuovo CV con questo inizio',
+        ornekGor: 'Vedi un CV di esempio',
+        ornekGizle: 'Nascondi esempio',
+        ornekAlt: 'CV di esempio: {x}',
+        ornekYok: 'Impossibile caricare l’immagine di esempio. ',
+        ornekSayfa: 'Apri la pagina di esempio',
+        cok: 'Puoi aggiungere al massimo 10 competenze; verranno usate le prime 10.',
+        firma: '[Azienda, città]',
+        ornek: '[Esempio – sostituiscilo con i tuoi dati] ',
+        acildi: 'Bozza aperta. Sostituisci il testo tra parentesi quadre con i tuoi dati.',
+        pdfQ: 'Il tuo CV ha ancora parti da completare:\n{x}\n\nScaricare comunque?',
+        esas: 'Competenze ed esempi: {x}',
+        hata: 'Impossibile caricare l’elenco delle professioni. Controlla la connessione e riprova.',
+        nokta: '… (numero / dato)',
+        taslakAd: ' – bozza',
+        balon1: '✏️ Aggiunto dalla bozza: modifica le [ ] e i ….',
+        balon2: '✏️ Aggiunto dalla bozza: adattalo alla tua esperienza.',
+        balon3: '✏️ Sostituisci … con i tuoi dati.'
+    };
+    // Português (20.11): todos os países de língua portuguesa. Brasil – CF art. 7.º XXX, Lei 9.029/1995;
+    // Portugal – Código do Trabalho arts. 17.º, 24.º, 25.º. Foto, idade e estado civil opcionais; o rascunho não os acrescenta.
+    MTD.pt = {
+        bas: 'Ponto de partida para {x}',
+        bilgi: 'Abre-se um novo currículo com a profissão e as competências que marcar. O perfil e a experiência de exemplo estão entre parênteses retos: substitua-os pelos seus dados. Foto, idade e estado civil são opcionais; as regras variam conforme o país. O seu currículo atual fica em «Os meus currículos».',
+        bos: 'Escreva a sua profissão (ex.: Cozinheiro).',
+        uzun: 'Escreva só a sua profissão (ex.: Cozinheiro, Vendedora, Motorista de pesados).',
+        baska: 'Outra profissão?',
+        benzer: 'Profissões parecidas:',
+        benzerZengin: 'Profissão parecida com competências prontas:',
+        genelBas: 'Início para {x}',
+        genelBilgi: 'Abre-se um novo currículo com a sua profissão. O perfil e a experiência de exemplo estão entre parênteses retos: complete-os com os seus dados. Pode acrescentar as competências depois, na secção Competências. O seu currículo atual fica em «Os meus currículos».',
+        genelCumle: 'Descreva as suas tarefas e resultados em frases curtas.',
+        kBas: 'Marque as competências que tem',
+        bBas: 'O que os empregadores costumam ver nesta profissão (acrescente se tiver)',
+        basla: 'Abrir um novo currículo com este início',
+        ornekGor: 'Ver currículo de exemplo',
+        ornekGizle: 'Ocultar exemplo',
+        ornekAlt: 'Currículo de exemplo: {x}',
+        ornekYok: 'Não foi possível carregar a imagem de exemplo. ',
+        ornekSayfa: 'Abrir a página de exemplo',
+        cok: 'Só é possível acrescentar 10 competências; serão usadas as 10 primeiras.',
+        firma: '[Empresa, cidade]',
+        ornek: '[Exemplo – substitua pelos seus dados] ',
+        acildi: 'Rascunho aberto. Substitua o texto entre parênteses retos pelos seus dados.',
+        pdfQ: 'O seu currículo ainda tem partes por preencher:\n{x}\n\nTransferir mesmo assim?',
+        esas: 'Competências e exemplos: {x}',
+        hata: 'Não foi possível carregar a lista de profissões. Verifique a ligação e tente novamente.',
+        nokta: '… (número / dado)',
+        taslakAd: ' – rascunho',
+        balon1: '✏️ Acrescentado do rascunho: edite os [ ] e os ….',
+        balon2: '✏️ Acrescentado do rascunho: adapte à sua experiência.',
+        balon3: '✏️ Substitua … pelos seus dados.'
+    };
+    // العربية (20.11): لكل البلدان الناطقة بالعربية. السعودية – نظام العمل م3؛ الإمارات – مرسوم بقانون 33/2021 م4؛
+    // مصر – قانون العمل 14/2025؛ المغرب – مدونة الشغل م9. الصورة والعمر والحالة الاجتماعية اختيارية؛ المسودة لا تضيفها.
+    MTD.ar = {
+        bas: 'بداية جاهزة لمهنة {x}',
+        bilgi: 'تُفتح سيرة ذاتية جديدة بالمسمى الوظيفي والمهارات التي تختارها. النبذة والخبرة النموذجيتان بين قوسين معقوفين: استبدلهما ببياناتك. الصورة والعمر والحالة الاجتماعية اختيارية، والقواعد تختلف من بلد لآخر. تبقى سيرتك الحالية في «سيري الذاتية».',
+        bos: 'اكتب مهنتك (مثلًا: طباخ).',
+        uzun: 'اكتب مهنتك فقط (مثلًا: طباخ، كاشير، سائق شاحنة).',
+        baska: 'مهنة أخرى؟',
+        benzer: 'مهن مشابهة:',
+        benzerZengin: 'مهنة مشابهة بمهارات جاهزة:',
+        genelBas: 'بداية لمهنة {x}',
+        genelBilgi: 'تُفتح سيرة ذاتية جديدة بمسماك الوظيفي. النبذة والخبرة النموذجيتان بين قوسين معقوفين: أكملهما ببياناتك. يمكنك إضافة المهارات لاحقًا في قسم المهارات. تبقى سيرتك الحالية في «سيري الذاتية».',
+        genelCumle: 'صف مهامك وإنجازاتك في جمل قصيرة.',
+        kBas: 'اختر المهارات التي تمتلكها',
+        bBas: 'ما ينظر إليه أصحاب العمل غالبًا في هذه المهنة (أضفه إن كان لديك)',
+        basla: 'افتح سيرة ذاتية جديدة بهذه البداية',
+        ornekGor: 'عرض سيرة ذاتية نموذجية',
+        ornekGizle: 'إخفاء النموذج',
+        ornekAlt: 'سيرة ذاتية نموذجية: {x}',
+        ornekYok: 'تعذر تحميل صورة النموذج. ',
+        ornekSayfa: 'افتح صفحة النموذج',
+        cok: 'يمكن إضافة 10 مهارات كحد أقصى؛ ستُستخدم أول 10.',
+        firma: '[الشركة، المدينة]',
+        ornek: '[مثال – استبدله ببياناتك] ',
+        acildi: 'فُتحت المسودة. استبدل النص الموجود بين القوسين المعقوفين ببياناتك.',
+        pdfQ: 'ما زالت في سيرتك الذاتية أجزاء تحتاج إلى إكمال:\n{x}\n\nهل تريد التنزيل على أي حال؟',
+        esas: 'المهارات والأمثلة: {x}',
+        hata: 'تعذر تحميل قائمة المهن. تحقق من الاتصال وحاول مرة أخرى.',
+        nokta: '… (رقم / معلومة)',
+        taslakAd: ' – مسودة',
+        balon1: '✏️ أُضيف من المسودة: عدّل [ ] و….',
+        balon2: '✏️ أُضيف من المسودة: عدّله حسب خبرتك.',
+        balon3: '✏️ استبدل … ببياناتك.'
+    };
+    // 中文 (20.11): 中国大陆，简体字。就业促进法 第三条、第二十七条；人社部等九部门 2019 年通知（不得询问妇女婚育情况）。
+    // 照片、年龄、婚育状况可不填；草稿不会添加。
+    MTD.zh = {
+        bas: '{x}的简历起点',
+        bilgi: '将打开一份新简历，带有职位名称和您勾选的技能。示例简介和示例经历放在方括号中，请替换为您自己的信息。照片、年龄、婚育状况等可以不填；用人单位不得因民族、性别、宗教信仰等歧视求职者。当前简历会保留在“我的简历”中。',
+        bos: '请输入您的职业（如：厨师）。',
+        uzun: '请只输入职业名称（如：厨师、收银员、货车司机）。',
+        baska: '是其他职业吗？',
+        benzer: '相近职业：',
+        benzerZengin: '有现成技能的相近职业：',
+        genelBas: '{x}的简历开头',
+        genelBilgi: '将打开一份带有您职位名称的新简历。示例简介和示例经历放在方括号中，请补充您自己的信息。技能可以稍后在“技能”部分添加。当前简历会保留在“我的简历”中。',
+        genelCumle: '用简短的句子描述您的工作内容和成果。',
+        kBas: '勾选您具备的技能',
+        bBas: '用人单位通常会看的内容（如有请补充）',
+        basla: '用这个起点打开新简历',
+        ornekGor: '查看简历示例',
+        ornekGizle: '隐藏示例',
+        ornekAlt: '简历示例：{x}',
+        ornekYok: '示例图片无法加载。',
+        ornekSayfa: '打开示例页面',
+        cok: '最多可添加 10 项技能，将使用前 10 项。',
+        firma: '[公司，城市]',
+        ornek: '[示例——请替换为您的信息] ',
+        acildi: '草稿已打开。请把方括号中的内容替换为您自己的信息。',
+        pdfQ: '您的简历还有未完成的部分：\n{x}\n\n仍要下载吗？',
+        esas: '技能和示例来自：{x}',
+        hata: '职业列表无法加载。请检查网络连接后重试。',
+        nokta: '…（数字 / 信息）',
+        taslakAd: '（草稿）',
+        balon1: '✏️ 来自草稿：请修改 [ ] 和 … 处。',
+        balon2: '✏️ 来自草稿：请根据您的经历修改。',
+        balon3: '✏️ 请把 … 替换为您自己的信息。'
+    };
+    // 日本語 (20.11): 職業安定法 第5条の5、厚生労働省「公正な採用選考」、厚生労働省履歴書様式例（性別は任意記載）。
+    // 下書きは写真・生年月日・性別を入れない。履歴書（tpl-rirekisho）の表は従来どおり標準フォームから作られる。
+    MTD.ja = {
+        bas: '{x}の下書き',
+        bilgi: '職種とチェックしたスキルを入れた新しい履歴書が開きます。例文の自己PRと職歴は[ ]で囲まれているので、ご自身の内容に書き換えてください。写真・生年月日・性別などは下書きに入れていません（厚生労働省の履歴書様式例では性別は任意記載です）。本籍や家族のことなど、適性・能力に関係のない事項は採用選考で問われるべきではないとされています。今の履歴書は「保存した履歴書」に残ります。',
+        bos: '職種を入力してください（例：介護職員）。',
+        uzun: '職種だけを入力してください（例：介護職員、販売スタッフ、トラックドライバー）。',
+        baska: '別の職種ですか？',
+        benzer: '近い職種：',
+        benzerZengin: 'スキルが用意されている近い職種：',
+        genelBas: '{x}の書き出し',
+        genelBilgi: 'ご自身の職種を入れた新しい履歴書が開きます。例文の自己PRと職歴は[ ]で囲まれているので、ご自身の内容を書き足してください。スキルはあとで「スキル」欄に追加できます。今の履歴書は「保存した履歴書」に残ります。',
+        genelCumle: '担当した業務と成果を短い文で書いてください。',
+        kBas: 'お持ちのスキルにチェックしてください',
+        bBas: 'この職種で採用担当者がよく見ること（お持ちなら書き加えてください）',
+        basla: 'この下書きで新しい履歴書を開く',
+        ornekGor: '履歴書の例を見る',
+        ornekGizle: '例を閉じる',
+        ornekAlt: '履歴書の例：{x}',
+        ornekYok: '例の画像を読み込めませんでした。',
+        ornekSayfa: '例のページを開く',
+        cok: 'スキルは最大10個まで追加できます。最初の10個が使われます。',
+        firma: '[会社名・所在地]',
+        ornek: '[例文：ご自身の内容に書き換えてください] ',
+        acildi: '下書きを開きました。[ ]の部分をご自身の内容に書き換えてください。',
+        pdfQ: '履歴書にまだ書き換えていない部分があります：\n{x}\n\nこのままダウンロードしますか？',
+        esas: 'スキルと例文の元の職種：{x}',
+        hata: '職種の一覧を読み込めませんでした。接続を確認して、もう一度お試しください。',
+        nokta: '…（数字・内容）',
+        taslakAd: '（下書き）',
+        balon1: '✏️ 下書きから追加：[ ]と…を書き換えてください。',
+        balon2: '✏️ 下書きから追加：ご自身の経験に合わせて書き換えてください。',
+        balon3: '✏️ …をご自身の内容に書き換えてください。'
+    };
+    // Português do Brasil: navegador em pt-BR -> dados oneri/pt-br.json e textos do painel com grafia brasileira.
+    MTD['pt-br'] = {
+        bilgi: 'Abre-se um novo currículo com a profissão e as competências que você marcar. O perfil e a experiência de exemplo estão entre colchetes: substitua pelos seus dados. Foto, idade e estado civil são opcionais; as regras variam conforme o país. Seu currículo atual fica em «Os meus currículos».',
+        genelBilgi: 'Abre-se um novo currículo com a sua profissão. O perfil e a experiência de exemplo estão entre colchetes: complete com os seus dados. Você pode adicionar as competências depois, na seção Competências. Seu currículo atual fica em «Os meus currículos».',
+        uzun: 'Escreva só a sua profissão (ex.: Cozinheiro, Vendedora, Motorista de caminhão).',
+        kBas: 'Marque as competências que você tem',
+        bBas: 'O que os empregadores costumam olhar nesta profissão (adicione se tiver)',
+        cok: 'É possível adicionar no máximo 10 competências; serão usadas as 10 primeiras.',
+        acildi: 'Rascunho aberto. Substitua o texto entre colchetes pelos seus dados.',
+        pdfQ: 'Seu currículo ainda tem partes para preencher:\n{x}\n\nBaixar mesmo assim?',
+        hata: 'Não foi possível carregar a lista de profissões. Verifique a conexão e tente novamente.',
+        balon1: '✏️ Adicionado do rascunho: edite os [ ] e os ….',
+        balon2: '✏️ Adicionado do rascunho: adapte à sua experiência.'
+    };
+    // Meslek verisi olan diller (sırayla eklenir); digerlerinde eski ilan kontrolu kalir
+    var MESLEK_DIL = { tr: 1, en: 1, de: 1, fr: 1, es: 1, ru: 1, it: 1, pt: 1, ar: 1, zh: 1, ja: 1 };
+    function mDil() { var l = lang(); return MESLEK_DIL[l] ? l : 'tr'; }
+    function buyukBas(w) { return w ? w.charAt(0).toLocaleUpperCase(mDil() === 'tr' ? 'tr' : mDil()) + w.slice(1) : w; }
+    // pt-BR: tarayicinin ilk Portekizce dili pt-BR ise Brezilya verisi ve metinleri (yoksa pt = Portekiz yazimi)
+    function brMi() {
+        var ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+        for (var i = 0; i < ls.length; i++) { var x = String(ls[i] || '').toLowerCase(); if (x.indexOf('pt') === 0) return x === 'pt-br'; }
+        return false;
+    }
+    // es-419 (21.11): tarayicinin ilk Ispanyolca dili Ispanya disinda bir bolgeyse (es-MX, es-AR, es-419...) Latin Amerika
+    // verisi (oneri/es-419.json: ulkelerin is ilani sitelerindeki unvanlar, Ispanya'ya ozgu belgeler yok) ve ulke kanun notu.
+    function esBolge() {
+        var ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+        for (var i = 0; i < ls.length; i++) { var x = String(ls[i] || ''); if (/^es(?:[-_]|$)/i.test(x)) return (x.split(/[-_]/)[1] || '').toUpperCase(); }
+        return '';
+    }
+    var ES_BOLGE = esBolge();
+    function esAmerikaMi() { return !!ES_BOLGE && ES_BOLGE !== 'ES'; }
+    var ES_LEY = {
+        MX: 'En México, la Ley Federal del Trabajo (art. 133) prohíbe negarse a contratar por motivos como la edad, el género, el origen o el estado de salud.',
+        CO: 'En Colombia, la Constitución (art. 13) y el Código Sustantivo del Trabajo (art. 10) garantizan la igualdad de trato.',
+        AR: 'En Argentina, la Ley 23.592 sanciona los actos discriminatorios y la Ley de Contrato de Trabajo (art. 17) prohíbe discriminar entre trabajadores.',
+        UY: 'En Uruguay, la Ley 16.045 prohíbe discriminar por sexo en el acceso al empleo y la Ley 17.817 combate toda forma de discriminación.',
+        GT: 'En Guatemala, el Código de Trabajo (art. 14 bis) prohíbe la discriminación por raza, religión o credo político, entre otros motivos.',
+        PE: 'En Perú, la Ley 26772 prohíbe que las ofertas de empleo incluyan requisitos discriminatorios.',
+        CL: 'En Chile, el Código del Trabajo (art. 2) prohíbe la discriminación por motivos como la edad, el sexo o el estado civil, también en las ofertas de trabajo.',
+        EC: 'En Ecuador, la normativa del Ministerio del Trabajo prohíbe pedir pruebas de embarazo en la selección y fijar requisitos por edad, sexo o etnia.'
+    };
+    MTD['es-419'] = {
+        bilgi: 'Se abre un CV nuevo con el puesto y las habilidades que marques. El perfil y la experiencia de ejemplo van entre corchetes: sustitúyelos por tus datos. La foto, la edad y el estado civil son opcionales.' + (ES_LEY[ES_BOLGE] ? ' ' + ES_LEY[ES_BOLGE] : '') + ' Tu CV actual sigue en «Mis CV».',
+        uzun: 'Escribe solo tu profesión (p. ej. Cocinero, Vendedora, Electricista).'
+    };
+    function mVeriDil() { var L = mDil(); return L === 'pt' && brMi() ? 'pt-br' : (L === 'es' && esAmerikaMi() ? 'es-419' : L); }
+    var MT = {};
+    Object.keys(MTD.tr).forEach(function (k) {
+        Object.defineProperty(MT, k, { get: function () { var v = MTD[mVeriDil()], d = MTD[mDil()]; return v && v[k] != null ? v[k] : d && d[k] != null ? d[k] : MTD.tr[k]; } });
+    });
+    var M_YOL = '/oneri/';
+    var MV = null, MVC = {}, MVPC = {};
+    function mYukle() {
+        var L = mVeriDil();
+        if (MVC[L]) { MV = MVC[L]; return Promise.resolve(MV); }
+        if (!MVPC[L]) MVPC[L] = fetch(M_YOL + L + '.json').then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (d) { MVC[L] = d; return d; }, function (e) { MVPC[L] = null; throw e; });
+        return MVPC[L].then(function (d) { MV = d; return d; });
+    }
+    // Turkce harfsiz yazimi da tanimak icin katlama: "hemsire" = "hemşire", "asci" = "aşçı"
+    // DE: ä/ß da katlanir ("verkaufer" = "Verkäufer")
+    // FR: aksanlar da katlanir ("electricien" = "Électricien"); kesme isareti bosluk olur ("d'entretien")
+    function katla(x) { return kucuk(x || '', true).replace(/[’']/g, ' ').replace(/[çğıöşüâîäßéèêëàôûùïœáíóúñёìòãõ]/g, function (c) { return { 'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u', 'â': 'a', 'î': 'i', 'ä': 'a', 'ß': 'ss', 'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e', 'à': 'a', 'ô': 'o', 'û': 'u', 'ù': 'u', 'ï': 'i', 'œ': 'oe', 'á': 'a', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ñ': 'n', 'ё': 'е', 'ì': 'i', 'ò': 'o', 'ã': 'a', 'õ': 'o' }[c]; })
+        .replace(/[\u064B-\u065F\u0670\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/(^|\s)ال(?=\S{3,})/g, '$1'); }
+    function mParca(m) {
+        if (m.__parca) return m.__parca;
+        // ilk parca ana ad; ardindan es anlamlilar ("e": "dikiş elemanı" -> Konfeksiyon İşçisi) ana ad gibi sayilir
+        function n(x) { return katla(x).replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim(); }
+        var p = m.n.split(/\s*[\/(),]\s*/).map(n), es = (m.e || []).map(n);
+        m.__ak = es.length;
+        var enAz = /^(zh|ja)$/.test(mDil()) ? 2 : 3;
+        return (m.__parca = [p[0]].concat(es, p.slice(1)).filter(function (x) { return x.length >= enAz; }));
+    }
+    // Puan (dusuk = iyi). <50000 "tam": meslek adi yazilanin icinde kelime basinda geciyor ya da yazilan, adin basi.
+    // Ana ad (parantez/egik cizgi oncesi) once; 139 zengin meslek az farkla one gecer. __tt: yazilanin neredeyse tamami.
+    function mAdaylar(d, metin) {
+        var tx = katla(metin).replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim(), puan = {}, tt = {};
+        if (tx.length < (/^(zh|ja)$/.test(mDil()) ? 2 : 3)) return [];
+        // EN: kisa kelimeler de anlam tasir ("lab assistant", "hr manager", "bus driver"); TR'de 4+ harf
+        var EN = mDil() !== 'tr', sozler = tx.length <= 40 ? tx.split(' ').filter(function (w) { return w.length >= (EN ? 2 : 4); }) : [];
+        // "kaynak ustası", "dikiş elemanı": genel unvan kelimeleri baska kelime varsa kok eslesmesinde aranmaz
+        var GENEL_SOZ = mDil() === 'ar' ? /^(عامل|عامله|موظف|موظفه|في|من|و|علي)$/ : mDil() === 'pt' ? /^(auxiliar|ajudante|operador|operadora|funcionario|funcionaria|trabalhador|trabalhadora|de|do|da|dos|das|em|e)$/ : mDil() === 'it' ? /^(addetto|addetta|operaio|operaia|personale|di|del|della|dei|delle|al|alla|alle|ai|in|e)$/ : mDil() === 'ru' ? /^(работник|работница|сотрудник|сотрудница|по|на|в|и)$/ : mDil() === 'es' ? /^(empleado|empleada|operario|operaria|personal|de|del|la|el|en)$/ : mDil() === 'fr' ? /^(employe|employee|agent|agente|ouvrier|ouvriere|polyvalent|polyvalente|de|du|des|en|d)$/ : mDil() === 'de' ? /^(mitarbeiter|mitarbeiterin|aushilfe|angestellte|angestellter|beschaftigte|beschaftigter|kraft)$/ : EN ? /^(worker|workers|staff|operative|employee|person)$/ : /^(usta|ustasi|kalfa|kalfasi|cirak|ciragi|eleman|elemani|isci|iscisi|personel|personeli|calisan|calisani)$/;
+        var GENEL_PARCA = /^(usta|ustasi|eleman|elemani|isci|iscisi|personel|personeli|operator|operatoru|teknisyen|teknisyeni|teknikeri|uzman|uzmani|gorevli|gorevlisi|memur|memuru|sef|sefi|mudur|muduru|yardimcisi|ozel|genel|diger|elle|makine|metal|ahsap|tekstil)$/;
+        var atilan = [];
+        if (sozler.some(function (w) { return !GENEL_SOZ.test(w); })) {
+            atilan = sozler.filter(function (w) { return GENEL_SOZ.test(w); }).map(function (w) { return w.slice(0, 5); });
+            sozler = sozler.filter(function (w) { return !GENEL_SOZ.test(w); });
+        }
+        function ekle(m, p, tam) { if (puan[m.s] == null || p < puan[m.s]) puan[m.s] = p; if (tam) tt[m.s] = 1; }
+        if (/^(zh|ja)$/.test(mDil())) {
+            var tz = tx.replace(/ /g, '');
+            d.forEach(function (m) {
+                mParca(m).forEach(function (p, pi) {
+                    p = p.replace(/ /g, ''); if (p.length < 2) return;
+                    var ceza = (pi > (m.__ak || 0) ? 400 : 0) + (m.resmi ? 0 : -15), i;
+                    if (tz === p) ekle(m, ceza, true);
+                    else if ((i = tz.lastIndexOf(p)) >= 0) ekle(m, 50000 + (tz.length - p.length) * 30 + (tz.length - i - p.length) * 200 + ceza);
+                    else if (p.indexOf(tz) === 0) ekle(m, 60000 + (p.length - tz.length) + ceza);
+                    else if (p.indexOf(tz) > 0) ekle(m, 70000 + (p.length - tz.length) + ceza);
+                });
+            });
+            return d.filter(function (m) { return puan[m.s] != null; }).sort(function (a, b) { return puan[a.s] - puan[b.s]; })
+                .slice(0, 8).map(function (m) { m.__p = puan[m.s]; m.__tt = !!tt[m.s]; return m; });
+        }
+        d.forEach(function (m) {
+            mParca(m).forEach(function (p, pi) {
+                // parantez/egik cizgi sonrasi tek genel kelime ("(Yapılandırmacı) Elemanı" -> "elemani") eslesme sayilmaz
+                // virgullu uzun adlarin ("Genel Müdür-Eğlence, Lokanta, Otel (...)") kisa ara parcalari da sayilmaz
+                var yan = pi > (m.__ak || 0);   // parantez/egik cizgi sonrasi yan ad (es anlamlilar ana ad sayilir)
+                if (yan && (GENEL_PARCA.test(p) || (p.length < 6 && mParca(m).length > 2))) return;
+                // yan ad (parantez ici "(Konfeksiyon)") tam eslesmede ana addan/es anlamlidan one gecmesin: "overlokçu konfeksiyon" -> Konfeksiyon İşçisi
+                var ceza = (yan ? 400 : 0) + (m.resmi ? 0 : -15), i = -1;
+                // meslek adi kelime basinda gecmeli ("muhasebe" icindeki "ebe" sayilmaz); sonrasinda ek olabilir ("kaynakçılık")
+                // kisa parantez parcasi ("Gece Müdürü (otel)" -> "otel") tam eslesme sayilmaz, yalniz kok eslesmesine girer
+                while (!(yan && p.length < 6) && (i = tx.indexOf(p, i + 1)) >= 0) {
+                    // Turkce tamlamada asil ad sondadir ("tır şoförü" -> şoför): sonda kalan yazi, bastakinden cok cezalandirilir
+                    // EN: sonda kalan kelime baska bir meslek demektir ("teacher assistant" ≠ Teacher)
+                    if (EN && (i === 0 || tx.charAt(i - 1) === ' ') && tx.slice(i + p.length).trim().split(' ').some(function (w) { return w && !GENEL_SOZ.test(w); })) break;
+                    if (i === 0 || tx.charAt(i - 1) === ' ') { ekle(m, (tx.length - i - p.length) * 30 + i * 5 + ceza, i === 0 && !yan && tx.length - p.length <= 4); break; }
+                }
+                // yazilan, meslek adinin basi ya da bir kelimesinin basi ("market elemanı", "muhasebe" -> Ön Muhasebe Elemanı)
+                if (tx.length >= 5) {
+                    if (p.indexOf(tx) === 0) ekle(m, 40 + (p.length - tx.length) + ceza);
+                    // kelime ortasinda gecen yazi: resmi uzun adlarda ("Otomotiv Sac ve Gövde Kaynak Ustası") zengin kok eslesmesinden sonra gelir
+                    else if (p.indexOf(' ' + tx) >= 0) ekle(m, (m.resmi ? 150000 : 70) + (p.length - tx.length) + ceza);
+                }
+                // kok eslesmesi: yazilan her kelime (4+ harf) adin bir kelimesiyle eslesmeli ("kaynak ustası" -> Kaynakçı degil, ikisi de gerekir)
+                if (sozler.length) {
+                    var pws = p.split(' '), tutan = 0, ilk = 1e9;
+                    sozler.forEach(function (w) {
+                        for (var j = 0; j < pws.length; j++) {
+                            // 4 harfli kelime: tam ya da belirgin uzun turev ("otel" -> otelcilik; "kasa" -> kasap degil)
+                            var pw = pws[j], hit = w.length < 5 ? (pw === w || (pw.indexOf(w) === 0 && pw.length >= w.length + 3)) : (pw.length >= 5 && pw.slice(0, 5) === w.slice(0, 5));
+                            // olumsuz turev sayilmaz: "dikiş" -> "dikişsiz"
+                            if (hit && pw.length > w.length && /^(siz|suz|sız|süz)/.test(pw.slice(Math.min(w.length, pw.length)))) hit = false;
+                            if (hit) { tutan++; ilk = Math.min(ilk, j); break; }
+                        }
+                    });
+                    // yazilan genel unvan kelimesi ("elemanı", "ustası") adda da geciyorsa one gec: "otel elemanı" -> Turizm ve Otelcilik Elemanı
+                    var unvanUyar = atilan.some(function (a) { return pws.some(function (pw) { return pw.slice(0, 5) === a; }); }) ? -150 : 0;
+                    if (tutan === sozler.length) ekle(m, 100000 + ilk * 50 + p.length + (yan ? 60 : 0) + (m.resmi ? 0 : -15) + unvanUyar);
+                }
+            });
+        });
+        return d.filter(function (m) { return puan[m.s] != null; }).sort(function (a, b) { return puan[a.s] - puan[b.s]; })
+            .slice(0, 8).map(function (m) { m.__p = puan[m.s]; m.__tt = !!tt[m.s]; return m; });
+    }
+    function mBul(d, metin) { return mAdaylar(d, metin)[0] || null; }
+    // Tam eslesme: meslek adi yazilanin icinde kelime basinda geciyor (kok/onek eslesmesi degil)
+    function tamMi(m) { return m && m.__p != null && m.__p < 50000; }
+    // İŞKUR Türk Meslekler Sözlüğü adları (oneri/tr-iskur.json, ~7.400): 139 zengin meslekte tam karşılığı olmayan
+    // unvanlar için. Yalnız ad ve ISCO birim grubu; beceri/görev yok.
+    var RV = null, RVP = null;
+    function rYukle() {
+        if (RV) return Promise.resolve(RV);
+        if (!RVP) RVP = fetch(M_YOL + 'tr-iskur.json').then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (l) {
+                RV = l.map(function (x) {
+                    var sade = x[1].replace(/\s*\([^)]*\)/g, '').trim() || x[1];
+                    return { s: 'iskur:' + x[0], n: x[1], t: x[1], k: [], c: [MT.genelCumle], b: [], genel: true, resmi: true,
+                        g: x[0].slice(0, 4), a: '… yıllık deneyime sahip ' + kucuk(sade, true) + '.' };
+                });
+                return RV;
+            }, function (e) { RVP = null; throw e; });
+        return RVP;
+    }
+    // Listede olmayan meslek: kullanicinin yazdigi unvanla genel baslangic (beceri ve ornek CV yok)
+    function genelMeslek(metin) {
+        var ad = String(metin || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+        try { ad = buyukBas(ad); } catch (e) {}
+        var a = mDil() === 'tr' ? '… yıllık deneyime sahip ' + kucuk(ad, true) + '.' : mDil() === 'de' ? ad + ' mit … Jahren Berufserfahrung.' : mDil() === 'fr' ? ad + ' avec … ans d’expérience.' : mDil() === 'es' ? ad + ' con … años de experiencia.' : mDil() === 'ru' ? ad + ' с опытом работы … лет.' : mDil() === 'it' ? ad + ' con … anni di esperienza.' : mDil() === 'pt' ? ad + ' com … anos de experiência.' : mDil() === 'ar' ? ad + ' بخبرة … سنوات.' : mDil() === 'zh' ? ad + '，… 年工作经验。' : mDil() === 'ja' ? ad + 'として…年の経験があります。' : ad + ' with … years of experience.';
+        return { s: 'genel', n: ad, t: ad, k: [], c: [MT.genelCumle], a: a, b: [], genel: true };
+    }
+    function mPanelHtml(m, digerleri) {
+        var h = '<div class="mcv-meslek">';
+        h += '<h3 class="mcv-alt">' + esc((m.genel ? MT.genelBas : MT.bas).replace('{x}', m.n)) + '</h3>';
+        if (m.__asil) h += '<p class="mcv-bilgi mcv-meslek-esas">' + esc(MT.esas.replace('{x}', m.__asil)) + '</p>';
+        h += '<p class="mcv-bilgi">' + esc(m.genel ? MT.genelBilgi : MT.bilgi) + '</p>';
+        if (digerleri && digerleri.length) {
+            h += '<p class="mcv-meslek-diger"><span>' + esc(m.resmi ? MT.benzerZengin : (m.genel ? MT.benzer : MT.baska)) + '</span> ';
+            digerleri.forEach(function (o) { h += '<button type="button" class="mcv-cip mcv-meslek-alt" data-s="' + esc(o.s) + '">' + esc(o.n) + '</button> '; });
+            h += '</p>';
+        }
+        if (m.k && m.k.length) {
+            h += '<h4 class="mcv-meslek-bas">' + esc(MT.kBas) + '</h4><div class="mcv-secimler">';
+            m.k.forEach(function (k) { h += '<label class="mcv-sec"><input type="checkbox" data-y="' + esc(k) + '"> ' + esc(k) + '</label>'; });
+            h += '</div>';
+        }
+        if (m.b && m.b.length) {
+            h += '<h4 class="mcv-meslek-bas">' + esc(MT.bBas) + '</h4><ul class="mcv-meslek-b">';
+            m.b.forEach(function (b) { h += '<li>' + esc(b) + '</li>'; });
+            h += '</ul>';
+        }
+        if (m.u) h += '<button type="button" class="mcv-ikincil mcv-meslek-ornek">' + esc(MT.ornekGor) + '</button><div class="mcv-meslek-gorsel" hidden></div>';
+        h += '<p class="mcv-hata mcv-meslek-hata" role="alert" hidden></p>';
+        h += '<button type="button" class="mcv-birincil mcv-meslek-basla">' + esc(MT.basla) + '</button>';
+        if (m.resmi) h += '<p class="mcv-not mcv-meslek-kaynak">' + esc(MT.kaynak) + '</p>';
+        return h + '</div>';
+    }
+    // Yazilan, zengin meslegin es anlamlisiyla birebir ayniysa ("overlokçu") unvan o ad olur; beceri ve ornekler
+    // zengin meslekten gelir (kurucu onayi 20.11; ilanlarda ve ATS aramalarinda adayin kullandigi unvan aranir).
+    function esAd(m, metin) {
+        if (!m || m.resmi || m.genel || !m.e || !m.e.length) return m;
+        function n(x) { return katla(x).replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim(); }
+        var tx = n(metin), es = m.e.filter(function (x) { return n(x) === tx; })[0], ad;
+        if (!es && tx === n(m.t || m.n)) return m;   // yazilan zaten unvanin kendisi (aksansiz/kesmesiz yazim dahil)
+        if (!es && /^(zh|ja)$/.test(mDil())) {
+            var tz = tx.replace(/ /g, ''), son = [m.t || m.n].concat(m.e).filter(function (x) { var y = n(x).replace(/ /g, ''); return y.length >= 2 && tz.length > y.length && tz.length - y.length <= 4 && tz.slice(-y.length) === y; })[0];
+            if (son) { es = son; ad = String(metin).replace(/\s+/g, '').trim(); }
+        }
+        // EN: kisaltilmis yazim ("admin assistant" -> Administrative Assistant): unvan yazildigi gibi
+        if (!es && mDil() !== 'tr') {
+            var tw = tx.split(' ');
+            var yakin = m.e.filter(function (x) { var xw = n(x).split(' '); return xw.length === tw.length && tw.some(function (w, i) { return xw[i] === w; }) && tw.every(function (w, i) { return xw[i] === w || (w.length >= 4 && xw[i].indexOf(w) === 0); }); })[0];
+            // EN: her kelime buyuk harfle; DE/FR: yalniz ilk harf, gerisi yazildigi gibi
+            if (yakin) { es = yakin; ad = mDil() === 'en' ? tw.map(buyukBas).join(' ') : buyukBas(String(metin).trim()); }
+        }
+        if (!es) return m;
+        ad = ad || (es !== es.toLowerCase() ? es : es.split(' ').map(buyukBas).join(' '));
+        var v = Object.create(m); v.n = ad; v.t = ad; v.__asil = m.n;
+        var t0 = m.t || m.n, eski = kucuk(t0, true) + '.';
+        if (m.a && (m.a.indexOf(t0 + ' ') === 0 || m.a.indexOf(t0 + '，') === 0 || m.a.indexOf(t0 + 'として') === 0)) v.a = ad + m.a.slice(t0.length);
+        else if (m.a && m.a.slice(-eski.length) === eski) v.a = m.a.slice(0, -eski.length) + kucuk(es, mDil() === 'tr') + '.';
+        return v;
+    }
+    window.mcvEsAd = esAd; // otomatik test icin
+    function meslekGoster(p, r, metin) {
+        var kutu = p.querySelector('#mcv-ilan-sonuc');
+        var temiz = String(metin || '').replace(/\s+/g, ' ').trim();
+        // bos ya da 3 harften kisa girdi ("Ç") unvan olarak kullanilmaz
+        if ((temiz.match(/\p{L}/gu) || []).length < (/^(zh|ja)$/.test(mDil()) ? 2 : 3)) { kutu.innerHTML = '<p class="mcv-uyari">' + esc(MT.bos) + '</p>'; try { p.querySelector('#mcv-ilan-metin').focus(); } catch (e) {} return; }
+        mYukle().then(function (d) {
+            if (!kutu.isConnected) return;
+            var adaylar = mAdaylar(d, temiz);
+            // EN: tek basina genel unvan ("engineer", "manager"): yazilan unvanla genel baslangic + benzer meslek dugmeleri
+            if (mDil() === 'ru' && /^(менеджер|специалист|оператор|работник|сотрудник|помощник|ассистент|инженер|мастер|техник|рабочий|консультант|руководитель|начальник)$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'ja' && /^(スタッフ|作業員|社員|正社員|パート|アルバイト|バイト|エンジニア|技術者|ドライバー|運転手|オペレーター|マネージャー|リーダー|アシスタント|担当者|職人|技能者)$/.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'zh' && /^(工人|员工|职员|技术员|工程师|经理|助理|主管|专员|师傅|司机|学徒|技工|操作员|管理员|顾问|工作人员)$/.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'ar' && /^(موظف|موظفه|عامل|عامله|عمال|فني|فنيه|مهندس|مهندسه|مدير|مديره|مساعد|مساعده|اخصائي|اخصائيه|مشرف|مشرفه|مندوب|مندوبه|منسق|منسقه|اداري|اداريه|سائق|سائقه|سواق)$/.test(katla(temiz))) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'pt' && /^(auxiliar|ajudante|assistente|operador|operadora|técnico|técnica|tecnico|tecnica|engenheir[oa]|gerente|supervisor|supervisora|encarregad[oa]|analista|consultor|consultora|funcionári[oa]|funcionari[oa]|colaborador|colaboradora|trabalhador|trabalhadora|empregad[oa]|atendente|agente|chefe|coordenador|coordenadora|motorista|condutor|condutora|operári[oa]|operari[oa])$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'it' && /^(addett[oa]|operai[oa]|impiegat[oa]|autista|conducente|tecnico|tecnica|ingegnere|responsabile|assistente|commerciale|operatore|operatrice|aiuto|apprendista|collaboratore|collaboratrice|consulente|specialista|lavoratore|lavoratrice|dipendente|capo|manager|addetti|operai)$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'es' && /^(emplead[oa]|operari[oa]|auxiliar|técnic[oa]|tecnic[oa]|ingenier[oa]|responsable|asistente|comercial|encargad[oa]|ayudante|peón|peon|oficial|agente|jef[ea]|gerente|trabajador|trabajadora)$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'fr' && /^(employée?|agente?|ouvrière?|ouvrier|technicienne?|ingénieure?|responsable|assistante?|conseillère?|conseiller|chargée?|chef|manager|opérateur|opératrice|aide|commercial|commerciale)$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'de' && /^(mitarbeiter(in)?|helfer(in)?|fachkraft|techniker(in)?|ingenieur(in)?|kaufmann|kauffrau|manager(in)?|assistent(in)?|sachbearbeiter(in)?|berater(in)?|leiter(in)?|aushilfe)$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (mDil() === 'en' && /^(engineer|manager|assistant|specialist|technician|operator|officer|consultant|coordinator|analyst|administrator|executive|agent|representative|clerk|supervisor|designer|developer|director)s?$/i.test(temiz)) {
+                goster(genelMeslek(temiz), adaylar.filter(function (o) { return !o.resmi; }).slice(0, 3)); return;
+            }
+            if (adaylar[0] && adaylar[0].__tt) { goster(adaylar[0], alternatif(adaylar[0], adaylar)); return; }
+            // uzun metin (ilan vb.): resmi listedeki kisa adlar rastgele kelimelerle eslesir; yalniz 139'a bakilir
+            if (temiz.length > 60 || temiz.split(' ').length > 6) { sec(adaylar, []); return; }
+            // 139'da yazilanin tamamini karsilayan meslek yok: İŞKUR resmi adlariyla karsilastir
+            if (mDil() !== 'tr') { sec(adaylar, []); return; }
+            rYukle().then(function (resmi) { sec(adaylar, mAdaylar(resmi, temiz)); }, function () { sec(adaylar, []); });
+        }, function () {
+            if (kutu.isConnected) kutu.insertAdjacentHTML('beforeend', '<p class="mcv-uyari">' + esc(MT.hata) + '</p>');
+        });
+        // Alternatif dugmeleri: yalniz tam eslesenler ve ayni ISCO birim grubundaki zengin meslekler
+        // (kok eslesmesi "Kaynakçı" icin "İnsan Kaynakları Uzmanı" gibi alakasiz sonuc veriyordu)
+        function alternatif(m, adaylar) {
+            var d = MV || [], l = adaylar.filter(function (o) { return o !== m && !o.resmi && o.__p < 50000; })
+                .concat(m.g ? d.filter(function (o) { return o.g === m.g && o !== m; }) : []);
+            var out = [], gor = {}; gor[m.s] = 1;
+            l.forEach(function (o) { if (!gor[o.s] && out.length < 3) { gor[o.s] = 1; out.push(o); } }); return out;
+        }
+        function sec(adaylar, resmiler) {
+            if (!kutu.isConnected) return;
+            var a0 = adaylar[0], r0 = resmiler[0];
+            var en = [a0, r0].filter(Boolean).sort(function (x, y) { return x.__p - y.__p; })[0];
+            if (en && en.__p < 200000) { goster(en, alternatif(en, adaylar)); return; }
+            // Uzun metin (ilan vb.) unvan olarak kullanilmaz; kisa yazilmasi istenir
+            if (temiz.length > 60 || temiz.split(' ').length > 6) { kutu.innerHTML = '<p class="mcv-uyari">' + esc(MT.uzun) + '</p>'; iz('meslek_uzun', { cv_language: mDil() }); return; }
+            goster(genelMeslek(temiz), alternatif({ s: '', g: '' }, adaylar));
+        }
+        function goster(m, digerleri) {
+            if (!kutu.isConnected) return;
+            m = esAd(m, temiz);
+            var d = MV || [];
+            var yer = document.createElement('div');
+            function ciz(mm, dg) {
+                yer.innerHTML = mPanelHtml(mm, dg);
+                [].forEach.call(yer.querySelectorAll('.mcv-meslek-alt'), function (bt) {
+                    bt.addEventListener('click', function () {
+                        var s = bt.getAttribute('data-s'), yeni = d.filter(function (o) { return o.s === s; })[0];
+                        if (!yeni) return;
+                        var kalan = [mm].concat(dg).filter(function (o) { return o.s !== yeni.s && !o.genel; }).slice(0, 3);
+                        ciz(yeni, kalan);
+                        iz('meslek_taslak_goster', { cv_language: mDil(), meslek: yeni.s, kaynak: 'oneri' });
+                    });
+                });
+                var og = yer.querySelector('.mcv-meslek-ornek');
+                if (og) og.addEventListener('click', function () {
+                    var g = yer.querySelector('.mcv-meslek-gorsel');
+                    if (!g.hidden) { g.hidden = true; og.textContent = MT.ornekGor; return; }
+                    if (!g.firstChild) {
+                        var img = document.createElement('img');
+                        img.alt = MT.ornekAlt.replace('{x}', mm.n); img.loading = 'eager'; img.src = mm.u.replace(/\.html$/, '.png');
+                        img.addEventListener('error', function () {
+                            g.textContent = MT.ornekYok;
+                            var a = document.createElement('a'); a.href = mm.u; a.target = '_blank'; a.rel = 'noopener'; a.textContent = MT.ornekSayfa; g.appendChild(a);
+                        });
+                        g.appendChild(img);
+                    }
+                    g.hidden = false; og.textContent = MT.ornekGizle;
+                    iz('meslek_ornek_gor', { cv_language: mDil(), meslek: mm.s });
+                });
+                var b = yer.querySelector('.mcv-meslek-basla');
+                if (b) b.addEventListener('click', function () {
+                    var secili = [].map.call(yer.querySelectorAll('input[type=checkbox]:checked'), function (c) { return c.getAttribute('data-y'); });
+                    taslakBaslat(mm, secili, yer);
+                });
+            }
+            kutu.innerHTML = '';
+            ciz(m, digerleri);
+            kutu.appendChild(yer);
+            // meslek: zengin meslek kodu, 'iskur:<ISCO kodu>' ya da 'genel' (yazilan metin gonderilmez)
+            iz('meslek_taslak_goster', { cv_language: mDil(), meslek: m.s, kaynak: 'yazi' });
+        }
+    }
+    function bosMu(x) {
+        var parca = [x.personalInfo, x.about, x.education, x.experience, x.projects, x.courses, x.skills, x.references, x.languages, x.socialMedia];
+        return !/[\p{L}\p{N}]/u.test(JSON.stringify(parca).replace(/"(?:[^"\\]|\\.)*":/g, ''));
+    }
+    function taslak(m, secili, cur) {
+        var ex = (m.c && m.c[0]) || '';
+        return {
+            timestamp: new Date().toISOString(),
+            personalInfo: { profession: m.t || m.n },
+            about: m.a ? MT.ornek + m.a : '',
+            education: [],
+            experience: [{ title: m.t || m.n, company: MT.firma, duration: '', description: ex ? MT.ornek + ex : '' }],
+            projects: [], courses: [], skills: secili.slice(0, 10), references: [], languages: [], socialMedia: {},
+            language: cur.language || 'tr', theme: cur.theme || '', template: cur.template || '', paper: cur.paper || 'a4'
+        };
+    }
+    function taslakBaslat(m, secili, yer) {
+        function mHata(x) { var e = yer.querySelector('.mcv-meslek-hata'); if (e) { e.textContent = x; e.hidden = false; } }
+        if (secili.length > 10) { if (!confirm(MT.cok)) return; }
+        var cur = veri(), d = taslak(m, secili, cur), o = durum(), geriAl = null;
+        if (!bosMu(cur)) {
+            if (o.liste.length >= MAX) { mHata(t('limit')); return; }
+            var akt = bul(o, o.aktif), eskiAd = akt.ad, eskiElle = akt.elle;
+            if (!akt.elle) { akt.ad = otoAd(cur); akt.elle = true; }
+            akt.veri = cur; akt.tarih = Date.now();
+            o.sayac = (o.sayac || o.liste.length) + 1;
+            var yeni = { id: 'c' + o.sayac, ad: m.n + MT.taslakAd, elle: true, tarih: Date.now(), veri: null };
+            o.liste.push(yeni); o.aktif = yeni.id;
+            try { yaz(o); } catch (er) { mHata(t('full')); return; }
+            geriAl = function () {
+                o.liste = o.liste.filter(function (e) { return e.id !== yeni.id; });
+                o.aktif = akt.id; akt.veri = null; akt.ad = eskiAd; akt.elle = eskiElle;
+                try { yaz(o); } catch (e2) {}
+            };
+        }
+        iz('meslek_taslak_ac', { cv_language: mDil(), meslek: m.s, beceri: secili.length });
+        try { window.mcvVeriyleYenile(d, MT.acildi); }
+        catch (er) { if (geriAl) geriAl(); mHata(t('full')); }
+    }
+    // PDF / Word indirilirken taslaktaki isaretli yerler (ve onerilerdeki "…") doldurulmamissa sor
+    var YT_KOSE = '\\[(?:Firma adı, şehir|Örnek – kendinize göre değiştirin|Company name, city|Example – replace with your own|Firma, Ort|Beispiel – durch eigene Angaben ersetzen|Entreprise, ville|Exemple – à remplacer par vos informations|Empresa, ciudad|Ejemplo – sustitúyelo por tus datos|Компания, город|Пример — замените своими данными|Azienda, città|Esempio – sostituiscilo con i tuoi dati|Empresa, cidade|Exemplo – substitua pelos seus dados|الشركة، المدينة|مثال – استبدله ببياناتك|公司，城市|示例——请替换为您的信息|会社名・所在地|例文：ご自身の内容に書き換えてください)\\]';
+    var YER_TUTUCU = new RegExp(YT_KOSE + '|…', 'g');
+    var sonOnay = 0;
+    function indirmeKoru(e) {
+        if (!MESLEK_DIL[lang()] || Date.now() - sonOnay < 3000) return;
+        var bul_ = cvMetni().match(YER_TUTUCU);
+        if (!bul_) return;
+        var tekil = []; bul_.forEach(function (x) { if (tekil.indexOf(x) < 0) tekil.push(x); });
+        var liste = tekil.slice(0, 4).map(function (x) { return '• ' + (x === '…' ? MT.nokta : x); }).join('\n');
+        if (confirm(MT.pdfQ.replace('{x}', liste))) { sonOnay = Date.now(); iz('taslak_indir_onay'); return; }
+        e.preventDefault(); e.stopImmediatePropagation(); iz('taslak_indir_vazgec');
+    }
+    ['save-pdf', 'sticky-pdf-btn', 'mcv-docx-btn'].forEach(function (id) {
+        document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('#' + id)) indirmeKoru(e); }, true);
+    });
+    (function () {
+        var st = document.createElement('style');
+        st.textContent = '.mcv-meslek{margin-top:16px;padding-top:12px;border-top:1px solid #e5e7eb}' +
+            '.mcv-meslek-bas{font-size:15px;margin:14px 0 6px}' +
+            '.mcv-secimler{display:flex;flex-wrap:wrap;gap:8px}' +
+            '.mcv-sec{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:999px;font-size:15px;cursor:pointer;background:#fff;color:#111827}' +
+            '.mcv-sec input{width:18px;height:18px;margin:0}' +
+            '.mcv-sec:has(input:checked){background:#e0f2fe;border-color:#0284c7}' +
+            '.mcv-meslek-b{margin:0 0 8px;margin-inline-start:18px;padding:0;font-size:15px;line-height:1.5}' +
+            '.mcv-meslek .mcv-birincil{margin-top:12px}' +
+            '.mcv-meslek-ornek{margin-top:12px;width:100%}' +
+            '.mcv-meslek-diger{margin:4px 0 8px;font-size:14px;color:#475569}.mcv-meslek-diger .mcv-cip{margin:2px 4px 2px 0;cursor:pointer}' +
+            '.mcv-taslak-alan{outline:2px dashed #f59e0b;outline-offset:2px;border-radius:4px}' +
+            '.mcv-taslak-balon{display:block;width:100%;max-width:min(100%, calc(100vw - 56px));margin:6px 0 8px;padding:8px 10px;border:1px solid #f59e0b;border-radius:8px;background:#fffbeb;color:#92400e;font-size:13px;line-height:1.4;text-align:start;cursor:pointer;font-family:inherit;font-weight:400;white-space:normal}' +
+            '.pdf-mode .mcv-taslak-balon{display:none!important}.pdf-mode .mcv-taslak-alan{outline:none!important}' +
+            '.mcv-meslek-gorsel{margin-top:8px}.mcv-meslek-gorsel img{width:100%;height:auto;border:1px solid #e5e7eb;border-radius:6px}';
+        document.head.appendChild(st);
+    })();
+    // Taslaktan gelen (ya da oneriyle eklenen) yer tutuculu alanlara "duzenle" balonu (kurucu 20.11)
+    var YT_TEK = new RegExp(YT_KOSE + '|…');
+    function balonMetni(tx) {
+        var ornek = new RegExp(YT_KOSE).test(tx), nokta = tx.indexOf('…') >= 0;
+        if (ornek && nokta) return MT.balon1;
+        if (ornek) return MT.balon2;
+        return MT.balon3;
+    }
+    function balonYeri(el) { return el.closest('.experience-subtitle-container') || el; }
+    function yerTutucuSec(el) {
+        try {
+            el.focus();
+            var n = el.firstChild; if (!n || n.nodeType !== 3) return;
+            var m = n.data.match(YT_TEK); if (!m) return;
+            var r = document.createRange(); r.setStart(n, m.index); r.setEnd(n, m.index + m[0].length);
+            var sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r);
+        } catch (e) {}
+    }
+    function balonGuncelle(el) {
+        if (!el || !el.isConnected) return;
+        var yer = balonYeri(el), b = yer.nextElementSibling;
+        if (b && !(b.classList.contains('mcv-taslak-balon') && b.__alan === el)) b = null;
+        var tx = el.classList.contains('empty-field') ? '' : (el.textContent || '');
+        if (!MESLEK_DIL[lang()] || !YT_TEK.test(tx)) {
+            el.classList.remove('mcv-taslak-alan');
+            if (b) b.parentNode.removeChild(b);
+            return;
+        }
+        el.classList.add('mcv-taslak-alan');
+        if (!b) {
+            b = document.createElement('button');
+            b.type = 'button'; b.className = 'mcv-taslak-balon'; b.__alan = el;
+            b.setAttribute('contenteditable', 'false');
+            b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+            b.addEventListener('click', function () { yerTutucuSec(el); iz('taslak_balon_tik'); });
+            yer.parentNode.insertBefore(b, yer.nextSibling);
+        }
+        b.textContent = balonMetni(tx);
+    }
+    var BALON_ALAN = '#about-text, #experience-container .experience-company, #experience-container .item-description, #experience-container .item-title, #projects-container .item-description';
+    function balonTara() { [].forEach.call(document.querySelectorAll(BALON_ALAN), balonGuncelle); }
+    document.addEventListener('input', function (e) {
+        var el = e.target && e.target.closest && e.target.closest(BALON_ALAN);
+        if (el) balonGuncelle(el);
+    });
+    document.addEventListener('focusout', function (e) {
+        var el = e.target && e.target.closest && e.target.closest(BALON_ALAN);
+        if (el) setTimeout(function () { balonGuncelle(el); }, 0);
+    });
+    // Dil degisince ve sayfa yuklenip CV verisi yazildiktan sonra tara
+    var dilSec = document.getElementById('language-select');
+    if (dilSec) dilSec.addEventListener('change', function () { setTimeout(balonTara, 300); });
+    setTimeout(balonTara, 1200); setTimeout(balonTara, 3000);
+    window.mcvBalonTara = balonTara; // otomatik test icin
+    window.mcvMeslekBul = mBul; // otomatik test icin
     bIlan.addEventListener('click', function () { ilanAc(bIlan); });
     window.mcvIlanAnaliz = analiz; // otomatik test icin
 
