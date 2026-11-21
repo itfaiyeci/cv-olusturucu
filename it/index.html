@@ -8720,6 +8720,12 @@ if (socialMediaSection) {
                         // Üretilen tüm sayfalara otomatik olarak yayılır.
                         const lgPdf = document.getElementById('language-select').value;
                         const cjkB64 = ((lgPdf === 'ja' || lgPdf === 'zh') && window.cvPdfCjkFont) ? await window.cvPdfCjkFont(lgPdf) : null;
+                        if (lgPdf !== 'ja' && lgPdf !== 'zh') await new Promise(function (res) {
+                            var key = lgPdf === 'ar' ? 'CV_PDF_FONT_ARABIC_BASE64' : 'CV_PDF_FONT_BASE64';
+                            if (window[key]) { res(); return; }
+                            try { window.dispatchEvent(new Event('keydown')); } catch (e) {}
+                            var n = 0; (function w() { if (window[key] || ++n > 100) res(); else setTimeout(w, 100); })();
+                        });
                         addInvisibleTextLayer(doc, pdfTextLines, cjkB64);
                         resolve(doc);
                     }).catch(error => {
