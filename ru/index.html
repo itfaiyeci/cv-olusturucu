@@ -2954,6 +2954,10 @@ body.mcv-modal-acik { overflow: hidden; }
 .mcv-modal .mcv-modal-kapat { flex: none; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; background: #f1f5f9; color: #334155; border: none; font-size: 16px; }
 .mcv-modal .mcv-birincil { width: 100%; margin: 6px 0 10px; background: #1e293b; color: #fff; border: none; }
 .mcv-modal .mcv-ikincil { background: #fff; color: #1e293b; border: 1px solid #cbd5e1; padding: 6px 12px; }
+.mcv-dil-kopya { margin: 0 0 12px; font-size: 14px; }
+.mcv-dil-kopya label { display: block; margin-bottom: 4px; font-weight: 600; }
+.mcv-dil-kopya-satir { display: flex; gap: 8px; }
+.mcv-dil-kopya-satir select { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; background: #fff; color: #1e293b; }
 .mcv-modal .mcv-tehlike { background: #fff; color: #b91c1c; border: 1px solid #fecaca; padding: 6px 12px; }
 .mcv-bilgi { font-size: 14px; line-height: 1.45; color: #475569; margin: 4px 0 10px; }
 .mcv-not { font-size: 12.5px; line-height: 1.45; color: #64748b; margin: 14px 0 0; }
@@ -11478,6 +11482,7 @@ function saveCV() {
         donus = kaynak || null;
         ov = document.createElement('div');
         ov.className = 'mcv-modal'; ov.id = id;
+        if (lang() === 'ar') ov.setAttribute('dir', 'rtl'); // Arapca: pencere sagdan sola
         ov.innerHTML = '<div class="mcv-modal-kutu" role="dialog" aria-modal="true" aria-labelledby="' + id + '-bas" tabindex="-1">' +
             '<div class="mcv-modal-bas"><strong id="' + id + '-bas">' + esc(baslik) + '</strong>' +
             '<button type="button" class="mcv-modal-kapat" aria-label="' + esc(t('close')) + '">✕</button></div>' +
@@ -11535,7 +11540,7 @@ function saveCV() {
     function cvlerimCiz() {
         var o = durum();
         var h = '<p class="mcv-bilgi">' + esc(t('cvsInfo')) + '</p>' +
-            '<button type="button" class="mcv-birincil" id="mcv-kopyala">' + esc(t('copy')) + '</button><ul class="mcv-liste">';
+            '<button type="button" class="mcv-birincil" id="mcv-kopyala">' + esc(t('copy')) + '</button>' + mcvDilKopyaHtml() + '<ul class="mcv-liste">';
         o.liste.forEach(function (e) {
             var aktif = e.id === o.aktif;
             h += '<li class="mcv-cv-satir' + (aktif ? ' aktif' : '') + '" data-id="' + esc(e.id) + '">' +
@@ -11557,6 +11562,7 @@ function saveCV() {
     function yenidenCiz() { if (!ov || ov.id !== 'mcv-cvlerim') return; ov.querySelector('.mcv-modal-govde').innerHTML = cvlerimCiz(); baglaCvlerim(ov); etiketler(); }
     function baglaCvlerim(p) {
         p.querySelector('#mcv-kopyala').addEventListener('click', kopyala);
+        var dk = p.querySelector('#mcv-dil-kopya-btn'); if (dk) dk.addEventListener('click', dilKopyala);
         [].forEach.call(p.querySelectorAll('.mcv-cv-satir'), function (li) {
             var id = li.getAttribute('data-id');
             li.querySelector('.mcv-ad').addEventListener('change', function () { adDegis(id, this.value); });
@@ -11569,6 +11575,46 @@ function saveCV() {
         ad = String(ad || '').trim().slice(0, 60);
         e.ad = ad; e.elle = !!ad;
         try { yaz(o); } catch (er) { hata(t('full')); }
+    }
+    var DK = {
+        tr: ['Başka bir dilde kopya oluştur', 'Oluştur', 'Kopya {d} dilinde açıldı. Bölüm başlıkları değişti; metinleri bu dilde kendiniz yazın. Otomatik çeviri yapılmaz.'],
+        en: ['Make a copy in another language', 'Create', 'The copy is now in {d}. Section headings have changed; rewrite your text in this language yourself. Nothing is translated automatically.'],
+        de: ['Kopie in einer anderen Sprache erstellen', 'Erstellen', 'Die Kopie ist jetzt auf {d}. Die Überschriften wurden angepasst; schreiben Sie Ihre Texte selbst in dieser Sprache. Es wird nichts automatisch übersetzt.'],
+        fr: ['Créer une copie dans une autre langue', 'Créer', 'La copie est maintenant en {d}. Les titres des rubriques ont changé ; réécrivez vous-même vos textes dans cette langue. Rien n’est traduit automatiquement.'],
+        es: ['Crear una copia en otro idioma', 'Crear', 'La copia ya está en {d}. Los títulos de las secciones han cambiado; reescribe tú mismo los textos en este idioma. No se traduce nada automáticamente.'],
+        it: ['Crea una copia in un’altra lingua', 'Crea', 'La copia ora è in {d}. I titoli delle sezioni sono cambiati; riscrivi tu i testi in questa lingua. Nulla viene tradotto automaticamente.'],
+        pt: ['Criar uma cópia em outro idioma', 'Criar', 'A cópia está agora em {d}. Os títulos mudaram; reescreva os textos neste idioma. Nada é traduzido automaticamente.'],
+        ru: ['Создать копию на другом языке', 'Создать', 'Копия теперь на языке: {d}. Заголовки разделов изменились; перепишите тексты на этом языке сами. Автоматического перевода нет.'],
+        ar: ['إنشاء نسخة بلغة أخرى', 'إنشاء', 'النسخة الآن باللغة: {d}. تغيّرت عناوين الأقسام؛ أعد كتابة نصوصك بهذه اللغة بنفسك. لا تتم أي ترجمة تلقائية.'],
+        zh: ['创建其他语言的副本', '创建', '副本已切换为{d}。各部分标题已更改；请自行用该语言重写内容。系统不会自动翻译。'],
+        ja: ['別の言語でコピーを作成', '作成', 'コピーを{d}に切り替えました。見出しは変更されました。本文はご自身でこの言語に書き直してください。自動翻訳はしません。']
+    };
+    function dk(i) { var d = DK[lang()] || DK.en; return d[i]; }
+    function mcvDilKopyaHtml() {
+        var sel = document.getElementById('language-select'); if (!sel) return '';
+        var h = '<div class="mcv-dil-kopya"><label for="mcv-dil-kopya-sec">' + esc(dk(0)) + '</label><div class="mcv-dil-kopya-satir"><select id="mcv-dil-kopya-sec">';
+        [].forEach.call(sel.options, function (op) { if (op.value && op.value !== sel.value) h += '<option value="' + esc(op.value) + '">' + esc(op.textContent.trim()) + '</option>'; });
+        return h + '</select><button type="button" class="mcv-ikincil" id="mcv-dil-kopya-btn">' + esc(dk(1)) + '</button></div></div>';
+    }
+    function dilKopyala() {
+        var sel = document.getElementById('language-select'), hs = ov && ov.querySelector('#mcv-dil-kopya-sec');
+        if (!sel || !hs || !hs.value) return;
+        var once = durum().aktif;
+        kopyala();
+        if (durum().aktif === once) return; // kopya olmadi (or. 5 CV siniri); hata mesaji kopyala() icinde
+        var hedef = hs.value, ad = '';
+        [].forEach.call(sel.options, function (op) { if (op.value === hedef) ad = op.textContent.trim(); });
+        if (/^(fr|es|it|pt)$/.test(hedef)) ad = ad.charAt(0).toLowerCase() + ad.slice(1); // "en français", "en español"
+        sel.value = hedef; sel.dispatchEvent(new Event('change', { bubbles: true }));
+        iz('cv_dil_kopya', { cv_language: hedef });
+        kapat();
+        [].forEach.call(document.querySelectorAll('.mcv-toast'), function (x) { x.parentNode && x.parentNode.removeChild(x); }); // kopyala()'nin kisa bildirimi yerine tek, uzun bildirim
+        var d = document.createElement('div');
+        d.className = 'mcv-toast'; d.setAttribute('role', 'status'); d.textContent = dk(2).replace('{d}', ad);
+        if (hedef === 'ar') d.setAttribute('dir', 'rtl');
+        document.body.appendChild(d);
+        setTimeout(function () { d.classList.add('cik'); }, 7000);
+        setTimeout(function () { d.parentNode && d.parentNode.removeChild(d); }, 7500);
     }
     function kopyala() {
         var o = durum();
