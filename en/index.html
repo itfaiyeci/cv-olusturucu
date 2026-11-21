@@ -6238,8 +6238,19 @@ class SocialMediaManager {
     document.addEventListener('click', function (e) {
         if (e.target && e.target.closest && e.target.closest('#save-pdf, #export-data, #mcv-docx-btn')) __mcvDegisti = false;
     }, true);
+    function __mcvAnlik() {
+        try { var m = window.autoSaveManager; if (!m || !m.collectData) return null; var d = m.collectData(); delete d.timestamp; return JSON.stringify(d); } catch (x) { return null; }
+    }
+    var __mcvIlk = null;
+    window.mcvCikisDurum = function () { return { degisti: __mcvDegisti, anlik: __mcvIlk !== null, ayni: __mcvIlk !== null && __mcvAnlik() === __mcvIlk }; };
+    window.addEventListener('load', function () { setTimeout(function () { __mcvIlk = __mcvAnlik(); }, 1500); }); // kayitli CV yuklenirken giden input olaylari degisiklik sayilmaz
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#save-pdf, #export-data, #mcv-docx-btn')) setTimeout(function () { __mcvIlk = __mcvAnlik(); }, 0);
+    }, true);
     window.addEventListener('beforeunload', function(e) {
         if (__mcvDegisti) {
+            var simdi = __mcvAnlik();
+            if (__mcvIlk !== null && simdi !== null && simdi === __mcvIlk) return; // CV ayni: uyari yok
             e.preventDefault();
             e.returnValue = '';
         }
@@ -11933,7 +11944,7 @@ function saveCV() {
     // foto, età e stato civile sono facoltativi; la bozza non li aggiunge.
     MTD.it = {
         bas: 'Punto di partenza per {x}',
-        bilgi: 'Si apre un nuovo CV con la professione e le competenze che selezioni. Il profilo e l’esperienza di esempio sono tra parentesi quadre: sostituiscili con i tuoi dati. Foto, età e stato civile sono facoltativi; il datore di lavoro può chiedere solo informazioni rilevanti per il lavoro. Il tuo CV attuale resta in «I miei CV».',
+        bilgi: 'Si apre un nuovo CV con la professione e le competenze che selezioni. Il profilo e l’esperienza di esempio sono tra parentesi quadre: sostituiscili con i tuoi dati. Foto, età e stato civile sono facoltativi; il datore di lavoro può chiedere solo informazioni rilevanti per il lavoro. La formula «autorizzo il trattamento dei dati personali» non è obbligatoria (art. 111-bis Codice privacy): aggiungila solo se l’annuncio la chiede. Il tuo CV attuale resta in «I miei CV».',
         bos: 'Scrivi la tua professione (es. Cuoco).',
         uzun: 'Scrivi solo la tua professione (es. Cuoco, Commessa, Magazziniere).',
         baska: 'Un’altra professione?',
@@ -12099,18 +12110,39 @@ function saveCV() {
         balon2: '✏️ 下書きから追加：ご自身の経験に合わせて書き換えてください。',
         balon3: '✏️ …をご自身の内容に書き換えてください。'
     };
+    // Português do Brasil: navegador em pt-BR -> dados oneri/pt-br.json e textos do painel com grafia brasileira.
+    MTD['pt-br'] = {
+        bilgi: 'Abre-se um novo currículo com a profissão e as competências que você marcar. O perfil e a experiência de exemplo estão entre colchetes: substitua pelos seus dados. Foto, idade e estado civil são opcionais; as regras variam conforme o país. Seu currículo atual fica em «Os meus currículos».',
+        genelBilgi: 'Abre-se um novo currículo com a sua profissão. O perfil e a experiência de exemplo estão entre colchetes: complete com os seus dados. Você pode adicionar as competências depois, na seção Competências. Seu currículo atual fica em «Os meus currículos».',
+        uzun: 'Escreva só a sua profissão (ex.: Cozinheiro, Vendedora, Motorista de caminhão).',
+        kBas: 'Marque as competências que você tem',
+        bBas: 'O que os empregadores costumam olhar nesta profissão (adicione se tiver)',
+        cok: 'É possível adicionar no máximo 10 competências; serão usadas as 10 primeiras.',
+        acildi: 'Rascunho aberto. Substitua o texto entre colchetes pelos seus dados.',
+        pdfQ: 'Seu currículo ainda tem partes para preencher:\n{x}\n\nBaixar mesmo assim?',
+        hata: 'Não foi possível carregar a lista de profissões. Verifique a conexão e tente novamente.',
+        balon1: '✏️ Adicionado do rascunho: edite os [ ] e os ….',
+        balon2: '✏️ Adicionado do rascunho: adapte à sua experiência.'
+    };
     // Meslek verisi olan diller (sırayla eklenir); digerlerinde eski ilan kontrolu kalir
     var MESLEK_DIL = { tr: 1, en: 1, de: 1, fr: 1, es: 1, ru: 1, it: 1, pt: 1, ar: 1, zh: 1, ja: 1 };
     function mDil() { var l = lang(); return MESLEK_DIL[l] ? l : 'tr'; }
     function buyukBas(w) { return w ? w.charAt(0).toLocaleUpperCase(mDil() === 'tr' ? 'tr' : mDil()) + w.slice(1) : w; }
+    // pt-BR: tarayicinin ilk Portekizce dili pt-BR ise Brezilya verisi ve metinleri (yoksa pt = Portekiz yazimi)
+    function brMi() {
+        var ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+        for (var i = 0; i < ls.length; i++) { var x = String(ls[i] || '').toLowerCase(); if (x.indexOf('pt') === 0) return x === 'pt-br'; }
+        return false;
+    }
+    function mVeriDil() { var L = mDil(); return L === 'pt' && brMi() ? 'pt-br' : L; }
     var MT = {};
     Object.keys(MTD.tr).forEach(function (k) {
-        Object.defineProperty(MT, k, { get: function () { var d = MTD[mDil()]; return d && d[k] != null ? d[k] : MTD.tr[k]; } });
+        Object.defineProperty(MT, k, { get: function () { var v = MTD[mVeriDil()], d = MTD[mDil()]; return v && v[k] != null ? v[k] : d && d[k] != null ? d[k] : MTD.tr[k]; } });
     });
     var M_YOL = '/oneri/';
     var MV = null, MVC = {}, MVPC = {};
     function mYukle() {
-        var L = mDil();
+        var L = mVeriDil();
         if (MVC[L]) { MV = MVC[L]; return Promise.resolve(MV); }
         if (!MVPC[L]) MVPC[L] = fetch(M_YOL + L + '.json').then(function (r) { if (!r.ok) throw 0; return r.json(); })
             .then(function (d) { MVC[L] = d; return d; }, function (e) { MVPC[L] = null; throw e; });
