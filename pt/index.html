@@ -12180,7 +12180,30 @@ function saveCV() {
         for (var i = 0; i < ls.length; i++) { var x = String(ls[i] || '').toLowerCase(); if (x.indexOf('pt') === 0) return x === 'pt-br'; }
         return false;
     }
-    function mVeriDil() { var L = mDil(); return L === 'pt' && brMi() ? 'pt-br' : L; }
+    // es-419 (21.11): tarayicinin ilk Ispanyolca dili Ispanya disinda bir bolgeyse (es-MX, es-AR, es-419...) Latin Amerika
+    // verisi (oneri/es-419.json: ulkelerin is ilani sitelerindeki unvanlar, Ispanya'ya ozgu belgeler yok) ve ulke kanun notu.
+    function esBolge() {
+        var ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+        for (var i = 0; i < ls.length; i++) { var x = String(ls[i] || ''); if (/^es(?:[-_]|$)/i.test(x)) return (x.split(/[-_]/)[1] || '').toUpperCase(); }
+        return '';
+    }
+    var ES_BOLGE = esBolge();
+    function esAmerikaMi() { return !!ES_BOLGE && ES_BOLGE !== 'ES'; }
+    var ES_LEY = {
+        MX: 'En México, la Ley Federal del Trabajo (art. 133) prohíbe negarse a contratar por motivos como la edad, el género, el origen o el estado de salud.',
+        CO: 'En Colombia, la Constitución (art. 13) y el Código Sustantivo del Trabajo (art. 10) garantizan la igualdad de trato.',
+        AR: 'En Argentina, la Ley 23.592 sanciona los actos discriminatorios y la Ley de Contrato de Trabajo (art. 17) prohíbe discriminar entre trabajadores.',
+        UY: 'En Uruguay, la Ley 16.045 prohíbe discriminar por sexo en el acceso al empleo y la Ley 17.817 combate toda forma de discriminación.',
+        GT: 'En Guatemala, el Código de Trabajo (art. 14 bis) prohíbe la discriminación por raza, religión o credo político, entre otros motivos.',
+        PE: 'En Perú, la Ley 26772 prohíbe que las ofertas de empleo incluyan requisitos discriminatorios.',
+        CL: 'En Chile, el Código del Trabajo (art. 2) prohíbe la discriminación por motivos como la edad, el sexo o el estado civil, también en las ofertas de trabajo.',
+        EC: 'En Ecuador, la normativa del Ministerio del Trabajo prohíbe pedir pruebas de embarazo en la selección y fijar requisitos por edad, sexo o etnia.'
+    };
+    MTD['es-419'] = {
+        bilgi: 'Se abre un CV nuevo con el puesto y las habilidades que marques. El perfil y la experiencia de ejemplo van entre corchetes: sustitúyelos por tus datos. La foto, la edad y el estado civil son opcionales.' + (ES_LEY[ES_BOLGE] ? ' ' + ES_LEY[ES_BOLGE] : '') + ' Tu CV actual sigue en «Mis CV».',
+        uzun: 'Escribe solo tu profesión (p. ej. Cocinero, Vendedora, Electricista).'
+    };
+    function mVeriDil() { var L = mDil(); return L === 'pt' && brMi() ? 'pt-br' : (L === 'es' && esAmerikaMi() ? 'es-419' : L); }
     var MT = {};
     Object.keys(MTD.tr).forEach(function (k) {
         Object.defineProperty(MT, k, { get: function () { var v = MTD[mVeriDil()], d = MTD[mDil()]; return v && v[k] != null ? v[k] : d && d[k] != null ? d[k] : MTD.tr[k]; } });
